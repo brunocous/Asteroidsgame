@@ -40,7 +40,7 @@ public class Ship implements IShip {
 	 *       | new.getRadius()== radius 
 	 */
 	
-	public Ship(Position pos,Velocity vel, double direction, double radius) throws IllegalRadiusException{
+	public Ship(Position pos,Velocity vel, double direction, double radius) throws IllegalRadiusException, IllegalArgumentException{
 
 		this.setPos(pos);
 		this.setVel(vel);

@@ -28,6 +28,8 @@ public class Facade implements IFacade{
 			
 		} catch(IllegalRadiusException exc){
 			throw new ModelException(exc);
+		} catch(IllegalArgumentException exc){
+			throw new ModelException(exc);
 		}
 	}
 
