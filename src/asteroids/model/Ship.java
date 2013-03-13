@@ -163,7 +163,7 @@ public class Ship implements IShip {
 	/**
 	 * Set the direction of this ship to the given direction.
 	 * 
-	 * @pre	 the value of the given direction must be greater than -Pi and less than or equal to Pi.
+	 * @pre	 the value of the given direction must be finite.
 	 * 		 |	isValidDirection(direction)
 	 * @param direction
 	 *        the new direction for this ship in radians.
@@ -191,7 +191,7 @@ public class Ship implements IShip {
 	 */
 	public static boolean isValidDirection(double direction){
 		
-		return (direction > -Math.PI) && (direction <= Math.PI);
+		return (!Double.isInfinite(direction));
 		
 	}
 
