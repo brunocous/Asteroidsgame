@@ -79,17 +79,27 @@ public void setPosY(double posY) {
  * 
  * @param posToAdd
  *        the position vector to be added to this position
- * @post the new posX of this position is equal to the old posX of this position plus the
- *       posX of the given posToAdd
- *       |new.getPosX()==this.getPosX()+posToAdd.getPosX()
- * @post the new posY of this position is equal to the old posY of this position plus the
- *       posY of the given posToAdd
- *       |new.getPosY()==this.getPosY()+posToAdd.getPosY()
+ * @return this position if the given posToAdd is null, a position that is equal to this
+ *         position plus the given posToAdd if the given posToAdd is not null.
+ *         | if(posToAdd == null)
+ *         | then result == this
+ *         | else result == new Position(posToAdd.getPosX() + getPosX(),posToAdd.getPosY() + getPosY())
  */
 
-public void add(Position posToAdd){
-	setPosX(posToAdd.getPosX() + getPosX());
-	setPosY(posToAdd.getPosY() + getPosY());
+public Position add(Position posToAdd){
+	
+	if(posToAdd == null){
+		
+		return this;
+		
+	}
+	else{
+		
+	double xCoord=(posToAdd.getPosX() + getPosX());
+	double yCoord=(posToAdd.getPosY() + getPosY());
+	
+	return new Position(xCoord,yCoord);
+	}
 }
 
 /**
