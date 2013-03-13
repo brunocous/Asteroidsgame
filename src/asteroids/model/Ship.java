@@ -273,7 +273,6 @@ public class Ship implements IShip {
 	 */
 	
 	public void move(double elapsedTime) throws NegativeTimeException{
-		
 		if(!isValidElapsedTime(elapsedTime)){
 			
 			throw new NegativeTimeException() ;

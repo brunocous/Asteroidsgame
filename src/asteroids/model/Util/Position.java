@@ -2,12 +2,18 @@ package asteroids.model.Util;
 
 import be.kuleuven.cs.som.annotate.*;
 
+@Value
 public class Position {
 
-//the x-component of a position vector.
-private double posX;
-// the y-component of a position vector.
-private double posY;
+/**	
+*	the x-component of a position vector.
+*/
+private final double posX;
+
+/**
+ * the y-component of a position vector.
+ */
+private final double posY;
 
 /**
  * Initialize this new position with given posX and given posY.
@@ -21,57 +27,27 @@ private double posY;
  * @post the new posY for this new position is equal to the given posY
  *       |new.getPosY()==posY   
  */
-
+@Raw
 public Position(double posX, double posY) {
-	this.setPosX(posX);
-	this.setPosY(posY);
+	this.posX = posX;
+	this.posY = posY;
 }
 /**
  * Returns the posX of this position.
  */
-@Basic 
+@Basic @Raw @Immutable
 public double getPosX() {
-	return posX;
-}
-/**
- * Sets the value for posX of this position to the given posX.
- * 
- * @param posX 
- * 		  The new value for the posX of this position.
- * @post the new posX of this position is equal to the given posX.
- *       |new.getPosX()==posX
- */
-
-@Basic
-public void setPosX(double posX) {
-	
-	this.posX = posX;
-	
+	return this.posX;
 }
 
 /**
  * Return the posY of this position.
  */
-@Basic
+@Basic @Raw @Immutable
 public double getPosY() {
 	
-	return posY;
+	return this.posY;
 	
-}
-
-/**
- *Set the value for y the posY of this position to the given posY. 
- *
- * @param posY
- * 		  the new posY for this position.
- * @post the new posY of this position is equal to the given posY.
- *       |new.getPosY()==posY
- */
-
-@Basic
-public void setPosY(double posY) {
-	
-	this.posY = posY;
 }
 
 /**
@@ -79,18 +55,21 @@ public void setPosY(double posY) {
  * 
  * @param posToAdd
  *        the position vector to be added to this position
- * @return this position if the given posToAdd is null, a position that is equal to this
+ * @return The resulting position has the same position as this position.
+ * 		   | result == this
+ * @return A position that is equal to this
  *         position plus the given posToAdd if the given posToAdd is not null.
- *         | if(posToAdd == null)
- *         | then result == this
- *         | else result == new Position(posToAdd.getPosX() + getPosX(),posToAdd.getPosY() + getPosY())
+ *         | result == new Position(posToAdd.getPosX() + getPosX(),posToAdd.getPosY() + getPosY())
+ * @throws IllegalArgumentException
+ * 			The posToAdd position is not effective.
+ * 		   | posToAdd == null
  */
 
-public Position add(Position posToAdd){
+public Position add(Position posToAdd) throws IllegalArgumentException{
 	
 	if(posToAdd == null){
 		
-		return this;
+		throw new IllegalArgumentException();
 		
 	}
 	else{
@@ -117,6 +96,44 @@ public Position add(Position posToAdd){
 public double getDistanceTo(Position position){
 	double distance = Math.sqrt(Math.pow(getPosX()-position.getPosX(),2)+Math.pow(getPosY()-position.getPosY(),2));
 	return distance;
+}
+
+/**
+ * Check whether this position is equal to the given position.
+ * 
+ * @return True if and only if the given object is effective, if this position and the given 
+ * 			position belong to the same class, and if this position and the other object 
+ * 			interpreted as a position have equal posX and equal posY.
+ * 			| result == ( (pos != null) && (this.getClass() == pos.getClass())
+ * 			| && asteroids.Util.fuzzyEquals(this.getPosX() , pos.getPosX())
+ * 			| && asteroids.Util.fuzzyEquals(this.getPosY() , pos.getPosY()) )
+ * @throws IllegalArgumentException
+ * 			The Object pos is not effective.
+ * 			| pos == null
+ */
+@Override
+public boolean equals(Object pos) throws IllegalArgumentException, ClassCastException{
+	if(pos == null)
+		throw new IllegalArgumentException();
+	return ( asteroids.Util.fuzzyEquals(this.getPosX() , ((Position) pos).getPosX()) 
+			&& asteroids.Util.fuzzyEquals(this.getPosY() , ((Position) pos).getPosY()) );
+}
+/**
+ * Return the hash code for this position.
+ */
+@Override 
+public int hashCode(){
+	return (new Double(this.getPosX()).hashCode()) + (new Double(this.getPosY()).hashCode());
+}
+/**
+ * Return a textual representation of this position.
+ * @return	A string consisting of the textual representation of the X- and Y-component of this position, 
+ * 			separated by a space and enclosed in square brackets.
+ * 			|	result.equals("[" + this.getPosX()+ " " + this.getPosY()+ "]" )
+ */
+@Override
+public String toString(){
+	return "[" + this.getPosX()+ " " + this.getPosY()+ "]";
 }
 
 }
