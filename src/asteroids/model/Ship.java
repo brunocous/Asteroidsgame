@@ -180,7 +180,7 @@ public class Ship implements IShip {
 		this.direction = direction%(2*Math.PI);
 		}
 		else{
-	    this.direction = 2*Math.PI - direction;
+	    this.direction = 2*Math.PI + direction;
 		}
 		
 	}
