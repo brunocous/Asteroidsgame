@@ -71,8 +71,8 @@ public class ShipTest {
 		largePositiveDirectionShip = new Ship(positivePosition, positiveVelocity, 2000, 1);
 		infinitePositiveDirectionShip = new Ship(positivePosition, positiveVelocity, Double.POSITIVE_INFINITY, 1);
 		
-		zeroPositionZeroDirectionShip = new Ship(zeroPosition, positiveVelocity, 0, 15);
-		fiftyXPositionPiDirectionShip = new Ship(fiftyXPosition, positiveVelocity, Math.PI, 15);
+		zeroPositionZeroDirectionShip = new Ship(zeroPosition, new Velocity(50,0), 0, 15);
+		fiftyXPositionPiDirectionShip = new Ship(fiftyXPosition, new Velocity(-50,0), Math.PI, 15);
 		
 		
 		
