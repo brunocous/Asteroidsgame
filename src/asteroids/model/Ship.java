@@ -170,8 +170,7 @@ public class Ship implements IShip {
 	 * @post the new direction for this ship is the given direction
 	 *       |	new.getDirection() = direction
 	 */
-	@Raw
-	@Basic
+	@Model @Basic
 	public void setDirection(double direction) {
 		
 		assert(isValidDirection(direction));
@@ -351,7 +350,7 @@ public class Ship implements IShip {
 		
 		Velocity gainedSpeed = new Velocity(amount*Math.cos(getDirection()),amount*Math.sin(getDirection()));
 		Velocity newSpeed = new Velocity(getVel().getVelX(), getVel().getVelY());
-		newSpeed.add(gainedSpeed);
+		newSpeed = newSpeed.add(gainedSpeed);
 		
 		if(!isValidVelocity(newSpeed)){
 			
@@ -360,7 +359,7 @@ public class Ship implements IShip {
 		}
 		else{
 		
-		vel.add(gainedSpeed);
+		vel = vel.add(gainedSpeed);
 		
 		}
 
