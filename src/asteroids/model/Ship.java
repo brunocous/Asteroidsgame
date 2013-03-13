@@ -324,8 +324,6 @@ public class Ship implements IShip {
 	 */
 	
 	public void turn(double angle){
-		
-		if (isValidDirection(getDirection() ))
 		setDirection(getDirection() + angle);
 	}
 
