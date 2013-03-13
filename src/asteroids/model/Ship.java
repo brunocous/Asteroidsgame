@@ -1,6 +1,5 @@
 package asteroids.model;
 
-import asteroids.Asteroids;
 import asteroids.IShip;
 import asteroids.Util;
 import asteroids.Error.*;
@@ -94,8 +93,13 @@ public class Ship implements IShip {
 	 */
 	
 	@Basic
-	public void setPos(Position pos) {
-	
+	public void setPos(Position pos) throws IllegalArgumentException {
+		
+		if(Double.isInfinite().|| pos.getPosY().isInfinite()){
+			
+			throw new IllegalArgumentException();
+			
+		}
 	    this.pos = pos;
 	
 	}
