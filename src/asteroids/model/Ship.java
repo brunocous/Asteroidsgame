@@ -175,7 +175,7 @@ public class Ship implements IShip {
 	public void setDirection(double direction) {
 		
 		assert(isValidDirection(direction));
-		this.direction = direction;
+		this.direction = direction%(2*Math.PI);
 		
 	}
 	
@@ -496,7 +496,7 @@ public class Ship implements IShip {
 	 */
 	                      
 	
-	public static double getTimeToCollision(Ship ship1, Ship ship2){
+	public static double getTimeToCollision(Ship ship1, Ship ship2) throws NullPointerException{
 		
 		double result;
 		
