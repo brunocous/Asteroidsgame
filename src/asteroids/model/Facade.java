@@ -21,9 +21,14 @@ public class Facade implements IFacade{
 
 	@Override
 	public IShip createShip(double x, double y, double xVelocity,
-			double yVelocity, double radius, double angle) {
-		
-		return new Ship(new Position(x,y), new Velocity(xVelocity,yVelocity), angle, radius);
+			double yVelocity, double radius, double angle) throws ModelException{
+		try{ 
+			IShip newShip = new Ship(new Position(x,y), new Velocity(xVelocity,yVelocity), angle, radius);
+			return newShip;
+			
+		} catch(IllegalRadiusException exc){
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
@@ -61,24 +66,24 @@ public class Facade implements IFacade{
 		Ship castedShip = (Ship) ship;
 		return castedShip.getDirection();
 	}
-//TODO exceptions omvormen naar modelexceptions??
+
 	@Override
-	public void move(IShip ship, double dt) {
+	public void move(IShip ship, double dt) throws ModelException {
 		try{ Ship castedShip = (Ship) ship;
 		castedShip.move(dt);
 		} catch(NegativeTimeException ex){
 			throw new ModelException(ex);
+		} catch(IllegalArgumentException exc){
+			throw new ModelException(exc);
+		} catch(NullPointerException exc){
+			throw new ModelException(exc);
 		}
 	}
 
 	@Override
 	public void thrust(IShip ship, double amount) {
-		try{ Ship castedShip = (Ship) ship;
+		Ship castedShip = (Ship) ship;
 		castedShip.thrust(amount);
-		} catch(ExceedsSpeedOfLightException ex){
-			throw new ModelException(ex);
-		}
-		
 	}
 
 	@Override
@@ -89,34 +94,46 @@ public class Facade implements IFacade{
 	}
 
 	@Override
-	public double getDistanceBetween(IShip ship1, IShip ship2) {
-		Ship castedShip1 = (Ship) ship1;
+	public double getDistanceBetween(IShip ship1, IShip ship2) throws ModelException {
+		try{Ship castedShip1 = (Ship) ship1;
 		Ship castedShip2 = (Ship) ship2;
 		return Ship.getDistanceBetween(castedShip1, castedShip2);
+		} catch(NullPointerException ex){
+			throw new ModelException(ex);
+		}
 	}
 
 	@Override
-	public boolean overlap(IShip ship1, IShip ship2) {
-		Ship castedShip1 = (Ship) ship1;
+	public boolean overlap(IShip ship1, IShip ship2) throws ModelException {
+		try{ Ship castedShip1 = (Ship) ship1;
 		Ship castedShip2 = (Ship) ship2;
 		return Ship.overlap(castedShip1, castedShip2);
+		} catch(NullPointerException ex){
+			throw new ModelException(ex);
+		}
 	}
 
 	@Override
-	public double getTimeToCollision(IShip ship1, IShip ship2) {
-		Ship castedShip1 = (Ship) ship1;
+	public double getTimeToCollision(IShip ship1, IShip ship2) throws ModelException{
+		try{ Ship castedShip1 = (Ship) ship1;
 		Ship castedShip2 = (Ship) ship2;
 		return Ship.getTimeToCollision(castedShip1, castedShip2);
+		} catch(NullPointerException ex){
+			throw new ModelException(ex);
+		}
 	}
 
 	@Override
-	public double[] getCollisionPosition(IShip ship1, IShip ship2) {
-		Ship castedShip1 = (Ship) ship1;
+	public double[] getCollisionPosition(IShip ship1, IShip ship2) throws ModelException {
+		try{ Ship castedShip1 = (Ship) ship1;
 		Ship castedShip2 = (Ship) ship2;
 		Position colPos = Ship.getCollisionPosition(castedShip1, castedShip2);
 		double[] colPosArray = new double[]{colPos.getPosX() , colPos.getPosY()};
 		
 		return colPosArray;
+	} catch(NullPointerException ex){
+		throw new ModelException(ex);
+	}
 	}
 
 }
