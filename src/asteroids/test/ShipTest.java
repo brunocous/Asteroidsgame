@@ -192,6 +192,10 @@ public class ShipTest {
 		assertTrue(Util.fuzzyEquals(positivePositionShip.getDirection(), Double.NEGATIVE_INFINITY%(Math.PI*2)));
 	}
 	@Test
+	public final void isValidDirection_legalCase(){
+		assertTrue(Ship.isValidDirection(Math.PI));
+	}
+	@Test
 	public final void thrust_positiveAmount() throws Exception{
 		positivePositionShip.thrust(10);
 		assertTrue(Util.fuzzyEquals(positivePositionShip.getVel().getVelX(), positiveVelocity.getVelX() + 10.0*Math.cos(positivePositionShip.getDirection())));
@@ -260,22 +264,7 @@ public class ShipTest {
 	public final void overlap_infiniteNonOverlappingShip(){
 		assertFalse(Ship.overlap(infiniteNegativePositionShip, infinitePositionShip));
 	}
-	//TODO zal mss weg moeten
-	/**
-	@Test
-	public final void correctSpeed_overSpeedOfLight(){
-		assertTrue()
-	}
-	@Test
-	public final void correctSpeed_speedOfLight(){
-		
-		
-	}
-	@Test
-	public final void correctSpeed_underSpeedOfLight(){
-		
-	}
-	*/
+	
 	@Test
 	public final void getTimeToCollision_sameShip(){
 		double timeToCheck = Ship.getTimeToCollision(positivePositionShip, positivePositionShip);
