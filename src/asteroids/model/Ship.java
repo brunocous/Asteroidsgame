@@ -90,17 +90,23 @@ public class Ship implements IShip {
 	 *        the new pos for this ship.
 	 * @post The new pos for this ship is equal to the given pos.
 	 *       |new.getPos()= pos
+	 * @throws IllegalArgumentException
+	 * 		   the given pos has a component that is infinitely big 
 	 */
 	
 	@Basic
 	public void setPos(Position pos) throws IllegalArgumentException {
 		
-		if(Double.isInfinite().|| pos.getPosY().isInfinite()){
+		if(Double.isInfinite(pos.getPosX()) || Double.isInfinite(pos.getPosY())){
 			
 			throw new IllegalArgumentException();
 			
 		}
+		else{
+		
 	    this.pos = pos;
+	    
+		}
 	
 	}
 	
