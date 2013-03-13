@@ -40,7 +40,7 @@ public class Ship implements IShip {
 	 *       | new.getRadius()== radius 
 	 */
 	
-	public Ship(Position pos,Velocity vel, double direction, double radius){
+	public Ship(Position pos,Velocity vel, double direction, double radius) throws IllegalRadiusException{
 
 		this.setPos(pos);
 		this.setVel(vel);
@@ -387,6 +387,7 @@ public class Ship implements IShip {
 	/**
 	 * Returns the distance between two given ships.  
 	 * 
+	 * @pre the given ship1 and ship2 should not be null.
 	 * @param ship1
 	 * 	      The first ship of which the position will be compared to the given Ship ship2
 	 * @param ship2
