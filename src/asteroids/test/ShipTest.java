@@ -172,11 +172,6 @@ public class ShipTest {
 		assertTrue(Util.fuzzyEquals(positivePositionShip.getDirection(), Math.PI));
 	}
 	@Test
-	public final void turn_infiniteCase(){
-		positivePositionShip.turn(Double.POSITIVE_INFINITY);
-		assertTrue(Util.fuzzyEquals(positivePositionShip.getDirection(), Double.POSITIVE_INFINITY%(Math.PI*2)));
-	}
-	@Test
 	public final void turn_negativeLessThan2PiCase(){
 		positivePositionShip.turn(-Math.PI);
 		assertTrue(Util.fuzzyEquals(positivePositionShip.getDirection(), Math.PI));
