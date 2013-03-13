@@ -29,12 +29,12 @@ public class PartialFacadeTest {
   }
 
   @Test(expected=ModelException.class)
-  public void testCreateShipXIsNan() {
+  public void testCreateShipXIsNan() throws Exception {
     facade.createShip(Double.NaN, 200, 10, -10, 20, -Math.PI);
   }
   
   @Test(expected=ModelException.class)
-  public void testCreateShipRadiusNegative() {
+  public void testCreateShipRadiusNegative() throws Exception {
     facade.createShip(100, 200, 10, -10, -20, -Math.PI);
   }
   
