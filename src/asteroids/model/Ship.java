@@ -77,7 +77,7 @@ public class Ship implements IShip {
 	/**
 	 * Return the position for this bank account.
 	 */
-	//TODO clone doorsturen
+	//TODO @value??
 	@Basic
 	public Position getPos() {
 		return pos;
