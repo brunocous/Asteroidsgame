@@ -392,9 +392,6 @@ public class Ship implements IShip {
 	 * 	      The first ship of which the position will be compared to the given Ship ship2
 	 * @param ship2
 	 *        The second ship of which the position will be compared to the given Ship ship1
-	 * @throws SameShipException
-	 * 		   the given ships are the same ship.
-	 *         | ship1 == ship2
 	 * @return The distance between the outer side of ship1 and ship2 if ship1 and ship2 are different ships, 
 	 *         0.0 if ship1 and ship2 are the same ship. 
 	 *         The result will be negative if ship1 and ship2 overlap.
@@ -402,11 +399,11 @@ public class Ship implements IShip {
 	 *         |  then result == 0.0
 	 *         |else result == ship1.getPos().getDistanceTo(ship2.getPos())-(ship1.getRadius()+ship2.getRadius())
 	 */
-	public static double getDistanceBetween(Ship ship1, Ship ship2) throws SameShipException{
+	public static double getDistanceBetween(Ship ship1, Ship ship2) {
 		
 		double result;
 		if(ship1==ship2){
-			throw new SameShipException();
+			result = 0.0;
 		}
 		
 		else{
@@ -424,25 +421,23 @@ public class Ship implements IShip {
 	/**
 	 * Check if 2 ships overlap.
 	 * 
+	 * @pre the given ship1 and ship2 should not be null.
 	 * @param ship1
 	 * 	      The first ship of which the position will be compared to the position of ship2
 	 * @param ship2
 	 * 	      The second ship of which the position will be compared to the position of ship1
-	 * @throws SameShipException
-	 * 		   the given ships are the same ship.
-	 * 		   | ship1 == ship2
 	 * @return true if and only if ship1 and ship2 are the same ship or the distance between
 	 *         ship1 and ship2 is less than zero. 
 	 *         | if( ship1==ship2 || (asteroids.Util.fuzzyLessThanOrEqualTo(getDistanceBetween(ship1,ship2),0) && !asteroids.Util.fuzzyEquals(getDistanceBetween(ship1,ship2), 0)))
 	 *         | then result == true
 	 *         | else result == false
 	 */
-	public static boolean overlap(Ship ship1, Ship ship2) throws SameShipException{
+	public static boolean overlap(Ship ship1, Ship ship2) {
 		
 		boolean result =false;
 		if(ship1==ship2){
 			
-			throw new SameShipException();
+			result=true;
 			
 		} 
 		else{
@@ -481,27 +476,35 @@ public class Ship implements IShip {
 	/**
 	 * Finds out whether and in how many seconds 2 ships will collide. 
 	 * 
+	 * @pre the given ship1 and ship2 should not be null.
 	 * @param ship1
 	 * 		  The first ship that will or will not collide with ship2 after an amount of time.
 	 * @param ship2
 	 * 		  The second ship that will or will not collide with ship1 after an amount of time.
-	 * @throws SameShipException
-	 * 		   the given ships are the same ship
-	 * 		   | ship1==ship2
 	 * @return The amount of time (in seconds) it will take for ship1 and ship2 to collide or 
 	 * 	       POSITIVE_INFINITY if they will never collide (given their current position and 
-	 *         velocity). 
-	 * 
+	 *         velocity). If ship1 and ship2 are the same ship, they will never collide.
+	 *         | double deltavx = ship2.getVel().getVelX()- ship1.getVel().getVelX()
+	 *		   | double deltavy = ship2.getVel().getVelY()- ship1.getVel().getVelY()
+	 *         | double deltarx = ship2.getPos().getPosX()- ship1.getPos().getPosX()
+	 *         | double deltary = ship2.getPos().getPosY()- ship1.getPos().getPosY()
+	 *         | double sigma = ship1.getRadius()+ship2.getRadius()
+	 *         | double d = Math.pow(scalarProduct(deltavx, deltavy, deltarx, deltary), 2)-scalarProduct(deltavx,deltavy,deltavx,deltavy)*(scalarProduct(deltarx,deltary,deltarx,deltary)-Math.pow(sigma, 2))
+	 *         | if(ship1 == ship2)
+	 *         | then result == Double.POSITIVE_INFINITY
+	 *         | else if(Util.fuzzyLessThanOrEqualTo(-scalarProduct(deltavx,deltavy,deltarx,deltary),0) || Util.fuzzyLessThanOrEqualTo(d,0) )
+	 *         | else result == -(scalarProduct(deltavx, deltavy, deltarx,deltary)+Math.sqrt(d))/scalarProduct(deltavx,deltavy,deltavx,deltavy)
+	 *         
 	 */
 	                      
 	
-	public static double getTimeToCollision(Ship ship1, Ship ship2) throws SameShipException{
+	public static double getTimeToCollision(Ship ship1, Ship ship2){
 		
 		double result;
 		
 		if(ship1 == ship2) {
 			
-			throw new SameShipException();
+			result = Double.POSITIVE_INFINITY;
 			
 		}
 		
@@ -530,15 +533,13 @@ public class Ship implements IShip {
 	 * Calculates the position where 2 ships will collide, if they will collide within a 
 	 * finite amount of time.
 	 * 
+	 * @pre the given ship1 and ship2 should not be null.
 	 * @param ship1
 	 *        The first ship of which we want to know at which position it will collide with
 	 *        ship2.
 	 * @param ship2
 	 *        The second ship of which we want to know at which position it will collide with
 	 *        ship1.
-	 * @throws SameShipException
-	 * 		   the given ships are the same ship.
-	 * 		   | ship1==ship2
 	 * @return The position where ship1 and ship2 will collide if they will collide eventually 
 	 *         or 'null' if ship1 and ship2 will never collide. 
 	 *         | if(deltaT==Double.POSITIVE_INFINITY)
@@ -546,15 +547,9 @@ public class Ship implements IShip {
 	 *	       | else result== new Position(ship1.getPos().getPosX()+getTimeToCollision(ship1,ship2)*ship1.getVel().getVelX(),ship1.getPos().getPosY()+getTimeToCollision(ship1,ship2)*ship1.getVel().getVelY())
 	 */
 	
-	public static Position getCollisionPosition(Ship ship1, Ship ship2) throws SameShipException{
+	public static Position getCollisionPosition(Ship ship1, Ship ship2) {
 		
 		Position result = null;
-		
-		if(ship1 == ship2){
-			throw new SameShipException();
-		}
-		
-		else{
 			
 		double deltaT= getTimeToCollision(ship1,ship2);
 		
@@ -572,7 +567,7 @@ public class Ship implements IShip {
 			result= collisionPoint;
 			
 		}
-		}
+		
 		
 		return result;
 		}
