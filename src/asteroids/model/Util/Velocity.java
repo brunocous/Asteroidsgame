@@ -1,13 +1,19 @@
 package asteroids.model.Util;
 import be.kuleuven.cs.som.annotate.*;
 
-
+@Value
 public class Velocity {
-	// the x-component of a velocity vector
+	/**
+	 * The x-component of a velocity vector.
+	 */
 	private double velX;
-	// the y-component of a velocity vector 
+	/**
+	 * The y-component of a velocity vector. 
+	 */
 	private double velY;
-	// the value for the speed of light
+	/**
+	 * The value for the speed of light.
+	 */
 	private static final double SPEED_OF_LIGHT=300000000.0;
 	
 	/**
@@ -21,6 +27,7 @@ public class Velocity {
 	 * @post the initial velY for this new velocity is equal to the given velY.
 	 *       |new.getVelY()==velY
 	 */
+	@Raw
 	public Velocity(double velX, double velY) {
 	 this.velX=velX;
 	 this.velY=velY;
@@ -29,48 +36,23 @@ public class Velocity {
 	/**
 	 * Return the velX of this velocity
 	 */
-	@Basic
+	@Basic @Raw @Immutable
 	public double getVelX() {
 		return velX;
 	}
-	
-	/**
-	 * Set the velX of this velocity to the given velX.
-	 * @param velX
-	 *        the new velX for this velocity.
-	 * @post the new velX for this velocity is equal to the given velX.
-	 *       |new.getVelX()==velX
-	 */
-	@Basic
-	public void setVelX(double velX) {
-		this.velX = velX;
-	}
-	
+
 	/**
 	 * Return the velY of this velocity.
 	 */
-	@Basic
+	@Basic @Raw @Immutable
 	public double getVelY() {
 		return velY;
 	}
 	
 	/**
-	 * Set the velY of this velocity to the given velY.
-	 * @param velY
-	 *        the new velY for this velocity.
-	 * @post the new velY for this velocity is equal to the given velY.
-	 *       |new.getVelY()==velY
-	 */
-	@Basic
-	public void setVelY(double velY) {
-		this.velY = velY;
-	}
-	
-	/**
 	 * Return the speed of light.
 	 */
-	// TODO @immutable?
-	@Basic 
+	@Basic @Immutable
 	public static double getSpeedOfLight(){
 		return SPEED_OF_LIGHT;
 	}
@@ -90,16 +72,55 @@ public class Velocity {
 	 * Add a given velocity vector to this velocity vector.
 	 * @param velToAdd
 	 *        the velocity vector to be added to this velocity 
-	 * @post The new velX of this velocity is equal to the old velX of this velocity plus the
-	 *       velX of the given velToAdd.
-	 *       |new.getVelX()==velToAdd.getVelX() + this.getVelX()
-	 * @post The new velY of this velocity is equal to the old velY of this velocity plus the 
-	 *       velY of the given velToAdd.
-	 *       |new.getVelY()==velToAdd.getVelY() + this.getVelY()
+	 * @return The resulting velocity has the exact same X-component and the exact same Y-component as this velocity.
+	 * 			|	result == this
+	 * @return The new velX of this velocity is equal to the old velX of this velocity plus the
+	 *       	velX of the given velToAdd, and the new velY of this velocity is equal to the old velY of this velocity plus the 
+	 *       	velY of the given velToAdd.
+	 *			|	(result.getVelX()==velToAdd.getVelX() + this.getVelX() )&&
+	 *      	|	(result.getVelY()==velToAdd.getVelY() + this.getVelY() )
 	 */
-	public void add(Velocity velToAdd){
-		setVelX(velToAdd.getVelX() + getVelX());
-		setVelY(velToAdd.getVelY() + getVelY());
+	public Velocity add(Velocity velToAdd){
+		if(velToAdd == null)
+			return this;
+		else
+		return new Velocity(getVelX() + velToAdd.getVelX(), getVelY() + velToAdd.getVelY());
+	}
+	
+	/**
+	 * Check whether this velocity is equal to the given velocity.
+	 * 
+	 * @return True if and only if the given object is effective, and if this velocity and the given 
+	 * 			velocity belong to the same class, and if this velocity and the other object 
+	 * 			interpreted as a velocity have equal velX and equal velY.
+	 * 			| result == ( (vel != null) && (this.getClass() == vel.getClass())
+	 * 			| && asteroids.Util.fuzzyEquals(this.getVelX() , vel.getVelX())
+	 * 			| && asteroids.Util.fuzzyEquals(this.getVelY() , vel.getVelY()) )
+	 * 
+	 */
+	@Override
+	public boolean equals(Object vel){
+		if(vel == null)
+			return false;
+		return ( asteroids.Util.fuzzyEquals(this.getVelX() , ((Velocity) vel).getVelX()) 
+				&& asteroids.Util.fuzzyEquals(this.getVelY() , ((Velocity) vel).getVelY()) );
+	}
+	/**
+	 * Return the hash code for this velocity.
+	 */
+	@Override 
+	public int hashCode(){
+		return (new Double(this.getVelX()).hashCode()) + (new Double(this.getVelY()).hashCode());
+	}
+	/**
+	 * Return a textual representation of this velocity.
+	 * @return	A string consisting of the textual representation of the X- and Y-component of this velocity, 
+	 * 			separated by a space and enclosed in square brackets.
+	 * 			|	result.equals("[" + this.getVelX()+ " " + this.getVelY()+ "]" )
+	 */
+	@Override
+	public String toString(){
+		return "[" + this.getVelX()+ " " + this.getVelY()+ "]";
 	}
 
 }
