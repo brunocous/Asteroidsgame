@@ -175,7 +175,13 @@ public class Ship implements IShip {
 	public void setDirection(double direction) {
 		
 		assert(isValidDirection(direction));
+		
+		if(direction>=0){
 		this.direction = direction%(2*Math.PI);
+		}
+		else{
+	    this.direction = 2*Math.PI - direction;
+		}
 		
 	}
 	
