@@ -212,7 +212,7 @@ public class Ship implements IShip {
 	 * Check whether the given direction is a valid direction.
 	 * 
 	 * @param direction
-	 *        the direction to be checked in radians.
+	 *        The direction to be checked in radians.
 	 * @return true if and only if the given direction is greater than -Pi and less than or equal to
 	 * 		   Pi.
 	 *         | result == (direction > -Math.PI) && (direction <= Math.PI)
@@ -237,17 +237,17 @@ public class Ship implements IShip {
 	/**
 	 * Set the radius of this ship to the given radius.
 	 * 
-	 * @pre	  the given radius should be a valid radius
+	 * @pre	  The given radius should be a valid radius.
 	 *        | isValidRadius(radius)
 	 * @param radius
-	 *        the new radius for this ship in km.
+	 *        The new radius for this ship in km.
 	 * @post The new radius for this ship is equal to the given radius if the given radius is
 	 *       larger than 10. Else the new radius for this ship is 15.
 	 *       |if(isValidRadius(radius))
 	 *       |then new.getRadius()== radius
 	 *       |else new.getRadius()== 10    
 	 * @throws illegalRadiusException
-	 *         the given radius is not a legal radius for this ship.
+	 *         The given radius is not a legal radius for this ship.
 	 *         |!isValidRadius(radius)
 	 * 
 	 */
@@ -272,7 +272,7 @@ public class Ship implements IShip {
 	 * higher than 0 and less than or equal to 10.
 	 *
 	 * @param radius
-	 *        the radius to be checked in km.
+	 *        The radius to be checked in km.
 	 * @return true if and only if the given radius is higher than 0 and less than or equal to 10.
 	 *         |result == (!Util.fuzzyLessThanOrEqualTo(radius, 0)) && Util.fuzzyLessThanOrEqualTo(radius, 10))
 	 */
@@ -284,11 +284,11 @@ public class Ship implements IShip {
 	/**
 	 * Moves the ship during a fixed amount of time.
 	 * 
-	 * @pre   the given elapsedTime should be positive 	  
+	 * @pre   The given elapsedTime should be positive or 0. 	  
 	 * @param elapsedTime
-	 * 		  amount of time during which the ship is moving in seconds.
+	 * 		  The amount of time during which the ship is moving in seconds.
 	 * @post The position of the ship has been changed according to the previous position,
-	 * 		   the current velocity of the ship and the given duration elapsedTime. 
+	 * 		   The current velocity of the ship and the given duration elapsedTime. 
 	 * 		   |(new this).getPos() == this.getPos().add(new Position(vel.getVelX()*elapsedTime, vel.getVelY()*elapsedTime));
 	 * @throws NegativeTimeException
 	 *         The given elapsedTime is negative and therefore unvalid.
@@ -314,7 +314,7 @@ public class Ship implements IShip {
 	 * Check whether the given time is a valid amount of time. 
 	 * 
 	 * @param time
-	 *        the amount of time to be checked in seconds.
+	 *        The amount of time to be checked in seconds.
 	 * @return true if and only if the given time is greater than or equal to zero.
 	 *         | result == !(time<0)
 	 *        
@@ -331,10 +331,10 @@ public class Ship implements IShip {
 	 *        The velocity to be checked.
 	 * @return true if and only if the given velocity's norm is less than or equal to the speed
 	 *         of light.
-	 *         |result == (velocity.getNorm()<=Velocity.getSpeedOfLight())
+	 *         |result == (Util.fuzzyLessThanOrEqualTo(velocity.getNorm(),Velocity.getSpeedOfLight()))
 	 */
 	public static boolean isValidVelocity(Velocity velocity){
-		return (velocity.getNorm()<=Velocity.getSpeedOfLight());
+		return (Util.fuzzyLessThanOrEqualTo(velocity.getNorm(),Velocity.getSpeedOfLight()));
 	}
 	
 	/**
@@ -342,7 +342,7 @@ public class Ship implements IShip {
 	 * 
 	 * @param angle
 	 * 		  The angle (in radians) to be added to the current direction of the ship
-	 * @effect the new direction of the ship is the previous direction plus
+	 * @effect The new direction of the ship is the previous direction plus
 	 *       the given angle.
 	 *       |setDirection(this.getDirection()+ angle)
 	 * @note this method has a precondition, namely
@@ -359,7 +359,7 @@ public class Ship implements IShip {
 	 * Changes the ship's velocity by a given amount, does not change the ship's direction. 
 	 * 
 	 * @param amount
-	 * 		  The amount by which the velocity of the ship will be increased
+	 * 		  The amount by which the velocity of the ship will be increased.
 	 * @effect If increasing the ship's velocity by the given amount does not result into a 
 	 *       velocity that is higher than the speed of light, the ship's velocity will be 
 	 *       increased by the given amount. If it does exceed the speed of light, the ship's new
@@ -415,11 +415,11 @@ public class Ship implements IShip {
 	/**
 	 * Returns the distance between two given ships.  
 	 * 
-	 * @pre the given ship1 and ship2 should not be null.
+	 * @pre The given ship1 and ship2 should not be null.
 	 * @param ship1
-	 * 	      The first ship of which the position will be compared to the given Ship ship2
+	 * 	      The first ship of which the position will be compared to the given Ship ship2.
 	 * @param ship2
-	 *        The second ship of which the position will be compared to the given Ship ship1
+	 *        The second ship of which the position will be compared to the given Ship ship1.
 	 * @return The distance between the outer side of ship1 and ship2 if ship1 and ship2 are different ships, 
 	 *         0.0 if ship1 and ship2 are the same ship. 
 	 *         The result will be negative if ship1 and ship2 overlap.
@@ -442,7 +442,7 @@ public class Ship implements IShip {
 	/**
 	 * Check if 2 ships overlap.
 	 * 
-	 * @pre the given ship1 and ship2 should not be null.
+	 * @pre The given ship1 and ship2 should not be null.
 	 * @param ship1
 	 * 	      The first ship of which the position will be compared to the position of ship2
 	 * @param ship2
@@ -477,11 +477,11 @@ public class Ship implements IShip {
 	 * Calculates the scalar product of two 2-dimensional vectors.
 	 * 
 	 * @param x1
-	 *        x-coördinate of the first vector.
+	 *        The x-coördinate of the first vector.
 	 * @param y1
-	 *        y-coördinate of the first vector
+	 *        The y-coördinate of the first vector.
 	 * @param x2
-	 *        x-coördinate of the second vector.
+	 *        The x-coördinate of the second vector.
 	 * @param y2
 	 *        y-coördinate of the second vector.
 	 * @return the scalar product of vector1(x1,y1) and vector2(x2,y2)
@@ -518,7 +518,6 @@ public class Ship implements IShip {
 	 *         
 	 */
 	                      
-	
 	public static double getTimeToCollision(Ship ship1, Ship ship2) throws NullPointerException{
 		
 		double result;
@@ -552,7 +551,7 @@ public class Ship implements IShip {
 	 * Calculates the position where 2 ships will collide, if they will collide within a 
 	 * finite amount of time.
 	 * 
-	 * @pre the given ship1 and ship2 should not be null.
+	 * @pre The given ship1 and ship2 should not be null.
 	 * @param ship1
 	 *        The first ship of which we want to know at which position it will collide with
 	 *        ship2.
@@ -575,14 +574,15 @@ public class Ship implements IShip {
 		else{
 			double radius1 = ship1.getRadius();
 			double radius2 = ship2.getRadius();
+			double fraction =(radius2/(radius1 + radius2));
 			
 			double xPosShip1 = ship1.getPos().getPosX()+deltaT*ship1.getVel().getVelX();
 			double yPosShip1 = ship1.getPos().getPosY()+deltaT*ship1.getVel().getVelY();
 			double xPosShip2 = ship2.getPos().getPosX()+deltaT*ship2.getVel().getVelX();
 			double yPosShip2 = ship2.getPos().getPosY()+deltaT*ship2.getVel().getVelY();
 			
-			double xCoordCollision = (radius2/(radius1 + radius2))*xPosShip1 + (radius1/(radius1+ radius2))*xPosShip2;
-			double yCoordCollision = (radius2/(radius1 + radius2))*yPosShip1 + (radius1/(radius1+ radius2))*yPosShip2;
+			double xCoordCollision = fraction*xPosShip1 + (1-fraction)*xPosShip2;
+			double yCoordCollision = fraction*yPosShip1 + (1-fraction)*yPosShip2;
 			
 			return new Position(xCoordCollision, yCoordCollision);
 			
