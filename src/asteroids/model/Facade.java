@@ -130,9 +130,10 @@ public class Facade implements IFacade{
 		try{ Ship castedShip1 = (Ship) ship1;
 		Ship castedShip2 = (Ship) ship2;
 		Position colPos = Ship.getCollisionPosition(castedShip1, castedShip2);
-		double[] colPosArray = new double[]{colPos.getPosX() , colPos.getPosY()};
-		
-		return colPosArray;
+		if(colPos == null){
+			return null;
+		} else
+		return new double[]{colPos.getPosX() , colPos.getPosY()};
 	} catch(NullPointerException ex){
 		throw new ModelException(ex);
 	}

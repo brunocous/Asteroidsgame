@@ -77,7 +77,6 @@ public class Ship implements IShip {
 	/**
 	 * Return the position for this bank account.
 	 */
-	//TODO @value??
 	@Basic
 	public Position getPos() {
 		return pos;
@@ -402,22 +401,15 @@ public class Ship implements IShip {
 	 *         |else result == ship1.getPos().getDistanceTo(ship2.getPos())-(ship1.getRadius()+ship2.getRadius())
 	 */
 	public static double getDistanceBetween(Ship ship1, Ship ship2) {
-		
-		double result;
 		if(ship1==ship2){
-			result = 0.0;
+			return 0;
 		}
-		
 		else{
-			
 		double distanceBetweenCentres = ship1.getPos().getDistanceTo(ship2.getPos());
 		double sumOfRadii= ship1.getRadius()+ship2.getRadius();
-		double distance = distanceBetweenCentres - sumOfRadii;
-		result = distance;
-		
+		return distanceBetweenCentres - sumOfRadii;
 		}
 		
-		return result;
 		
 	}
 	/**
@@ -504,13 +496,11 @@ public class Ship implements IShip {
 		
 		double result;
 		
-		if(ship1 == ship2) {
+		if(ship1==ship2) {
 			
 			result = Double.POSITIVE_INFINITY;
 			
-		}
-		
-		else{
+		} else{
 		
 		double deltavx = ship2.getVel().getVelX()- ship1.getVel().getVelX();
 		double deltavy = ship2.getVel().getVelY()- ship1.getVel().getVelY();
@@ -550,28 +540,18 @@ public class Ship implements IShip {
 	 */
 	
 	public static Position getCollisionPosition(Ship ship1, Ship ship2) {
-		
-		Position result = null;
-			
 		double deltaT= getTimeToCollision(ship1,ship2);
 		
-		if(deltaT==Double.POSITIVE_INFINITY){
-			
-			result= null;
-			
+		if(Double.isInfinite(deltaT)){
+			return null;
 		}
 		else{
-			
 			double xCoordCollision = ship1.getPos().getPosX()+deltaT*ship1.getVel().getVelX();
 			double yCoordCollision = ship1.getPos().getPosY()+deltaT*ship1.getVel().getVelY();
 			
-			Position collisionPoint = new Position(xCoordCollision, yCoordCollision);
-			result= collisionPoint;
+			return new Position(xCoordCollision, yCoordCollision);
 			
 		}
-		
-		
-		return result;
 		}
 		
 	}
