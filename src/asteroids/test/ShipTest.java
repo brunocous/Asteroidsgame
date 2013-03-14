@@ -23,7 +23,7 @@ public class ShipTest {
 				zeroPositionZeroDirectionShip, fiftyXPositionPiDirectionShip;
 	
 	private Position zeroPosition, negativePosition, positivePosition, infinitePosition, fiftyXPosition, nearInfinitePosition, nearNegativeInfinitePosition;
-	private Velocity speedOfLightVelocity, positiveVelocity, positiveInfiniteVelocity;
+	private Velocity speedOfLightVelocity, positiveVelocity, positiveInfiniteVelocity, zeroVelocity;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -42,6 +42,7 @@ public class ShipTest {
 		speedOfLightVelocity = new Velocity(Velocity.getSpeedOfLight(),0);
 		positiveVelocity = new Velocity(50,50);
 		positiveInfiniteVelocity = new Velocity(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+		zeroVelocity = new Velocity(0,0);
 		
 		speedOfLightShip = new Ship(positivePosition, speedOfLightVelocity, 0 , 15);
 		
@@ -65,10 +66,8 @@ public class ShipTest {
 	@Test
 	public final void extendedConstructor_LegalCase() throws Exception{
 		Ship theShip = new Ship(positivePosition, positiveVelocity, Math.PI, 11);
-		assertTrue(Util.fuzzyEquals(positivePosition.getPosX(), theShip.getPos().getPosX()) );
-		assertTrue(Util.fuzzyEquals(positivePosition.getPosY(), theShip.getPos().getPosY()));
-		assertTrue(Util.fuzzyEquals(positiveVelocity.getVelX(), theShip.getVel().getVelX()));
-		assertTrue(Util.fuzzyEquals(positiveVelocity.getVelY(), theShip.getVel().getVelY()));
+		assertTrue(theShip.getPos().equals(positivePosition));
+		assertTrue(theShip.getVel().equals(positiveVelocity));
 		assertTrue(Util.fuzzyEquals(Math.PI, theShip.getDirection()));
 		assertTrue(Util.fuzzyEquals(11, theShip.getRadius()));
 	}
@@ -76,7 +75,7 @@ public class ShipTest {
 	@Test
 	public final void extendendConstructor_infiniteSpeedCase() throws Exception{
 		Ship theShip = new Ship(positivePosition, positiveInfiniteVelocity, Math.PI, 11);
-		assertTrue(Util.fuzzyEquals(theShip.getVel().getNorm(), 0));
+		assertTrue(theShip.getVel().equals(zeroVelocity));
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
@@ -91,10 +90,8 @@ public class ShipTest {
 	@Test 
 	public final void defaultConstructor_legalCase(){
 		Ship theShip = new Ship();
-		assertTrue(Util.fuzzyEquals(0, theShip.getPos().getPosX()) );
-		assertTrue(Util.fuzzyEquals(0, theShip.getPos().getPosY()));
-		assertTrue(Util.fuzzyEquals(0, theShip.getVel().getVelX()));
-		assertTrue(Util.fuzzyEquals(0, theShip.getVel().getVelY()));
+		assertTrue(theShip.getPos().equals(zeroPosition));
+		assertTrue(theShip.getVel().equals(zeroVelocity));
 		assertTrue(Util.fuzzyEquals(0, theShip.getDirection()));
 		assertTrue(Util.fuzzyEquals(15, theShip.getRadius()));
 	}
@@ -112,14 +109,12 @@ public class ShipTest {
 	@Test
 	public final void move_toZeroPosition() throws Exception{
 		negativePositionShip.move(1.0);
-		assertTrue(Util.fuzzyEquals(negativePositionShip.getPos().getPosX(), zeroPosition.getPosX()));
-		assertTrue(Util.fuzzyEquals(negativePositionShip.getPos().getPosY(), zeroPosition.getPosY()));
+		assertTrue(negativePositionShip.getPos().equals(zeroPosition));
 	}
 	@Test
 	public final void move_noChange() throws Exception{
 		positivePositionShip.move(0.0);
-		assertTrue(Util.fuzzyEquals(positivePositionShip.getPos().getPosX(), positivePosition.getPosX()));
-		assertTrue(Util.fuzzyEquals(positivePositionShip.getPos().getPosY(), positivePosition.getPosY()));
+		assertTrue(positivePositionShip.getPos().equals(positivePosition));
 	}
 	@Test (expected = NegativeTimeException.class)
 	public final void move_negativeTime() throws Exception{
@@ -267,6 +262,13 @@ public class ShipTest {
 	
 	@Test
 	public final void getCollisionPosition_angledDirection(){
+		zeroPositionShip.setVel(new Velocity(0,50));
+		zeroPositionShip.setDirection(Math.PI/2);
+		positivePositionShip.setVel(new Velocity(-50,0));
+		positivePositionShip.setDirection(Math.PI);
+		Position posToCheck = Ship.getCollisionPosition(zeroPositionShip, positivePositionShip);
+		System.out.println(posToCheck.toString());
+		assertTrue(posToCheck.equals(new Position(10.606601717798211,39.39339828220179)));
 		
 	}
 }
