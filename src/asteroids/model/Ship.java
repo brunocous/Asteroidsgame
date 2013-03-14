@@ -558,8 +558,8 @@ public class Ship implements IShip {
 			double xPosShip2 = ship2.getPos().getPosX()+deltaT*ship2.getVel().getVelX();
 			double yPosShip2 = ship2.getPos().getPosY()+deltaT*ship2.getVel().getVelY();
 			
-			double xCoordCollision = (radius1/(radius1 + radius2))*xPosShip1 + (radius2/(radius1+ radius2))*xPosShip2;
-			double yCoordCollision = (radius1/(radius1 + radius2))*yPosShip1 + (radius2/(radius1+ radius2))*yPosShip2;
+			double xCoordCollision = (radius2/(radius1 + radius2))*xPosShip1 + (radius1/(radius1+ radius2))*xPosShip2;
+			double yCoordCollision = (radius2/(radius1 + radius2))*yPosShip1 + (radius1/(radius1+ radius2))*yPosShip2;
 			
 			return new Position(xCoordCollision, yCoordCollision);
 			

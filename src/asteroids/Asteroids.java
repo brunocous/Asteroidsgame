@@ -109,7 +109,7 @@ public class Asteroids extends JFrame {
 
   public void start() {
     this.setFocusable(true);
-    this.setAutoRequestFocus(true);
+    //this.setAutoRequestFocus(true);
     this.setVisible(true);
     this.requestFocus();
     lastMove = System.currentTimeMillis();

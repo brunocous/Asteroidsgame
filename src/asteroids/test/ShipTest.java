@@ -147,7 +147,7 @@ public class ShipTest {
 		positivePositionShip.turn(-Math.PI);
 		assertTrue(Util.fuzzyEquals(positivePositionShip.getDirection(), Math.PI));
 	}
-	// TODO WAT MOET ER GEBEUREN BIJ ONEINDIG ALS ARGUMENT BIJ DIRECTION??
+	
 	@Test 
 	public final void turn_negativeGreaterThan2PiCase(){
 		positivePositionShip.turn(-9*Math.PI);
@@ -234,7 +234,6 @@ public class ShipTest {
 	//TODO uitrekenen
 	public final void getTimeToCollision_sameOppositeDirectionAndSameVelocity(){
 		double timeToCheck = Ship.getTimeToCollision(zeroPositionZeroDirectionShip, fiftyXPositionPiDirectionShip);
-		System.out.println(timeToCheck);
 		
 		assertTrue(Util.fuzzyEquals(timeToCheck, 0.2));
 	}	
@@ -242,10 +241,11 @@ public class ShipTest {
 	public final void getTimeToCollision_angledDirection(){
 		zeroPositionShip.setVel(new Velocity(0,50));
 		zeroPositionShip.setDirection(Math.PI/2);
-		positivePositionShip.setVel(new Velocity(50,0));
+		positivePositionShip.setVel(new Velocity(-50,0));
 		positivePositionShip.setDirection(Math.PI);
 		double timeToCheck = Ship.getTimeToCollision(zeroPositionShip, positivePositionShip);
-		assertTrue(Util.fuzzyEquals(timeToCheck, 0.905538514));
+		
+		assertTrue(Util.fuzzyEquals(timeToCheck,0.57573593129));
 		
 	}
 	@Test
