@@ -58,7 +58,7 @@ public class ShipTest {
 		smallPositiveDirectionShip = new Ship(positivePosition, positiveVelocity, 1, 15);
 		
 		zeroPositionZeroDirectionShip = new Ship(zeroPosition, new Velocity(50,0), 0, 15);
-		fiftyXPositionPiDirectionShip = new Ship(fiftyXPosition, new Velocity(-50,0), Math.PI, 15);
+		fiftyXPositionPiDirectionShip = new Ship(fiftyXPosition, new Velocity(-50,0), 0, 15);
 			
 	}
 
@@ -76,7 +76,7 @@ public class ShipTest {
 	@Test
 	public final void extendendConstructor_infiniteSpeedCase() throws Exception{
 		Ship theShip = new Ship(positivePosition, positiveInfiniteVelocity, Math.PI, 11);
-		assertTrue(Util.fuzzyEquals(theShip.getVel().getVelX(), speedOfLightVelocity.getVelX()));
+		assertTrue(Util.fuzzyEquals(theShip.getVel().getNorm(), 0));
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
@@ -154,11 +154,6 @@ public class ShipTest {
 		assertTrue(Util.fuzzyEquals(positivePositionShip.getDirection(), Math.PI));
 	}
 	@Test
-	public final void turn_negativeInfiniteCase(){
-		positivePositionShip.turn(Double.NEGATIVE_INFINITY);
-		assertTrue(Util.fuzzyEquals(positivePositionShip.getDirection(), Double.NEGATIVE_INFINITY%(Math.PI*2) + 2*Math.PI));
-	}
-	@Test
 	public final void isValidDirection_legalCase(){
 		assertTrue(Ship.isValidDirection(Math.PI));
 	}
@@ -204,12 +199,8 @@ public class ShipTest {
 		assertTrue(Util.fuzzyLessThanOrEqualTo(distanceToCheck, 0));
 	}
 	@Test
-	//TODO ni zeker wa ik hier moet doen
 	public final void getDistanceBetween_negativeAndPositiveInfinitePositionedShips(){
-		negativePositionShip.setPos(new Position(Double.MAX_VALUE-1000,Double.MAX_VALUE - 1000));
-		positivePositionShip.setPos(new Position(Double.MAX_VALUE-1000,Double.MAX_VALUE - 1000));
-		double distanceToCheck = Ship.getDistanceBetween(negativePositionShip, positivePositionShip);
-		
+		double distanceToCheck = Ship.getDistanceBetween(nearInfinitePositionShip, nearNegativeInfinitePositionShip);
 		assertTrue(Double.isInfinite(distanceToCheck));
 	}
 	@Test
@@ -243,18 +234,18 @@ public class ShipTest {
 	//TODO uitrekenen
 	public final void getTimeToCollision_sameOppositeDirectionAndSameVelocity(){
 		double timeToCheck = Ship.getTimeToCollision(zeroPositionZeroDirectionShip, fiftyXPositionPiDirectionShip);
-		assertTrue(Util.fuzzyEquals(timeToCheck, 0));
-	}
+		System.out.println(timeToCheck);
+		
+		assertTrue(Util.fuzzyEquals(timeToCheck, 0.2));
+	}	
 	@Test
-	public final void getTimeToCollision_sameDirectionAndDifferentVelocity(){
-		
-	}
-	public final void getTimeToCollision_sameDirectionAndSameVelocity(){
-		
-		
-	}
-	@Test
-	public final void getTimeToCollision_angledDirectionAndDifferentSpeed(){
+	public final void getTimeToCollision_angledDirection(){
+		zeroPositionShip.setVel(new Velocity(0,50));
+		zeroPositionShip.setDirection(Math.PI/2);
+		positivePositionShip.setVel(new Velocity(50,0));
+		positivePositionShip.setDirection(Math.PI);
+		double timeToCheck = Ship.getTimeToCollision(zeroPositionShip, positivePositionShip);
+		assertTrue(Util.fuzzyEquals(timeToCheck, 0.905538514));
 		
 	}
 	@Test
@@ -268,17 +259,14 @@ public class ShipTest {
 		assertTrue((posToCheck == null));
 	}
 	@Test
-	public final void getCollisionPosition_sameDirrectionAndDifferentVelocity(){
+	public final void getCollisionPosition_sameDirrectionAndSameVelocity(){
 		Position posToCheck = Ship.getCollisionPosition(zeroPositionZeroDirectionShip, fiftyXPositionPiDirectionShip);
 		assertTrue(Util.fuzzyEquals(posToCheck.getPosX(), 25));
 		assertTrue(Util.fuzzyEquals(posToCheck.getPosY(), 0));
 	}
+	
 	@Test
-	public final void getCollisionPosition_angledDirectionAndDifferentSpeed(){
-		
-	}
-	@Test
-	public final void getCollisionPosition_angledDirectionAndSameSpeed(){
+	public final void getCollisionPosition_angledDirection(){
 		
 	}
 }

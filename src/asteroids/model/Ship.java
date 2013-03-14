@@ -134,6 +134,7 @@ public class Ship implements IShip {
 	 *       |then new.getVel()==vel
 	 *       |else new.getVel() == correctSpeed(vel)
 	 */
+	//TODO documentatie aanpassen
 	@Basic
 	public void setVel(Velocity vel) {
 		if (isValidVelocity(vel)){
@@ -141,11 +142,14 @@ public class Ship implements IShip {
 			this.vel = vel;
 			
 		}
-		else{
+		else{ 
+			if(Double.isInfinite(vel.getVelX()) || Double.isInfinite(vel.getVelY())){
+			this.vel = new Velocity(0,0);
+		} else{
 			
 			Velocity result = correctSpeed(vel);
 			this.vel = result;
-			
+		}
 		}
 	}
 
@@ -178,7 +182,7 @@ public class Ship implements IShip {
 		this.direction = direction%(2*Math.PI);
 		}
 		else{
-	    this.direction = 2*Math.PI + direction;
+	    this.direction = 2*Math.PI + direction%(2*Math.PI);
 		}
 		
 	}
@@ -463,10 +467,10 @@ public class Ship implements IShip {
 	
 	public static double scalarProduct(double x1, double y1, double x2, double y2){
 		
-		return x1*y1+x2*y2;
+		return x1*x2+y1*y2;
 	}
 	
-	
+	//TODO documentatie aanpassen
 	/**
 	 * Finds out whether and in how many seconds 2 ships will collide. 
 	 * 
@@ -520,7 +524,7 @@ public class Ship implements IShip {
 		
 		return result;
 	}
-	
+	//TODO documentatie aanpassen
 	/**
 	 * Calculates the position where 2 ships will collide, if they will collide within a 
 	 * finite amount of time.
@@ -546,8 +550,16 @@ public class Ship implements IShip {
 			return null;
 		}
 		else{
-			double xCoordCollision = ship1.getPos().getPosX()+deltaT*ship1.getVel().getVelX();
-			double yCoordCollision = ship1.getPos().getPosY()+deltaT*ship1.getVel().getVelY();
+			double radius1 = ship1.getRadius();
+			double radius2 = ship2.getRadius();
+			
+			double xPosShip1 = ship1.getPos().getPosX()+deltaT*ship1.getVel().getVelX();
+			double yPosShip1 = ship1.getPos().getPosY()+deltaT*ship1.getVel().getVelY();
+			double xPosShip2 = ship2.getPos().getPosX()+deltaT*ship2.getVel().getVelX();
+			double yPosShip2 = ship2.getPos().getPosY()+deltaT*ship2.getVel().getVelY();
+			
+			double xCoordCollision = (radius1/(radius1 + radius2))*xPosShip1 + (radius2/(radius1+ radius2))*xPosShip2;
+			double yCoordCollision = (radius1/(radius1 + radius2))*yPosShip1 + (radius2/(radius1+ radius2))*yPosShip2;
 			
 			return new Position(xCoordCollision, yCoordCollision);
 			
