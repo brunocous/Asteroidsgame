@@ -5,6 +5,7 @@ import asteroids.Util;
 import asteroids.Error.*;
 import asteroids.model.Util.*;
 import be.kuleuven.cs.som.annotate.*;
+//TODO klasse invariant
 
 public class Ship implements IShip {
 
@@ -20,24 +21,31 @@ public class Ship implements IShip {
 	/**
 	 * Initialize this new ship with given pos, vel, direction and radius.
 	 * 
-	 * @pre   the given direction must be a valid direction.
+	 * @pre   The given direction must be a valid direction.
 	 * 		  | isValidDirection(direction)
 	 * @param pos
-	 *        the position for this new ship.
+	 *        The position for this new ship.
 	 * @param vel
-	 *        the velocity for this new ship.
+	 *        The velocity for this new ship.
 	 * @param direction
-	 *        the direction for this new ship.
+	 *        The direction for this new ship.
 	 * @param radius
-	 *        the radius for this new ship
-	 * @post the new pos for this new ship is equal to the given pos
+	 *        The radius for this new ship.
+	 * @post The new pos for this new ship is equal to the given pos.
 	 *       | new.getPos()== pos 
-	 * @post the new vel for this new ship is equal to the given vel
+	 * @post The new vel for this new ship is equal to the given vel.
 	 *       | new.getVel()== vel
-	 * @post the new direction for this new ship is equal to the given direction
+	 * @post The new direction for this new ship is equal to the given direction.
 	 *       | new.getDirection()== direction
-	 * @post the new radius for this new ship is equal to the given radius
+	 * @post The new radius for this new ship is equal to the given radius.
 	 *       | new.getRadius()== radius 
+	 * @throws IllegalRadiusException
+	 *         The given radius is not a valid radius.
+	 *         |!isValidRadius()
+	 * @throws IllegalArgumentException
+	 *         The given pos is not a valid position.
+	 *         |!isValidPosition()
+	 *         
 	 */
 	
 	public Ship(Position pos,Velocity vel, double direction, double radius) throws IllegalRadiusException, IllegalArgumentException{
@@ -51,15 +59,15 @@ public class Ship implements IShip {
 	/**
 	 * Initialize this new ship as a default ship. 
 	 * 
-	 * @post the new pos for this new ship is a position object with x-component 0 and 
+	 * @post The new pos for this new ship is a position object with x-component 0 and 
 	 *       y-component 0.
 	 *       | new.getPos()== new Position(0,0)
-	 * @post the new vel for this new ship is a velocity object with x-component 0 and
+	 * @post The new vel for this new ship is a velocity object with x-component 0 and
 	 *       y-component 0.
 	 *       | new.getVel()== new Velocity(0,0)
-	 * @post the new direction for this new ship is 0.
+	 * @post The new direction for this new ship is 0.
 	 *       | new.getDirection()== 0
-	 * @post the new radius for this new ship is 15.
+	 * @post The new radius for this new ship is 15.
 	 *       | new.getRadius()== 15  
 	 */
 	public Ship(){
@@ -86,18 +94,18 @@ public class Ship implements IShip {
 	 * Set the pos for this ship to the given pos. 
 	 * 
 	 * @param pos
-	 *        the new pos for this ship.
+	 *        The new pos for this ship.
 	 * @post The new pos for this ship is equal to the given pos.
 	 *       |new.getPos()= pos
 	 * @throws IllegalArgumentException
-	 * 		   the given pos has a component that is infinitely big or Not a Number
+	 * 		   The given pos has a component that is infinitely big or Not a Number.
 	 *         |Double.isInfinite(pos.getPosX()) || Double.isNaN(pos.getPosX()) || Double.isInfinite(pos.getPosY()) || Double.isNaN(pos.getPosY())
 	 */
 	
 	@Basic
-	public void setPos(Position pos) throws IllegalArgumentException, NullPointerException {
+	public void setPos(Position pos) throws IllegalArgumentException{
 		
-		if(Double.isInfinite(pos.getPosX()) || Double.isNaN(pos.getPosX()) || Double.isInfinite(pos.getPosY()) || Double.isNaN(pos.getPosY())){
+		if(!isValidPosition()){
 			
 			throw new IllegalArgumentException();
 			
@@ -110,6 +118,19 @@ public class Ship implements IShip {
 	
 	}
 	
+	/**
+	 * Check whether the given position is a valid position. In other words, check whether it has
+	 * finite components and components that are not 'NaN'.
+	 *
+	 * @param radius
+	 *        the position object to be checked in.
+	 * @return true if and only if the given position has finite components and components that
+	 *         are not NaN.
+	 *         |result == !(Double.isInfinite(pos.getPosX()) || Double.isNaN(pos.getPosX()) || Double.isInfinite(pos.getPosY()) || Double.isNaN(pos.getPosY()));
+	 */
+	public boolean isValidPosition(){
+		return !(Double.isInfinite(pos.getPosX()) || Double.isNaN(pos.getPosX()) || Double.isInfinite(pos.getPosY()) || Double.isNaN(pos.getPosY()));
+	}
 	
 	/**
 	 * Return the velocity of this ship.
@@ -125,16 +146,16 @@ public class Ship implements IShip {
 	 * Set the vel of this ship to the given vel.
 	 * 
 	 * @param vel
-	 *        the new velocity for this ship.
-	 * @post if the given vel is a valid velocity, in other words if its norm is less than or 
+	 *        The new velocity for this ship.
+	 * @post If the given vel is a valid velocity, in other words if its norm is less than or 
 	 *       equal to the speed of light, the new vel for this ship is equal to the given
 	 *       vel. Else the new vel of this ship has the direction of the given vel but a norm
-	 *       equal to the speed of light.
+	 *       equal to the speed of light. If the given vel has an infinite component, the new 
+	 *       vel of this ship will be zero (both x- and y-component).
 	 *       |if (isValidVelocity(vel))
 	 *       |then new.getVel()==vel
 	 *       |else new.getVel() == correctSpeed(vel)
 	 */
-	//TODO documentatie aanpassen
 	@Basic
 	public void setVel(Velocity vel) {
 		if (isValidVelocity(vel)){
@@ -166,11 +187,11 @@ public class Ship implements IShip {
 	/**
 	 * Set the direction of this ship to the given direction.
 	 * 
-	 * @pre	 the value of the given direction must be finite.
+	 * @pre	 The value of the given direction must be finite.
 	 * 		 |	isValidDirection(direction)
 	 * @param direction
-	 *        the new direction for this ship in radians.
-	 * @post the new direction for this ship is the given direction
+	 *        The new direction for this ship in radians.
+	 * @post The new direction for this ship is the given direction.
 	 *       |	new.getDirection() = direction
 	 */
 	@Model @Basic
@@ -339,17 +360,18 @@ public class Ship implements IShip {
 	 * 
 	 * @param amount
 	 * 		  The amount by which the velocity of the ship will be increased
-	 * @post If increasing the ship's velocity by the given amount does not result into a 
-	 *       velocity that is higher than the speed of light, the ship's new velocity will be 
+	 * @effect If increasing the ship's velocity by the given amount does not result into a 
+	 *       velocity that is higher than the speed of light, the ship's velocity will be 
 	 *       increased by the given amount. If it does exceed the speed of light, the ship's new
-	 *       velocity will be the speed of light.   
+	 *       velocity will be the speed of light. If amount is infinite, the new velocity for 
+	 *       this ship will be zero.
 	 *       |if(isValidVelocity((new Velocity(getVel().getVelX(), getVel().getVelY())).add(new Velocity(amount*Math.cos(getDirection()),amount*Math.sin(getDirection()))))
-	 *       |     then (new this).getVel()== this.getVel().add(new Velocity(amount*Math.cos(getDirection()),amount*Math.sin(getDirection())))
-	 *       |else ((new this).getVel()= new Velocity (speed.getVelX()/(speed.getNorm()/Velocity.getSpeedOfLight()),speed.getVelY()/(speed.getNorm()/Velocity.getSpeedOfLight()))
+	 *       |     then (this).setVel(this.getVel().add(new Velocity(amount*Math.cos(getDirection()),amount*Math.sin(getDirection()))))
+	 *       |else ((this).setVel(correctSpeed(new Velocity(amount*Math.cos(getDirection()),amount*Math.sin(getDirection()))))
 	 * @post The ship's direction will not be changed. 
 	 *       |(new this).getDirection() == this.getDirection()
 	 */
-	//verandern
+	
 	public void thrust(double amount) {
 		
 		Velocity gainedSpeed = new Velocity(amount*Math.cos(getDirection()),amount*Math.sin(getDirection()));
