@@ -21,7 +21,6 @@ public class Asteroids extends JFrame {
   private long lastMove;
   private boolean thrust;
   private double angle;
-//bla bla 
   private static final double THRUST_PER_SECOND = 150;
 
   public Asteroids(final IFacade facade, boolean undecorated) {
