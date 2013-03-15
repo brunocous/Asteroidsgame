@@ -2,18 +2,21 @@ package asteroids.model.Util;
 
 import be.kuleuven.cs.som.annotate.*;
 
+/**
+ * A class of two dimensional position vectors involving an x- and a y-component.
+ * 
+ * @version 1.0
+ * @author Bruno Coussement and Simon Telen
+ * 
+ */
 @Value
 public class Position {
 
-/**	
-*	the x-component of a position vector.
-*/
-private final double posX;
 
-/**
- * the y-component of a position vector.
- */
-private final double posY;
+	//the x-component of a position vector.
+	private final double posX;
+	//the y-component of a position vector.
+	private final double posY;
 
 /**
  * Initialize this new position with given posX and given posY.

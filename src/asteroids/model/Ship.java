@@ -7,6 +7,22 @@ import asteroids.model.Util.*;
 import be.kuleuven.cs.som.annotate.*;
 //TODO klasse invariant
 
+/** 
+ * A class of spaceships involving a position, a velocity, a direction and a radius with 
+ * among others moving, turning and accelerating facilities. 
+ * 
+ * @invar The position that applies to all ships must be a valid position.
+ *        | isValidPosition(getPos())
+ * @invar The velocity that applies to all ships must be a valid velocity.
+ *        | isValidVelocity(getVel())
+ * @invar The radius that applies to all ships must be a valid radius.
+ *        | isValidRadius(getRadius())
+ * 
+ * @version 1.0
+ * @author Bruno Coussement and Simon Telen
+ *
+ */
+
 public class Ship implements IShip {
 
 	// the position vector of a ship.
@@ -493,7 +509,7 @@ public class Ship implements IShip {
 		return x1*x2+y1*y2;
 	}
 	
-	//TODO documentatie aanpassen
+//TODO documentatie aanpassen
 	/**
 	 * Finds out whether and in how many seconds 2 ships will collide. 
 	 * 
@@ -546,7 +562,7 @@ public class Ship implements IShip {
 		
 		return result;
 	}
-	//TODO documentatie aanpassen
+	
 	/**
 	 * Calculates the position where 2 ships will collide, if they will collide within a 
 	 * finite amount of time.
@@ -562,7 +578,17 @@ public class Ship implements IShip {
 	 *         or 'null' if ship1 and ship2 will never collide. 
 	 *         | if(deltaT==Double.POSITIVE_INFINITY)
 	 *	       | then result== null
-	 *	       | else result== new Position(ship1.getPos().getPosX()+getTimeToCollision(ship1,ship2)*ship1.getVel().getVelX(),ship1.getPos().getPosY()+getTimeToCollision(ship1,ship2)*ship1.getVel().getVelY())
+	 *	       | else 
+	 *		   | double radius1 = ship1.getRadius();
+	 *         | double radius2 = ship2.getRadius();
+	 *		   | double fraction =(radius2/(radius1 + radius2));
+	 *		   | double xPosShip1 = ship1.getPos().getPosX()+deltaT*ship1.getVel().getVelX();
+ 	 *         | double yPosShip1 = ship1.getPos().getPosY()+deltaT*ship1.getVel().getVelY();
+	 *  	   | double xPosShip2 = ship2.getPos().getPosX()+deltaT*ship2.getVel().getVelX();
+	 *		   | double yPosShip2 = ship2.getPos().getPosY()+deltaT*ship2.getVel().getVelY();
+	 *		   | double xCoordCollision = fraction*xPosShip1 + (1-fraction)*xPosShip2;
+	 *		   | double yCoordCollision = fraction*yPosShip1 + (1-fraction)*yPosShip2;
+	 *		   | result == new Position(xCoordCollision, yCoordCollision);
 	 */
 	
 	public static Position getCollisionPosition(Ship ship1, Ship ship2) {

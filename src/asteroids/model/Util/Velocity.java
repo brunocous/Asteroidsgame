@@ -1,19 +1,21 @@
 package asteroids.model.Util;
 import be.kuleuven.cs.som.annotate.*;
 
+/**
+ * A class of two dimensional velocity vectors involving an x- and a y-component.
+ * 
+ * @version 1.0
+ * @author Bruno Coussement and Simon Telen
+ *
+ */
 @Value
 public class Velocity {
-	/**
-	 * The x-component of a velocity vector.
-	 */
+	
+	//The x-component of a velocity vector.
 	private double velX;
-	/**
-	 * The y-component of a velocity vector. 
-	 */
+	//The y-component of a velocity vector. 
 	private double velY;
-	/**
-	 * The value for the speed of light.
-	 */
+    //The value for the speed of light.
 	private static final double SPEED_OF_LIGHT=300000000.0;
 	
 	/**
