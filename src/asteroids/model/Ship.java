@@ -138,7 +138,7 @@ public class Ship implements IShip {
 	 * Check whether the given position is a valid position. In other words, check whether it has
 	 * finite components and components that are not 'NaN'.
 	 *
-	 * @param radius
+	 * @param pos
 	 *        the position object to be checked in.
 	 * @return true if and only if the given position has finite components and components that
 	 *         are not NaN.
@@ -299,8 +299,7 @@ public class Ship implements IShip {
 	}
 	/**
 	 * Moves the ship during a fixed amount of time.
-	 * 
-	 * @pre   The given elapsedTime should be positive or 0. 	  
+	 * 	  
 	 * @param elapsedTime
 	 * 		  The amount of time during which the ship is moving in seconds.
 	 * @post The position of the ship has been changed according to the previous position,
