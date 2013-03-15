@@ -121,7 +121,7 @@ public class Ship implements IShip {
 	@Basic
 	public void setPos(Position pos) throws IllegalArgumentException{
 		
-		if(!isValidPosition()){
+		if(!isValidPosition(pos)){
 			
 			throw new IllegalArgumentException();
 			
@@ -144,7 +144,7 @@ public class Ship implements IShip {
 	 *         are not NaN.
 	 *         |result == !(Double.isInfinite(pos.getPosX()) || Double.isNaN(pos.getPosX()) || Double.isInfinite(pos.getPosY()) || Double.isNaN(pos.getPosY()));
 	 */
-	public boolean isValidPosition(){
+	public boolean isValidPosition(Position pos){
 		return !(Double.isInfinite(pos.getPosX()) || Double.isNaN(pos.getPosX()) || Double.isInfinite(pos.getPosY()) || Double.isNaN(pos.getPosY()));
 	}
 	
