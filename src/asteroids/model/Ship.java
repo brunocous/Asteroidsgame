@@ -299,8 +299,7 @@ public class Ship implements IShip {
 	}
 	/**
 	 * Moves the ship during a fixed amount of time.
-	 * 
-	 * @pre   The given elapsedTime should be positive or 0. 	  
+	 * 	  
 	 * @param elapsedTime
 	 * 		  The amount of time during which the ship is moving in seconds.
 	 * @post The position of the ship has been changed according to the previous position,
