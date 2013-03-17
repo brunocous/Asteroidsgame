@@ -31,8 +31,10 @@ public class Velocity {
 	 */
 	@Raw
 	public Velocity(double velX, double velY) {
+		
 	 this.velX=velX;
 	 this.velY=velY;
+	 
 	}
 	
 	/**
@@ -40,7 +42,9 @@ public class Velocity {
 	 */
 	@Basic @Raw @Immutable
 	public double getVelX() {
+		
 		return velX;
+		
 	}
 
 	/**
@@ -48,7 +52,9 @@ public class Velocity {
 	 */
 	@Basic @Raw @Immutable
 	public double getVelY() {
+		
 		return velY;
+		
 	}
 	
 	/**
@@ -56,7 +62,9 @@ public class Velocity {
 	 */
 	@Basic @Immutable
 	public static double getSpeedOfLight(){
+		
 		return SPEED_OF_LIGHT;
+		
 	}
 	
 	/**
@@ -66,8 +74,10 @@ public class Velocity {
 	 *         |result == Math.sqrt(Math.pow(getVelX(), 2.0) + Math.pow(getVelY(), 2.0))
 	 */
 	public double getNorm(){
+		
 		double result = Math.sqrt(Math.pow(getVelX(), 2.0) + Math.pow(getVelY(), 2.0));
 		return result;
+		
 	}
 	
 	/**
@@ -83,10 +93,17 @@ public class Velocity {
 	 *      	|	(result.getVelY()==velToAdd.getVelY() + this.getVelY() )
 	 */
 	public Velocity add(Velocity velToAdd){
-		if(velToAdd == null)
+		
+		if(velToAdd == null){
+			
 			return this;
-		else
+			
+		}
+		else{
+			
 		return new Velocity(getVelX() + velToAdd.getVelX(), getVelY() + velToAdd.getVelY());
+		
+		}
 	}
 	
 	/**

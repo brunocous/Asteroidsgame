@@ -32,15 +32,19 @@ public class Position {
  */
 @Raw
 public Position(double posX, double posY) {
+	
 	this.posX = posX;
 	this.posY = posY;
+	
 }
 /**
  * Returns the posX of this position.
  */
 @Basic @Raw @Immutable
 public double getPosX() {
+	
 	return this.posX;
+	
 }
 
 /**
@@ -81,6 +85,7 @@ public Position add(Position posToAdd) throws IllegalArgumentException{
 	double yCoord=(posToAdd.getPosY() + getPosY());
 	
 	return new Position(xCoord,yCoord);
+	
 	}
 }
 
@@ -97,8 +102,10 @@ public Position add(Position posToAdd) throws IllegalArgumentException{
  */
 
 public double getDistanceTo(Position position){
+	
 	double distance = Math.sqrt(Math.pow(getPosX()-position.getPosX(),2)+Math.pow(getPosY()-position.getPosY(),2));
 	return distance;
+	
 }
 
 /**
@@ -130,6 +137,7 @@ public int hashCode(){
 }
 /**
  * Return a textual representation of this position.
+ * 
  * @return	A string consisting of the textual representation of the X- and Y-component of this position, 
  * 			separated by a space and enclosed in square brackets.
  * 			|	result.equals("[" + this.getPosX()+ " " + this.getPosY()+ "]" )

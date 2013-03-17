@@ -5,7 +5,7 @@ import asteroids.Util;
 import asteroids.Error.*;
 import asteroids.model.Util.*;
 import be.kuleuven.cs.som.annotate.*;
-//TODO klasse invariant
+
 
 /** 
  * A class of spaceships involving a position, a velocity, a direction and a radius with 
@@ -47,14 +47,18 @@ public class Ship implements IShip {
 	 *        The direction for this new ship.
 	 * @param radius
 	 *        The radius for this new ship.
-	 * @post The new pos for this new ship is equal to the given pos.
-	 *       | new.getPos()== pos 
-	 * @post The new vel for this new ship is equal to the given vel.
-	 *       | new.getVel()== vel
+	 * @post The new pos for this new ship is equal to the given pos if the given pos is a 
+	 * 		 valid position.
+	 *       | if(isValidPosition(pos))
+	 *       | then new.getPos()== pos 
+	 * @effect The new vel for this new ship is equal to the given vel.
+	 *       | this.setVel(vel)
 	 * @post The new direction for this new ship is equal to the given direction.
 	 *       | new.getDirection()== direction
-	 * @post The new radius for this new ship is equal to the given radius.
-	 *       | new.getRadius()== radius 
+	 * @post The new radius for this new ship is equal to the given radius if the given radius
+	 * 		 is a valid radius.
+	 *       | if(isValidRadius(radius)
+	 *       | then new.getRadius()== radius 
 	 * @throws IllegalRadiusException
 	 *         The given radius is not a valid radius.
 	 *         |!isValidRadius()
@@ -103,7 +107,9 @@ public class Ship implements IShip {
 	 */
 	@Basic
 	public Position getPos() {
+		
 		return pos;
+		
 	}
 
 	/**
@@ -145,7 +151,9 @@ public class Ship implements IShip {
 	 *         |result == !(Double.isInfinite(pos.getPosX()) || Double.isNaN(pos.getPosX()) || Double.isInfinite(pos.getPosY()) || Double.isNaN(pos.getPosY()));
 	 */
 	public boolean isValidPosition(Position pos){
+		
 		return !(Double.isInfinite(pos.getPosX()) || Double.isNaN(pos.getPosX()) || Double.isInfinite(pos.getPosY()) || Double.isNaN(pos.getPosY()));
+	
 	}
 	
 	/**
@@ -180,13 +188,16 @@ public class Ship implements IShip {
 			
 		}
 		else{ 
+			
 			if(Double.isInfinite(vel.getVelX()) || Double.isInfinite(vel.getVelY())){
 			this.vel = new Velocity(0,0);
-		} else{
+		
+			} else{
 			
 			Velocity result = correctSpeed(vel);
 			this.vel = result;
-		}
+		
+			}
 		}
 	}
 
@@ -216,10 +227,14 @@ public class Ship implements IShip {
 		assert(isValidDirection(direction));
 		
 		if(direction>=0){
+			
 		this.direction = direction%(2*Math.PI);
+		
 		}
 		else{
+			
 	    this.direction = 2*Math.PI + direction%(2*Math.PI);
+		
 		}
 		
 	}
@@ -335,7 +350,9 @@ public class Ship implements IShip {
 	 *        
 	 */
 	public static boolean isValidElapsedTime(double time){
+		
 		return !(time < 0);
+		
 	}
 	
 	/**
@@ -349,7 +366,9 @@ public class Ship implements IShip {
 	 *         |result == (Util.fuzzyLessThanOrEqualTo(velocity.getNorm(),Velocity.getSpeedOfLight()))
 	 */
 	public static boolean isValidVelocity(Velocity velocity){
+		
 		return (Util.fuzzyLessThanOrEqualTo(velocity.getNorm(),Velocity.getSpeedOfLight()));
+		
 	}
 	
 	/**
@@ -367,7 +386,9 @@ public class Ship implements IShip {
 	 */
 	
 	public void turn(double angle){
+		
 		setDirection(getDirection() + angle);
+		
 	}
 
 	/**
@@ -397,6 +418,7 @@ public class Ship implements IShip {
 			
 			Velocity result = correctSpeed(newSpeed);
 			setVel(result);
+			
 		}
 		else{
 		
@@ -444,12 +466,16 @@ public class Ship implements IShip {
 	 */
 	public static double getDistanceBetween(Ship ship1, Ship ship2) {
 		if(ship1==ship2){
+			
 			return 0;
+			
 		}
 		else{
+			
 		double distanceBetweenCentres = ship1.getPos().getDistanceTo(ship2.getPos());
 		double sumOfRadii= ship1.getRadius()+ship2.getRadius();
 		return distanceBetweenCentres - sumOfRadii;
+		
 		}
 		
 		
@@ -506,9 +532,9 @@ public class Ship implements IShip {
 	public static double scalarProduct(double x1, double y1, double x2, double y2){
 		
 		return x1*x2+y1*y2;
+		
 	}
 	
-//TODO documentatie aanpassen
 	/**
 	 * Finds out whether and in how many seconds 2 ships will collide. 
 	 * 
@@ -551,9 +577,12 @@ public class Ship implements IShip {
 		double d = Math.pow(scalarProduct(deltavx, deltavy, deltarx, deltary), 2)-scalarProduct(deltavx,deltavy,deltavx,deltavy)*(scalarProduct(deltarx,deltary,deltarx,deltary)-Math.pow(sigma, 2));
 		
 		if(Util.fuzzyLessThanOrEqualTo(-scalarProduct(deltavx,deltavy,deltarx,deltary),0) || Util.fuzzyLessThanOrEqualTo(d,0) ){
+			
 			result = Double.POSITIVE_INFINITY;
+			
 		}
 		else{
+			
 			result = -(scalarProduct(deltavx, deltavy, deltarx,deltary)+Math.sqrt(d))/scalarProduct(deltavx,deltavy,deltavx,deltavy);
 			
 		}
@@ -594,9 +623,11 @@ public class Ship implements IShip {
 		double deltaT= getTimeToCollision(ship1,ship2);
 		
 		if(Double.isInfinite(deltaT)){
+			
 			return null;
 		}
 		else{
+			
 			double radius1 = ship1.getRadius();
 			double radius2 = ship2.getRadius();
 			double fraction =(radius2/(radius1 + radius2));
