@@ -1,6 +1,5 @@
 package asteroids.model;
 
-import asteroids.IShip;
 import asteroids.Util;
 import asteroids.Error.*;
 import asteroids.model.Util.*;
@@ -23,7 +22,7 @@ import be.kuleuven.cs.som.annotate.*;
  *
  */
 
-public class Ship implements IShip {
+public class Ship{
 
 	// the position vector of a ship.
 	private Position pos;
