@@ -407,7 +407,7 @@ public class Ship implements IShip {
 	 * @post The ship's direction will not be changed. 
 	 *       |(new this).getDirection() == this.getDirection()
 	 */
-	
+	// TODO amount aanpassen
 	public void thrust(double amount) {
 		
 		Velocity gainedSpeed = new Velocity(amount*Math.cos(getDirection()),amount*Math.sin(getDirection()));
