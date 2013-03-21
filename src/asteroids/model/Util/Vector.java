@@ -1,6 +1,7 @@
 package asteroids.model.Util;
 
 import be.kuleuven.cs.som.annotate.*;
+import asteroids.Util;
 
 @Value
 public abstract class Vector {
@@ -49,8 +50,8 @@ public abstract class Vector {
 		if (vec == null)
 			return false;
 		try {
-			return (asteroids.Util.fuzzyEquals(this.getX(),
-					((Vector) vec).getX()) && asteroids.Util.fuzzyEquals(
+			return (Util.fuzzyEquals(this.getX(),
+					((Vector) vec).getX()) && Util.fuzzyEquals(
 					this.getY(), ((Vector) vec).getY()));
 		} catch (ClassCastException ex) {
 			return false;

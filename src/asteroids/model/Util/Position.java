@@ -87,4 +87,20 @@ public double getDistanceTo(Position position){
 	
 }
 
+/**
+ * Check whether the given position is a valid position. In other words, check whether it has
+ * finite components and components that are not 'NaN'.
+ *
+ * @param pos
+ *        the position object to be checked in.
+ * @return true if and only if the given position has finite components and components that
+ *         are not NaN.
+ *         |result == !(Double.isInfinite(pos.getX()) || Double.isNaN(pos.getX()) || Double.isInfinite(pos.getY()) || Double.isNaN(pos.getY()));
+ */
+public boolean isValidPosition(Position pos){
+	
+	return !(Double.isInfinite(pos.getX()) || Double.isNaN(pos.getX()) || Double.isInfinite(pos.getY()) || Double.isNaN(pos.getY()));
+
+}
+
 }

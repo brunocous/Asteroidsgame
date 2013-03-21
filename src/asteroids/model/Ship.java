@@ -139,21 +139,6 @@ public class Ship{
 	
 	}
 	
-	/**
-	 * Check whether the given position is a valid position. In other words, check whether it has
-	 * finite components and components that are not 'NaN'.
-	 *
-	 * @param pos
-	 *        the position object to be checked in.
-	 * @return true if and only if the given position has finite components and components that
-	 *         are not NaN.
-	 *         |result == !(Double.isInfinite(pos.getPosX()) || Double.isNaN(pos.getPosX()) || Double.isInfinite(pos.getPosY()) || Double.isNaN(pos.getPosY()));
-	 */
-	public boolean isValidPosition(Position pos){
-		
-		return !(Double.isInfinite(pos.getPosX()) || Double.isNaN(pos.getPosX()) || Double.isInfinite(pos.getPosY()) || Double.isNaN(pos.getPosY()));
-	
-	}
 	
 	/**
 	 * Return the velocity of this ship.
@@ -354,21 +339,7 @@ public class Ship{
 		
 	}
 	
-	/**
-	 * Check whether the given velocity is a valid velocity. In other words, check whether its 
-	 * norm is less than or equal to the speed of light.
-	 * 
-	 * @param velocity
-	 *        The velocity to be checked.
-	 * @return true if and only if the given velocity's norm is less than or equal to the speed
-	 *         of light.
-	 *         |result == (Util.fuzzyLessThanOrEqualTo(velocity.getNorm(),Velocity.getSpeedOfLight()))
-	 */
-	public static boolean isValidVelocity(Velocity velocity){
-		
-		return (Util.fuzzyLessThanOrEqualTo(velocity.getNorm(),Velocity.getSpeedOfLight()));
-		
-	}
+	
 	
 	/**
 	 * Turns the ship over a fixed angle. 

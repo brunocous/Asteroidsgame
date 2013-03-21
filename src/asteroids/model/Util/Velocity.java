@@ -1,4 +1,5 @@
 package asteroids.model.Util;
+import asteroids.Util;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
@@ -85,4 +86,19 @@ public class Velocity extends Vector{
 		}
 	}
 	
+	/**
+	 * Check whether the given velocity is a valid velocity. In other words, check whether its 
+	 * norm is less than or equal to the speed of light.
+	 * 
+	 * @param velocity
+	 *        The velocity to be checked.
+	 * @return true if and only if the given velocity's norm is less than or equal to the speed
+	 *         of light.
+	 *         |result == (Util.fuzzyLessThanOrEqualTo(getNorm(),getSpeedOfLight()))
+	 */
+	public static boolean isValidVelocity(Velocity velocity){
+		
+		return (Util.fuzzyLessThanOrEqualTo(velocity.getNorm(),getSpeedOfLight()));
+		
+	}
 }
