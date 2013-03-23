@@ -152,7 +152,7 @@ public abstract class SpaceObject {
 	@Basic
 	public void setPos(Position pos) throws IllegalPositionException{
 		if(!isValidPosition(pos)){
-			throw new IllegalPositionException();
+			throw new IllegalPositionException(pos.getX(),pos.getY());
 		}
 		else{
 	    this.pos = pos;
