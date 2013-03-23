@@ -1,7 +1,7 @@
 package asteroids.model.Util;
 
-import be.kuleuven.cs.som.annotate.*;
 import asteroids.Util;
+import be.kuleuven.cs.som.annotate.*;
 
 @Value
 public abstract class Vector {

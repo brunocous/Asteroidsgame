@@ -2,7 +2,9 @@ package asteroids.model;
 
 import asteroids.Util;
 import asteroids.Error.IllegalRadiusException;
+import asteroids.Error.NegativeTimeException;
 import asteroids.model.Util.Position;
+import asteroids.model.Util.Vector;
 import asteroids.model.Util.Velocity;
 import be.kuleuven.cs.som.annotate.*;
 
@@ -64,9 +66,7 @@ public abstract class SpaceObject {
 		this.setVel(vel);
 		this.setDirection(direction);
 		
-		if(isValidRadius(radius)){
-			this.radius = radius;
-		} else throw new IllegalRadiusException();
+		this.setRadius(radius);
 
 		if(Velocity.isLessThanOrEqualToSpeedOfLight(new Velocity(maxSpeed,maxSpeed))){
 		this.maxSpeed = maxSpeed;
@@ -78,11 +78,7 @@ public abstract class SpaceObject {
 		this.setPos(pos);
 		this.setVel(vel);
 		this.setDirection(direction);
-		
-		if(isValidRadius(radius)){
-			this.radius = radius;
-		} else throw new IllegalRadiusException();
-		
+		this.setRadius(radius);
 		this.maxSpeed = Velocity.getSpeedOfLight();
 	}
 	
@@ -194,8 +190,29 @@ public abstract class SpaceObject {
 	 * @return the radius
 	 */
 	@Basic
+	@Immutable
 	public double getRadius() {
 		return radius;
+	}
+	/**
+	 * Set the radius for this space object to the given mass.
+	 * @param radius
+	 * 			The new radius for this space object.
+	 * @post The new radius for this space object is equal to the given space object.
+	 *       |new.getRadius()= radius
+	 * @throws IllegalRadiusException
+	 * 		   The given radius is not valid.
+	 *         | isValidRadius(radius) == false
+	 */
+	@Basic
+	@Immutable
+	protected void setRadius(double radius) throws IllegalRadiusException{
+	if(!isValidRadius(radius)){
+		throw new IllegalRadiusException();
+	}
+	else{
+    this.radius = radius;
+	}
 	}
 	/**
 	 * @return the maxSpeed
@@ -531,6 +548,47 @@ protected Velocity correctSpeed(Velocity speed){
 	double correctingFactor = speed.getNorm()/getMaxSpeed();
 	Velocity correctedSpeed = new Velocity (speed.getX()/correctingFactor,speed.getY()/correctingFactor);
 	return correctedSpeed;
+}
+/**
+ * Moves the space object during a fixed amount of time.
+ * 	  
+ * @param elapsedTime
+ * 		  The amount of time during which the space object is moving in seconds.
+ * @post The position of the space object has been changed according to the previous position,
+ * 		   The current velocity of the space object and the given duration elapsedTime. 
+ * 		   |(new this).getPos() == this.getPos().add(new Position(vel.getX()*elapsedTime, vel.getY()*elapsedTime));
+ * @throws NegativeTimeException
+ *         The given elapsedTime is negative and therefore unvalid.
+ *         |!isValidElapsedTime()
+ */
+
+public void move(double elapsedTime) throws NegativeTimeException{
+	if(!isValidElapsedTime(elapsedTime)){
+		
+		throw new NegativeTimeException() ;
+		
+	}
+	else{
+		
+		Vector displacement = new Position(vel.getX()*elapsedTime, vel.getY()*elapsedTime);
+		Vector newPosition = pos.add( displacement);
+		setPos((Position) newPosition);
+		
+	} 
+}
+/** 
+ * Check whether the given time is a valid amount of time. 
+ * 
+ * @param time
+ *        The amount of time to be checked in seconds.
+ * @return true if and only if the given time is greater than or equal to zero.
+ *         | result == !(time<0)
+ *        
+ */
+public static boolean isValidElapsedTime(double time){
+	
+	return !(time < 0);
+	
 }
 }
 

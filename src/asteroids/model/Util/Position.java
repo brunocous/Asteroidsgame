@@ -45,13 +45,13 @@ public Position(){
  * 		   | result == this
  * @return A position that is equal to this
  *         position plus the given posToAdd if the given posToAdd is not null.
- *         | result == new Position(posToAdd.getPosX() + getPosX(),posToAdd.getPosY() + getPosY())
+ *         | result == new Position(posToAdd.getX() + getX(),posToAdd.getY() + getY())
  * @throws IllegalArgumentException
  * 			The posToAdd position is not effective.
  * 		   | posToAdd == null
  */
 @Override
-public Vector add(Vector posToAdd) throws IllegalArgumentException{
+public Vector add(Vector posToAdd){
 	
 	if(posToAdd == null){
 		

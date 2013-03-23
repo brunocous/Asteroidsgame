@@ -115,51 +115,6 @@ public class Ship extends SpaceObject{
 	}
 	
 	/**
-	 * Moves the ship during a fixed amount of time.
-	 * 	  
-	 * @param elapsedTime
-	 * 		  The amount of time during which the ship is moving in seconds.
-	 * @post The position of the ship has been changed according to the previous position,
-	 * 		   The current velocity of the ship and the given duration elapsedTime. 
-	 * 		   |(new this).getPos() == this.getPos().add(new Position(vel.getX()*elapsedTime, vel.getY()*elapsedTime));
-	 * @throws NegativeTimeException
-	 *         The given elapsedTime is negative and therefore unvalid.
-	 *         |!isValidElapsedTime()
-	 */
-	
-	public void move(double elapsedTime) throws NegativeTimeException{
-		if(!isValidElapsedTime(elapsedTime)){
-			
-			throw new NegativeTimeException() ;
-			
-		}
-		else{
-			
-			Vector displacement = new Position(vel.getX()*elapsedTime, vel.getY()*elapsedTime);
-			Position newPosition = pos.add(displacement);
-			setPos(newPosition);
-			
-		} 
-	}
-	
-	/** 
-	 * Check whether the given time is a valid amount of time. 
-	 * 
-	 * @param time
-	 *        The amount of time to be checked in seconds.
-	 * @return true if and only if the given time is greater than or equal to zero.
-	 *         | result == !(time<0)
-	 *        
-	 */
-	public static boolean isValidElapsedTime(double time){
-		
-		return !(time < 0);
-		
-	}
-	
-	
-	
-	/**
 	 * Turns the ship over a fixed angle. 
 	 * 
 	 * @param angle
