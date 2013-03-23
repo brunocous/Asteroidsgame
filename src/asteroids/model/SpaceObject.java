@@ -1,6 +1,8 @@
 package asteroids.model;
 
 import asteroids.Util;
+import asteroids.Error.IllegalMaxSpeedException;
+import asteroids.Error.IllegalPositionException;
 import asteroids.Error.IllegalRadiusException;
 import asteroids.Error.NegativeTimeException;
 import asteroids.model.Util.Position;
@@ -18,8 +20,6 @@ import be.kuleuven.cs.som.annotate.*;
  *        | isValidVelocity(getVel())
  * @invar The radius that applies to all space objects must be a valid radius.
  *        | isValidRadius(getRadius())
- * @invar The mass that applies to all space objects must be a valid mass.
- *        | isValidMass(getMass())
  * 
  * @version 1.0
  * @author Bruno Coussement and Simon Telen
@@ -36,10 +36,6 @@ public abstract class SpaceObject {
 	 *  the velocity vector of a space object.
 	 */
 	protected Velocity vel;
-	/**
-	 *  the direction a space object is orientated in.
-	 */
-	protected double direction;
 	/**
 	 *  the radius of a space object.
 	 */
@@ -61,31 +57,76 @@ public abstract class SpaceObject {
 	 */
 	protected static final double MIN_MASS = 0;
 	
-	public SpaceObject( Position pos, Velocity vel, double direction, double radius, double maxSpeed) throws IllegalRadiusException{
+	/**
+	 * Initialize this new space object with given pos, vel, radius and maxSpeed.
+	 * 
+	 * @param pos
+	 *        The position for this new ship.
+	 * @param vel
+	 *        The velocity for this new ship.
+	 * @param radius
+	 *        The radius for this new ship.
+	 * @param maxSpeed
+	 *        The maximum speed for this new ship.
+	 * @post The new pos for this new ship is equal to the given pos if the given pos is a 
+	 * 		 valid position.
+	 *       | if(isValidPosition(pos))
+	 *       | then new.getPos()== pos 
+	 * @effect The new vel for this new ship is equal to the given vel.
+	 *       | this.setVel(vel)
+	 * @post The new radius for this new ship is equal to the given radius if the given radius
+	 * 		 is a valid radius.
+	 *       | if(isValidRadius(radius)
+	 *       | then new.getRadius()== radius 
+	 * @post The new maxium speed for this new ship is equal to the given maximum speed if the given 
+	 * 		 maximum speed is a valid maximum speed.
+	 *       | if(isValidMaxSpeed(maxSpeed)
+	 *       | then new.getMaxSpeed()== maxSpeed 
+	 *       | else new.getMaxSpeed()== Velocity.getSpeedOfLight()
+	 * @throws IllegalRadiusException
+	 *         The given radius is not a valid radius.
+	 *         |!isValidRadius()
+	 * @throws IllegalPositionException
+	 *         The given pos is not a valid position.
+	 *         |!isValidPosition()
+	 * @throws IllegalMaxSpeedException
+	 * 			The given maxSpeed is not a valid maximum speed.
+	 * 			|!isValidMaximumSpeed()
+	 *         
+	 */
+	public SpaceObject( Position pos, Velocity vel, double radius, double maxSpeed) throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
 		this.setPos(pos);
 		this.setVel(vel);
-		this.setDirection(direction);
 		
-		this.setRadius(radius);
-
-		if(Velocity.isLessThanOrEqualToSpeedOfLight(new Velocity(maxSpeed,maxSpeed))){
-		this.maxSpeed = maxSpeed;
-		} else this.maxSpeed = Velocity.getSpeedOfLight();
+		if(!isValidRadius(radius)){
+			throw new IllegalRadiusException();
+		}
+		else this.radius = radius;
 		
-		
+		if(!isValidMaxSpeed(maxSpeed)){
+			throw new IllegalMaxSpeedException();
+			} else this.maxSpeed = maxSpeed;
 	}
-	public SpaceObject( Position pos, Velocity vel, double direction, double radius) throws IllegalRadiusException{
+	
+	public SpaceObject( Position pos, Velocity vel, double radius) throws IllegalPositionException, IllegalRadiusException{
 		this.setPos(pos);
 		this.setVel(vel);
-		this.setDirection(direction);
-		this.setRadius(radius);
+		
+		if(!isValidRadius(radius)){
+			throw new IllegalRadiusException();
+		}
+		else this.radius = radius;
+		
+
 		this.maxSpeed = Velocity.getSpeedOfLight();
 	}
 	
 	public SpaceObject(){
-		this.setPos(new Position());
+		try{this.setPos(new Position());
+		} catch(IllegalPositionException ex){
+			
+		}
 		this.setVel(new Velocity());
-		this.setDirection(0);
 		this.radius = 15;
 		this.maxSpeed = Velocity.getSpeedOfLight();
 	}
@@ -104,14 +145,14 @@ public abstract class SpaceObject {
 	 *        The new pos for this space object.
 	 * @post The new pos for this space object is equal to the given pos.
 	 *       |new.getPos()= pos
-	 * @throws IllegalArgumentException
+	 * @throws IllegalPositionException
 	 * 		   The given pos is not valid.
 	 *         | isValidPosition(pos) == false
 	 */
 	@Basic
-	public void setPos(Position pos) throws IllegalArgumentException{
+	public void setPos(Position pos) throws IllegalPositionException{
 		if(!isValidPosition(pos)){
-			throw new IllegalArgumentException();
+			throw new IllegalPositionException();
 		}
 		else{
 	    this.pos = pos;
@@ -153,40 +194,6 @@ public abstract class SpaceObject {
 		}
 	}
 	/**
-	 * @return the direction
-	 */
-	@Basic
-	public double getDirection() {
-		return direction;
-	}
-	/**
-	 * Set the direction of this space object to the given direction.
-	 * 
-	 * @pre	 The value of the given direction must be finite.
-	 * 		 |	isValidDirection(direction)
-	 * @param direction
-	 *        The new direction for this space object in radians.
-	 * @post The new direction for this space object is the given direction.
-	 *       |	new.getDirection() = direction
-	 */
-	@Model @Basic
-	public void setDirection(double direction) {
-		
-		assert(isValidDirection(direction));
-		
-		if(direction>=0){
-			
-		this.direction = direction%(2*Math.PI);
-		
-		}
-		else{
-			
-	    this.direction = 2*Math.PI + direction%(2*Math.PI);
-		
-		}
-		
-	}
-	/**
 	 * @return the radius
 	 */
 	@Basic
@@ -194,6 +201,7 @@ public abstract class SpaceObject {
 	public double getRadius() {
 		return radius;
 	}
+	// TODO verwijderen en documentatie gebruiken
 	/**
 	 * Set the radius for this space object to the given mass.
 	 * @param radius
@@ -207,12 +215,7 @@ public abstract class SpaceObject {
 	@Basic
 	@Immutable
 	protected void setRadius(double radius) throws IllegalRadiusException{
-	if(!isValidRadius(radius)){
-		throw new IllegalRadiusException();
-	}
-	else{
-    this.radius = radius;
-	}
+	
 	}
 	/**
 	 * @return the maxSpeed
@@ -294,24 +297,10 @@ public boolean isValidVelocity(Velocity velocity){
  * @return true if and only if the position is valid.
  * 			| result == (Position.isValidPosition(position) && World.isSituatedInOrOnBoundaries(position))
  */
-public boolean isValidPosition(Position position){
+public static boolean isValidPosition(Position position){
 	return (Position.isValidPosition(position) && World.isSituatedInOrOnBoundaries(position));
 }
-/** 
- * Check whether the given direction is a valid direction.
- * 
- * @param direction
- *        The direction to be checked in radians.
- * @return true if and only if the given direction is greater than -Pi and less than or equal to
- * 		   Pi.
- *         | result == (direction > -Math.PI) && (direction <= Math.PI)
- *        
- */
-public static boolean isValidDirection(double direction){
-	
-	return (!Double.isInfinite(direction));
-	
-}
+
 /**
  * Check whether the given radius is a valid radius. In other words, check whether it is
  * higher than the minimum radius.
@@ -328,19 +317,21 @@ public static boolean isValidRadius(double radius){
 }
 
 /**
- * Check whether the given mass is a valid mass. In other words, check whether it is
- * higher than the minimum mass.
+ * Check whether the given maximum speed is a valid maximum speed. In other words, check whether it is
+ *  greater than 0 and less than or equal to the speed of light.
  *
- * @param mass
- *        The mass to be checked in kg.
- * @return true if and only if the given mass is higher than the minimum mass.
- *         |result == (!Util.fuzzyLessThanOrEqualTo(mass, getMinMass()))
+ * @param maxSpeed
+ *        The maxSpeed to be checked in km/h.
+ * @return true if and only if the given maximum speed is greater than 0 and less than or equal
+ * 			to the speed of light.
+ *         | result == (Util.fuzzyLessThanOrEqualTo(maxSpeed, Velocity.getSpeedOfLight()) && 
+ *         | !Util.fuzzyLessThanOrEqualTo(maxSpeed, 0))
  */
-public static boolean isValidMass(double mass){
-	
-	return (!Util.fuzzyLessThanOrEqualTo(mass, getMinMass()));
-
+public static boolean isValidMaxSpeed(double maxSpeed){
+	return (Util.fuzzyLessThanOrEqualTo(maxSpeed, Velocity.getSpeedOfLight()) && 
+			!Util.fuzzyLessThanOrEqualTo(maxSpeed, 0));
 }
+
 /**
  * Returns the distance between two given space objects.  
  * 
@@ -572,7 +563,11 @@ public void move(double elapsedTime) throws NegativeTimeException{
 		
 		Vector displacement = new Position(vel.getX()*elapsedTime, vel.getY()*elapsedTime);
 		Vector newPosition = pos.add( displacement);
-		setPos((Position) newPosition);
+		try{
+			this.setPos((Position) newPosition);
+		} catch (IllegalPositionException exc){
+			
+		}
 		
 	} 
 }
@@ -589,6 +584,21 @@ public static boolean isValidElapsedTime(double time){
 	
 	return !(time < 0);
 	
+}
+/**
+ * Terminates a space object. 
+ * @effect The new state of this space object is terminated.
+ * 			| setState(State.TERMINATED)  
+ */
+public void terminate(){
+	this.setState(State.TERMINATED);
+}
+/**
+ * @return True if and only if the state of this object is terminated.
+ * 			| result == (this.getState() == State.TERMINATED)
+ */
+public boolean isTerminated(){
+	return (this.getState() == State.TERMINATED);
 }
 }
 

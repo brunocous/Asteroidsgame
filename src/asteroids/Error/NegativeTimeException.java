@@ -1,4 +1,5 @@
 package asteroids.Error;
+
 public class NegativeTimeException extends Exception {
 
 	/**

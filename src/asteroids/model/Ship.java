@@ -1,5 +1,6 @@
 package asteroids.model;
 
+import asteroids.Util;
 import asteroids.Error.IllegalRadiusException;
 import asteroids.Error.NegativeTimeException;
 import asteroids.model.Util.*;
@@ -9,6 +10,9 @@ import be.kuleuven.cs.som.annotate.*;
 /** 
  * A class of spaceships involving a position, a velocity, a direction and a radius with 
  * among others moving, turning and accelerating facilities. 
+ * 
+ *  @invar The mass that applies to all ships must be a valid mass.
+ *        | isValidMass(getMass())
  * 
  * @version 1.0
  * @author Bruno Coussement and Simon Telen
@@ -29,6 +33,10 @@ public class Ship extends SpaceObject{
 	 * Force per seconds exerted by a ship.
 	 */
 	private final double forcePerSecond;
+	/**
+	 *  the direction a ship is orientated in.
+	 */
+	private double direction;
 
 	/**
 	 * Initialize this new ship with given pos, vel, direction, mass and radius.
@@ -66,8 +74,16 @@ public class Ship extends SpaceObject{
 	
 	public Ship(Position pos,Velocity vel, double direction, double radius, double mass) throws IllegalRadiusException, IllegalArgumentException{
 
-		super(pos, vel , direction, radius);
-		setMass(mass);
+		super(pos, vel , radius);
+
+		if(!isValidMass(mass)){
+			throw new IllegalArgumentException();
+		}
+		else this.mass = mass;
+		
+		this.setDirection(direction);
+		this.forcePerSecond = 1.1 * Math.pow(10, 18);
+		
 	}
 	
 
@@ -87,12 +103,10 @@ public class Ship extends SpaceObject{
 	 */
 	public Ship(){
 		
-		Position pos = new Position(0,0);
-		this.setPos(pos);
-		Velocity vel = new Velocity(0,0);
-		this.setVel(vel);
-		this.direction =0;
-		this.radius=15;
+		super();
+		this.setDirection(0);
+		this.mass = 5000;
+		this.forcePerSecond = 1.1 * Math.pow(10, 18);
 		
 	}
 	/**
@@ -106,14 +120,42 @@ public class Ship extends SpaceObject{
 	 *         | isValidMass(mass) == false
 	 */
 	private void setMass(double mass) throws IllegalArgumentException{
-	if(!isValidMass(mass)){
-		throw new IllegalArgumentException();
-	}
-	else{
-    this.mass = mass;
-	}
-	}
 	
+	}
+	/**
+	 * @return the direction
+	 */
+	@Basic
+	public double getDirection() {
+		return direction;
+	}
+	/**
+	 * Set the direction of this ship to the given direction.
+	 * 
+	 * @pre	 The value of the given direction must be finite.
+	 * 		 |	isValidDirection(direction)
+	 * @param direction
+	 *        The new direction for this ship in radians.
+	 * @post The new direction for this ship is the given direction.
+	 *       |	new.getDirection() = direction
+	 */
+	@Model @Basic
+	public void setDirection(double direction) {
+		
+		assert(isValidDirection(direction));
+		
+		if(direction>=0){
+			
+		this.direction = direction%(2*Math.PI);
+		
+		}
+		else{
+			
+	    this.direction = 2*Math.PI + direction%(2*Math.PI);
+		
+		}
+		
+	}
 	/**
 	 * Turns the ship over a fixed angle. 
 	 * 
@@ -133,6 +175,18 @@ public class Ship extends SpaceObject{
 		setDirection(getDirection() + angle);
 		
 	}
+	/**
+	 * Check whether the given mass is a valid mass. In other words, check whether it is
+	 * higher than the minimum mass.
+	 *
+	 * @param mass
+	 *        The mass to be checked in kg.
+	 * @return true if and only if the given mass is higher than the minimum mass.
+	 *         |result == (!Util.fuzzyLessThanOrEqualTo(mass, getMinMass()))
+	 */
+	public static boolean isValidMass(double mass){
+		return (!Util.fuzzyLessThanOrEqualTo(mass, getMinMass()));
+	}
 
 	/**
 	 * Changes the ship's velocity by a given amount, does not change the ship's direction. 
@@ -151,28 +205,72 @@ public class Ship extends SpaceObject{
 	 *       |(new this).getDirection() == this.getDirection()
 	 */
 	// TODO amount aanpassen
-	public void thrust(double amount) {
+	public void thrust() {
+		setEnableThruster(true);
+			double acceleration = this.getForcePerSecond() / this.getMass();
 		
-		Velocity gainedSpeed = new Velocity(amount*Math.cos(getDirection()),amount*Math.sin(getDirection()));
-		Velocity newSpeed = new Velocity(getVel().getX(), getVel().getY());
+		Vector gainedSpeed = new Velocity(acceleration*Math.cos(this.getDirection()),acceleration*Math.sin(this.getDirection()));
+		Vector newSpeed = new Velocity(getVel().getX(), getVel().getY());
 		newSpeed = newSpeed.add(gainedSpeed);
 		
-		if(!isValidVelocity(newSpeed)){
+		if(!isValidVelocity((Velocity) newSpeed)){
 			
-			Velocity result = correctSpeed(newSpeed);
-			setVel(result);
+			Velocity result = correctSpeed((Velocity) newSpeed);
+			this.setVel(result);
 			
 		}
-		else{
-		
-		vel = vel.add(gainedSpeed);
-		
-		}
+		else
+			this.setVel((Velocity) this.getVel().add( (Velocity) gainedSpeed));
 
 	}
 	
-	
 
-		}
+
+	/** 
+	 * Check whether the given direction is a valid direction.
+	 * 
+	 * @param direction
+	 *        The direction to be checked in radians.
+	 * @return true if and only if the given direction is greater than -Pi and less than or equal to
+	 * 		   Pi.
+	 *         | result == (direction > -Math.PI) && (direction <= Math.PI)
+	 *        
+	 */
+	public static boolean isValidDirection(double direction){
+		
+		return (!Double.isInfinite(direction));
+		
+	}
+
+/**
+ * @return True is and only if the thruster is enabled.
+ * 			| result == (enalbeThruster == true)
+ */
+	public boolean isEnableThruster() {
+		return (enableThruster == true);
+	}
+
+
+	public void setEnableThruster(boolean enableThruster){
+		this.enableThruster = enableThruster;
+	}
+
+/**
+ * 
+ * @return The force exerted by the thrusters per seconds.
+ */
+	@Basic 
+	@Immutable
+	public double getForcePerSecond() {
+		return forcePerSecond;
+	}
+	/**
+	 * @return Returns the mass of the ship.
+	 */
+	@Basic
+	@Immutable
+	public double getMass() {
+		return mass;
+	}
 		
 	}
