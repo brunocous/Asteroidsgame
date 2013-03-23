@@ -1,4 +1,5 @@
 package asteroids.model.Util;
+
 import asteroids.Util;
 import be.kuleuven.cs.som.annotate.*;
 
@@ -96,7 +97,7 @@ public class Velocity extends Vector{
 	 *         of light.
 	 *         |result == (Util.fuzzyLessThanOrEqualTo(getNorm(),getSpeedOfLight()))
 	 */
-	public static boolean isValidVelocity(Velocity velocity){
+	public static boolean isLessThanOrEqualToSpeedOfLight(Velocity velocity){
 		
 		return (Util.fuzzyLessThanOrEqualTo(velocity.getNorm(),getSpeedOfLight()));
 		

@@ -97,7 +97,7 @@ public double getDistanceTo(Position position){
  *         are not NaN.
  *         |result == !(Double.isInfinite(pos.getX()) || Double.isNaN(pos.getX()) || Double.isInfinite(pos.getY()) || Double.isNaN(pos.getY()));
  */
-public boolean isValidPosition(Position pos){
+public static boolean isValidPosition(Position pos){
 	
 	return !(Double.isInfinite(pos.getX()) || Double.isNaN(pos.getX()) || Double.isInfinite(pos.getY()) || Double.isNaN(pos.getY()));
 
