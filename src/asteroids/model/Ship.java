@@ -74,7 +74,7 @@ public class Ship extends SpaceObject{
 	
 	public Ship(Position pos,Velocity vel, double direction, double radius, double mass) throws IllegalRadiusException, IllegalArgumentException{
 
-		super(pos, vel , radius);
+		super(pos, vel, radius);
 
 		if(!isValidMass(mass)){
 			throw new IllegalArgumentException();

@@ -61,25 +61,24 @@ public abstract class SpaceObject {
 	 * Initialize this new space object with given pos, vel, radius and maxSpeed.
 	 * 
 	 * @param pos
-	 *        The position for this new ship.
+	 *        The position for this new space object.
 	 * @param vel
-	 *        The velocity for this new ship.
+	 *        The velocity for this new space object.
 	 * @param radius
-	 *        The radius for this new ship.
+	 *        The radius for this new space object.
 	 * @param maxSpeed
-	 *        The maximum speed for this new ship.
-	 * @post The new pos for this new ship is equal to the given pos if the given pos is a 
-	 * 		 valid position.
-	 *       | if(isValidPosition(pos))
-	 *       | then new.getPos()== pos 
-	 * @effect The new vel for this new ship is equal to the given vel.
+	 *        The maximum speed for this new space object.
+	 * @effect The new pos for this new space object is equal to the given pos.
+	 *       | this.setPos(pos)
+	 * @effect The new vel for this new space object is equal to the given vel.
 	 *       | this.setVel(vel)
-	 * @post The new radius for this new ship is equal to the given radius if the given radius
+	 * @post The new radius for this new space object is equal to the given radius if the given radius
 	 * 		 is a valid radius.
 	 *       | if(isValidRadius(radius)
 	 *       | then new.getRadius()== radius 
-	 * @post The new maxium speed for this new ship is equal to the given maximum speed if the given 
-	 * 		 maximum speed is a valid maximum speed.
+	 * @post The new maximum speed for this new space object is equal to the given maximum speed if the given 
+	 * 		 maximum speed is a valid maximum speed. If the given maximum speed is not a valid maximum speed
+	 * 		 , then the new maximum speed of this space object is equal to the speed of light.
 	 *       | if(isValidMaxSpeed(maxSpeed)
 	 *       | then new.getMaxSpeed()== maxSpeed 
 	 *       | else new.getMaxSpeed()== Velocity.getSpeedOfLight()
@@ -107,29 +106,33 @@ public abstract class SpaceObject {
 			throw new IllegalMaxSpeedException();
 			} else this.maxSpeed = maxSpeed;
 	}
-	
-	public SpaceObject( Position pos, Velocity vel, double radius) throws IllegalPositionException, IllegalRadiusException{
-		this.setPos(pos);
-		this.setVel(vel);
-		
-		if(!isValidRadius(radius)){
-			throw new IllegalRadiusException();
-		}
-		else this.radius = radius;
-		
-
-		this.maxSpeed = Velocity.getSpeedOfLight();
+	/**
+	 * Initialize a new space object with a given position, velocity and radius.
+	 * 
+	 * @param pos
+	 *        The position for this new space object.
+	 * @param vel
+	 *        The velocity for this new space object.
+	 * @param radius
+	 *        The radius for this new space object.
+	 * @effect This new space object is initialized with the given position as its position,
+	 * 			the given velocity as its velocity, the given radius as its radius and with the
+	 * 			the speed of light as its maximum speed. 
+	 * 			| this(pos, vel, radius, Velocity.getSpeedOfLight())
+	 */
+	public SpaceObject( Position pos, Velocity vel, double radius) throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
+		this(pos, vel, radius, Velocity.getSpeedOfLight());
+	}
+	//TODO afmaken
+	/**
+	 * Initialize a new space object with a position in (0,0), a velocity equal to (0,0)
+	 * and a radius equal to 15.
+	 * @effect 
+	 */
+	public SpaceObject() throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
+		this(new Position(), new Velocity(), 15);
 	}
 	
-	public SpaceObject(){
-		try{this.setPos(new Position());
-		} catch(IllegalPositionException ex){
-			
-		}
-		this.setVel(new Velocity());
-		this.radius = 15;
-		this.maxSpeed = Velocity.getSpeedOfLight();
-	}
 	/**
 	 * @return the pos
 	 */
