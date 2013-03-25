@@ -15,7 +15,7 @@ public class Velocity extends Vector{
 	
     //The value for the speed of light.
 	private static final double SPEED_OF_LIGHT=300000000.0;
-	
+	//TODO doe me weg
 	/**
 	 * Initialize this new velocity with given velX and velY.
 	 * @param velX
