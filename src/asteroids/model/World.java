@@ -19,12 +19,83 @@ public class World {
 	 * The maximum height of the world.
 	 */
 	private static final double MAX_HEIGHT = Double.MAX_VALUE;
+	//A list of space objects for this new world.
 	private ArrayList<SpaceObject> spaceObjects;
+	//The width of this new world.
+	private double width;
+	//The height of this new world.
+	private double height;
 	
-	public World(){
+	public World(double width, double height){
 		
+		this.setWidth(width);
+		this.setHeight(height);
 		this.spaceObjects = new ArrayList<SpaceObject>();
 		
+	}
+	
+
+	@Basic
+	public ArrayList<SpaceObject> getSpaceObjects() {
+		return spaceObjects;
+	}
+
+
+	@Basic
+	public void setSpaceObjects(ArrayList<SpaceObject> spaceObjects) {
+		this.spaceObjects = spaceObjects;
+	}
+
+
+	@Basic
+	public double getWidth() {
+		return width;
+	}
+
+
+	@Basic
+	public void setWidth(double width) {
+		if(isValidWidth(width)){
+		
+			this.width = width;
+			
+		}
+		else{
+			
+			this.width = getMaxWidth();
+			
+		}
+	}
+
+	public boolean isValidWidth(double width){
+		
+		return (!Util.fuzzyLessThanOrEqualTo(width,0 )&& Util.fuzzyLessThanOrEqualTo(width, getMaxWidth()));
+	}
+
+	@Basic
+	public double getHeight() {
+		return height;
+	}
+
+
+	@Basic
+	public void setHeight(double height) {
+		if(isValidHeight(height)){
+			
+			this.width = height;
+			
+		}
+		else{
+			
+			this.width = getMaxHeight();
+			
+		}
+	}
+
+	public boolean isValidHeight(double height){
+		
+		return (!Util.fuzzyLessThanOrEqualTo(height,0 )&& Util.fuzzyLessThanOrEqualTo(height, getMaxHeight()));
+	
 	}
 
 	/**
@@ -53,9 +124,14 @@ public class World {
 	 * 		 	| result == (Util.fuzzyEquals(pos.getX(), 0) && Util.fuzzyEquals(pos.getY(), 0) && (pos.getX() > 0) && (pos.getY() > 0) 
 				| && Util.fuzzyLessThanOrEqualTo(pos.getX(), getMaxWidth()) && Util.fuzzyLessThanOrEqualTo(pos.getY(), getMaxHeight()))
 	 */
-	public static boolean isSituatedInOrOnBoundaries(Position pos){
-		return (Util.fuzzyEquals(pos.getX(), 0) && Util.fuzzyEquals(pos.getY(), 0) && (pos.getX() > 0) && (pos.getY() > 0) 
-				&& Util.fuzzyLessThanOrEqualTo(pos.getX(), getMaxWidth()) && Util.fuzzyLessThanOrEqualTo(pos.getY(), getMaxHeight()));
+	public static boolean isSituatedInOrOnBoundaries(SpaceObject spaceObject){
+		
+		double x = spaceObject.getPos().getX();
+		double y = spaceObject.getPos().getY();
+		double r = spaceObject.getRadius();
+		
+		return ((!Util.fuzzyLessThanOrEqualTo(x-r, 0) && (!Util.fuzzyLessThanOrEqualTo(y-r, 0)) 
+				&& Util.fuzzyLessThanOrEqualTo(x+r, getMaxWidth()) && Util.fuzzyLessThanOrEqualTo(y+r, getMaxHeight())));
 	}
 	
 	public void updatePositions(double deltaT) throws IllegalPositionException{
@@ -83,11 +159,49 @@ public class World {
 		 }
 	}
 	
-	public void evolve(double deltaT){
+	public double getTimeToFirstCollision() {
+		
+		int i = 0;
+		int j = 0;
+		double result = SpaceObject.getTimeToCollision(spaceObjects.get(1), spaceObjects.get(2));
+		
+		while(i!=spaceObjects.size()){
+			
+			while(j!=spaceObjects.size()){
+				
+				double timeToCollision = SpaceObject.getTimeToCollision(spaceObjects.get(i), spaceObjects.get(j));
+				
+				if (timeToCollision!=Double.POSITIVE_INFINITY && Util.fuzzyLessThanOrEqualTo(timeToCollision,result)){
+					
+					result = timeToCollision;
+				
+				}
+				j++;
+			}
+			double timeToBoundaryCollision = getTimeToBoundaryCollision(spaceObjects.get(i));
+			if (Util.fuzzyLessThanOrEqualTo(timeToBoundaryCollision, result)){
+				
+				result = timeToBoundaryCollision;
+				
+			}
+			i++;
+		}
+		
+		return result;
+		
+	}
+	
+	public double getTimeToBoundaryCollision(SpaceObject spaceObject){
+		
+		return 1;
+		
+	}
+	
+	public void evolve(double deltaT) throws IllegalPositionException{
 		
 		double tC=getTimeToFirstCollision();
 		
-		if(tC > deltaT){
+		if(!Util.fuzzyLessThanOrEqualTo(tC, deltaT)){
 			
 			updatePositions(deltaT);
 			updateVelocities(deltaT);
@@ -136,13 +250,29 @@ public class World {
 			
 			bounceOff(object1,object2);
 			
-	}
-		else if (Asteroid.class.isAssignableFrom(object1.getClass()) && Asteroid.class.isAssignableFrom(object2.getClass())){
+		}
+		else if(Asteroid.class.isAssignableFrom(object1.getClass()) && Asteroid.class.isAssignableFrom(object2.getClass())){
 			
 			bounceOff(object1,object2);
 			
 		}
-		
+		else if(Bullet.class.isAssignableFrom(object1.getClass()) || Bullet.class.isAssignableFrom(object2.getClass())){
+			
+			object1.terminate();
+			object2.terminate();
+			
+		}
+		else if(Asteroid.class.isAssignableFrom(object1.getClass()) && Ship.class.isAssignableFrom(object2.getClass())){
+			
+			object2.terminate();
+			
+		}
+		else if(Ship.class.isAssignableFrom(object1.getClass()) && Asteroid.class.isAssignableFrom(object2.getClass())){
+			
+			object1.terminate();
+			
+		}
+	
 		
 	}
 	/**
