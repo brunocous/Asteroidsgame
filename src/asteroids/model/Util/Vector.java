@@ -32,7 +32,21 @@ public abstract class Vector {
 	public double getY() {
 		return yComp;
 	}
-
+	
+	/**
+	 * Calculates the scalar product of two 2-dimensional vectors.
+	 * 
+	 * @param v1
+	 *        The first vector.
+	 * @param v2
+	 *        The second vector.
+	 * @return the scalar product of vector1 and vector2
+	 *         |result==v1.getX()*v2.getX() + v1.getY()+v2.getY()
+	 */
+	public static double scalarProduct(Vector v1, Vector v2){
+		return v1.getX()*v2.getX() + v1.getY()+v2.getY();
+		
+	}
 	/**
 	 * Check whether this vector is equal to the given vector.
 	 * 
