@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import asteroids.Util;
 import asteroids.Error.IllegalPositionException;
 import asteroids.model.Util.Position;
+import asteroids.model.Util.Vector;
+import asteroids.model.Util.Velocity;
 import be.kuleuven.cs.som.annotate.*;
 
 public class World {
@@ -109,13 +111,39 @@ public class World {
 		}
 	}
 	
+	public void bounceOff(SpaceObject obj1, SpaceObject obj2){
+		
+		double mi = obj1.getMass();
+		double mj = obj2.getMass();
+		double sigma = obj1.getRadius()+ obj2.getRadius();
+		Velocity deltaV = new Velocity(obj2.getVel().getX()-obj1.getVel().getX(),obj2.getVel().getY()-obj1.getVel().getY());
+		Position deltaR = new Position(obj2.getPos().getX()-obj1.getPos().getX(),obj2.getPos().getY()-obj1.getPos().getY());
+		
+		double J=(2*mi*mj*Vector.scalarProduct(deltaV, deltaR))/(sigma*(mi+mj));
+		
+		Velocity velToAddI = new Velocity(J*deltaR.getX()/(sigma*mi), J*deltaR.getY()/(sigma*mi));
+		Velocity velToAddJ = new Velocity(J*deltaR.getX()/(sigma*mj), J*deltaR.getY()/(sigma*mj));
+		
+		obj1.getVel().add(velToAddI);
+		obj2.getVel().add(velToAddJ);
+		
+	}
+	
+	
 	public void resolve(SpaceObject object1, SpaceObject object2){
 		
 		if(Ship.class.isAssignableFrom(object1.getClass()) && Ship.class.isAssignableFrom(object2.getClass())){
 			
-			double mi = object1.getMass();
-			double mj = object2.getMass();
+			bounceOff(object1,object2);
+			
 	}
+		else if (Asteroid.class.isAssignableFrom(object1.getClass()) && Asteroid.class.isAssignableFrom(object2.getClass())){
+			
+			bounceOff(object1,object2);
+			
+		}
+		
+		
 	}
 	/**
 	 * Returns the distance between two given space objects.  
