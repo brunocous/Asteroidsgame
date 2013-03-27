@@ -109,7 +109,12 @@ public class World {
 		}
 	}
 	
-	public void resolve(){
+	public void resolve(SpaceObject object1, SpaceObject object2){
+		
+		if(Ship.class.isAssignableFrom(object1.getClass()) && Ship.class.isAssignableFrom(object2.getClass())){
+			
+			double mi = object1.getMass();
+			double mj = object2.getMass();
 	}
 	}
 	/**

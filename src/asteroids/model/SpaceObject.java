@@ -600,5 +600,11 @@ public void terminate(){
 public boolean isTerminated(){
 	return (this.getState() == State.TERMINATED);
 }
+
+/**
+ * Returns the mass of a space object.
+ * @return 
+ */
+public abstract double getMass();
 }
 
