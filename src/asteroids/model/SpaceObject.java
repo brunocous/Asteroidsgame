@@ -37,6 +37,10 @@ public abstract class SpaceObject {
 	 */
 	protected Velocity vel;
 	/**
+	 * the world the space object belongs to.
+	 */
+	protected World world;
+	/**
 	 *  the radius of a space object.
 	 */
 	protected final double radius;
@@ -68,6 +72,8 @@ public abstract class SpaceObject {
 	 *        The radius for this new space object.
 	 * @param maxSpeed
 	 *        The maximum speed for this new space object.
+	 * @param world
+	 * 		  The world this new space object belongs to.
 	 * @effect The new pos for this new space object is equal to the given pos.
 	 *       | this.setPos(pos)
 	 * @effect The new vel for this new space object is equal to the given vel.
@@ -82,6 +88,8 @@ public abstract class SpaceObject {
 	 *       | if(isValidMaxSpeed(maxSpeed))
 	 *       | then new.getMaxSpeed()== maxSpeed 
 	 *       | else new.getMaxSpeed()== Velocity.getSpeedOfLight()
+	 * @effect The new world for this new space object is equal to the given world.
+	 * 		 | this.setWorld(world)
 	 * @throws IllegalRadiusException
 	 *         The given radius is not a valid radius.
 	 *         |!isValidRadius()
@@ -93,7 +101,7 @@ public abstract class SpaceObject {
 	 * 			|!isValidMaximumSpeed()
 	 *         
 	 */
-	public SpaceObject( Position pos, Velocity vel, double radius, double maxSpeed) throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
+	public SpaceObject( Position pos, Velocity vel, double radius, double maxSpeed, World world) throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
 		this.setPos(pos);
 		this.setVel(vel);
 		
@@ -105,6 +113,26 @@ public abstract class SpaceObject {
 		if(!isValidMaxSpeed(maxSpeed)){
 			throw new IllegalMaxSpeedException();
 			} else this.maxSpeed = maxSpeed;
+		this.setWorld(world);
+	}
+	/**
+	 * Initialize a new space object with a given position, velocity, radius and world.
+	 * 
+	 * @param pos
+	 *        The position for this new space object.
+	 * @param vel
+	 *        The velocity for this new space object.
+	 * @param radius
+	 *        The radius for this new space object.
+	 * @param world
+	 * 		  The world for this new space object.
+	 * @effect This new space object is initialized with the given position as its position,
+	 * 			the given velocity as its velocity, the given radius as its radius, with the
+	 * 			the speed of light as its maximum speed and the given world as its world. 
+	 * 			| this(pos, vel, radius, Velocity.getSpeedOfLight(), world)
+	 */
+	public SpaceObject( Position pos, Velocity vel, double radius,World world) throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
+		this(pos, vel, radius, Velocity.getSpeedOfLight(), world);
 	}
 	/**
 	 * Initialize a new space object with a given position, velocity and radius.
@@ -116,12 +144,12 @@ public abstract class SpaceObject {
 	 * @param radius
 	 *        The radius for this new space object.
 	 * @effect This new space object is initialized with the given position as its position,
-	 * 			the given velocity as its velocity, the given radius as its radius and with the
-	 * 			the speed of light as its maximum speed. 
-	 * 			| this(pos, vel, radius, Velocity.getSpeedOfLight())
+	 * 			the given velocity as its velocity, the given radius as its radius, with the
+	 * 			the speed of light as its maximum speed and does not belong to a world. 
+	 * 			| this(pos, vel, radius, Velocity.getSpeedOfLight(), null)
 	 */
 	public SpaceObject( Position pos, Velocity vel, double radius) throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
-		this(pos, vel, radius, Velocity.getSpeedOfLight());
+		this(pos, vel, radius, Velocity.getSpeedOfLight(), null);
 	}
 	
 	/**
@@ -230,6 +258,62 @@ public abstract class SpaceObject {
 	@Immutable
 	public static double getMinMass(){
 		return MIN_MASS;
+	}
+	/**
+	 * Returns the mass of a space object.
+	 */
+	@Basic
+	@Immutable
+	public abstract double getMass();
+	/**
+	 * @return the world of a space object.
+	 */
+	@Basic
+	public World getWorld() {
+		if (this.world == null)
+			return null;
+		return this.world.getCopy();
+	}
+	/**
+	 * Sets the world of this space object to the given world.
+	 */
+	@Basic
+	public void setWorld(World world){
+		if(this.canHaveAsWorld(world))
+		this.world = world;
+	}
+	/**
+	 * Check whether this space object can have the given world as its world.
+	 * @param  world
+	 *         The world to check.
+	 * @return  If this world is not yet terminated, true if and
+	 *          only if the given world is effective and not yet
+	 *          terminated
+	 *        | if (! isTerminated())
+	 *        |   then result == (world != null) && (! world.isTerminated())
+	 * @return  If this world is terminated, true if and only if
+	 *          the given world is not effective.
+	 *        | if (! this.isTerminated())
+	 *        |   then result == (world == null)
+	 */
+	@Raw
+	public boolean canHaveAsWorld(World world){
+		if (isTerminated())
+			return (world == null);
+		return (world != null) && (!world.isTerminated());
+	}
+	/**
+	 * Check whether this space object has a proper world.
+	 * @return  True if and only if this space object can have its world as its
+	 *          world, and if this space object is terminated or the world of
+	 *          this space object has this space object as one of its space objects.
+	 *        | result ==
+	 *        |   canHaveAsShare(getShare()) &&
+	 *        |   ( isTerminated() || getShare().hasAsPurchase(this))
+	 */
+	public boolean hasProperWorld(){
+		return canHaveAsWorld(getWorld())
+				&&((getWorld() == null) || (getWorld().hasAsSpaceObject(this)));
 	}
 	/**
 	 * Enumeration of all possible states of a space object.
@@ -571,10 +655,5 @@ public void terminate(){
 public boolean isTerminated(){
 	return (this.getState() == State.TERMINATED);
 }
-
-/**
- * Returns the mass of a space object.
- */
-public abstract double getMass();
 }
 
