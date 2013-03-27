@@ -74,12 +74,12 @@ public abstract class SpaceObject {
 	 *       | this.setVel(vel)
 	 * @post The new radius for this new space object is equal to the given radius if the given radius
 	 * 		 is a valid radius.
-	 *       | if(isValidRadius(radius)
+	 *       | if(isValidRadius(radius))
 	 *       | then new.getRadius()== radius 
 	 * @post The new maximum speed for this new space object is equal to the given maximum speed if the given 
 	 * 		 maximum speed is a valid maximum speed. If the given maximum speed is not a valid maximum speed
 	 * 		 , then the new maximum speed of this space object is equal to the speed of light.
-	 *       | if(isValidMaxSpeed(maxSpeed)
+	 *       | if(isValidMaxSpeed(maxSpeed))
 	 *       | then new.getMaxSpeed()== maxSpeed 
 	 *       | else new.getMaxSpeed()== Velocity.getSpeedOfLight()
 	 * @throws IllegalRadiusException
@@ -123,11 +123,13 @@ public abstract class SpaceObject {
 	public SpaceObject( Position pos, Velocity vel, double radius) throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
 		this(pos, vel, radius, Velocity.getSpeedOfLight());
 	}
-	//TODO afmaken
+	
 	/**
 	 * Initialize a new space object with a position in (0,0), a velocity equal to (0,0)
 	 * and a radius equal to 15.
-	 * @effect 
+	 * @effect This new space object is initialized with a position in (0,0), a velocity equal
+	 * 			to (0,0) and a radius equal to 15.
+	 * 			| this(new Position(), new Velocity(), 15)
 	 */
 	public SpaceObject() throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
 		this(new Position(), new Velocity(), 15);
@@ -204,22 +206,7 @@ public abstract class SpaceObject {
 	public double getRadius() {
 		return radius;
 	}
-	// TODO verwijderen en documentatie gebruiken
-	/**
-	 * Set the radius for this space object to the given mass.
-	 * @param radius
-	 * 			The new radius for this space object.
-	 * @post The new radius for this space object is equal to the given space object.
-	 *       |new.getRadius()= radius
-	 * @throws IllegalRadiusException
-	 * 		   The given radius is not valid.
-	 *         | isValidRadius(radius) == false
-	 */
-	@Basic
-	@Immutable
-	protected void setRadius(double radius) throws IllegalRadiusException{
-	
-	}
+
 	/**
 	 * @return the maxSpeed
 	 */
@@ -395,27 +382,6 @@ public static boolean overlap(SpaceObject obj1, SpaceObject obj2) {
 }
 
 /**
- * Calculates the scalar product of two 2-dimensional vectors.
- * 
- * @param x1
- *        The x-coördinate of the first vector.
- * @param y1
- *        The y-coördinate of the first vector.
- * @param x2
- *        The x-coördinate of the second vector.
- * @param y2
- *        y-coördinate of the second vector.
- * @return the scalar product of vector1(x1,y1) and vector2(x2,y2)
- *         |result==x1*y1+x2*y2
- */
-
-public static double scalarProduct(double x1, double y1, double x2, double y2){
-	
-	return x1*x2+y1*y2;
-	
-}
-
-/**
  * Finds out whether and in how many seconds 2 space objects will collide. 
  * 
  * @pre the given obj1 and obj2 should not be null.
@@ -431,11 +397,12 @@ public static double scalarProduct(double x1, double y1, double x2, double y2){
  *         | double deltarx = obj2.getPos().getX()- obj1.getPos().getX()
  *         | double deltary = obj2.getPos().getY()- obj1.getPos().getY()
  *         | double sigma = obj1.getRadius()+obj2.getRadius()
- *         | double d = Math.pow(scalarProduct(deltavx, deltavy, deltarx, deltary), 2)-scalarProduct(deltavx,deltavy,deltavx,deltavy)*(scalarProduct(deltarx,deltary,deltarx,deltary)-Math.pow(sigma, 2))
+ *         | double d = Math.pow(Vector.scalarProduct(new Velocity(deltavx, deltavy),new Position(deltarx, deltary)), 2)
+		   | -Vector.scalarProduct(new Velocity(deltavx,deltavy),new Velocity(deltavx,deltavy))*(Vector.scalarProduct(new Position(deltarx,deltary),new Position(deltarx,deltary))-Math.pow(sigma, 2));
  *         | if(obj1 == obj2)
  *         | then result == Double.POSITIVE_INFINITY
- *         | else if(Util.fuzzyLessThanOrEqualTo(-scalarProduct(deltavx,deltavy,deltarx,deltary),0) || Util.fuzzyLessThanOrEqualTo(d,0) )
- *         | else result == -(scalarProduct(deltavx, deltavy, deltarx,deltary)+Math.sqrt(d))/scalarProduct(deltavx,deltavy,deltavx,deltavy)
+ *         | else if(Util.fuzzyLessThanOrEqualTo(-Vector.scalarProduct(new Velocity(deltavx,deltavy),new Position(deltarx,deltary)),0) || Util.fuzzyLessThanOrEqualTo(d,0) )
+ *         | else result == -(Vector.scalarProduct(new Velocity(deltavx, deltavy),new Position( deltarx,deltary))+Math.sqrt(d))/Vector.scalarProduct(new Velocity(deltavx,deltavy), new Velocity(deltavx,deltavy))
  *         
  */
                       
@@ -454,16 +421,17 @@ public static double getTimeToCollision(SpaceObject obj1, SpaceObject obj2) thro
 	double deltarx = obj2.getPos().getX()- obj1.getPos().getX();
 	double deltary = obj2.getPos().getY()- obj1.getPos().getY();
 	double sigma = obj1.getRadius()+obj2.getRadius();
-	double d = Math.pow(scalarProduct(deltavx, deltavy, deltarx, deltary), 2)-scalarProduct(deltavx,deltavy,deltavx,deltavy)*(scalarProduct(deltarx,deltary,deltarx,deltary)-Math.pow(sigma, 2));
+	double d = Math.pow(Vector.scalarProduct(new Velocity(deltavx, deltavy),new Position(deltarx, deltary)), 2)
+			-Vector.scalarProduct(new Velocity(deltavx,deltavy),new Velocity(deltavx,deltavy))*(Vector.scalarProduct(new Position(deltarx,deltary),new Position(deltarx,deltary))-Math.pow(sigma, 2));
 	
-	if(Util.fuzzyLessThanOrEqualTo(-scalarProduct(deltavx,deltavy,deltarx,deltary),0) || Util.fuzzyLessThanOrEqualTo(d,0) ){
+	if(Util.fuzzyLessThanOrEqualTo(-Vector.scalarProduct(new Velocity(deltavx,deltavy),new Position(deltarx,deltary)),0) || Util.fuzzyLessThanOrEqualTo(d,0) ){
 		
 		result = Double.POSITIVE_INFINITY;
 		
 	}
 	else{
 		
-		result = -(scalarProduct(deltavx, deltavy, deltarx,deltary)+Math.sqrt(d))/scalarProduct(deltavx,deltavy,deltavx,deltavy);
+		result = -(Vector.scalarProduct(new Velocity(deltavx, deltavy),new Position( deltarx,deltary))+Math.sqrt(d))/Vector.scalarProduct(new Velocity(deltavx,deltavy), new Velocity(deltavx,deltavy));
 		
 	}
 	}
@@ -606,7 +574,6 @@ public boolean isTerminated(){
 
 /**
  * Returns the mass of a space object.
- * @return 
  */
 public abstract double getMass();
 }
