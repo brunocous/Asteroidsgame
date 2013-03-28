@@ -166,7 +166,7 @@ public class Ship extends SpaceObject{
 	public static boolean isValidMass(double mass){
 		return (!Util.fuzzyLessThanOrEqualTo(mass, getMinMass()));
 	}
-
+//TODO rekening houden met de negatieve tijden
 	/**
 	 * Changes the ship's velocity by a given amount, does not change the ship's direction. 
 	 * 
