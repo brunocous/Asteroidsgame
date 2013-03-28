@@ -1,6 +1,8 @@
 package asteroids.model;
 
 import asteroids.Util;
+import asteroids.Error.IllegalMaxSpeedException;
+import asteroids.Error.IllegalPositionException;
 import asteroids.Error.IllegalRadiusException;
 import asteroids.Error.NegativeTimeException;
 import asteroids.model.Util.*;
@@ -39,7 +41,7 @@ public class Ship extends SpaceObject{
 	private double direction;
 
 	/**
-	 * Initialize this new ship with given pos, vel, direction, mass and radius.
+	 * Initialize this new ship with given pos, vel, direction, mass, radius and world.
 	 * 
 	 * @pre   The given direction must be a valid direction.
 	 * 		  | isValidDirection(direction)
@@ -51,30 +53,20 @@ public class Ship extends SpaceObject{
 	 *        The direction for this new ship.
 	 * @param radius
 	 *        The radius for this new ship.
-	 * @post The new pos for this new ship is equal to the given pos if the given pos is a 
-	 * 		 valid position.
-	 *       | if(isValidPosition(pos))
-	 *       | then new.getPos()== pos 
-	 * @effect The new vel for this new ship is equal to the given vel.
-	 *       | this.setVel(vel)
+	 * @param world
+	 * 		  The wolrd for this new ship.
 	 * @post The new direction for this new ship is equal to the given direction.
 	 *       | new.getDirection()== direction
-	 * @post The new radius for this new ship is equal to the given radius if the given radius
-	 * 		 is a valid radius.
-	 *       | if(isValidRadius(radius)
-	 *       | then new.getRadius()== radius 
-	 * @throws IllegalRadiusException
-	 *         The given radius is not a valid radius.
-	 *         |!isValidRadius()
-	 * @throws IllegalArgumentException
-	 *         The given pos is not a valid position.
-	 *         |!isValidPosition()
-	 *         
+	 * @post The new mass of this ship is equal to the given mass if the given mass is valid.
+	 * 		 | if(isValidMass(mass))
+	 * 		 | then new.getMass() == mass
+	 * @note This constructor inherts a constructor of space object.
 	 */
 	
-	public Ship(Position pos,Velocity vel, double direction, double radius, double mass) throws IllegalRadiusException, IllegalArgumentException{
+	public Ship(Position pos,Velocity vel, double direction, double radius, double mass,World world) throws
+	 		IllegalRadiusException, IllegalMaxSpeedException, IllegalPositionException{
 
-		super(pos, vel, radius);
+		super(pos, vel, radius, world);
 
 		if(!isValidMass(mass)){
 			throw new IllegalArgumentException();
@@ -101,26 +93,13 @@ public class Ship extends SpaceObject{
 	 * @post The new radius for this new ship is 15.
 	 *       | new.getRadius()== 15  
 	 */
-	public Ship(){
+	public Ship() throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
 		
 		super();
 		this.setDirection(0);
 		this.mass = 5000;
 		this.forcePerSecond = 1.1 * Math.pow(10, 18);
 		
-	}
-	/**
-	 * Set the mass for this ship to the given mass.
-	 * @param mass
-	 * 			The new mass for this ship.
-	 * @post The new mass for this ship is equal to the given ship.
-	 *       |new.getMass()= mass
-	 * @throws IllegalArgumentException
-	 * 		   The given mass is not valid.
-	 *         | isValidMass(mass) == false
-	 */
-	private void setMass(double mass) throws IllegalArgumentException{
-	
 	}
 	/**
 	 * @return the direction
@@ -191,23 +170,29 @@ public class Ship extends SpaceObject{
 	/**
 	 * Changes the ship's velocity by a given amount, does not change the ship's direction. 
 	 * 
-	 * @param amount
-	 * 		  The amount by which the velocity of the ship will be increased.
-	 * @effect If increasing the ship's velocity by the given amount does not result into a 
-	 *       velocity that is higher than the speed of light, the ship's velocity will be 
-	 *       increased by the given amount. If it does exceed the speed of light, the ship's new
-	 *       velocity will be the speed of light. If amount is infinite, the new velocity for 
+	 * @param deltaT
+	 * 		  The amount of time in which the ship thrusts.
+	 * @effect If increasing the ship's velocity during a time amount deltaT does not result into a 
+	 *       velocity that is higher than the maximum speed of this ship, the ship's velocity will be 
+	 *       increased during an amount of time deltaT with a constant acceleration equal to 
+	 *       the amount of time times the amount of force exerted by the thrusters per second divided
+	 *       by the mass of this ship. If it does exceed the maximum speed, the ship's new
+	 *       velocity will be the maximum speed. If the amount of time is infinite, the new velocity for 
 	 *       this ship will be zero.
-	 *       |if(isValidVelocity((new Velocity(getVel().getX(), getVel().getY())).add(new Velocity(amount*Math.cos(getDirection()),amount*Math.sin(getDirection()))))
-	 *       |     then (this).setVel(this.getVel().add(new Velocity(amount*Math.cos(getDirection()),amount*Math.sin(getDirection()))))
-	 *       |else ((this).setVel(correctSpeed(new Velocity(amount*Math.cos(getDirection()),amount*Math.sin(getDirection()))))
+	 *       |if(Double.isInfinite(deltaT))
+	 *       		then (this).setVel(new Velocity())
+	 *       |else if(isValidVelocity((new Velocity(getVel().getX(), getVel().getY())).add(new Velocity(acceleration*Math.cos(getDirection()),acceleration*Math.sin(getDirection()))))
+	 *       |     then (this).setVel(this.getVel().add(new Velocity(acceleration*Math.cos(getDirection()),acceleration*Math.sin(getDirection()))))
+	 *       |else ((this).setVel(correctSpeed(new Velocity(acceleration*Math.cos(getDirection()),acceleration*Math.sin(getDirection()))))
 	 * @post The ship's direction will not be changed. 
 	 *       |(new this).getDirection() == this.getDirection()
 	 */
-	// TODO amount aanpassen
-	public void thrust() {
+	public void thrust(double deltaT) {
+		if(Double.isInfinite(deltaT)){
+			this.setVel(new Velocity());
+		}else{
 		setEnableThruster(true);
-			double acceleration = this.getForcePerSecond() / this.getMass();
+			double acceleration = deltaT*this.getForcePerSecond() / this.getMass();
 		
 		Vector gainedSpeed = new Velocity(acceleration*Math.cos(this.getDirection()),acceleration*Math.sin(this.getDirection()));
 		Vector newSpeed = new Velocity(getVel().getX(), getVel().getY());
@@ -221,7 +206,7 @@ public class Ship extends SpaceObject{
 		}
 		else
 			this.setVel((Velocity) this.getVel().add( (Velocity) gainedSpeed));
-
+		}
 	}
 	
 
