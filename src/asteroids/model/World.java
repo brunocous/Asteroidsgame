@@ -37,7 +37,7 @@ public class World {
 
 	@Basic
 	public ArrayList<SpaceObject> getSpaceObjects() {
-		return spaceObjects;
+		return new ArrayList<SpaceObject>(spaceObjects);
 	}
 
 
@@ -304,6 +304,12 @@ public class World {
 		
 		}
 		
+		
+	}
+	/**
+	 * Add a space object to the space objectlist
+	 */
+	public void addSpaceObject(SpaceObject object){
 		
 	}
 	}
