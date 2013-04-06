@@ -54,15 +54,14 @@ public class Ship extends SpaceObject{
 	 * @param radius
 	 *        The radius for this new ship.
 	 * @param world
-	 * 		  The wolrd for this new ship.
+	 * 		  The world for this new ship.
 	 * @post The new direction for this new ship is equal to the given direction.
 	 *       | new.getDirection()== direction
 	 * @post The new mass of this ship is equal to the given mass if the given mass is valid.
 	 * 		 | if(isValidMass(mass))
 	 * 		 | then new.getMass() == mass
-	 * @note This constructor inherts a constructor of space object.
+	 * @note This constructor inherits a constructor of space object.
 	 */
-	
 	public Ship(Position pos,Velocity vel, double direction, double radius, double mass,World world) throws
 	 		IllegalRadiusException, IllegalMaxSpeedException, IllegalPositionException{
 
@@ -78,28 +77,39 @@ public class Ship extends SpaceObject{
 		
 	}
 	
+	/**
+	 * Initialize this new ship with given pos, vel, direction, mass and radius.
+	 * 
+	 * @param pos
+	 *        The position for this new ship.
+	 * @param vel
+	 *        The velocity for this new ship.
+	 * @param direction
+	 *        The direction for this new ship.
+	 * @param radius
+	 *        The radius for this new ship.
+	 * @effect This new ship is initialized with the given position as its position,
+	 * 			the given velocity as its velocity, the given direction as its direction
+	 * 			, the given radius as its direction, the given mass as its mass and does 
+	 * 			not belong to any world.
+	 * 			| this(pos,vel,direction,radius,mass,null);
+	 */
+	public Ship(Position pos, Velocity vel, double direction, double radius, double mass) throws IllegalRadiusException, IllegalMaxSpeedException, IllegalPositionException{
+		this(pos,vel,direction,radius,mass,null);
+	}
+	
 
 	/**
 	 * Initialize this new ship as a default ship. 
 	 * 
-	 * @post The new pos for this new ship is a position object with x-component 0 and 
-	 *       y-component 0.
-	 *       | new.getPos()== new Position(0,0)
-	 * @post The new vel for this new ship is a velocity object with x-component 0 and
-	 *       y-component 0.
-	 *       | new.getVel()== new Velocity(0,0)
-	 * @post The new direction for this new ship is 0.
-	 *       | new.getDirection()== 0
-	 * @post The new radius for this new ship is 15.
-	 *       | new.getRadius()== 15  
+	 * @effect This new ship is initialized with the default position as its position
+	 * 			, the default velocity as its velocity, a direction of 0 radians as its direction
+	 * 			, a radius of 15 km as its radius, a mass of 5000 kg as its mass and does not
+	 * 			belong to any world.
+	 * 			| this(new Position(), new Velocity(), 0, 15, 5000, null)
 	 */
 	public Ship() throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
-		
-		super();
-		this.setDirection(0);
-		this.mass = 5000;
-		this.forcePerSecond = 1.1 * Math.pow(10, 18);
-		
+		this(new Position(), new Velocity(), 0, 15, 5000, null);
 	}
 	/**
 	 * @return the direction
@@ -166,7 +176,6 @@ public class Ship extends SpaceObject{
 	public static boolean isValidMass(double mass){
 		return (!Util.fuzzyLessThanOrEqualTo(mass, getMinMass()));
 	}
-//TODO rekening houden met de negatieve tijden
 	/**
 	 * Changes the ship's velocity by a given amount, does not change the ship's direction. 
 	 * 
@@ -186,8 +195,14 @@ public class Ship extends SpaceObject{
 	 *       |else ((this).setVel(correctSpeed(new Velocity(acceleration*Math.cos(getDirection()),acceleration*Math.sin(getDirection()))))
 	 * @post The ship's direction will not be changed. 
 	 *       |(new this).getDirection() == this.getDirection()
+ * @throws NegativeTimeException
+ *         The given elapsedTime is negative and therefore invalid.
+ *         |!isValidElapsedTime()		
 	 */
-	public void thrust(double deltaT) {
+	public void thrust(double deltaT) throws NegativeTimeException{
+		if(super.isValidElapsedTime(deltaT)){
+			throw new NegativeTimeException();
+		}
 		if(Double.isInfinite(deltaT)){
 			this.setVel(new Velocity());
 		}else{

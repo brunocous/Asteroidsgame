@@ -102,6 +102,9 @@ public abstract class SpaceObject {
 	 *         
 	 */
 	public SpaceObject( Position pos, Velocity vel, double radius, double maxSpeed, World world) throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
+		if(!isValidMaxSpeed(maxSpeed)){
+			throw new IllegalMaxSpeedException();
+			} else this.maxSpeed = maxSpeed;
 		this.setVel(vel);
 		
 		if(!isValidRadius(radius)){
@@ -109,13 +112,10 @@ public abstract class SpaceObject {
 		}
 		else this.radius = radius;
 		this.setPos(pos,radius);
-		if(!isValidMaxSpeed(maxSpeed)){
-			throw new IllegalMaxSpeedException();
-			} else this.maxSpeed = maxSpeed;
 		this.setWorld(world);
 	}
 	/**
-	 * Initialize a new space object with a given position, velocity, radius and world.
+	 * Initialize this new space object with a given position, velocity, radius and world.
 	 * 
 	 * @param pos
 	 *        The position for this new space object.
@@ -134,7 +134,7 @@ public abstract class SpaceObject {
 		this(pos, vel, radius, Velocity.getSpeedOfLight(), world);
 	}
 	/**
-	 * Initialize a new space object with a given position, velocity and radius.
+	 * Initialize this new space object with a given position, velocity and radius.
 	 * 
 	 * @param pos
 	 *        The position for this new space object.
@@ -152,10 +152,10 @@ public abstract class SpaceObject {
 	}
 	
 	/**
-	 * Initialize a new space object with a position in (0,0), a velocity equal to (0,0)
-	 * and a radius equal to 15.
-	 * @effect This new space object is initialized with a position in (0,0), a velocity equal
-	 * 			to (0,0) and a radius equal to 15.
+	 * Initialize this new space object as a default space object 
+	 * @effect This new space object is initialized with the default position as its position, 
+	 * 			the default velocity as its velocity, a radius of 15 km as its radius and 
+	 * 			does not belong to any world.
 	 * 			| this(new Position(), new Velocity(), 15)
 	 */
 	public SpaceObject() throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
@@ -269,19 +269,34 @@ public abstract class SpaceObject {
 	/**
 	 * @return the world of a space object.
 	 */
-	@Basic
+	@Basic 
+	@Raw
 	public World getWorld() {
-		if (this.world == null)
-			return null;
-		return this.world.getCopy();
+		return this.world;
 	}
 	/**
 	 * Sets the world of this space object to the given world.
+	 * @param   world
+	 *          The new world for this space object.
+	 * @pre     This space object can have the given world as its world.
+	 *        | canHaveAsWorld(world)
+	 * @post    The world of this space object is the same as the given space object.
+	 *        | new.getWorld() == world
 	 */
 	@Basic
-	public void setWorld(World world){
+	@Raw
+	public void setWorld(@Raw World world){
 		if(this.canHaveAsWorld(world))
 		this.world = world;
+	}
+	/**
+	 * Checks whether this space object has a world.
+	 * @return True if and only if this space object has an effective world.
+	 * 			| result == (this.getWorld() != null)
+	 */
+	@Raw
+	public boolean hasWorld(){
+		return (this.getWorld() != null);
 	}
 	/**
 	 * Check whether this space object can have the given world as its world.
@@ -299,7 +314,7 @@ public abstract class SpaceObject {
 	 */
 	@Raw
 	public boolean canHaveAsWorld(World world){
-		if (isTerminated())
+		if (this.isTerminated())
 			return (world == null);
 		return (world != null) && (!world.isTerminated());
 	}
@@ -649,11 +664,15 @@ public static boolean isValidElapsedTime(double time){
 }
 /**
  * Terminates a space object. 
+ * @effect  The World, if any, is unset from this space object.
+*       	| unsetOwner()
  * @effect The new state of this space object is terminated.
- * 			| setState(State.TERMINATED)  
+ * 			| setState(State.TERMINATED) 
  */
 public void terminate(){
+	this.unsetWorld();
 	this.setState(State.TERMINATED);
+	
 }
 /**
  * @return True if and only if the state of this object is terminated.
@@ -661,6 +680,29 @@ public void terminate(){
  */
 public boolean isTerminated(){
 	return (this.getState() == State.TERMINATED);
+}
+/**
+ * Unset the world, if any, from this space object.
+ *
+ * @post    This space object no longer has a world.
+ *        | ! new.hasOwner()
+ * @post    The former world of this space object, if any, no longer
+ *          has this space object as one of its space objects.
+ *        |    (getWorld() == null)
+ *        | || (! (new getOwner()).hasAsOwning(owning))
+ * @post    All space objects registered beyond the position at which
+ *          this space object was registered shift one position to the left.
+ *        | (getWorld() == null) ||
+ *        | (for each index in
+ *        |        getWord().getIndexOfSpaceObject(spaceobject)+1..getWorld().getNbSpaceObjects():
+ *        |    (new getWorld()).getSpaceObjectAt(index-1) == getWorld().getSpaceObjectAt(index) ) 
+ */
+public void unsetWorld() {
+	if (this.hasWorld()) {
+		World formerWorld = this.getWorld();
+		this.setWorld(null);
+		formerWorld.removeAsSpaceObject(this);
+	}
 }
 }
 

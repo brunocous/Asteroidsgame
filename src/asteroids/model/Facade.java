@@ -1,5 +1,6 @@
 package asteroids.model;
 
+import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
@@ -28,49 +29,74 @@ public class Facade implements IFacade<World, Ship, Asteroid,Bullet>{
 
 	@Override
 	public Set<Ship> getShips(World world) {
-		
-		return new HashSet<Ship>(world.getAllSpaceObjectsByType(Ship.class()));
+		Set<Ship> ships = new HashSet<Ship>();
+		for(SpaceObject spaceObject:world.getAllSpaceObjects()){
+			if(Ship.class.isAssignableFrom(spaceObject.getClass()))
+				ships.add((Ship) spaceObject);
+		}
+		return ships;
 	}
 
 	@Override
 	public Set<Asteroid> getAsteroids(World world) {
-		// TODO Auto-generated method stub
-		return HashSet<Asteroid>(world.getAllSpaceObjectsByType(Asteroid.class()));
+		Set<Asteroid> asteroids = new HashSet<Asteroid>();
+		for(SpaceObject spaceObject:world.getAllSpaceObjects()){
+			if(Asteroid.class.isAssignableFrom(spaceObject.getClass()))
+				asteroids.add((Asteroid) spaceObject);
+		}
+		return asteroids;
 	}
 
 	@Override
 	public Set<Bullet> getBullets(World world) {
-		// TODO Auto-generated method stub
-		return HashSet<Bullet>(world.getAllSpaceObjectsByType(Bullet.class()));
+		Set<Bullet> bullets = new HashSet<Bullet>();
+		for(SpaceObject spaceObject:world.getAllSpaceObjects()){
+			if(Bullet.class.isAssignableFrom(spaceObject.getClass()))
+				bullets.add((Bullet) spaceObject);
+		}
+		return bullets;
 	}
 
 	@Override
 	public void addShip(World world, Ship ship) {
-		world.addSpaceObject(ship);
+		try{
+		ship.setWorld(world);
+		world.addAsSpaceObject(ship);
+		} catch (Exception ex){
+			throw new ModelException(ex);
+		}
 	}
 
 	@Override
 	public void addAsteroid(World world, Asteroid asteroid) {
-		world.addSpaceObject(asteroid);
+		try{
+		asteroid.setWorld(world);
+		world.addAsSpaceObject(asteroid);
+		} catch (Exception ex){
+			throw new ModelException(ex);
+		}
 		
 	}
 
 	@Override
 	public void removeShip(World world, Ship ship) {
-		world.removeSpaceObjectAs(ship);
+		ship.terminate();
 		
 	}
 
 	@Override
 	public void removeAsteroid(World world, Asteroid asteroid) {
-		world.removeSpaceObjectAs(world);
+		asteroid.terminate();
 		
 	}
 
 	@Override
 	public void evolve(World world, double dt,
 			CollisionListener collisionListener) {
-		world.evolve(dt);
+		try{world.evolve(dt);
+		} catch(Exception ex){
+			throw new ModelException(ex);
+		}
 		
 		
 	}
@@ -132,33 +158,39 @@ public class Facade implements IFacade<World, Ship, Asteroid,Bullet>{
 
 	@Override
 	public boolean isShipThrusterActive(Ship ship) {
-		// TODO Auto-generated method stub
-		return false;
+		return ship.isEnableThruster();
 	}
 
 	@Override
 	public void setThrusterActive(Ship ship, boolean active) {
-		// TODO Auto-generated method stub
+		ship.setEnableThruster(active);
 		
 	}
 
 	@Override
 	public void turn(Ship ship, double angle) {
-		// TODO Auto-generated method stub
+		try{ship.turn(angle);
 		
+		}catch(Exception ex){
+			throw new ModelException(ex);
+		}
 	}
 
 	@Override
 	public void fireBullet(Ship ship) {
-		// TODO Auto-generated method stub
+		ship.getWorld().fireObject(ship, Bullet.class);
 		
 	}
 
 	@Override
 	public Asteroid createAsteroid(double x, double y, double xVelocity,
 			double yVelocity, double radius) {
-		// TODO Auto-generated method stub
-		return null;
+		try{
+			return new Asteroid(new Position(x,y)
+			, new Velocity(xVelocity,yVelocity), radius);
+		} catch(Exception ex){
+			throw new ModelException(ex);
+		}
 	}
 
 	@Override
@@ -170,104 +202,87 @@ public class Facade implements IFacade<World, Ship, Asteroid,Bullet>{
 
 	@Override
 	public boolean isAsteroid(Object o) {
-		// TODO Auto-generated method stub
-		return false;
+		return Asteroid.class.isAssignableFrom(o.getClass());
 	}
 
 	@Override
 	public double getAsteroidX(Asteroid asteroid) {
-		// TODO Auto-generated method stub
-		return 0;
+		return asteroid.getPos().getX();
 	}
 
 	@Override
 	public double getAsteroidY(Asteroid asteroid) {
-		// TODO Auto-generated method stub
-		return 0;
+		return asteroid.getPos().getY();
 	}
 
 	@Override
 	public double getAsteroidXVelocity(Asteroid asteroid) {
-		// TODO Auto-generated method stub
-		return 0;
+		return asteroid.getVel().getX();
 	}
 
 	@Override
 	public double getAsteroidYVelocity(Asteroid asteroid) {
-		// TODO Auto-generated method stub
-		return 0;
+		return asteroid.getVel().getY();
 	}
 
 	@Override
 	public double getAsteroidRadius(Asteroid asteroid) {
-		// TODO Auto-generated method stub
-		return 0;
+		return asteroid.getRadius();
 	}
 
 	@Override
 	public double getAsteroidMass(Asteroid asteroid) {
-		// TODO Auto-generated method stub
-		return 0;
+		return asteroid.getMass();
 	}
 
 	@Override
 	public World getAsteroidWorld(Asteroid asteroid) {
-		// TODO Auto-generated method stub
-		return null;
+		return asteroid.getWorld();
 	}
 
 	@Override
 	public boolean isBullets(Object o) {
-		// TODO Auto-generated method stub
-		return false;
+		return Bullet.class.isAssignableFrom(o.getClass());
 	}
 
 	@Override
 	public double getBulletX(Bullet bullet) {
-		// TODO Auto-generated method stub
-		return 0;
+		return bullet.getPos().getX();
 	}
 
 	@Override
 	public double getBulletY(Bullet bullet) {
-		// TODO Auto-generated method stub
-		return 0;
+		return bullet.getPos().getY();
 	}
 
 	@Override
 	public double getBulletXVelocity(Bullet bullet) {
-		// TODO Auto-generated method stub
-		return 0;
+		return bullet.getVel().getX();
 	}
 
 	@Override
 	public double getBulletYVelocity(Bullet bullet) {
-		// TODO Auto-generated method stub
-		return 0;
+		return bullet.getVel().getY();
 	}
 
 	@Override
 	public double getBulletRadius(Bullet bullet) {
-		// TODO Auto-generated method stub
-		return 0;
+		return bullet.getRadius();
 	}
 
 	@Override
 	public double getBulletMass(Bullet bullet) {
-		// TODO Auto-generated method stub
-		return 0;
+		return bullet.getMass();
 	}
 
 	@Override
 	public World getBulletWorld(Bullet bullet) {
-		// TODO Auto-generated method stub
-		return null;
+		return bullet.getWorld();
 	}
 
 	@Override
 	public Ship getBulletSource(Bullet bullet) {
-		// TODO Auto-generated method stub
-		return null;
+		return bullet.getSource();
 	}
 
 	

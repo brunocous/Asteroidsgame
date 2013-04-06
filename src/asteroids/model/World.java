@@ -3,14 +3,17 @@ package asteroids.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import deel3.les7.opl.worlds.SpaceObject;
-
 import asteroids.Util;
+import asteroids.Error.IllegalMaxSpeedException;
 import asteroids.Error.IllegalPositionException;
+import asteroids.Error.IllegalRadiusException;
+import asteroids.Error.NegativeTimeException;
 import asteroids.model.Util.Position;
 import asteroids.model.Util.Vector;
 import asteroids.model.Util.Velocity;
-import be.kuleuven.cs.som.annotate.*;
+import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Immutable;
+import be.kuleuven.cs.som.annotate.Raw;
 
 public class World {
 
@@ -22,54 +25,79 @@ public class World {
 	 * The maximum height of the world.
 	 */
 	private static final double MAX_HEIGHT = Double.MAX_VALUE;
-	//A list of space objects for this new world.
+	/**
+	 * Variable referencing a list collecting all the space objects of
+	 * this world.
+	 * 
+	 * @Invar   The referenced list is effective.
+	 *        | spaceObjects != null
+	 * @Invar   Each space object registered in the referenced list is
+	 *          effective and not yet terminated.
+	 *        | for each spaceObject in spaceObjects:
+	 *        |   ( (spaceObject != null) && (!spaceObject.isTerminated()) )
+	 */
 	private ArrayList<SpaceObject> spaceObjects;
-	//The width of this new world.
-	private double width;
-	//The height of this new world.
-	private double height;
-	//Indicates whether a world is indicated.
+	/**
+	 * The width of this new world.
+	 */
+	private final double width;
+	/**
+	 * The height of this new world.
+	 */
+	private final double height;
+	/**
+	 * Variable reflecting whether or not this world is terminated.
+	 */
 	private boolean isTerminated;
-	
+	/**
+	 * Initializes this new world with a given width and height.
+	 * @param width
+	 * 			The width for this new world.
+	 * @param height
+	 * 			The height for this new world.
+	 * @post The new width of this new world is equal to the given width if 
+	 * 		the given width is a valid width. If the given width is not a valid
+	 * 		width, then the new width of this new world is equal to the maximum 
+	 * 		width.
+	 * 			| if(isValidWidth(width))
+	 * 			| then new.getWidth() == width
+	 * 			| else new.getWidth() == getMaxWidth();
+	 * @post The new height of this new world is equal to the given height if 
+	 * 		the given height is a valid height. If the given height is not a valid
+	 * 		height, then the new height of this new world is equal to the maximum 
+	 * 		height.
+	 * 			| if(isValidHeight(height))
+	 * 			| then new.getHeight() == height
+	 * 			| else new.getHeight() == getMaxHeight();
+	 * @effect This new world does not have any space objects yet.
+	 * 			| getNbSpaceObjects() == 0
+	 */
 	public World(double width, double height){
 		
-		this.setWidth(width);
-		this.setHeight(height);
+		if(isValidWidth(width))
+			this.width = width;
+		else this.width = getMaxWidth();
+		
+		if(isValidHeight(height))
+			this.height = height;
+		else this.height = getMaxHeight();
+		
 		this.spaceObjects = new ArrayList<SpaceObject>();
 		
 	}
-	
-
-	@Basic
-	public ArrayList<SpaceObject> getSpaceObjects() {
-		return new ArrayList<SpaceObject>(spaceObjects);
+	/**
+	 * Default constructor for a world.
+	 * @effect This new world is initialized with the maximum width as its new width,
+	 * 			the maximum height as its new height and does not have any space objects yet.
+	 * 			| this(MAX_WIDTH, MAX_HEIGHT)
+	 */
+	public World(){
+		this(MAX_WIDTH, MAX_HEIGHT);
 	}
-
-
-	@Basic
-	public void setSpaceObjects(ArrayList<SpaceObject> spaceObjects) {
-		this.spaceObjects = spaceObjects;
-	}
-
 
 	@Basic
 	public double getWidth() {
 		return width;
-	}
-
-
-	@Basic
-	public void setWidth(double width) {
-		if(isValidWidth(width)){
-		
-			this.width = width;
-			
-		}
-		else{
-			
-			this.width = getMaxWidth();
-			
-		}
 	}
 
 	public boolean isValidWidth(double width){
@@ -80,21 +108,6 @@ public class World {
 	@Basic
 	public double getHeight() {
 		return height;
-	}
-
-
-	@Basic
-	public void setHeight(double height) {
-		if(isValidHeight(height)){
-			
-			this.width = height;
-			
-		}
-		else{
-			
-			this.width = getMaxHeight();
-			
-		}
 	}
 
 	public boolean isValidHeight(double height){
@@ -120,9 +133,6 @@ public class World {
 	public static double getMaxHeight() {
 		return MAX_HEIGHT;
 	}
-	/**
-	 * 
-	 */
 	
 	/**
 	 * @return the isTerminated
@@ -131,20 +141,21 @@ public class World {
 		return isTerminated;
 	}
 
-
-	/**
-	 * @param isTerminated the isTerminated to set
-	 */
-	public void setTerminated(boolean isTerminated) {
-		this.isTerminated = isTerminated;
-	}
-
 	/**
 	 * Terminates a world.
-	 * TODO alle verbindingen verwijderen.
+	 * @post    This world is terminated.
+	 *        | new.isTerminated()
+	 * @post    Each of the space objects of this world no longer has
+	 *          a world.
+	 *        | for each space object in getAllSpaceObjects():
+	 *        |	  (! (new space object).hasSpaceObject())
 	 */
 	public void terminate(){
-		this.setTerminated(true);
+		if (!isTerminated()) {
+			for (SpaceObject spaceObject : this.getAllSpaceObjects())
+				spaceObject.unsetWorld();
+			this.isTerminated = true;
+		}
 	}
 	
 	/**
@@ -292,9 +303,7 @@ public class World {
 	public List<SpaceObject> getAllSpaceObjects() {
 		return new ArrayList<SpaceObject>(spaceObjects);
 	}
-
 	/**
-	 * TODO precondities in orde brengen, KLOPPEN NIET.
 	 * Add the given spaceObject at the end of the list of
 	 * space objects of this world.
 	 * 
@@ -305,7 +314,7 @@ public class World {
 	 *        | (spaceObject != null) && (spaceObject.getWorld() == this)
 	 * @pre     This world does not not yet have the given space object
 	 *          as one of its space objects.
-	 *        | ! hasAsOwning(spaceObject)
+	 *        | ! hasAsSpaceObject(spaceObject)
 	 * @post    The number of space objects of this world is incremented
 	 *          by 1.
 	 *        | new.getNbSpaceObjects() == getNbSpaceObjects() + 1
@@ -313,6 +322,7 @@ public class World {
 	 *          space object.
 	 *        | (new this).getOwningAt(this.getNbSpaceObjects()+1) == spaceObject
 	 */
+	@Raw
 	public void addAsSpaceObject(@Raw SpaceObject spaceObject) {
 		assert (spaceObject != null) && (spaceObject.getWorld() == this);
 		assert !this.hasAsSpaceObject(spaceObject);
@@ -320,7 +330,6 @@ public class World {
 	}
 
 	/**
-	 * TODO zie todo hierboven.
 	 * Remove the given space object from the space objects of this world.
 	 * 
 	 * @param   spaceObject
@@ -343,7 +352,7 @@ public class World {
 	 *        |   (new this).getSpaceObjectAt(index-1) == this.getSpaceObjectAt(index) 
 	 */
 	@Raw
-	public void removeAsOwning(SpaceObject spaceObject) {
+	public void removeAsSpaceObject(SpaceObject spaceObject) {
 		assert (spaceObject != null) && (spaceObject.getWorld() == null);
 		assert (this.hasAsSpaceObject(spaceObject));
 		spaceObjects.remove(spaceObject);
@@ -382,7 +391,7 @@ public class World {
 		
 	}
 	
-	public void updateVelocities(double deltaT){
+	public void updateVelocities(double deltaT) throws NegativeTimeException{
 		
 		for(SpaceObject object : spaceObjects){
 			
@@ -433,7 +442,7 @@ public class World {
 		
 	}
 	
-	public void evolve(double deltaT) throws IllegalPositionException{
+	public void evolve(double deltaT) throws IllegalPositionException, NegativeTimeException{
 		
 		double tC=getTimeToFirstCollision();
 		
@@ -543,10 +552,23 @@ public class World {
 		
 	}
 	/**
-	 * Add a space object to the space objectlist
+	 * Makes the given space object firing an projectile.
+	 *  
+	 * @param attacker
+	 * 			The space object that fires the projectile.
+	 * @param projectileClass
+	 * 			The class of the projectile.
+	 * 
 	 */
-	public void addSpaceObject(SpaceObject object){
-		
+	public void fireObject(SpaceObject attacker, Object projectileClass){
+		try{if(Ship.class.isAssignableFrom(attacker.getClass()) 
+				&& Bullet.class.isAssignableFrom(projectileClass.getClass())){
+				SpaceObject bullet = new Bullet((Ship) attacker);
+				bullet.getWorld().addAsSpaceObject(bullet);
+			}
+	} catch (Exception ex){
+		//TODO hier iets doen
 	}
 	}
+}
 

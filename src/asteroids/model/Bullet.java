@@ -13,26 +13,37 @@ import be.kuleuven.cs.som.annotate.Immutable;
  */
 public class Bullet extends SpaceObject {
 	
-	// The ship that fired this bullet.
+	/**
+	 * The ship that fired this bullet.
+	 */
 	private final Ship source;
-	// The density of a bullet in kg/km³.
+	/**
+	 * The density of a bullet in kg/km³.
+	 */
 	private static final double RHO_BULLET = 7.8 * Math.pow(10, 12);
+	/**
+	 * The speed of a bullet that has been fired.
+	 */
+	private static final double INITIAL_SPEED = 250;
+	/**
+	 * The radius of a bullet that has been fired.
+	 */
+	private static final double INITIAL_RADIUS = 3;
+	
 
 	/**
 	 * The constructor for this new bullet.
+	 * @Pre The source of this new bullet must be effective
+	 * 		| (source != null)
 	 */
-	public Bullet(Position pos, Velocity vel, double radius, Ship source)
-			throws IllegalRadiusException, IllegalPositionException,IllegalMaxSpeedException {
-
-		super(pos, vel, radius);
-		if (source != null) {
-
-			this.source = source;
-		} else {
-
-			throw new IllegalArgumentException();
-
-		}
+	public Bullet(Ship source)
+			throws IllegalRadiusException, IllegalPositionException,IllegalMaxSpeedException{
+		super(
+				new Position(source.getPos().getX() + Math.cos(source.getDirection())*(getInitialRadius()+source.getRadius()),source.getPos().getY() + Math.sin(source.getDirection())*(getInitialRadius()+source.getRadius()))
+				, new Velocity(Math.cos(source.getDirection())*getInitialSpeed(),Math.sin(source.getDirection())*getInitialSpeed())
+				, getInitialRadius(), source.getWorld());
+		
+		this.source = source;
 	}
 
 	/**
@@ -71,5 +82,19 @@ public class Bullet extends SpaceObject {
 
 		return this.source;
 
+	}
+
+	/**
+	 * @return the initialSpeed
+	 */
+	public static double getInitialSpeed() {
+		return INITIAL_SPEED;
+	}
+
+	/**
+	 * @return the initialRadius
+	 */
+	public static double getInitialRadius() {
+		return INITIAL_RADIUS;
 	}
 }
