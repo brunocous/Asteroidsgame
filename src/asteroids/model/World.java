@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import asteroids.Util;
-import asteroids.Error.IllegalMaxSpeedException;
 import asteroids.Error.IllegalPositionException;
-import asteroids.Error.IllegalRadiusException;
 import asteroids.Error.NegativeTimeException;
 import asteroids.model.Util.Position;
 import asteroids.model.Util.Vector;
@@ -567,7 +565,7 @@ public class World {
 				bullet.getWorld().addAsSpaceObject(bullet);
 			}
 	} catch (Exception ex){
-		//TODO hier iets doen
+		//TODO hier iets doen?
 	}
 	}
 }
