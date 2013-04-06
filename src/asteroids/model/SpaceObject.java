@@ -102,14 +102,13 @@ public abstract class SpaceObject {
 	 *         
 	 */
 	public SpaceObject( Position pos, Velocity vel, double radius, double maxSpeed, World world) throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
-		this.setPos(pos);
 		this.setVel(vel);
 		
 		if(!isValidRadius(radius)){
 			throw new IllegalRadiusException();
 		}
 		else this.radius = radius;
-		
+		this.setPos(pos,radius);
 		if(!isValidMaxSpeed(maxSpeed)){
 			throw new IllegalMaxSpeedException();
 			} else this.maxSpeed = maxSpeed;
@@ -172,10 +171,12 @@ public abstract class SpaceObject {
 	}
 	
 	/**
-	 * Set the pos for this space object to the given pos. 
+	 * Set the position for this space object to the given position. 
 	 * 
 	 * @param pos
 	 *        The new pos for this space object.
+	 * @param radius
+	 * 		  The new radius for this space object.
 	 * @post The new pos for this space object is equal to the given pos.
 	 *       |new.getPos()= pos
 	 * @throws IllegalPositionException
@@ -183,8 +184,8 @@ public abstract class SpaceObject {
 	 *         | isValidPosition(pos) == false
 	 */
 	@Basic
-	public void setPos(Position pos) throws IllegalPositionException{
-		if(!isValidPosition(pos)){
+	public void setPos(Position pos, double radius) throws IllegalPositionException{
+		if(!isValidPosition(pos,radius)){
 			throw new IllegalPositionException(pos.getX(),pos.getY());
 		}
 		else{
@@ -363,17 +364,23 @@ public boolean isValidVelocity(Velocity velocity){
 	
 }
 /**
- * Check whether the given position is a valid position. In other words, check whether its
- * x- and y- components are inside or on the boundaries.
+ * Check whether the given position is a valid position. In other words, check whether all the points within the given radius
+ * of the x- and y- components are inside or on the boundaries.
  * 
  * @param position
  * 			The position to be checked.
+ * @param radius
+ * 			The distance between the center and a point on the boundary.
  * @return true if and only if the position is valid.
- * 			| result == (Position.isValidPosition(position) && World.isSituatedInOrOnBoundaries(position))
+ * 			| result == (Position.isValidPosition(position) && World.isSituatedInOrOnBoundaries(new Asteroid(position,new Velocity(), radius)))
  */
-public static boolean isValidPosition(Position position){
-	return (Position.isValidPosition(position) && World.isSituatedInOrOnBoundaries(position));
-}
+public static boolean isValidPosition(Position position, double radius){
+	try{return (Position.isValidPosition(position) && World.isSituatedInOrOnBoundaries(new Asteroid(position,new Velocity(), radius)));
+	}catch(Exception ex){
+		return false;
+	}
+	
+	}
 
 /**
  * Check whether the given radius is a valid radius. In other words, check whether it is
@@ -604,7 +611,7 @@ protected Velocity correctSpeed(Velocity speed){
  * 		   The current velocity of the space object and the given duration elapsedTime. 
  * 		   |(new this).getPos() == this.getPos().add(new Position(vel.getX()*elapsedTime, vel.getY()*elapsedTime));
  * @throws NegativeTimeException
- *         The given elapsedTime is negative and therefore unvalid.
+ *         The given elapsedTime is negative and therefore invalid.
  *         |!isValidElapsedTime()
  */
 
@@ -619,7 +626,7 @@ public void move(double elapsedTime) throws NegativeTimeException{
 		Vector displacement = new Position(vel.getX()*elapsedTime, vel.getY()*elapsedTime);
 		Vector newPosition = pos.add( displacement);
 		try{
-			this.setPos((Position) newPosition);
+			this.setPos((Position) newPosition, this.getRadius());
 		} catch (IllegalPositionException exc){
 			
 		}

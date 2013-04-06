@@ -1,5 +1,6 @@
 package asteroids.model;
 
+import asteroids.Error.IllegalMaxSpeedException;
 import asteroids.Error.IllegalPositionException;
 import asteroids.Error.IllegalRadiusException;
 import asteroids.model.Util.Position;
@@ -19,14 +20,14 @@ public class Asteroid extends SpaceObject {
 	 * The constructor for this new asteroid.
 	 */
 	public Asteroid(Position pos, Velocity vel, double radius)
-			throws IllegalRadiusException, IllegalPositionException {
+			throws IllegalRadiusException, IllegalPositionException, IllegalMaxSpeedException {
 		super(pos, vel, radius);
 	}
 
 	/**
 	 * A default constructor for this new asteroid.
 	 */
-	public Asteroid() throws IllegalPositionException, IllegalRadiusException{
+	public Asteroid() throws IllegalPositionException, IllegalRadiusException,IllegalMaxSpeedException{
 
 		super(new Position(0, 0), new Velocity(0, 0), 10);
 
@@ -48,9 +49,10 @@ public class Asteroid extends SpaceObject {
 	 * 
 	 * @return result ==4/3*Math.PI*Math.pow(radius,3)*RHO_ASTEROID
 	 */
-	public double getMass(double radius) {
+	@Override
+	public double getMass() {
 		
-		return 4 / 3 * Math.PI * Math.pow(radius, 3) * getRhoAsteroid();
+		return 4 / 3 * Math.PI * Math.pow(this.getRadius(), 3) * getRhoAsteroid();
 		
 	}
 

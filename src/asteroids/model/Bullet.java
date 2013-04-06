@@ -1,5 +1,6 @@
 package asteroids.model;
 
+import asteroids.Error.IllegalMaxSpeedException;
 import asteroids.Error.IllegalPositionException;
 import asteroids.Error.IllegalRadiusException;
 import asteroids.model.Util.Position;
@@ -11,7 +12,7 @@ import be.kuleuven.cs.som.annotate.Immutable;
  * A class of bullets involving a position, a velocity, a source and a radius.
  */
 public class Bullet extends SpaceObject {
-
+	
 	// The ship that fired this bullet.
 	private final Ship source;
 	// The density of a bullet in kg/km³.
@@ -21,7 +22,7 @@ public class Bullet extends SpaceObject {
 	 * The constructor for this new bullet.
 	 */
 	public Bullet(Position pos, Velocity vel, double radius, Ship source)
-			throws IllegalRadiusException, IllegalPositionException {
+			throws IllegalRadiusException, IllegalPositionException,IllegalMaxSpeedException {
 
 		super(pos, vel, radius);
 		if (source != null) {
@@ -53,9 +54,10 @@ public class Bullet extends SpaceObject {
 	 * @return result ==4/3*Math.PI*Math.pow(radius,3)*RHO_BULLET
 	 * 
 	 */
-	public double getMass(double radius) {
+	@Override
+	public double getMass() {
 
-		return 4 / 3 * Math.PI * Math.pow(radius, 3) * getRhoBullet();
+		return 4 / 3 * Math.PI * Math.pow(this.getRadius(), 3) * getRhoBullet();
 
 	}
 
