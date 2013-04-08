@@ -378,6 +378,7 @@ public boolean isValidVelocity(Velocity velocity){
 	return (Util.fuzzyLessThanOrEqualTo(velocity.getNorm(),getMaxSpeed()) && Velocity.isLessThanOrEqualToSpeedOfLight(velocity));
 	
 }
+
 /**
  * Check whether the given position is a valid position. In other words, check whether all the points within the given radius
  * of the x- and y- components are inside or on the boundaries.

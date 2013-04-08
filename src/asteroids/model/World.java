@@ -436,7 +436,34 @@ public class World {
 	
 	public double getTimeToBoundaryCollision(SpaceObject spaceObject){
 		
-		return 1;
+		double collisionTopOrBottom;
+		double distanceTopOrBottom;
+		if(Util.fuzzyLessThanOrEqualTo(spaceObject.getVel().getY(),0)){
+			
+			distanceTopOrBottom = spaceObject.getPos().getY();
+			
+		}
+		else{
+			distanceTopOrBottom = getHeight() - spaceObject.getPos().getY();
+		}
+		
+		collisionTopOrBottom = distanceTopOrBottom/Math.abs(spaceObject.getVel().getY());
+		
+		double collisionSides;
+		double distanceSides;
+		
+		if(Util.fuzzyLessThanOrEqualTo(spaceObject.getVel().getX(),0)){
+			
+			distanceSides = spaceObject.getPos().getX();
+			
+		}
+		else{
+			distanceSides = getWidth() - spaceObject.getPos().getX();
+		}
+		
+		collisionSides = distanceSides/Math.abs(spaceObject.getVel().getY());
+		
+		return Math.min(collisionTopOrBottom, collisionSides);
 		
 	}
 	
@@ -458,6 +485,12 @@ public class World {
 			
 			for(SpaceObject object1 : spaceObjects){
 				
+				if(Util.fuzzyEquals(object1.getPos().getX(), 0) || Util.fuzzyEquals(object1.getPos().getX(), getWidth()) || Util.fuzzyEquals(object1.getPos().getY(), 0) || Util.fuzzyEquals(object1.getPos().getY(), getHeight())){
+					
+					boundaryCollide(object1);
+					
+				}
+				
 				for(SpaceObject object2 : spaceObjects){
 					
 					if(Util.fuzzyEquals(getDistanceBetween(object1,object2),0) && object1!=object2){
@@ -466,6 +499,11 @@ public class World {
 				}
 			}
 		}
+	}
+	
+	public void boundaryCollide(SpaceObject spaceObject){
+		
+		
 	}
 	
 	public void bounceOff(SpaceObject obj1, SpaceObject obj2){
