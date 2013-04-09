@@ -269,6 +269,7 @@ public class Ship extends SpaceObject{
 	 */
 	@Basic
 	@Immutable
+	@Override
 	public double getMass() {
 		return mass;
 	}
