@@ -81,13 +81,11 @@ public class Facade implements IFacade<World, Ship, Asteroid,Bullet>{
 	@Override
 	public void removeShip(World world, Ship ship) {
 		ship.terminate();
-		
 	}
 
 	@Override
 	public void removeAsteroid(World world, Asteroid asteroid) {
 		asteroid.terminate();
-		
 	}
 
 	@Override
@@ -196,8 +194,14 @@ public class Facade implements IFacade<World, Ship, Asteroid,Bullet>{
 	@Override
 	public Asteroid createAsteroid(double x, double y, double xVelocity,
 			double yVelocity, double radius, Random random) {
-		// TODO Auto-generated method stub
-		return null;
+		try{
+		return new Asteroid(new Position(x,y),
+							new Velocity(xVelocity,yVelocity), 
+							radius, 
+							random);
+		} catch (Exception ex){
+			throw new ModelException(ex);
+		}
 	}
 
 	@Override

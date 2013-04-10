@@ -13,10 +13,14 @@ public abstract class Vector {
 		this.xComp = xComp;
 		this.yComp = yComp;
 	}
-
+/**
+ * Initializes a default Vector.
+ * @Effect This new vector is initialized with 50 as 
+ * 			its new x-component and 50 as its new y-component.
+ */
 	public Vector() {
-		this.xComp = 0;
-		this.yComp = 0;
+		this.xComp = 50;
+		this.yComp = 50;
 	}
 
 	@Basic

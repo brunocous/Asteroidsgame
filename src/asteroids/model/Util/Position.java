@@ -31,7 +31,11 @@ public Position(double posX, double posY) {
 	super(posX,posY);
 	
 }
-
+/**
+ * Initialize this new position as a default position.
+ * @Effect This new position is initialized with 50 as its new x-component 
+ * 			and 50 as its new y-component.
+ */
 public Position(){
 	super();
 }

@@ -2,6 +2,7 @@ package asteroids.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.Throwable;
 
 import asteroids.Util;
 import asteroids.Error.IllegalPositionException;
@@ -326,6 +327,25 @@ public class World {
 		assert !this.hasAsSpaceObject(spaceObject);
 		spaceObjects.add(spaceObject);
 	}
+	/**
+	 * Adds the given spaceObjects at the end of the list of space objects of this world.
+	 * 
+	 * @param spaceObjectsToAdd
+	 * 		  	The space objects to be added.
+	 * @post ...
+	 * 			| for each index in 0..spaceObjectsToAdd.size()-1
+	 * 			| addAsSpaceObject(spaceObjectsToAdd.get(index))
+	 */
+	@Raw 
+	public void addAsSpaceObjects(@Raw List<SpaceObject> spaceObjectsToAdd){
+		for(SpaceObject objectToAdd: spaceObjectsToAdd){
+			try{ this.addAsSpaceObject(objectToAdd);
+			}catch (Exception ex){
+				assert ((objectToAdd == null) || (objectToAdd.getWorld() != this));
+				assert this.hasAsSpaceObject(objectToAdd);
+			}
+		}
+	}
 
 	/**
 	 * Remove the given space object from the space objects of this world.
@@ -538,14 +558,31 @@ public class World {
 			
 		}
 		else if(Bullet.class.isAssignableFrom(object1.getClass()) || Bullet.class.isAssignableFrom(object2.getClass())){
-			
+			if(Asteroid.class.isAssignableFrom(object1.getClass())){
+				try{Asteroid asteroidCopy = new Asteroid((Asteroid) object1);
+				object1.terminate();
+				object2.terminate();
+				this.addAsSpaceObjects( asteroidCopy.split());
+				} catch (Exception ex){
+					
+				}
+			}else if(Asteroid.class.isAssignableFrom(object2.getClass())){
+				try{Asteroid asteroidCopy = new Asteroid((Asteroid) object2);
+				object2.terminate();
+				object1.terminate();
+				this.addAsSpaceObjects( asteroidCopy.split());
+				} catch (Exception ex){
+					
+				}
+			} else{
 			object1.terminate();
 			object2.terminate();
-			
+			}
 		}
 		else if(Asteroid.class.isAssignableFrom(object1.getClass()) && Ship.class.isAssignableFrom(object2.getClass())){
 			
 			object2.terminate();
+			
 			
 		}
 		else if(Ship.class.isAssignableFrom(object1.getClass()) && Asteroid.class.isAssignableFrom(object2.getClass())){
@@ -588,10 +625,10 @@ public class World {
 		
 	}
 	/**
-	 * Makes the given space object firing an projectile.
+	 * Makes the given space object fire a new projectile.
 	 *  
 	 * @param attacker
-	 * 			The space object that fires the projectile.
+	 * 			The space object that fires the new projectile.
 	 * @param projectileClass
 	 * 			The class of the projectile.
 	 * 

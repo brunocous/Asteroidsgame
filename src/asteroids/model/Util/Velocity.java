@@ -32,7 +32,11 @@ public class Velocity extends Vector{
 		
 	super(velX,velY);
 	}
-	//TODO Commentaar?
+	/**
+	 * Initialize this new velocity as a default position.
+	 * @Effect This new velocity is initialized with 50 as its new x-component 
+	 * 			and 50 as its new y-component.
+	 */
 	public Velocity(){
 		super();
 	}

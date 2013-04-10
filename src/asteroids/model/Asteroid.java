@@ -1,5 +1,9 @@
 package asteroids.model;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import asteroids.Error.IllegalMaxSpeedException;
 import asteroids.Error.IllegalPositionException;
 import asteroids.Error.IllegalRadiusException;
@@ -17,6 +21,10 @@ public class Asteroid extends SpaceObject {
 	 * The density of an asteroid in kg/km³.
 	 */
 	private static final double RHO_ASTEROID = 2.65 * Math.pow(10, 12);
+	/**
+	 * The random number generator of an asteroid.
+	 */
+	private final Random random;
 
 	/**
 	 * Initializes a new asteroid with given position, velocity, radius and world.
@@ -28,14 +36,55 @@ public class Asteroid extends SpaceObject {
 	 *        The radius for this new asteroid.
 	 * @param world
 	 * 		  The World where this new asteroid belongs to.
+	 * @param random
+	 * 		  The random number generator for this new asteroid.
 	 * @effect This new Asteroid is initialized with the given position as its position,
-	 * 			the given velocity as its velocity, the given radius as its radius and 
-	 * 			belongs to the given world.
+	 * 			the given velocity as its velocity, the given radius as its radius, the given
+	 * 			random as its random and belongs to the given world.
+	 * 			| this(pos, vel, radius, random, world)
+	 */
+	public Asteroid(Position pos, Velocity vel, double radius,Random random, World world)
+			throws IllegalRadiusException, IllegalPositionException, IllegalMaxSpeedException {
+		super(pos, vel, radius, world);
+		this.random = random;
+	}
+	/**
+	 * Initializes a new asteroid with given position, velocity, radius and world.
+	 * @param pos
+	 *        The position for this new asteroid.
+	 * @param vel
+	 *        The velocity for this new asteroid.
+	 * @param radius
+	 *        The radius for this new asteroid.
+	 * @param world
+	 * 		  The World where this new asteroid belongs to.
+	 * @effect This new Asteroid is initialized with the given position as its new position,
+	 * 			the given velocity as its new velocity, the given radius as its new radius, 
+	 * 			a default random number generator as its new random generator and belongs to the given world.
 	 * 			| this(pos, vel, radius, world)
 	 */
 	public Asteroid(Position pos, Velocity vel, double radius, World world)
 			throws IllegalRadiusException, IllegalPositionException, IllegalMaxSpeedException {
-		super(pos, vel, radius, world);
+		this(pos, vel, radius, new Random(), world);
+	}
+	/**
+	 * Initializes a new asteroid with given position, velocity, radius and world.
+	 * @param pos
+	 *        The position for this new asteroid.
+	 * @param vel
+	 *        The velocity for this new asteroid.
+	 * @param radius
+	 *        The radius for this new asteroid.
+	 * @param random
+	 * 		  The random number generator for this new asteroid.
+	 * @effect This new Asteroid is initialized with the given position as its new position,
+	 * 			the given velocity as its new velocity, the given radius as its new radius, the given
+	 * 			random as its new random and does not belong to any world.
+	 * 			| this(pos, vel, radius, random, world)
+	 */
+	public Asteroid(Position pos, Velocity vel, double radius,Random random)
+			throws IllegalRadiusException, IllegalPositionException, IllegalMaxSpeedException {
+		this(pos, vel, radius, random, null);
 	}
 	/**
 	 * Initializes a new asteroid with given position, velocity, radius.
@@ -45,24 +94,43 @@ public class Asteroid extends SpaceObject {
 	 *        The velocity for this new asteroid.
 	 * @param radius
 	 *        The radius for this new asteroid.
-	 * @effect This new Asteroid is initialized with the given position as its position,
-	 * 			the given velocity as its velocity, the given radius as its radius and 
+	 * @effect This new Asteroid is initialized with the given position as its new position,
+	 * 			the given velocity as its new velocity, the given radius as its new radius 
+	 * 			, a default random number generator as its new random generator and 
 	 * 			does not belong to any world.
-	 * 			| this(pos, vel, radius, new World())
+	 * 			| this(pos, vel, radius, (World) null)
 	 */
 	public Asteroid(Position pos, Velocity vel, double radius)throws IllegalRadiusException, IllegalPositionException, IllegalMaxSpeedException {
-		this(pos,vel,radius, null);
+		this(pos,vel,radius,(World) null);
 	}
 	/**
 	 * Initializes this new asteroid as a default asteroid.
-	 * @effect This new Asteroid is initialized with the default position as its position,
-	 * 			the default velocity as its velocity, a radius of 15 km as its radius and 
+	 * @effect This new Asteroid is initialized with the default position as its new position,
+	 * 			the default velocity as its new velocity, a radius of 15 km as its new radius, 
+	 * 			a default random number generator as its new random generator and 
 	 * 			does not belong to any world.
-	 * 			| this(new Position(), new Velocity(), 15, null)
+	 * 			| this(new Position(), new Velocity(), 15, (World) null)
 	 */
 	public Asteroid() throws IllegalPositionException, IllegalRadiusException,IllegalMaxSpeedException{
 		this(new Position(), new Velocity(), 15);
 
+	}
+	/**
+	 * Initializes this new asteroid equal to the given asteroid.
+	 * 
+	 * @param astToClone
+	 * 			The asteroid to clone.
+	 * @effect This new asteroid is initialized with the position of the given asteroid
+	 * 			as its new position, the velocity of the given asteroid as its new velocity
+	 * 			, the radius of the given asteroid as its new radius, the random number generator
+	 * 			of the given asteroid as its new random number generator and belongs to the same
+	 * 			world as the given asteroid does.
+	 * 			| this(astToClone.getPos(), astToClone.getVel(), astToClone.getRadius(), 
+	 * 			| astToClone.getRandom(), astToClone.getWorld() )
+	 */
+	public Asteroid(Asteroid astToClone) throws IllegalPositionException, IllegalRadiusException,IllegalMaxSpeedException{
+		this(astToClone.getPos(), astToClone.getVel(), astToClone.getRadius(), astToClone.getRandom(), astToClone.getWorld() );
+		
 	}
 
 	/**
@@ -88,5 +156,36 @@ public class Asteroid extends SpaceObject {
 		
 	}
 
-	
+	/**
+	 * Returns the random number generator of this asteroid.
+	 */
+	@Basic @Immutable
+	public Random getRandom(){
+		return this.random;
+	}
+	/**
+	 * Returns a list of two child asteroids from this asteroid.
+	 * 
+	 * @post 
+	 */
+	public List<SpaceObject> split(){
+		List<SpaceObject> children = new ArrayList<SpaceObject>();
+		double childSpeedNorm = this.getVel().getNorm()*1.5;
+		double childDirection = this.getRandom().nextDouble()*2*Math.PI;
+		double childRadius = this.getRadius()/2;
+		try{
+			for(int i = 0 ; i<=1 ;i++){
+				childDirection += i*Math.PI;
+				SpaceObject child = new Asteroid((Position) this.getPos().add(new Position(Math.cos(childDirection)*childRadius/2, Math.sin(childDirection)*childRadius/2)),
+												new Velocity(Math.cos(childDirection)*childSpeedNorm,Math.sin(childDirection)*childSpeedNorm),
+												childRadius, 
+												this.getRandom(),
+												this.getWorld());
+				children.add(child);
+			}
+		} catch(Exception ex){
+			
+		}
+		return children; 
+	}
 }
