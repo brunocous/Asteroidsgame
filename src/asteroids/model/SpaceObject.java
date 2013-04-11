@@ -391,7 +391,7 @@ public boolean isValidVelocity(Velocity velocity){
  * 			| result == (Position.isValidPosition(position) && World.isSituatedInOrOnBoundaries(new Asteroid(position,new Velocity(), radius)))
  */
 public static boolean isValidPosition(Position position, double radius){
-	try{return (Position.isValidPosition(position) && World.isSituatedInOrOnBoundaries(new Asteroid(position,new Velocity(), radius)));
+	try{return (Position.isValidPosition(position) && World.isSituatedInOrOnBoundaries(position, radius));
 	}catch(Exception ex){
 		return false;
 	}
