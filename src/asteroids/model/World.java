@@ -387,14 +387,14 @@ public class World {
 	 * 		 	| result == ((!Util.fuzzyLessThanOrEqualTo(x-r, 0) && (!Util.fuzzyLessThanOrEqualTo(y-r, 0)) 
 	 * 			| && Util.fuzzyLessThanOrEqualTo(x+r, getMaxWidth()) && Util.fuzzyLessThanOrEqualTo(y+r, getMaxHeight())))
 	 */
-	public static boolean isSituatedInOrOnBoundaries(SpaceObject spaceObject){
+	public static boolean isSituatedInOrOnBoundaries(Position pos, double radius){
 		
-		double x = spaceObject.getPos().getX();
-		double y = spaceObject.getPos().getY();
-		double r = spaceObject.getRadius();
+		double x = pos.getX();
+		double y = pos.getY();
+	
 		
-		return ((!Util.fuzzyLessThanOrEqualTo(x-r, 0) && (!Util.fuzzyLessThanOrEqualTo(y-r, 0)) 
-				&& Util.fuzzyLessThanOrEqualTo(x+r, getMaxWidth()) && Util.fuzzyLessThanOrEqualTo(y+r, getMaxHeight())));
+		return ((!Util.fuzzyLessThanOrEqualTo(x-radius, 0) && (!Util.fuzzyLessThanOrEqualTo(y-radius, 0)) 
+				&& Util.fuzzyLessThanOrEqualTo(x+radius, getMaxWidth()) && Util.fuzzyLessThanOrEqualTo(y+radius, getMaxHeight())));
 	}
 	
 	/**
@@ -440,15 +440,15 @@ public class World {
 		
 		int i = 0;
 		int j = 0;
-		double result = SpaceObject.getTimeToCollision(spaceObjects.get(1), spaceObjects.get(2));
+		double result = Double.POSITIVE_INFINITY;
 		
-		while(i!=spaceObjects.size()){
+		while(i!=getNbSpaceObjects()){
 			
-			while(j!=spaceObjects.size()){
+			while(j!=getNbSpaceObjects()){
 				
 				double timeToCollision = SpaceObject.getTimeToCollision(spaceObjects.get(i), spaceObjects.get(j));
 				
-				if (timeToCollision!=Double.POSITIVE_INFINITY && Util.fuzzyLessThanOrEqualTo(timeToCollision,result)){
+				if ((timeToCollision!=Double.POSITIVE_INFINITY && Util.fuzzyLessThanOrEqualTo(timeToCollision,result)) || result == Double.POSITIVE_INFINITY){
 					
 					result = timeToCollision;
 				
