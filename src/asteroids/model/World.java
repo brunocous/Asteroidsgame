@@ -448,7 +448,7 @@ public class World {
 				
 				double timeToCollision = SpaceObject.getTimeToCollision(spaceObjects.get(i), spaceObjects.get(j));
 				
-				if ((timeToCollision!=Double.POSITIVE_INFINITY && Util.fuzzyLessThanOrEqualTo(timeToCollision,result)) || result == Double.POSITIVE_INFINITY){
+				if ((!Double.isInfinite(timeToCollision) && Util.fuzzyLessThanOrEqualTo(timeToCollision,result)) || Double.isInfinite(result)){
 					
 					result = timeToCollision;
 				
@@ -536,6 +536,7 @@ public class World {
 					
 				}
 				
+				else{
 				for(SpaceObject object2 : spaceObjects){
 					
 					if(Util.fuzzyEquals(getDistanceBetween(object1,object2),0) && object1!=object2){
@@ -544,6 +545,7 @@ public class World {
 				}
 			}
 		}
+	}
 	}
 	
 	/**
