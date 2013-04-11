@@ -29,7 +29,14 @@ public class Bullet extends SpaceObject {
 	 * The radius of a bullet that has been fired.
 	 */
 	private static final double INITIAL_RADIUS = 3;
-	
+	/**
+	 * The number of times a bullet has hit a boundary.
+	 */
+	private int nbBoundaryCollisions = 0;
+	/**
+	 * The number of times a bullet is allowed to hit a boundary.
+	 */
+	private static final int MAX_NUMBER_OF_BOUNDARY_COLLISIONS = 2;
 
 	/**
 	 * The constructor for this new bullet.
@@ -87,6 +94,7 @@ public class Bullet extends SpaceObject {
 	/**
 	 * @return the initialSpeed
 	 */
+	@Basic
 	public static double getInitialSpeed() {
 		return INITIAL_SPEED;
 	}
@@ -94,7 +102,58 @@ public class Bullet extends SpaceObject {
 	/**
 	 * @return the initialRadius
 	 */
+	@Basic
 	public static double getInitialRadius() {
 		return INITIAL_RADIUS;
+	}
+
+	/**
+	 * @return the nbBoundaryCollisions
+	 */
+	@Basic
+	public int getNbBoundaryCollisions() {
+		return nbBoundaryCollisions;
+	}
+	/**
+	 * Checks if the given number of boundary collisions is valid.
+	 * @return True if and only if the given number of boundary collisions
+	 * 			is less than the maximum number of boundary collisions.
+	 * 			| result == (nbBoundaryCollisions < getMaxNumberOfBoundaryCollisions())
+	 */
+	public boolean isValidNbBoundaryCollisions(int nbBoundaryCollisions){
+		return (nbBoundaryCollisions < getMaxNumberOfBoundaryCollisions());
+	}
+	
+	/**
+	 * @param nbBoundaryCollisions the nbBoundaryCollisions to set
+	 */
+	private void setNbBoundaryCollisions(int nbBoundaryCollisions) {
+		if(isValidNbBoundaryCollisions(nbBoundaryCollisions)){
+		this.nbBoundaryCollisions = nbBoundaryCollisions;
+		}
+	}
+
+	/**
+	 * @return True if and only if this bullet can bounce.
+	 * 			| result == isValidNbBoundaryCollisions(getNbBoundaryCollisions()+1)
+	 */
+	public boolean canBounce(){
+		return this.isValidNbBoundaryCollisions(this.getNbBoundaryCollisions()+1);
+	}
+	/**
+	 * Makes this bullet bounce.
+	 * @effect ...
+	 * 		| setNbBoundaryCollisions(getNbBoundaryCollisions() + 1)
+	 */
+	public void bounce(){
+		this.setNbBoundaryCollisions(this.getNbBoundaryCollisions() + 1);
+	}
+	/**
+	 * @return the maxNumberOfBoundaryCollisions
+	 */
+	@Basic 
+	@Immutable
+	public static int getMaxNumberOfBoundaryCollisions() {
+		return MAX_NUMBER_OF_BOUNDARY_COLLISIONS;
 	}
 }
