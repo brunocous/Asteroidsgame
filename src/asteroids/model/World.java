@@ -397,6 +397,11 @@ public class World {
 				&& Util.fuzzyLessThanOrEqualTo(x+r, getMaxWidth()) && Util.fuzzyLessThanOrEqualTo(y+r, getMaxHeight())));
 	}
 	
+	/**
+	 * 
+	 * @param deltaT
+	 * @throws IllegalPositionException
+	 */
 	public void updatePositions(double deltaT) throws IllegalPositionException{
 		
 		for(SpaceObject object : spaceObjects){
@@ -409,6 +414,11 @@ public class World {
 		
 	}
 	
+	/**
+	 * 
+	 * @param deltaT
+	 * @throws NegativeTimeException
+	 */
 	public void updateVelocities(double deltaT) throws NegativeTimeException{
 		
 		for(SpaceObject object : spaceObjects){
@@ -422,6 +432,10 @@ public class World {
 		 }
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public double getTimeToFirstCollision() {
 		
 		int i = 0;
@@ -454,17 +468,22 @@ public class World {
 		
 	}
 	
+	/**
+	 * 
+	 * @param spaceObject
+	 * @return
+	 */
 	public double getTimeToBoundaryCollision(SpaceObject spaceObject){
 		
 		double collisionTopOrBottom;
 		double distanceTopOrBottom;
 		if(Util.fuzzyLessThanOrEqualTo(spaceObject.getVel().getY(),0)){
 			
-			distanceTopOrBottom = spaceObject.getPos().getY();
+			distanceTopOrBottom = spaceObject.getPos().getY() - spaceObject.getRadius();
 			
 		}
 		else{
-			distanceTopOrBottom = getHeight() - spaceObject.getPos().getY();
+			distanceTopOrBottom = getHeight() - spaceObject.getPos().getY() - spaceObject.getRadius();
 		}
 		
 		collisionTopOrBottom = distanceTopOrBottom/Math.abs(spaceObject.getVel().getY());
@@ -474,11 +493,11 @@ public class World {
 		
 		if(Util.fuzzyLessThanOrEqualTo(spaceObject.getVel().getX(),0)){
 			
-			distanceSides = spaceObject.getPos().getX();
+			distanceSides = spaceObject.getPos().getX() - spaceObject.getRadius();
 			
 		}
 		else{
-			distanceSides = getWidth() - spaceObject.getPos().getX();
+			distanceSides = getWidth() - spaceObject.getPos().getX() - spaceObject.getRadius();
 		}
 		
 		collisionSides = distanceSides/Math.abs(spaceObject.getVel().getY());
@@ -487,6 +506,12 @@ public class World {
 		
 	}
 	
+	/**
+	 * 
+	 * @param deltaT
+	 * @throws IllegalPositionException
+	 * @throws NegativeTimeException
+	 */
 	public void evolve(double deltaT) throws IllegalPositionException, NegativeTimeException{
 		
 		double tC=getTimeToFirstCollision();
@@ -521,11 +546,65 @@ public class World {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param spaceObject
+	 */
 	public void boundaryCollide(SpaceObject spaceObject){
+		
+		if(Ship.class.isAssignableFrom(spaceObject.getClass()) || Asteroid.class.isAssignableFrom(spaceObject.getClass())){
+			
+			bounceOffBoundary(spaceObject);
+			
+		}
+		else if(Bullet.class.isAssignableFrom(spaceObject.getClass()) ){
+			
+			if(((Bullet)spaceObject).canBounce()){
+				
+				bounceOffBoundary(spaceObject);
+				((Bullet) spaceObject).bounce();
+				
+			}
+			else{
+				
+				spaceObject.terminate();
+				
+			}
+			
+		}
 		
 		
 	}
 	
+	/**
+	 * Makes a given Space Object obj bounce off a boundary of this world. 
+	 * @param obj
+	 * @effect	...
+	 * 			| if(Util.fuzzyEquals(obj.getPos().getX(), obj.getRadius())|| Util.fuzzyEquals(obj.getPos().getX(), getWidth()-obj.getRadius()))
+	 *		    | obj.setVel(new Velocity( -obj.getVel().getX(), obj.getVel().getY()))
+	 *		    | else obj.setVel(new Velocity(obj.getVel().getX(), -obj.getVel().getY()))
+	 */
+	public void bounceOffBoundary(SpaceObject obj){
+		
+		if(Util.fuzzyEquals(obj.getPos().getX(), obj.getRadius())|| Util.fuzzyEquals(obj.getPos().getX(), getWidth()-obj.getRadius())){
+			
+			obj.setVel(new Velocity( -obj.getVel().getX(), obj.getVel().getY()));
+			
+		}
+		else{
+			
+			obj.setVel(new Velocity(obj.getVel().getX(), -obj.getVel().getY()));
+			
+		}
+	}
+	
+	/**
+	 * Makes two given Space Object bounce off each other. 
+	 * 
+	 * @param obj1
+	 * @param obj2
+	 * 
+	 */
 	public void bounceOff(SpaceObject obj1, SpaceObject obj2){
 		
 		double mi = obj1.getMass();
@@ -544,7 +623,11 @@ public class World {
 		
 	}
 	
-	
+	/**
+	 * 
+	 * @param object1
+	 * @param object2
+	 */
 	public void resolve(SpaceObject object1, SpaceObject object2){
 		
 		if(Ship.class.isAssignableFrom(object1.getClass()) && Ship.class.isAssignableFrom(object2.getClass())){
