@@ -486,7 +486,7 @@ public class World {
 			distanceTopOrBottom = getHeight() - spaceObject.getPos().getY() - spaceObject.getRadius();
 		}
 		
-		collisionTopOrBottom = distanceTopOrBottom/Math.abs(spaceObject.getVel().getY());
+		collisionTopOrBottom = Math.abs( distanceTopOrBottom/(spaceObject.getVel().getY()));
 		
 		double collisionSides;
 		double distanceSides;
@@ -500,7 +500,7 @@ public class World {
 			distanceSides = getWidth() - spaceObject.getPos().getX() - spaceObject.getRadius();
 		}
 		
-		collisionSides = distanceSides/Math.abs(spaceObject.getVel().getY());
+		collisionSides = Math.abs( distanceSides/(spaceObject.getVel().getY()));
 		
 		return Math.min(collisionTopOrBottom, collisionSides);
 		
