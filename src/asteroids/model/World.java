@@ -530,7 +530,7 @@ public class World {
 			
 			for(SpaceObject object1 : spaceObjects){
 				
-				if(Util.fuzzyEquals(object1.getPos().getX(), 0) || Util.fuzzyEquals(object1.getPos().getX(), getWidth()) || Util.fuzzyEquals(object1.getPos().getY(), 0) || Util.fuzzyEquals(object1.getPos().getY(), getHeight())){
+				if(Util.fuzzyEquals(object1.getPos().getX()-object1.getRadius(), 0) || Util.fuzzyEquals(object1.getPos().getX()+object1.getRadius(), getWidth()) || Util.fuzzyEquals(object1.getPos().getY()-object1.getRadius(), 0) || Util.fuzzyEquals(object1.getPos().getY()+object1.getRadius(), getHeight())){
 					
 					boundaryCollide(object1);
 					
