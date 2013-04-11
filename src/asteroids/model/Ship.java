@@ -200,7 +200,7 @@ public class Ship extends SpaceObject{
  *         |!isValidElapsedTime()		
 	 */
 	public void thrust(double deltaT) throws NegativeTimeException{
-		if(super.isValidElapsedTime(deltaT)){
+		if(!super.isValidElapsedTime(deltaT)){
 			throw new NegativeTimeException();
 		}
 		if(Double.isInfinite(deltaT)){

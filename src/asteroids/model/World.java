@@ -710,23 +710,16 @@ public class World {
 		
 	}
 	/**
-	 * Makes the given space object fire a new projectile.
+	 * Fires an object.
 	 *  
-	 * @param attacker
-	 * 			The space object that fires the new projectile.
-	 * @param projectileClass
-	 * 			The class of the projectile.
+	 * @param projectile
+	 * 			The projectile.
 	 * 
 	 */
-	public void fireObject(SpaceObject attacker, Object projectileClass){
-		try{if(Ship.class.isAssignableFrom(attacker.getClass()) 
-				&& Bullet.class.isAssignableFrom(projectileClass.getClass())){
-				SpaceObject bullet = new Bullet((Ship) attacker);
-				bullet.getWorld().addAsSpaceObject(bullet);
-			}
-	} catch (Exception ex){
-		//TODO hier iets doen?
-	}
+	public void fireObject(SpaceObject projectile){
+		if(Bullet.class.isAssignableFrom(projectile.getClass())){
+				projectile.getWorld().addAsSpaceObject(projectile);
+		}
 	}
 }
 
