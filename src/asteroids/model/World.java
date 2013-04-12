@@ -403,7 +403,7 @@ public class World {
 				&& Util.fuzzyLessThanOrEqualTo(x+radius, world.getWidth()) && Util.fuzzyLessThanOrEqualTo(y+radius, world.getHeight())));
 		}
 		else{
-			return false;
+			return true;
 		}
 	}
 	
