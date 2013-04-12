@@ -125,6 +125,7 @@ public class Bullet extends SpaceObject {
 	}
 	
 	/**
+	 * TODO docs
 	 * @param nbBoundaryCollisions the nbBoundaryCollisions to set
 	 */
 	private void setNbBoundaryCollisions(int nbBoundaryCollisions) {

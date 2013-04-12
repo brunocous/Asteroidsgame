@@ -113,7 +113,7 @@ public class Asteroids<World, Ship, Asteroid, Bullet> extends JFrame {
   }
 
   public static void main(final String[] args) {
-    boolean tryFullscreen = true;
+    boolean tryFullscreen = false;
     boolean enableSound = true;
     for(String arg : args) {
       if(arg.equals("-window")) {

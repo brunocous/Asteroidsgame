@@ -176,7 +176,10 @@ public class Facade implements IFacade<World, Ship, Asteroid,Bullet>{
 
 	@Override
 	public void fireBullet(Ship ship) {
-		ship.getWorld().fireObject(ship, Bullet.class);
+		try{ship.getWorld().fireObject(new Bullet(ship));
+		}catch(Exception ex){
+			throw new ModelException(ex);
+		}
 		
 	}
 
