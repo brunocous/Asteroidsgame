@@ -86,7 +86,7 @@ public class Velocity extends Vector{
 		}
 		else{
 			
-		return new Velocity(getX() + velToAdd.getX(), getY() + velToAdd.getY());
+		return new Velocity(this.getX() + velToAdd.getX(), this.getY() + velToAdd.getY());
 		
 		}
 	}

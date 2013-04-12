@@ -470,15 +470,22 @@ public class World {
 				}
 				j++;
 			}
+			i++;
+		}
+		
+		int k =0;
+		
+		while(k!=getNbSpaceObjects()){
+			
 			double timeToBoundaryCollision = getTimeToBoundaryCollision(spaceObjects.get(i));
 			if (Util.fuzzyLessThanOrEqualTo(timeToBoundaryCollision, result) && timeToBoundaryCollision !=0){
 				
 				result = timeToBoundaryCollision;
 				
 			}
-			i++;
+			k++;
 		}
-		
+			
 		return result;
 		
 	}
