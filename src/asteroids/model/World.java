@@ -380,21 +380,31 @@ public class World {
 	 * Checks if all the points within the radius of the space object 
 	 * from the x- and y-component of the position of the space object 
 	 * are within or equal to the values of the boundaries.
-	 * @param spaceObject
-	 * 			The space object to be checked.
+	 * @param pos
+	 * 		  The position of the Space Object to be checked. 
+	 * @param radius
+	 * 		  The radius of the Space Object to be checked in km.
+	 * @param world
+	 * 		  The world in which the Space Object to be checked exists.
 	 * @return True if all the points within the radius of the given position from the x- and y-components 
 	 * 			of the position of the center of the given space object are both within or on the values of the boundaries.
 	 * 		 	| result == ((!Util.fuzzyLessThanOrEqualTo(x-r, 0) && (!Util.fuzzyLessThanOrEqualTo(y-r, 0)) 
-	 * 			| && Util.fuzzyLessThanOrEqualTo(x+r, getMaxWidth()) && Util.fuzzyLessThanOrEqualTo(y+r, getMaxHeight())))
+	 * 			| && Util.fuzzyLessThanOrEqualTo(x+r, world.getWidth()) && Util.fuzzyLessThanOrEqualTo(y+r, world.getHeight())))
+	 * @return false if the given world is a null object.
 	 */
-	public static boolean isSituatedInOrOnBoundaries(Position pos, double radius){
+	public static boolean isSituatedInOrOnBoundaries(Position pos, double radius, World world){
 		
+		if(world != null){
 		double x = pos.getX();
 		double y = pos.getY();
 	
 		
 		return (((!Util.fuzzyLessThanOrEqualTo(x-radius, 0) || Util.fuzzyEquals(x-radius, 0)) && ((!Util.fuzzyLessThanOrEqualTo(y-radius, 0)) || Util.fuzzyEquals(y-radius, 0)) 
-				&& Util.fuzzyLessThanOrEqualTo(x+radius, getMaxWidth()) && Util.fuzzyLessThanOrEqualTo(y+radius, getMaxHeight())));
+				&& Util.fuzzyLessThanOrEqualTo(x+radius, world.getWidth()) && Util.fuzzyLessThanOrEqualTo(y+radius, world.getHeight())));
+		}
+		else{
+			return false;
+		}
 	}
 	
 	/**

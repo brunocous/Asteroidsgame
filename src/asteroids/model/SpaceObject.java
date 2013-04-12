@@ -185,7 +185,7 @@ public abstract class SpaceObject {
 	 */
 	@Basic
 	public void setPos(Position pos, double radius) throws IllegalPositionException{
-		if(!isValidPosition(pos,radius)){
+		if(!isValidPosition(pos,radius,this.getWorld())){
 			throw new IllegalPositionException(pos.getX(),pos.getY());
 		}
 		else{
@@ -387,11 +387,13 @@ public boolean isValidVelocity(Velocity velocity){
  * 			The position to be checked.
  * @param radius
  * 			The distance between the center and a point on the boundary.
+ * @param world 
+ * 			The world in which the Space Object with the given position and radius exists.
  * @return true if and only if the position is valid.
  * 			| result == (Position.isValidPosition(position) && World.isSituatedInOrOnBoundaries(new Asteroid(position,new Velocity(), radius)))
  */
-public static boolean isValidPosition(Position position, double radius){
-	try{return (Position.isValidPosition(position) && World.isSituatedInOrOnBoundaries(position, radius));
+public static boolean isValidPosition(Position position, double radius, World world){
+	try{return (Position.isValidPosition(position) && World.isSituatedInOrOnBoundaries(position, radius, world));
 	}catch(Exception ex){
 		return false;
 	}
