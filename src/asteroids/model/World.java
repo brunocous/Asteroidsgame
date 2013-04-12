@@ -400,7 +400,7 @@ public class World {
 		double y = pos.getY();
 	
 		
-		return (((!Util.fuzzyLessThanOrEqualTo(x-radius, 0) || Util.fuzzyEquals(x-radius, 0)) && ((!Util.fuzzyLessThanOrEqualTo(y-radius, 0)) || Util.fuzzyEquals(y-radius, 0)) 
+		return ((((!Util.fuzzyLessThanOrEqualTo(x-radius, 0)) || (Util.fuzzyEquals(x-radius, 0))) && ((!Util.fuzzyLessThanOrEqualTo(y-radius, 0)) || Util.fuzzyEquals(y-radius, 0)) 
 				&& Util.fuzzyLessThanOrEqualTo(x+radius, world.getWidth()) && Util.fuzzyLessThanOrEqualTo(y+radius, world.getHeight())));
 		}
 		else{
