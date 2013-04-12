@@ -165,14 +165,18 @@ public class Asteroid extends SpaceObject {
 	}
 	/**
 	 * Returns a list of two child asteroids from this asteroid.
+	 * TODO afmaken
+	 * @return ...
+	 * 			| 
 	 * 
-	 * @post 
 	 */
 	public List<SpaceObject> split(){
+		if(this.getRadius() >= 30){
 		List<SpaceObject> children = new ArrayList<SpaceObject>();
 		double childSpeedNorm = this.getVel().getNorm()*1.5;
 		double childDirection = this.getRandom().nextDouble()*2*Math.PI;
 		double childRadius = this.getRadius()/2;
+		
 		try{
 			for(int i = 0 ; i<=1 ;i++){
 				childDirection += i*Math.PI;
@@ -182,10 +186,11 @@ public class Asteroid extends SpaceObject {
 												this.getRandom(),
 												this.getWorld());
 				children.add(child);
-			}
+			}	
 		} catch(Exception ex){
 			
 		}
 		return children; 
+		} else return new ArrayList<SpaceObject>();
 	}
 }
