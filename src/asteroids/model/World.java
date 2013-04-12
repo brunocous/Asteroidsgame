@@ -548,6 +548,7 @@ public class World {
 				if(Util.fuzzyEquals(object1.getPos().getX()-object1.getRadius(), 0) || Util.fuzzyEquals(object1.getPos().getX()+object1.getRadius(), getWidth()) || Util.fuzzyEquals(object1.getPos().getY()-object1.getRadius(), 0) || Util.fuzzyEquals(object1.getPos().getY()+object1.getRadius(), getHeight())){
 					
 					boundaryCollide(object1);
+					break;
 					
 				}
 				
@@ -556,6 +557,7 @@ public class World {
 					
 					if(Util.fuzzyEquals(getDistanceBetween(object1,object2),0) && object1!=object2){
 						resolve(object1,object2);
+						break;
 					}
 				}
 			}
