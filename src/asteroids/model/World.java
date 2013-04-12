@@ -453,13 +453,11 @@ public class World {
 	 */
 	public double getTimeToFirstCollision() {
 		
-		int i = 0;
-		int j = 0;
 		double result = Double.POSITIVE_INFINITY;
 		
-		while(i!=getNbSpaceObjects()){
+		for(int i=0;i!=getNbSpaceObjects();i++){
 			
-			while(j!=getNbSpaceObjects()){
+			for(int j = 0;j!=getNbSpaceObjects();j++){
 				
 				double timeToCollision = SpaceObject.getTimeToCollision(spaceObjects.get(i), spaceObjects.get(j));
 				
@@ -468,9 +466,8 @@ public class World {
 					result = timeToCollision;
 				
 				}
-				j++;
+			
 			}
-			i++;
 		}
 		
 		int k =0;
