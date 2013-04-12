@@ -664,27 +664,10 @@ public class World {
 			
 		}
 		else if(Bullet.class.isAssignableFrom(object1.getClass()) || Bullet.class.isAssignableFrom(object2.getClass())){
-			if(Asteroid.class.isAssignableFrom(object1.getClass())){
-				try{Asteroid asteroidCopy = new Asteroid((Asteroid) object1);
-				object1.terminate();
-				object2.terminate();
-				this.addAsSpaceObjects( asteroidCopy.split());
-				} catch (Exception ex){
-					
-				}
-			}else if(Asteroid.class.isAssignableFrom(object2.getClass())){
-				try{Asteroid asteroidCopy = new Asteroid((Asteroid) object2);
-				object2.terminate();
-				object1.terminate();
-				this.addAsSpaceObjects( asteroidCopy.split());
-				} catch (Exception ex){
-					
-				}
-			} else{
-			object1.terminate();
-			object2.terminate();
-			}
+		
+			resolveBullet(object1, object2);
 		}
+		
 		else if(Asteroid.class.isAssignableFrom(object1.getClass()) && Ship.class.isAssignableFrom(object2.getClass())){
 			
 			object2.terminate();
@@ -698,6 +681,50 @@ public class World {
 		}
 	
 		
+	}
+	
+	public void resolveBullet(SpaceObject object1, SpaceObject object2){
+		
+		if(Asteroid.class.isAssignableFrom(object1.getClass())){
+			
+			try{Asteroid asteroidCopy = new Asteroid((Asteroid) object1);
+			object1.terminate();
+			object2.terminate();
+			this.addAsSpaceObjects( asteroidCopy.split());
+			} catch (Exception ex){
+				
+			}
+			
+		}else if(Asteroid.class.isAssignableFrom(object2.getClass())){
+			
+			try{Asteroid asteroidCopy = new Asteroid((Asteroid) object2);
+			object2.terminate();
+			object1.terminate();
+			this.addAsSpaceObjects( asteroidCopy.split());
+			} catch (Exception ex){
+				
+			}
+			
+		} else if(Ship.class.isAssignableFrom(object1.getClass())){
+			
+			if(((Bullet) object2).getSource() != (Ship)object1){
+				
+				object1.terminate();
+			}
+		} else if(Ship.class.isAssignableFrom(object2.getClass())){
+			
+			if(((Bullet) object1).getSource() != (Ship)object2){
+				
+				object2.terminate();
+			}
+		}
+		
+		else{
+			
+		object1.terminate();
+		object2.terminate();
+		
+		}
 	}
 	/**
 	 * Returns the distance between two given space objects.  
