@@ -399,9 +399,13 @@ public class World {
 		double x = pos.getX();
 		double y = pos.getY();
 	
+		boolean xLow = (!Util.fuzzyLessThanOrEqualTo(x - radius, 0)|| Util.fuzzyEquals(x - radius, 0));
+		boolean yLow = (!Util.fuzzyLessThanOrEqualTo(y - radius, 0)|| Util.fuzzyEquals(y - radius, 0));
+		boolean xHigh = Util.fuzzyLessThanOrEqualTo(x + radius, world.getWidth());
+		boolean yHigh = Util.fuzzyLessThanOrEqualTo(y + radius, world.getHeight());
 		
-		return ((((!Util.fuzzyLessThanOrEqualTo(x-radius, 0)) || (Util.fuzzyEquals(x-radius, 0))) && ((!Util.fuzzyLessThanOrEqualTo(y-radius, 0)) || Util.fuzzyEquals(y-radius, 0)) 
-				&& Util.fuzzyLessThanOrEqualTo(x+radius, world.getWidth()) && Util.fuzzyLessThanOrEqualTo(y+radius, world.getHeight())));
+		
+		return (xLow && yLow && xHigh && yHigh);
 		}
 		else{
 			return true;
@@ -511,7 +515,7 @@ public class World {
 			distanceSides = getWidth() - spaceObject.getPos().getX() - spaceObject.getRadius();
 		}
 		
-			collisionSides = Math.abs( distanceSides/(spaceObject.getVel().getY()));
+			collisionSides = Math.abs( distanceSides/(spaceObject.getVel().getX()));
 		
 		return Math.min(collisionTopOrBottom, collisionSides);
 		
