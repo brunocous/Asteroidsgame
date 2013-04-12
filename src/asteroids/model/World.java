@@ -563,7 +563,9 @@ public class World {
 						resolved = true;
 					}
 				}
+				
 			}
+		i++;
 		}
 	}
 	}
