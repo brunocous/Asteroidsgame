@@ -648,8 +648,8 @@ public class World {
 		Velocity velToAddI = new Velocity(J*deltaR.getX()/(sigma*mi), J*deltaR.getY()/(sigma*mi));
 		Velocity velToAddJ = new Velocity(J*deltaR.getX()/(sigma*mj), J*deltaR.getY()/(sigma*mj));
 		
-		obj1.getVel().add(velToAddI);
-		obj2.getVel().add(velToAddJ);
+		obj1.setVel((Velocity) obj1.getVel().add(velToAddI));
+		obj2.setVel((Velocity) obj2.getVel().add(velToAddJ));
 		
 	}
 	
