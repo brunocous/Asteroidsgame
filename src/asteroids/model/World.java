@@ -539,7 +539,7 @@ public class World {
 			updatePositions(tC);
 			updateVelocities(tC);
 			
-			for(SpaceObject object1 : spaceObjects){
+			for(SpaceObject object1 : this.getAllSpaceObjects()){
 				
 				if(Util.fuzzyEquals(object1.getPos().getX()-object1.getRadius(), 0) || Util.fuzzyEquals(object1.getPos().getX()+object1.getRadius(), getWidth()) || Util.fuzzyEquals(object1.getPos().getY()-object1.getRadius(), 0) || Util.fuzzyEquals(object1.getPos().getY()+object1.getRadius(), getHeight())){
 					
@@ -548,7 +548,7 @@ public class World {
 				}
 				
 				else{
-				for(SpaceObject object2 : spaceObjects){
+				for(SpaceObject object2 : this.getAllSpaceObjects()){
 					
 					if(Util.fuzzyEquals(getDistanceBetween(object1,object2),0) && object1!=object2){
 						resolve(object1,object2);
