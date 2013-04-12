@@ -2,8 +2,8 @@ package asteroids.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.lang.Throwable;
 
+import asteroids.CollisionListener;
 import asteroids.Util;
 import asteroids.Error.IllegalPositionException;
 import asteroids.Error.NegativeTimeException;
@@ -531,7 +531,7 @@ public class World {
 	 * @throws IllegalPositionException
 	 * @throws NegativeTimeException
 	 */
-	public void evolve(double deltaT) throws IllegalPositionException, NegativeTimeException{
+	public void evolve(double deltaT,CollisionListener collisionListener) throws IllegalPositionException, NegativeTimeException{
 		
 		double tC=getTimeToFirstCollision();
 		
@@ -552,8 +552,12 @@ public class World {
 			
 			while(i < this.getNbSpaceObjects() && resolved == false){
 				
-				if(Util.fuzzyEquals(spaceObjects.get(i).getPos().getX()-spaceObjects.get(i).getRadius(), 0) || Util.fuzzyEquals(spaceObjects.get(i).getPos().getX()+spaceObjects.get(i).getRadius(), getWidth()) || Util.fuzzyEquals(spaceObjects.get(i).getPos().getY()-spaceObjects.get(i).getRadius(), 0) || Util.fuzzyEquals(spaceObjects.get(i).getPos().getY()+spaceObjects.get(i).getRadius(), getHeight())){
-					
+				if(Util.fuzzyEquals(spaceObjects.get(i).getPos().getX()-spaceObjects.get(i).getRadius(), 0) 
+						|| Util.fuzzyEquals(spaceObjects.get(i).getPos().getX()+spaceObjects.get(i).getRadius(), getWidth()) 
+						|| Util.fuzzyEquals(spaceObjects.get(i).getPos().getY()-spaceObjects.get(i).getRadius(), 0) 
+						|| Util.fuzzyEquals(spaceObjects.get(i).getPos().getY()+spaceObjects.get(i).getRadius(), getHeight()))
+				{
+					collisionListener.boundaryCollision(spaceObjects.get(i), spaceObjects.get(i).getPos().getX(),spaceObjects.get(i).getPos().getY() );
 					boundaryCollide(spaceObjects.get(i));
 					resolved=true;
 					
@@ -563,6 +567,8 @@ public class World {
 				for(SpaceObject object2 : this.getAllSpaceObjects()){
 					
 					if(Util.fuzzyEquals(getDistanceBetween(spaceObjects.get(i),object2),0) && spaceObjects.get(i)!=object2){
+						Vector colPos = SpaceObject.getCollisionPosition(getSpaceObjectAt(i+1), object2);
+						collisionListener.objectCollision(getSpaceObjectAt(i+1), object2, colPos.getX() ,colPos.getY() );
 						resolve(spaceObjects.get(i),object2);
 						resolved = true;
 					}

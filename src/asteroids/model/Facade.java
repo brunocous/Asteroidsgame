@@ -91,7 +91,8 @@ public class Facade implements IFacade<World, Ship, Asteroid,Bullet>{
 	@Override
 	public void evolve(World world, double dt,
 			CollisionListener collisionListener) {
-		try{world.evolve(dt);
+		try{world.evolve(dt,collisionListener);
+		
 		} catch(Exception ex){
 			throw new ModelException(ex);
 		}
