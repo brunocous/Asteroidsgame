@@ -543,21 +543,24 @@ public class World {
 			updatePositions(tC);
 			updateVelocities(tC);
 			
-			for(SpaceObject object1 : this.getAllSpaceObjects()){
+			int i = 0;
+			boolean resolved = false;
+			
+			while(i < this.getNbSpaceObjects() && resolved == false){
 				
-				if(Util.fuzzyEquals(object1.getPos().getX()-object1.getRadius(), 0) || Util.fuzzyEquals(object1.getPos().getX()+object1.getRadius(), getWidth()) || Util.fuzzyEquals(object1.getPos().getY()-object1.getRadius(), 0) || Util.fuzzyEquals(object1.getPos().getY()+object1.getRadius(), getHeight())){
+				if(Util.fuzzyEquals(spaceObjects.get(i).getPos().getX()-spaceObjects.get(i).getRadius(), 0) || Util.fuzzyEquals(spaceObjects.get(i).getPos().getX()+spaceObjects.get(i).getRadius(), getWidth()) || Util.fuzzyEquals(spaceObjects.get(i).getPos().getY()-spaceObjects.get(i).getRadius(), 0) || Util.fuzzyEquals(spaceObjects.get(i).getPos().getY()+spaceObjects.get(i).getRadius(), getHeight())){
 					
-					boundaryCollide(object1);
-					break;
+					boundaryCollide(spaceObjects.get(i));
+					resolved=true;
 					
 				}
 				
 				else{
 				for(SpaceObject object2 : this.getAllSpaceObjects()){
 					
-					if(Util.fuzzyEquals(getDistanceBetween(object1,object2),0) && object1!=object2){
-						resolve(object1,object2);
-						break;
+					if(Util.fuzzyEquals(getDistanceBetween(spaceObjects.get(i),object2),0) && spaceObjects.get(i)!=object2){
+						resolve(spaceObjects.get(i),object2);
+						resolved = true;
 					}
 				}
 			}
