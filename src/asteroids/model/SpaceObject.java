@@ -519,11 +519,12 @@ public static double getTimeToCollision(SpaceObject obj1, SpaceObject obj2) thro
 	
 	double result;
 	
-	if(obj1==obj2) {
+	if (overlap(obj1,obj2)){
 		
 		result = Double.POSITIVE_INFINITY;
 		
-	} else{
+	}
+	else {
 	
 	double deltavx = obj2.getVel().getX()- obj1.getVel().getX();
 	double deltavy = obj2.getVel().getY()- obj1.getVel().getY();
