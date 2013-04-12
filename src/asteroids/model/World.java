@@ -583,7 +583,6 @@ public class World {
 		if(Ship.class.isAssignableFrom(spaceObject.getClass())){
 			
 			bounceOffBoundary(spaceObject);
-			((Ship) spaceObject).setDirection(-((Ship) spaceObject).getDirection());
 			
 		}
 		else if(Asteroid.class.isAssignableFrom(spaceObject.getClass())){
