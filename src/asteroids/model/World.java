@@ -710,11 +710,16 @@ public class World {
 			if(((Bullet) object2).getSource() != (Ship)object1){
 				
 				object1.terminate();
+				object2.terminate();
+			}
+			else{
+				
 			}
 		} else if(Ship.class.isAssignableFrom(object2.getClass())){
 			
 			if(((Bullet) object1).getSource() != (Ship)object2){
 				
+				object1.terminate();
 				object2.terminate();
 			}
 		}
