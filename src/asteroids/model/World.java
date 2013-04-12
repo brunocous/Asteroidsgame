@@ -453,26 +453,26 @@ public class World {
 	 */
 	public double getTimeToFirstCollision() {
 		
-		double result = 1000;
+		int i = 0;
+		int j = 0;
+		double result = Double.POSITIVE_INFINITY;
 		
-		for(int i = 0;i!=getNbSpaceObjects();i++){
+		while(i!=getNbSpaceObjects()){
 			
-			for(int j = 0;j!=getNbSpaceObjects();j++){
+			while(j!=getNbSpaceObjects()){
 				
 				double timeToCollision = SpaceObject.getTimeToCollision(spaceObjects.get(i), spaceObjects.get(j));
-				System.out.println("i = " + i + "| j= " + j);
-				if(i==1 && j==2){
-					
-				}
+				
 				if ( !Double.isInfinite(timeToCollision) && Util.fuzzyLessThanOrEqualTo(timeToCollision, result) && !Util.fuzzyEquals(timeToCollision,0)){
 					
 					result = timeToCollision;
 				
 				}
-				
+				j++;
 			}
-			
+			i++;
 		}
+		
 		int k =0;
 		
 		while(k!=getNbSpaceObjects()){
@@ -484,7 +484,8 @@ public class World {
 				
 			}
 			k++;
-		}	
+		}
+			
 		return result;
 		
 	}
@@ -652,7 +653,7 @@ public class World {
 		double J=(2*mi*mj*Vector.scalarProduct(deltaV, deltaR))/(sigma*(mi+mj));
 		
 		Velocity velToAddI = new Velocity(J*deltaR.getX()/(sigma*mi), J*deltaR.getY()/(sigma*mi));
-		Velocity velToAddJ = new Velocity(J*deltaR.getX()/(sigma*mj), J*deltaR.getY()/(sigma*mj));
+		Velocity velToAddJ = new Velocity(-J*deltaR.getX()/(sigma*mj), -J*deltaR.getY()/(sigma*mj));
 		
 		obj1.setVel((Velocity) obj1.getVel().add(velToAddI));
 		obj2.setVel((Velocity) obj2.getVel().add(velToAddJ));
