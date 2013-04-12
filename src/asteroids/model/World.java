@@ -453,26 +453,26 @@ public class World {
 	 */
 	public double getTimeToFirstCollision() {
 		
-		int i = 0;
-		int j = 0;
-		double result = Double.POSITIVE_INFINITY;
+		double result = 1000;
 		
-		while(i!=getNbSpaceObjects()){
+		for(int i = 0;i!=getNbSpaceObjects();i++){
 			
-			while(j!=getNbSpaceObjects()){
+			for(int j = 0;j!=getNbSpaceObjects();j++){
 				
 				double timeToCollision = SpaceObject.getTimeToCollision(spaceObjects.get(i), spaceObjects.get(j));
-				
+				System.out.println("i = " + i + "| j= " + j);
+				if(i==1 && j==2){
+					
+				}
 				if ( !Double.isInfinite(timeToCollision) && Util.fuzzyLessThanOrEqualTo(timeToCollision, result) && !Util.fuzzyEquals(timeToCollision,0)){
 					
 					result = timeToCollision;
 				
 				}
-				j++;
+				
 			}
-			i++;
+			
 		}
-		
 		int k =0;
 		
 		while(k!=getNbSpaceObjects()){
@@ -484,8 +484,7 @@ public class World {
 				
 			}
 			k++;
-		}
-			
+		}	
 		return result;
 		
 	}
