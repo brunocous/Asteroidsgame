@@ -463,7 +463,7 @@ public class World {
 				
 				double timeToCollision = SpaceObject.getTimeToCollision(spaceObjects.get(i), spaceObjects.get(j));
 				
-				if (((!Double.isInfinite(timeToCollision) && Util.fuzzyLessThanOrEqualTo(timeToCollision,result)) || Double.isInfinite(result)) && timeToCollision !=0){
+				if ( !Double.isInfinite(timeToCollision) && Util.fuzzyLessThanOrEqualTo(timeToCollision, result) && !Util.fuzzyEquals(timeToCollision,0)){
 					
 					result = timeToCollision;
 				
@@ -477,7 +477,7 @@ public class World {
 		
 		while(k!=getNbSpaceObjects()){
 			
-			double timeToBoundaryCollision = getTimeToBoundaryCollision(spaceObjects.get(i));
+			double timeToBoundaryCollision = getTimeToBoundaryCollision(spaceObjects.get(k));
 			if (Util.fuzzyLessThanOrEqualTo(timeToBoundaryCollision, result) && timeToBoundaryCollision !=0){
 				
 				result = timeToBoundaryCollision;
