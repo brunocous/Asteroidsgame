@@ -390,7 +390,8 @@ public class World {
 	 * 			of the position of the center of the given space object are both within or on the values of the boundaries.
 	 * 		 	| result == ((!Util.fuzzyLessThanOrEqualTo(x-r, 0) && (!Util.fuzzyLessThanOrEqualTo(y-r, 0)) 
 	 * 			| && Util.fuzzyLessThanOrEqualTo(x+r, world.getWidth()) && Util.fuzzyLessThanOrEqualTo(y+r, world.getHeight())))
-	 * @return false if the given world is a null object.
+	 * @return true if the given world is a null object.
+	 * 			| if(world == null) result == true
 	 */
 	public static boolean isSituatedInOrOnBoundaries(Position pos, double radius, World world){
 		
