@@ -10,8 +10,8 @@ import be.kuleuven.cs.som.annotate.*;
 
 //TODO dit aanpassen
 /** 
- * A class of spaceships involving a position, a velocity, a direction and a radius with 
- * among others moving, turning and accelerating facilities. 
+ * A class of spaceships involving a position, a velocity, a direction, 
+ * a mass, a radius and a world with among others turning and accelerating facilities. 
  * 
  *  @invar The mass that applies to all ships must be a valid mass.
  *        | isValidMass(getMass())
@@ -181,20 +181,24 @@ public class Ship extends SpaceObject{
 	 * 
 	 * @param deltaT
 	 * 		  The amount of time in which the ship thrusts.
-	 * @effect If increasing the ship's velocity during a time amount deltaT does not result into a 
-	 *       velocity that is higher than the maximum speed of this ship, the ship's velocity will be 
-	 *       increased during an amount of time deltaT with a constant acceleration equal to 
-	 *       the amount of time times the amount of force exerted by the thrusters per second divided
-	 *       by the mass of this ship. If it does exceed the maximum speed, the ship's new
-	 *       velocity will be the maximum speed. If the amount of time is infinite, the new velocity for 
-	 *       this ship will be zero.
-	 *       |if(Double.isInfinite(deltaT))
-	 *       		then (this).setVel(new Velocity())
-	 *       |else if(isValidVelocity((new Velocity(getVel().getX(), getVel().getY())).add(new Velocity(acceleration*Math.cos(getDirection()),acceleration*Math.sin(getDirection()))))
-	 *       |     then (this).setVel(this.getVel().add(new Velocity(acceleration*Math.cos(getDirection()),acceleration*Math.sin(getDirection()))))
-	 *       |else ((this).setVel(correctSpeed(new Velocity(acceleration*Math.cos(getDirection()),acceleration*Math.sin(getDirection()))))
+	 * 
+	 * @effect If the thrusters are active of this ship, then if increasing the ship's velocity 
+	 * 		 during a time amount deltaT does not result into a velocity that is higher than 
+	 *       the maximum speed of this ship, the ship's velocity will be increased during 
+	 *       an amount of time deltaT with a constant acceleration equal to the amount of 
+	 *       time times the amount of force exerted by the thrusters per second divide by 
+	 *       the mass of this ship. If it does exceed the maximum speed, the ship's new
+	 *       velocity will be the maximum speed. If the amount of time is infinite, the 
+	 *       new velocity for this ship will be zero.
+	 *       | if(isEnableThruster())
+	 *       | then if(Double.isInfinite(deltaT))
+	 *       |		then (this).setVel(new Velocity())
+	 *       |		else if(isValidVelocity((new Velocity(getVel().getX(), getVel().getY()))
+	 *       |					.add(new Velocity(acceleration*Math.cos(getDirection()),acceleration*Math.sin(getDirection()))))
+	 *       |     		 then (this).setVel(this.getVel().add(new Velocity(acceleration*Math.cos(getDirection()),acceleration*Math.sin(getDirection()))))
+	 *       |			 else ((this).setVel(correctSpeed(new Velocity(acceleration*Math.cos(getDirection()),acceleration*Math.sin(getDirection()))))
 	 * @post The ship's direction will not be changed. 
-	 *       |(new this).getDirection() == this.getDirection()
+	 *       | new.getDirection() == getDirection()
  * @throws NegativeTimeException
  *         The given elapsedTime is negative and therefore invalid.
  *         |!isValidElapsedTime()		
@@ -251,7 +255,12 @@ public class Ship extends SpaceObject{
 		return (enableThruster == true);
 	}
 
-
+/**
+ * Sets if the thrusters are enabled.
+ * @param enableThruster
+ * @post EnableThrusters of this ship is equal to the given enable thrusters.
+ * 			| new.isEnableThrusters() = enableThruster 
+ */
 	public void setEnableThruster(boolean enableThruster){
 		this.enableThruster = enableThruster;
 	}

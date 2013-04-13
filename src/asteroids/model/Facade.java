@@ -6,6 +6,9 @@ import java.util.Set;
 
 import asteroids.CollisionListener;
 import asteroids.IFacade;
+import asteroids.Error.IllegalMaxSpeedException;
+import asteroids.Error.IllegalPositionException;
+import asteroids.Error.IllegalRadiusException;
 import asteroids.Error.ModelException;
 import asteroids.model.Util.*;
 
@@ -91,7 +94,7 @@ public class Facade implements IFacade<World, Ship, Asteroid,Bullet>{
 	@Override
 	public void evolve(World world, double dt,
 			CollisionListener collisionListener) {
-		try{world.evolve(dt,collisionListener);
+		try{world.evolve(dt);
 		
 		} catch(Exception ex){
 			throw new ModelException(ex);
@@ -177,10 +180,17 @@ public class Facade implements IFacade<World, Ship, Asteroid,Bullet>{
 
 	@Override
 	public void fireBullet(Ship ship) {
-		try{ship.getWorld().fireObject(new Bullet(ship));
-		}catch(Exception ex){
-			throw new ModelException(ex);
+		
+		try{
+		try {
+			SpaceObject bullet = new Bullet(ship);
+			ship.fireObject(bullet);
+		} catch (IllegalRadiusException | IllegalMaxSpeedException e) {
+			throw new ModelException(e);
 		}
+		}catch(IllegalPositionException ex){
+			//Do Nothing
+		} 
 		
 	}
 

@@ -13,9 +13,10 @@ import be.kuleuven.cs.som.annotate.*;
 @Value
 public class Velocity extends Vector{
 	
-    //The value for the speed of light.
+    /**
+     * The value for the speed of light.
+     */
 	private static final double SPEED_OF_LIGHT=300000000.0;
-	//TODO doe me weg
 	/**
 	 * Initialize this new velocity with given velX and velY.
 	 * @param velX
@@ -63,16 +64,18 @@ public class Velocity extends Vector{
 		return result;
 		
 	}
-	//TODO documentatie
 	/**
 	 * Add a given velocity vector to this velocity vector.
 	 * @param velToAdd
 	 *        the velocity vector to be added to this velocity 
-	 * @return The resulting velocity has the exact same X-component and the exact same Y-component as this velocity.
+	 * @return If velToAdd is not effective, then the resulting 
+	 * 			velocity has the exact same X-component and the 
+	 * 			exact same Y-component as this velocity.
 	 * 			|	result == this
-	 * @return The new velX of this velocity is equal to the old velX of this velocity plus the
-	 *       	velX of the given velToAdd, and the new velY of this velocity is equal to the old velY of this velocity plus the 
-	 *       	velY of the given velToAdd.
+	 * @return The new velX of this velocity is equal to the old velX 
+	 * 			of this velocity plus the velX of the given velToAdd, 
+	 * 			and the new velY of this velocity is equal to the old 
+	 * 			velY of this velocity plus the velY of the given velToAdd.
 	 *			|	(result.getX()==velToAdd.getX() + this.getX() )&&
 	 *      	|	(result.getY()==velToAdd.getY() + this.getY() )
 	 */

@@ -40,8 +40,15 @@ public class Bullet extends SpaceObject {
 
 	/**
 	 * The constructor for this new bullet.
-	 * @Pre The source of this new bullet must be effective
-	 * 		| (source != null)
+	 * @param source
+	 * 		The source of this new bullet.
+	 * @effect ...
+	 * 			| super(
+	 * 			| new Position(source.getPos().getX() + Math.cos(source.getDirection())*(getInitialRadius()+source.getRadius()),source.getPos().getY() + Math.sin(source.getDirection())*(getInitialRadius()+source.getRadius()))
+	 * 			| , new Velocity(Math.cos(source.getDirection())*getInitialSpeed(),Math.sin(source.getDirection())*getInitialSpeed())
+	 *			| , getInitialRadius(), source.getWorld())
+	 * @post ...
+	 * 			| (new this).getSource == source; 
 	 */
 	public Bullet(Ship source)
 			throws IllegalRadiusException, IllegalPositionException,IllegalMaxSpeedException{
@@ -125,9 +132,19 @@ public class Bullet extends SpaceObject {
 	}
 	
 	/**
-	 * TODO docs
-	 * @param nbBoundaryCollisions the nbBoundaryCollisions to set
+	 * Sets the number of boundary collisions to the given number of
+	 * boundary collisions.
+	 * 
+	 * @param nbBoundaryCollisions 
+	 * 			the nbBoundaryCollisions to set
+	 * @post If the given number of boundary collisions is valid, then
+	 * 		the number of boundary collisions of this bullet is equal to
+	 * 		the given number of boundary collisions.
+	 * 		| if(isValidNbBoundaryCollisions(nbBoundaryCollisions))
+	 * 		| then new.getNbBounderayCollisions 
+	 * 		|					== nbBoundaryCollisions
 	 */
+	@Basic
 	private void setNbBoundaryCollisions(int nbBoundaryCollisions) {
 		if(isValidNbBoundaryCollisions(nbBoundaryCollisions)){
 		this.nbBoundaryCollisions = nbBoundaryCollisions;

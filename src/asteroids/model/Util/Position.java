@@ -20,10 +20,9 @@ public class Position extends Vector{
  *        the initial x-coördinate for this new position.
  * @param posY
  *        the initial y-coördinate for this new position.
- * @post the new posX for this new position is equal to the given posX
- *       |new.getX()==posX
- * @post the new posY for this new position is equal to the given posY
- *       |new.getY()==posY   
+ * @effect This new position is initialized with posX as its new 
+ * 			x-component and with posY as its new y-component.
+ * 			| super(posX,posY)  
  */
 @Raw
 public Position(double posX, double posY) {
@@ -90,21 +89,4 @@ public double getDistanceTo(Position position){
 	return distance;
 	
 }
-
-/**
- * Check whether the given position is a valid position. In other words, check whether it has
- * finite components and components that are not 'NaN'.
- *
- * @param pos
- *        the position object to be checked in.
- * @return true if and only if the given position has finite components and components that
- *         are not NaN.
- *         |result == !(Double.isInfinite(pos.getX()) || Double.isNaN(pos.getX()) || Double.isInfinite(pos.getY()) || Double.isNaN(pos.getY()));
- */
-public static boolean isValidPosition(Position pos){
-	
-	return !(Double.isInfinite(pos.getX()) || Double.isNaN(pos.getX()) || Double.isInfinite(pos.getY()) || Double.isNaN(pos.getY()));
-
-}
-
 }

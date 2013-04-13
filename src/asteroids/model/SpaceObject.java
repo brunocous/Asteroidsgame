@@ -4,7 +4,6 @@ import asteroids.Util;
 import asteroids.Error.IllegalMaxSpeedException;
 import asteroids.Error.IllegalPositionException;
 import asteroids.Error.IllegalRadiusException;
-import asteroids.Error.NegativeTimeException;
 import asteroids.model.Util.Position;
 import asteroids.model.Util.Vector;
 import asteroids.model.Util.Velocity;
@@ -14,11 +13,11 @@ import be.kuleuven.cs.som.annotate.*;
  * An abstract class of space objects involving a position, a velocity, a direction
  * , a maximum speed, a mass and a radius with moving facilities.
  * 
- * @invar The position that applies to all space objects must be a valid position.
+ * @Invar The position that applies to all space objects must be a valid position.
  *        | isValidPosition(getPos())
- * @invar The velocity that applies to all space objects must be a valid velocity.
+ * @Invar The velocity that applies to all space objects must be a valid velocity.
  *        | isValidVelocity(getVel())
- * @invar The radius that applies to all space objects must be a valid radius.
+ * @Invar The radius that applies to all space objects must be a valid radius.
  *        | isValidRadius(getRadius())
  * 
  * @version 1.0
@@ -111,8 +110,8 @@ public abstract class SpaceObject {
 			throw new IllegalRadiusException();
 		}
 		else this.radius = radius;
-		this.setPos(pos,radius);
 		this.setWorld(world);
+		this.setPos(pos);
 	}
 	/**
 	 * Initialize this new space object with a given position, velocity, radius and world.
@@ -184,9 +183,9 @@ public abstract class SpaceObject {
 	 *         | isValidPosition(pos) == false
 	 */
 	@Basic
-	public void setPos(Position pos, double radius) throws IllegalPositionException{
-		if(!isValidPosition(pos,radius,this.getWorld())){
-			throw new IllegalPositionException(pos.getX(),pos.getY());
+	public void setPos(Position pos) throws IllegalPositionException{
+		if(!isValidPosition(pos)){
+			throw new IllegalPositionException();
 		}
 		else{
 	    this.pos = pos;
@@ -371,33 +370,28 @@ public abstract class SpaceObject {
  * @param velocity
  *        The velocity to be checked.
  * @return true if and only if the given velocity's norm is less than or equal to the maximum speed and the speed of light.
- *         |result == (Util.fuzzyLessThanOrEqualTo(getNorm(),getMaxSpeed()) && Velocity.isLessThanOrEqualToSpeedOfLight(velocity))
+ *         |result == (Util.fuzzyLessThanOrEqualTo(getNorm(), getMaxSpeed()) && Velocity.isLessThanOrEqualToSpeedOfLight(velocity))
  */
 public boolean isValidVelocity(Velocity velocity){
 	
-	return (Util.fuzzyLessThanOrEqualTo(velocity.getNorm(),getMaxSpeed()) && Velocity.isLessThanOrEqualToSpeedOfLight(velocity));
+	return (Util.fuzzyLessThanOrEqualTo(velocity.getNorm(), this.getMaxSpeed()) && Velocity.isLessThanOrEqualToSpeedOfLight(velocity));
 	
 }
 
 /**
- * Check whether the given position is a valid position. In other words, check whether all the points within the given radius
- * of the x- and y- components are inside or on the boundaries.
+ * Check whether the given position is a valid position for this space object. In other words, check 
+ * whether all the points within the radius of this space object from the center of this space object 
+ * are inside or on the boundaries of the world of this space object.
  * 
  * @param position
  * 			The position to be checked.
- * @param radius
- * 			The distance between the center and a point on the boundary.
- * @param world 
- * 			The world in which the Space Object with the given position and radius exists.
- * @return true if and only if the position is valid.
- * 			| result == (Position.isValidPosition(position) && World.isSituatedInOrOnBoundaries(new Asteroid(position,new Velocity(), radius)))
+ * @return true if and only if all the points within the radius of this space object from the center of this space object 
+ * 			are inside or on the boundaries of the world of this space object.
+ * 			| result == (Vector.isValidVector(position.getX(),position.getY()) 
+ * 			| && World.isSituatedInOrOnBoundaries(position, this.getRadius(), this.getWorld()))
  */
-public static boolean isValidPosition(Position position, double radius, World world){
-	try{return (Position.isValidPosition(position) && World.isSituatedInOrOnBoundaries(position, radius, world));
-	}catch(Exception ex){
-		return false;
-	}
-	
+public boolean isValidPosition(Position position){
+	return (Vector.isValidVector(position.getX(),position.getY()) && World.isSituatedInOrOnBoundaries(position, this.getRadius(), this.getWorld()));
 	}
 
 /**
@@ -621,37 +615,6 @@ protected Velocity correctSpeed(Velocity speed){
 	Velocity correctedSpeed = new Velocity (speed.getX()/correctingFactor,speed.getY()/correctingFactor);
 	return correctedSpeed;
 }
-/**
- * Moves the space object during a fixed amount of time.
- * 	  
- * @param elapsedTime
- * 		  The amount of time during which the space object is moving in seconds.
- * @post The position of the space object has been changed according to the previous position,
- * 		   The current velocity of the space object and the given duration elapsedTime. 
- * 		   |(new this).getPos() == this.getPos().add(new Position(vel.getX()*elapsedTime, vel.getY()*elapsedTime));
- * @throws NegativeTimeException
- *         The given elapsedTime is negative and therefore invalid.
- *         |!isValidElapsedTime()
- */
-
-public void move(double elapsedTime) throws NegativeTimeException{
-	if(!isValidElapsedTime(elapsedTime)){
-		
-		throw new NegativeTimeException() ;
-		
-	}
-	else{
-		
-		Vector displacement = new Position(vel.getX()*elapsedTime, vel.getY()*elapsedTime);
-		Vector newPosition = pos.add( displacement);
-		try{
-			this.setPos((Position) newPosition, this.getRadius());
-		} catch (IllegalPositionException exc){
-			
-		}
-		
-	} 
-}
 /** 
  * Check whether the given time is a valid amount of time. 
  * 
@@ -707,6 +670,49 @@ public void unsetWorld() {
 		this.setWorld(null);
 		formerWorld.removeAsSpaceObject(this);
 	}
+}
+/**
+ * Makes this spaceObject fire a projectile.
+ *  
+ * @param projectile
+ * 			The projectile to fire.
+ * @post If this space object can fire the given bullet, then 
+ * 			add the given bullet to the world where this space 
+ * 			object belongs to.
+ * 			| if(canFireBullet(projectile))
+			| then new.getWorld().getNbSpaceObjects() == getWorld().getNbSpaceObjects() + 1;
+ * @throws IllegalStateException
+ * 			This space object is already terminated.
+ * 			| isTerminated()
+ * 
+ */
+public void fireObject(SpaceObject projectile)throws IllegalStateException{
+	if(!isTerminated()){
+	if(Bullet.class.isAssignableFrom(projectile.getClass())){
+		if(this.canFireBullet((Bullet) projectile))
+			this.getWorld().addAsSpaceObject(projectile);
+	}else throw new IllegalStateException();
+	}
+}
+/**
+ * Checks if the given bullet is a valid bullet.
+ * @return True if and only if the given bullet is effective
+ * 			and if the given bullet has this space Object 
+ * 			as its source and if the given bullet and this
+ * 			space object belong to the same world and if 
+ * 			the world of this space object does not yet have
+ * 			the given bullet.
+ * 			| result == ((bullet != null) && (bullet.getSource() == this))
+ * @throws IllegalStateException
+ * 			This space object is already terminated.
+ * 			| isTerminated()
+ */
+public boolean canFireBullet(Bullet bullet) throws IllegalStateException{
+	if(!isTerminated()){
+	return ((bullet != null) && (bullet.getSource() == this) 
+			&& (bullet.getWorld() == this.getWorld()) 
+			&& !this.getWorld().hasAsSpaceObject(bullet));
+	} throw new IllegalStateException();
 }
 }
 

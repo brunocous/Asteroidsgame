@@ -8,10 +8,32 @@ public abstract class Vector {
 
 	protected final double xComp;
 	protected final double yComp;
-
+/**
+ * Initialize a vector with a given x component and a given y component.
+ * @param xComp
+ * 			The x component.
+ * @param yComp
+ * 			The y component.
+ * @post The new x component of this new vector is equal to the given x component 
+ * 			if the given x component is a valid x component. If not, then the new
+ * 			x component of this new world is equal to 0.
+ * 			| if(isValidComponent(xComp)
+ * 			| then new.getX() = xComp
+ * 			| else new.getX() = 0
+ * @post The new y component of this new vector is equal to the given y component 
+ * 			if the given y component is a valid y component. If not, then the new
+ * 			y component of this new world is equal to 0.
+ * 			| if(isValidComponent(yComp)
+ * 			| then new.getY() = yComp
+ * 			| else new.getY() = 0
+ */
 	public Vector(double xComp, double yComp) {
-		this.xComp = xComp;
-		this.yComp = yComp;
+		if(isValidComponent(xComp))
+			this.xComp = xComp;
+		else this.xComp = 0;
+		if(isValidComponent(yComp))
+			this.yComp = yComp;
+		else this.yComp = 0;
 	}
 /**
  * Initializes a default Vector.
@@ -19,17 +41,21 @@ public abstract class Vector {
  * 			its new x-component and 50 as its new y-component.
  */
 	public Vector() {
-		this.xComp = 50;
-		this.yComp = 50;
+		this(50,50);
 	}
-
+/**
+ * @return the x-compononent of this vector.
+ */
 	@Basic
 	@Raw
 	@Immutable
 	public double getX() {
 		return xComp;
 	}
-
+/**
+ * 
+ * @return the y-component of this vector.
+ */
 	@Basic
 	@Raw
 	@Immutable
@@ -50,6 +76,31 @@ public abstract class Vector {
 	public static double scalarProduct(Vector v1, Vector v2){
 		return v1.getX()*v2.getX() + v1.getY()*v2.getY();
 		
+	}
+	/**
+	 * Checks if the given component is a valid component.
+	 * @param comp
+	 * 			The component to check.
+	 * @Return True if and only if the given component is
+	 * 			not infinite and a number.
+	 * 			| result ==  !(Double.isInfinite(comp) || Double.isNaN(comp))
+	 */
+	public static boolean isValidComponent(double comp){
+		return !(Double.isInfinite(comp) || Double.isNaN(comp));
+	}
+	/**
+	 * Checks if the given x component and the given y component are valid components.
+	 * 
+	 * @param x
+	 * 			The x component to check.
+	 * @param y
+	 * 			The y component to check.
+	 * @return True if and only if the given x component and the given y-component are
+	 * 			both not infinite and are both a number.
+	 * 			| result == (isValidComponent(x) && isValidComponent(y))
+	 */
+	public static boolean isValidVector(double x, double y){
+		return (isValidComponent(x) && isValidComponent(y));
 	}
 	/**
 	 * Check whether this vector is equal to the given vector.

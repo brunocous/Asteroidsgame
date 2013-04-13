@@ -3,10 +3,10 @@ package asteroids.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import asteroids.CollisionListener;
 import asteroids.Util;
 import asteroids.Error.IllegalPositionException;
 import asteroids.Error.NegativeTimeException;
+import asteroids.Error.NotOfThisWorldException;
 import asteroids.model.Util.Position;
 import asteroids.model.Util.Vector;
 import asteroids.model.Util.Velocity;
@@ -68,8 +68,8 @@ public class World {
 	 * 			| if(isValidHeight(height))
 	 * 			| then new.getHeight() == height
 	 * 			| else new.getHeight() == getMaxHeight();
-	 * @effect This new world does not have any space objects yet.
-	 * 			| getNbSpaceObjects() == 0
+	 * @post This new world does not have any space objects yet.
+	 * 			| new.getNbSpaceObjects() == 0
 	 */
 	public World(double width, double height){
 		
@@ -85,7 +85,7 @@ public class World {
 		
 	}
 	/**
-	 * Default constructor for a world.
+	 * Initialize this new world as a default world.
 	 * @effect This new world is initialized with the maximum width as its new width,
 	 * 			the maximum height as its new height and does not have any space objects yet.
 	 * 			| this(MAX_WIDTH, MAX_HEIGHT)
@@ -93,12 +93,23 @@ public class World {
 	public World(){
 		this(MAX_WIDTH, MAX_HEIGHT);
 	}
-
+	/**
+	 * 
+	 * @return The width of this world.
+	 */
 	@Basic
 	public double getWidth() {
 		return width;
 	}
-
+/**
+ * checks whether the given width is valid.
+ * @param width
+			The width to check.
+ * @return True if and only if the given width is greater than 0 
+ * 			and less than or equal to the maximum width of a world.
+ * 			| result == (!Util.fuzzyLessThanOrEqualTo(width,0 )
+ * 			| && Util.fuzzyLessThanOrEqualTo(width, getMaxWidth()))
+ */
 	public boolean isValidWidth(double width){
 		
 		return (!Util.fuzzyLessThanOrEqualTo(width,0 )&& Util.fuzzyLessThanOrEqualTo(width, getMaxWidth()));
@@ -108,7 +119,15 @@ public class World {
 	public double getHeight() {
 		return height;
 	}
-
+	/**
+	 * checks whether the given height is valid.
+	 * @param heigth
+				The height to check.
+	 * @return True if and only if the given height is greater than 0 
+	 * 			and less than or equal to the maximum height of a world.
+	 * 			| result == (!Util.fuzzyLessThanOrEqualTo(height,0 )
+	 * 			| && Util.fuzzyLessThanOrEqualTo(height, getMaxHeight()))
+	 */
 	public boolean isValidHeight(double height){
 		
 		return (!Util.fuzzyLessThanOrEqualTo(height,0 )&& Util.fuzzyLessThanOrEqualTo(height, getMaxHeight()));
@@ -377,21 +396,29 @@ public class World {
 	}
 
 	/**
-	 * Checks if all the points within the radius of the space object 
-	 * from the x- and y-component of the position of the space object 
-	 * are within or equal to the values of the boundaries.
+	 * Checks if all the points within the given radius from the given position  
+	 * from the x- and y-component of the position are within or equal to the 
+	 * values of the boundaries.
 	 * @param pos
-	 * 		  The position of the Space Object to be checked. 
+	 * 		  The position to be checked. 
 	 * @param radius
-	 * 		  The radius of the Space Object to be checked in km.
+	 * 		  The radius to be checked in km.
 	 * @param world
-	 * 		  The world in which the Space Object to be checked exists.
-	 * @return True if all the points within the radius of the given position from the x- and y-components 
-	 * 			of the position of the center of the given space object are both within or on the values of the boundaries.
-	 * 		 	| result == ((!Util.fuzzyLessThanOrEqualTo(x-r, 0) && (!Util.fuzzyLessThanOrEqualTo(y-r, 0)) 
-	 * 			| && Util.fuzzyLessThanOrEqualTo(x+r, world.getWidth()) && Util.fuzzyLessThanOrEqualTo(y+r, world.getHeight())))
-	 * @return true if the given world is a null object.
-	 * 			| if(world == null) result == true
+	 * 		  The world with the boundaries.
+	 * @return True if and only if all the points within the given radius of the 
+	 * 			given position are within or on the values of the boundaries.
+	 * 		 	| double x = pos.getX()
+	 * 			| double y = pos.getY();
+	 * 			| boolean xLow = (!Util.fuzzyLessThanOrEqualTo(x - radius, 0)
+	 * 			| 					|| Util.fuzzyEquals(x - radius, 0))
+	 * 			| boolean yLow = (!Util.fuzzyLessThanOrEqualTo(y - radius, 0)
+	 * 			| 					|| Util.fuzzyEquals(y - radius, 0))
+	 * 			| boolean xHigh = Util.fuzzyLessThanOrEqualTo(x + radius, world.getWidth())
+	 * 			| boolean yHigh = Util.fuzzyLessThanOrEqualTo(y + radius, world.getHeight())
+	 * 			| result == (xLow && yLow && xHigh && yHigh);
+	 * @return true if the given world is not effective.
+	 * 			| if(world == null) 
+	 * 			| then result == true
 	 */
 	public static boolean isSituatedInOrOnBoundaries(Position pos, double radius, World world){
 		
@@ -403,8 +430,7 @@ public class World {
 		boolean yLow = (!Util.fuzzyLessThanOrEqualTo(y - radius, 0)|| Util.fuzzyEquals(y - radius, 0));
 		boolean xHigh = Util.fuzzyLessThanOrEqualTo(x + radius, world.getWidth());
 		boolean yHigh = Util.fuzzyLessThanOrEqualTo(y + radius, world.getHeight());
-		
-		
+	
 		return (xLow && yLow && xHigh && yHigh);
 		}
 		else{
@@ -413,30 +439,56 @@ public class World {
 	}
 	
 	/**
-	 * 
+	 * Updates the positions of each space object in this world for an amount of time delta T.
 	 * @param deltaT
-	 * @throws IllegalPositionException
+	 * 			The amount of time.
+	 * @post Each of the space objects of this world updates their position by adding their 
+	 *			current velocity multiplied by the given amount of time delta T to their 
+	 * 			current position.
+	 * 			| for each spaceObject in spaceObjects:
+	 * 			| (new spaceObject).getPos() == 
+	 * 			| spaceObject.getPos().add(deltaT*spaceObject.getVel())
+	 * @throws IllegalStateException
+	 * 			This world is already terminated.
+	 * 			| isTerminated()
 	 */
-	public void updatePositions(double deltaT) throws IllegalPositionException{
-		
-		for(SpaceObject object : spaceObjects){
-			
+	public void updatePositions(double deltaT) throws IllegalStateException{
+		if(isTerminated())
+			throw new IllegalStateException();
+		for(SpaceObject object : this.getAllSpaceObjects()){
 			double posX=object.getPos().getX()+ deltaT*object.getVel().getX();
 			double posY=object.getPos().getY()+ deltaT*object.getVel().getY();
-			
-			object.setPos(new Position(posX,posY),object.getRadius());
+			try{
+				object.setPos(new Position(posX,posY));
+			}catch (IllegalPositionException ex){
+				assert !object.isValidPosition( new Position(posX,posY));
+			}
 		}
 		
 	}
 	
 	/**
+	 * Update the velocities of each space object in this world 
+	 * for an amount of time delta T.
 	 * 
 	 * @param deltaT
+	 * 			The amount of time.
+	 * @effect Each ship of this world will thrust during an amount of time deltaT.
+	 * 			| for each spaceObject in spaceObjects:
+	 * 			| if(Ship.class.isAssignableFrom(spaceObject.getClass()))
+	 * 			| ((Ship) spaceObject).thrust(deltaT)
 	 * @throws NegativeTimeException
+	 * 			The given amount of time is negative.
+	 * 			| deltaT < 0
+	 * @throws IllegalStateException
+	 * 			This world is already terminated.
+	 * 			| isTerminated()
 	 */
-	public void updateVelocities(double deltaT) throws NegativeTimeException{
-		
-		for(SpaceObject object : spaceObjects){
+	public void updateVelocities(double deltaT) throws NegativeTimeException,
+					IllegalStateException{
+		if(isTerminated())
+			throw new IllegalStateException();
+		for(SpaceObject object : this.getAllSpaceObjects()){
 			
 				if(Ship.class.isAssignableFrom(object.getClass())){
 					
@@ -448,18 +500,42 @@ public class World {
 	}
 	
 	/**
+	 * The amount of time until the first collision in this world.
 	 * 
-	 * @return
+	 * @return The amount of time until the first collision in this world.
+	 * 			| double result = Double.POSITIVE_INFINITY
+	 * 			| for each index1 in 1..getNbSpaceObjects():
+	 * 			| for each index2 in 1..getNbSpaceObjects():
+	 * 			| double timeToCollision = SpaceObject.
+	 * 			| 					getTimeToCollision(getSpaceObjectAt(index1), 
+	 * 			|					getSpaceObjectAt(index2))
+	 * 			| if ( !Double.isInfinite(timeToCollision) 
+	 * 			| 			&& Util.fuzzyLessThanOrEqualTo(timeToCollision, result) 
+	 * 			|			&& !Util.fuzzyEquals(timeToCollision,0))
+	 * 			| then tempResult = timeToCollision;
+	 * 			| for each index in 1..getNbSpaceObjects():
+	 * 			| double timeToBoundaryCollision = 
+	 * 			|			getTimeToBoundaryCollision(getSpaceObjectAt(k))
+	 * 			| if (Util.fuzzyLessThanOrEqualTo(timeToBoundaryCollision, result) 
+	 * 			|			&& timeToBoundaryCollision !=0)
+	 * 			| then tempResult = timeToBoundaryCollision
+	 * 			| Result == tempResult
+	 * 
+	 * @throws IllegalStateException
+	 * 			This world is already terminated.
+	 * 			| isTerminated()
+	 * 
 	 */
-	public double getTimeToFirstCollision() {
-		
+	public double getTimeToFirstCollision() throws IllegalStateException{
+		if(isTerminated())
+			throw new IllegalStateException();
 		double result = Double.POSITIVE_INFINITY;
 		
-		for(int i=0;i!=getNbSpaceObjects();i++){
+		for(int i=1;i<=this.getNbSpaceObjects();i++){
 			
-			for(int j = 0;j!=getNbSpaceObjects();j++){
+			for(int j = 1;j<=this.getNbSpaceObjects();j++){
 				
-				double timeToCollision = SpaceObject.getTimeToCollision(spaceObjects.get(i), spaceObjects.get(j));
+				double timeToCollision = SpaceObject.getTimeToCollision(this.getSpaceObjectAt(i), this.getSpaceObjectAt(j));
 				
 				if ( !Double.isInfinite(timeToCollision) && Util.fuzzyLessThanOrEqualTo(timeToCollision, result) && !Util.fuzzyEquals(timeToCollision,0)){
 					
@@ -470,17 +546,20 @@ public class World {
 			}
 		}
 		
-		int k =0;
+		int k =1;
 		
-		while(k!=getNbSpaceObjects()){
+		while(k<=getNbSpaceObjects()){
 			
-			double timeToBoundaryCollision = getTimeToBoundaryCollision(spaceObjects.get(k));
+			try{double timeToBoundaryCollision = getTimeToBoundaryCollision(this.getSpaceObjectAt(k));
+			
 			if (Util.fuzzyLessThanOrEqualTo(timeToBoundaryCollision, result) && timeToBoundaryCollision !=0){
 				
 				result = timeToBoundaryCollision;
-				
 			}
 			k++;
+			} catch(NotOfThisWorldException ex){
+				assert this.getSpaceObjectAt(k).getWorld() != this;
+			}
 		}
 			
 		return result;
@@ -488,12 +567,40 @@ public class World {
 	}
 	
 	/**
+	 * The amount of time until the given space object collides with a boundary.
 	 * 
 	 * @param spaceObject
-	 * @return
+	 * 			The space object that may collide with a boundary.
+	 * @return The amount of time that the given space object has before
+	 * 			colliding with a boundary of this world.
+	 * 			| double collisionTopOrBottom
+	 * 			| double distanceTopOrBottom
+	 * 			| if(Util.fuzzyLessThanOrEqualTo(spaceObject.getVel().getY(),0))
+	 * 			| 	then distanceTopOrBottom = spaceObject.getPos().getY() - spaceObject.getRadius()
+	 * 			| 	else distanceTopOrBottom = getHeight() - spaceObject.getPos().getY() - spaceObject.getRadius()
+	 * 			| collisionTopOrBottom = Math.abs( distanceTopOrBottom/(spaceObject.getVel().getY()))
+	 * 			| 
+	 * 			| double collisionSides
+	 * 			| double distanceSides
+	 * 			| if(Util.fuzzyLessThanOrEqualTo(spaceObject.getVel().getX(),0))
+	 * 			| 	then distanceSides = spaceObject.getPos().getX() - spaceObject.getRadius()
+	 * 			| 	else distanceSides = getWidth() - spaceObject.getPos().getX() - spaceObject.getRadius()
+	 * 			| collisionSides = Math.abs( distanceSides/(spaceObject.getVel().getX()))
+	 * 			| result == Math.min(collisionTopOrBottom, collisionSides);
+	 * 
+	 * @throws NotOfThisWorldException
+	 * 			This world does not have the given space object.
+	 * 			| !hasAsSpaceObject(spaceObject)
+	 * 
+	 * @throws IllegalStateException
+	 * 			This world is already terminated.
+	 * 			| isTerminated()
 	 */
-	public double getTimeToBoundaryCollision(SpaceObject spaceObject){
-		
+	public double getTimeToBoundaryCollision(SpaceObject spaceObject) throws IllegalStateException, NotOfThisWorldException{
+		if(isTerminated())
+			throw new IllegalStateException();
+			if(!this.hasAsSpaceObject(spaceObject))
+				throw new NotOfThisWorldException();
 		double collisionTopOrBottom;
 		double distanceTopOrBottom;
 		if(Util.fuzzyLessThanOrEqualTo(spaceObject.getVel().getY(),0)){
@@ -526,15 +633,47 @@ public class World {
 	}
 	
 	/**
+	 * Evolves the world during an amount of time delta t.
 	 * 
 	 * @param deltaT
-	 * @throws IllegalPositionException
+	 * 			The amount of time the world has to evolve.
+	 * @effect If the time to the first collision is greater than the given
+	 * 			amount of time deltaT, then update the positions and velocities
+	 * 			for a given amount of time deltaT of all the space objects of
+	 * 			this world. Else update the positions and velocities of all 
+	 * 			space objects of this world for an amount of time untill the 
+	 * 			first collision and resolve that collision.
+	 * 			| double tC = getTimeToFirstCollision()
+	 * 			| if(!tC > deltaT)
+	 * 			| then updatePositions(deltaT)
+	 * 			| 	   updateVelocitties(deltaT)
+	 * 			| else updatePositions(tC)
+	 * 			|	   updateVelocities(tC)
+	 * 			| for each i in 1..getNbSpaceObjects():
+	 * 			| 		if(Util.fuzzyEquals(getSpaceObjectAt(i).getPos().getX()
+	 * 			|				-getSpaceObjectAt(i).getRadius(), 0) 
+	 * 			| 			|| Util.fuzzyEquals(getSpaceObjectAt(i).getPos().getX()
+	 * 			|				+getSpaceObjectAt(i).getRadius(), getWidth()) 
+	 * 			| 			|| Util.fuzzyEquals(getSpaceObjectAt(i).getPos().getY()
+	 * 			|				-getSpaceObjectAt(i).getRadius(), 0) 
+	 * 			| 			|| Util.fuzzyEquals(getSpaceObjectAt(i).getPos().getY()
+	 * 			|				+getSpaceObjectAt(i).getRadius(), getHeight()))
+	 * 			|		then boundaryCollide(getSpaceObjectAt(i))
+	 * 			| 		else for each spaceObject in spaceObjects:
+	 * 			| 			if(Util.fuzzyEquals(SpaceObject.getDistanceBetween(this.getSpaceObjectAt(i),spaceObject),0) 
+	 * 			|				&& this.getSpaceObjectAt(i)!= spaceObject)
+	 * 			|			then resolve(this.getSpaceObjectAt(i), spaceObject)
 	 * @throws NegativeTimeException
+	 * 			The given amount of time deltaT is negative.
+	 * 			| deltaT < 0
+	 * @throws IllegalStateException
+	 * 			This world is already terminated.
+	 * 			| isTerminated()
 	 */
-	public void evolve(double deltaT,CollisionListener collisionListener) throws IllegalPositionException, NegativeTimeException{
-		
+	public void evolve(double deltaT) throws NegativeTimeException, IllegalStateException{
+		if(isTerminated())
+			throw new IllegalStateException();
 		double tC=getTimeToFirstCollision();
-		
 		if(!Util.fuzzyLessThanOrEqualTo(tC, deltaT)){
 			
 			updatePositions(deltaT);
@@ -547,18 +686,24 @@ public class World {
 			updatePositions(tC);
 			updateVelocities(tC);
 			
-			int i = 0;
+			int i = 1;
 			boolean resolved = false;
 			
-			while(i < this.getNbSpaceObjects() && resolved == false){
+			while(i <= this.getNbSpaceObjects() && resolved == false){
 				
-				if(Util.fuzzyEquals(spaceObjects.get(i).getPos().getX()-spaceObjects.get(i).getRadius(), 0) 
-						|| Util.fuzzyEquals(spaceObjects.get(i).getPos().getX()+spaceObjects.get(i).getRadius(), getWidth()) 
-						|| Util.fuzzyEquals(spaceObjects.get(i).getPos().getY()-spaceObjects.get(i).getRadius(), 0) 
-						|| Util.fuzzyEquals(spaceObjects.get(i).getPos().getY()+spaceObjects.get(i).getRadius(), getHeight()))
+				if(Util.fuzzyEquals(this.getSpaceObjectAt(i).getPos().getX()
+						-this.getSpaceObjectAt(i).getRadius(), 0) 
+						|| Util.fuzzyEquals(this.getSpaceObjectAt(i).getPos().getX()
+								+this.getSpaceObjectAt(i).getRadius(), getWidth()) 
+						|| Util.fuzzyEquals(this.getSpaceObjectAt(i).getPos().getY()
+								-this.getSpaceObjectAt(i).getRadius(), 0) 
+						|| Util.fuzzyEquals(this.getSpaceObjectAt(i).getPos().getY()
+								+this.getSpaceObjectAt(i).getRadius(), getHeight()))
 				{
-					collisionListener.boundaryCollision(spaceObjects.get(i), spaceObjects.get(i).getPos().getX(),spaceObjects.get(i).getPos().getY() );
-					boundaryCollide(spaceObjects.get(i));
+					try{boundaryCollide(this.getSpaceObjectAt(i));
+					}catch (NotOfThisWorldException ex){
+						assert this.getSpaceObjectAt(i).getWorld() != this;
+					}
 					resolved=true;
 					
 				}
@@ -566,10 +711,14 @@ public class World {
 				else{
 				for(SpaceObject object2 : this.getAllSpaceObjects()){
 					
-					if(Util.fuzzyEquals(getDistanceBetween(spaceObjects.get(i),object2),0) && spaceObjects.get(i)!=object2){
-						Vector colPos = SpaceObject.getCollisionPosition(getSpaceObjectAt(i+1), object2);
-						collisionListener.objectCollision(getSpaceObjectAt(i+1), object2, colPos.getX() ,colPos.getY() );
-						resolve(spaceObjects.get(i),object2);
+					if(Util.fuzzyEquals(SpaceObject.getDistanceBetween(this.getSpaceObjectAt(i),object2),0) 
+							&& this.getSpaceObjectAt(i)!=object2){
+						try {
+							resolve(this.getSpaceObjectAt(i),object2);
+						} catch (NotOfThisWorldException e) {
+							assert this.getSpaceObjectAt(i).getWorld() != this;
+							assert object2.getWorld() != this;
+						}
 						resolved = true;
 					}
 				}
@@ -581,51 +730,75 @@ public class World {
 	}
 	
 	/**
+	 * Checks if the given space object can bounce off a boundary.
 	 * 
 	 * @param spaceObject
+	 * 			The space object to check.
+	 * @effect The the given space object is a ship or if the given space object
+	 * 			is a an asteroid, then the given space object bounces off a boundary.
+	 * 			Else if the given space object is a bullet, then if the bullet can bounce
+	 * 			then the given space object bounces off a boundary. Else the given space
+	 * 			object terminates.
+	 * 			| if(Ship.class.isAssignableFrom(spaceObject.getClass())
+	 * 			| || Asteroid.class.isAssignableFrom(spaceObject.getClass()))
+	 * 			| then bounceOffBoundary(spaceObject)
+	 * 			| else if(Bullet.class.isAssignableFrom(spaceObject.getClass()) )
+	 * 			|	   then if((Bullet) spaceObject).canBounce()
+	 * 			|			then bounceOffBoundary(spaceObject)
+	 * 			|				 spaceobject.bounce()
+	 * 			|			else spaceObject.terminate() 
+	 * @throws NotOfThisWorldException
+	 * 			This world does not have the given space object.
+	 * 			| !hasAsSpaceObject(spaceObject)
+	 * @throws IllegalStateException
+	 * 			This world is already terminated.
+	 * 			| isTerminated()
 	 */
-	public void boundaryCollide(SpaceObject spaceObject){
-		
-		if(Ship.class.isAssignableFrom(spaceObject.getClass())){
+	public void boundaryCollide(SpaceObject spaceObject) throws IllegalStateException, 
+					NotOfThisWorldException{
+		if(this.isTerminated())
+			throw new IllegalStateException();
+			if(!this.hasAsSpaceObject(spaceObject))
+				throw new NotOfThisWorldException();
+				if(Ship.class.isAssignableFrom(spaceObject.getClass()) 
+						|| Asteroid.class.isAssignableFrom(spaceObject.getClass())){
 			
-			bounceOffBoundary(spaceObject);
+						bounceOffBoundary(spaceObject);
+			
+				}
+				else if(Bullet.class.isAssignableFrom(spaceObject.getClass()) ){
+			
+						if(((Bullet)spaceObject).canBounce()){
+				
+							bounceOffBoundary(spaceObject);
+							((Bullet) spaceObject).bounce();
+				
+						}
+						else{
+				
+							spaceObject.terminate();
+				
+						}
 			
 		}
-		else if(Asteroid.class.isAssignableFrom(spaceObject.getClass())){
-			
-			bounceOffBoundary(spaceObject);
-			
-		}
-		else if(Bullet.class.isAssignableFrom(spaceObject.getClass()) ){
-			
-			if(((Bullet)spaceObject).canBounce()){
-				
-				bounceOffBoundary(spaceObject);
-				((Bullet) spaceObject).bounce();
-				
-			}
-			else{
-				
-				spaceObject.terminate();
-				
-			}
-			
-		}
-		
-		
 	}
 	
 	/**
-	 * Makes a given Space Object obj bounce off a boundary of this world. 
+	 * Makes a given Space Object obj bounce off a boundary in this world. 
 	 * @param obj
+	 * 			The space object that bounces off a boundary.
 	 * @effect	...
 	 * 			| if(Util.fuzzyEquals(obj.getPos().getX(), obj.getRadius())|| Util.fuzzyEquals(obj.getPos().getX(), getWidth()-obj.getRadius()))
-	 *		    | obj.setVel(new Velocity( -obj.getVel().getX(), obj.getVel().getY()))
+	 *		    | then obj.setVel(new Velocity( -obj.getVel().getX(), obj.getVel().getY()))
 	 *		    | else obj.setVel(new Velocity(obj.getVel().getX(), -obj.getVel().getY()))
+	 *@throws NotOfThisWorldException
+	 * 			The given space object does not belong to this world.
+	 * 			| !hasAsSpaceObject(obj) 
 	 */
-	public void bounceOffBoundary(SpaceObject obj){
-		
-		if(Util.fuzzyEquals(obj.getPos().getX(), obj.getRadius())|| Util.fuzzyEquals(obj.getPos().getX(), getWidth()-obj.getRadius())){
+	public void bounceOffBoundary(SpaceObject obj) throws NotOfThisWorldException{
+		if(!this.hasAsSpaceObject(obj))
+			throw new NotOfThisWorldException();
+		if(Util.fuzzyEquals(obj.getPos().getX(), obj.getRadius()) || Util.fuzzyEquals(obj.getPos().getX(), getWidth()-obj.getRadius())){
 			
 			obj.setVel(new Velocity( -obj.getVel().getX(), obj.getVel().getY()));
 			
@@ -641,21 +814,34 @@ public class World {
 	 * Makes two given Space Object bounce off each other. 
 	 * 
 	 * @param obj1
+	 * 		The first space object.
 	 * @param obj2
+	 * 		The second space object.
+	 * @post	...
+	 * 			| double mi = obj1.getMass()
+	 * 			| double mj = obj2.getMass()
+	 * 			| double sigma = obj1.getRadius()+ obj2.getRadius()
+	 * 			| Vector deltaV = new Velocity(obj2.getVel().getX()-obj1.getVel().getX(),obj2.getVel().getY()-obj1.getVel().getY())
+	 * 			| Vector deltaR = new Position(obj2.getPos().getX()-obj1.getPos().getX(),obj2.getPos().getY()-obj1.getPos().getY())
+	 * 			| double J=(2*mi*mj*Vector.scalarProduct(deltaV, deltaR))/(sigma*(mi+mj))
+	 * 			| Vector velToAddI = new Velocity(J*deltaR.getX()/(sigma*mi), J*deltaR.getY()/(sigma*mi))
+	 * 			| Vector velToAddJ = new Velocity(-J*deltaR.getX()/(sigma*mj), -J*deltaR.getY()/(sigma*mj));
+	 * 			| (new obj1).getVel() = obj1.getVel().add(velToAddI)
+	 * 			| (new obj2).getVel() = obj2.getVel().add(velToAddJ)
 	 * 
 	 */
-	public void bounceOff(SpaceObject obj1, SpaceObject obj2){
+	public static void bounceOff(SpaceObject obj1, SpaceObject obj2){
 		
 		double mi = obj1.getMass();
 		double mj = obj2.getMass();
 		double sigma = obj1.getRadius()+ obj2.getRadius();
-		Velocity deltaV = new Velocity(obj2.getVel().getX()-obj1.getVel().getX(),obj2.getVel().getY()-obj1.getVel().getY());
-		Position deltaR = new Position(obj2.getPos().getX()-obj1.getPos().getX(),obj2.getPos().getY()-obj1.getPos().getY());
+		Vector deltaV = new Velocity(obj2.getVel().getX()-obj1.getVel().getX(),obj2.getVel().getY()-obj1.getVel().getY());
+		Vector deltaR = new Position(obj2.getPos().getX()-obj1.getPos().getX(),obj2.getPos().getY()-obj1.getPos().getY());
 		
 		double J=(2*mi*mj*Vector.scalarProduct(deltaV, deltaR))/(sigma*(mi+mj));
 		
-		Velocity velToAddI = new Velocity(J*deltaR.getX()/(sigma*mi), J*deltaR.getY()/(sigma*mi));
-		Velocity velToAddJ = new Velocity(-J*deltaR.getX()/(sigma*mj), -J*deltaR.getY()/(sigma*mj));
+		Vector velToAddI = new Velocity(J*deltaR.getX()/(sigma*mi), J*deltaR.getY()/(sigma*mi));
+		Vector velToAddJ = new Velocity(-J*deltaR.getX()/(sigma*mj), -J*deltaR.getY()/(sigma*mj));
 		
 		obj1.setVel((Velocity) obj1.getVel().add(velToAddI));
 		obj2.setVel((Velocity) obj2.getVel().add(velToAddJ));
@@ -663,132 +849,194 @@ public class World {
 	}
 	
 	/**
+	 * Resolves the collision between 2 space objects.
 	 * 
 	 * @param object1
+	 * 			The first object to be resolved.
 	 * @param object2
+	 * 			The second object to be resolved.
+	 * @effect If both given objects are ships or if both objects are asteroids, 
+	 * 			then they bounce off. Else if the given object1 is a bullet or 
+	 * 			the given object2 is a bullet, then they're resolved as a collision
+	 * 			between bullets. Else if the given object1 is an asteroid and 
+	 * 			object2 is a ship, then terminate object2. Else if the given object1
+	 * 			is a ship and object2 is an asteroid, then terminate object1.
+	 * 			| if((Asteroid.class.isAssignableFrom(object1.getClass()) 
+	 * 			| && Asteroid.class.isAssignableFrom(object2.getClass())) 
+	 * 			| || (Ship.class.isAssignableFrom(object2.getClass()) 
+	 * 			| && Ship.class.isAssignableFrom(object1.getClass()))) 
+	 * 			| then 
+	 * 			| bounceOff(object1,object2)
+	 * 			| else if(Bullet.class.isAssignableFrom(object1.getClass()) 
+	 * 			| || Bullet.class.isAssignableFrom(object2.getClass()))
+	 * 			| 	   then
+	 * 			|	   resolveBullet(object1,object2)
+	 * 			|	   else if(Asteroid.class.isAssignableFrom(object1.getClass()) 
+	 * 			| 			&& Ship.class.isAssignableFrom(object2.getClass())) 
+	 * 			|			then
+	 * 			|			object2.terminate()
+	 * 			|			else if(Ship.class.isAssignableFrom(object1.getClass()) 
+	 * 			| 				 && Asteroid.class.isAssignableFrom(object2.getClass()))
+	 * 			|				 then
+	 * 			|				 object1.terminate() 
+	 * @throws IllegalStateException
+	 * 			This world is already terminated.
+	 * 			| isTerminated()
+	 * @throws NotOfThisWorldException
+	 * 			None of the given space objects belong to this world.
+	 * 			| !hasAsSpaceObject(object1) 
+	 * 			| || !hasAsSpaceObject(object2)
 	 */
-	public void resolve(SpaceObject object1, SpaceObject object2){
+	public void resolve(SpaceObject object1, SpaceObject object2) throws IllegalStateException
+						, NotOfThisWorldException{
+		if(this.isTerminated())
+			throw new IllegalStateException();
+		if(!this.hasAsSpaceObject(object1) || !this.hasAsSpaceObject(object2))
+			throw new NotOfThisWorldException();
+				if(Ship.class.isAssignableFrom(object1.getClass()) && Ship.class.isAssignableFrom(object2.getClass())){
+			
+					bounceOff(object1,object2);
+			
+				}
+				else if(Asteroid.class.isAssignableFrom(object1.getClass()) && Asteroid.class.isAssignableFrom(object2.getClass())){
+			
+					bounceOff(object1,object2);
+			
+				}
+				else if(Bullet.class.isAssignableFrom(object1.getClass()) || Bullet.class.isAssignableFrom(object2.getClass())){
 		
-		if(Ship.class.isAssignableFrom(object1.getClass()) && Ship.class.isAssignableFrom(object2.getClass())){
-			
-			bounceOff(object1,object2);
-			
-		}
-		else if(Asteroid.class.isAssignableFrom(object1.getClass()) && Asteroid.class.isAssignableFrom(object2.getClass())){
-			
-			bounceOff(object1,object2);
-			
-		}
-		else if(Bullet.class.isAssignableFrom(object1.getClass()) || Bullet.class.isAssignableFrom(object2.getClass())){
+					resolveBullet(object1, object2);
+				}
 		
-			resolveBullet(object1, object2);
-		}
-		
-		else if(Asteroid.class.isAssignableFrom(object1.getClass()) && Ship.class.isAssignableFrom(object2.getClass())){
+				else if(Asteroid.class.isAssignableFrom(object1.getClass()) && Ship.class.isAssignableFrom(object2.getClass())){
 			
-			object2.terminate();
+					object2.terminate();
 			
 			
-		}
-		else if(Ship.class.isAssignableFrom(object1.getClass()) && Asteroid.class.isAssignableFrom(object2.getClass())){
+				}
+				else if(Ship.class.isAssignableFrom(object1.getClass()) && Asteroid.class.isAssignableFrom(object2.getClass())){
 			
-			object1.terminate();
+					object1.terminate();
 			
-		}
-	
-		
-	}
-	
-	public void resolveBullet(SpaceObject object1, SpaceObject object2){
-		
-		if(Asteroid.class.isAssignableFrom(object1.getClass())){
-			
-			try{Asteroid asteroidCopy = new Asteroid((Asteroid) object1);
-			object1.terminate();
-			object2.terminate();
-			this.addAsSpaceObjects( asteroidCopy.split());
-			} catch (Exception ex){
-				
-			}
-			
-		}else if(Asteroid.class.isAssignableFrom(object2.getClass())){
-			
-			try{Asteroid asteroidCopy = new Asteroid((Asteroid) object2);
-			object2.terminate();
-			object1.terminate();
-			this.addAsSpaceObjects( asteroidCopy.split());
-			} catch (Exception ex){
-				
-			}
-			
-		} else if(Ship.class.isAssignableFrom(object1.getClass())){
-			
-			if(((Bullet) object2).getSource() != (Ship)object1){
-				
-				object1.terminate();
-				object2.terminate();
-			}
-			else{
-				
-			}
-		} else if(Ship.class.isAssignableFrom(object2.getClass())){
-			
-			if(((Bullet) object1).getSource() != (Ship)object2){
-				
-				object1.terminate();
-				object2.terminate();
-			}
-		}
-		
-		else{
-			
-		object1.terminate();
-		object2.terminate();
-		
-		}
+				}
 	}
 	/**
-	 * Returns the distance between two given space objects.  
+	 * Resolve a collision between 2 spaceObject when only one of the spaceObjects is a bullet.
 	 * 
-	 * @pre The given obj1 and obj2 should not be null.
-	 * @param obj1
-	 * 	      The first space object of which the position will be compared to the given SpaceObject obj2.
-	 * @param obj2
-	 *        The second space object of which the position will be compared to the given SpaceObject obj1.
-	 * @return The distance between the outer side of obj1 and obj2 if obj1 and obj2 are different space objects, 
-	 *         0.0 if obj1 and obj2 are the same space object. 
-	 *         The result will be negative if obj1 and obj2 overlap.
-	 *         |if(obj1==obj2)
-	 *         |  then result == 0.0
-	 *         |else result == obj1.getPos().getDistanceTo(obj2.getPos())-(obj1.getRadius()+obj2.getRadius())
-	 */
-	public static double getDistanceBetween(SpaceObject obj1, SpaceObject obj2) {
-		if(obj1==obj2){
-			
-			return 0;
-			
-		}
-		else{
-			
-		double distanceBetweenCentres = obj1.getPos().getDistanceTo(obj2.getPos());
-		double sumOfRadii= obj1.getRadius()+obj2.getRadius();
-		return distanceBetweenCentres - sumOfRadii;
-		
-		}
-		
-		
-	}
-	/**
-	 * Fires an object.
-	 *  
-	 * @param projectile
-	 * 			The projectile.
+	 * @param object1
+	 * 			The first object to be resolved.
+	 * @param object2
+	 * 			The second object to be resolved.
+	 * @effect If the given object1 is an asteroid and the given object2 is a bullet 
+	 * 			or if the given object2 is an asteroid and the given object 1 a bullet, 
+	 * 			then terminate object1 and terminate object2. Else if the given object1
+	 * 			is a ship and the given object2 is a bullet, then if the given object2 
+	 * 			has not got the given object1 as its source then terminate object1 and 
+	 * 			terminate object2. Else do nothing. Else if the given object 2 is a ship
+	 * 			and the given object 1 is a bullet, then if the given object1 has not got
+	 * 			object2 as its source then terminate object1 and terminate object2. Else 
+	 * 			do nothing. Else terminate object1 and terminate object2.
+	 * 			| if((Asteroid.class.isAssignableFrom(object1.getClass()) 
+	 * 			| && Bullet.class.isAssignableFrom(object2.getClass())) 
+	 * 			| || (Asteroid.class.isAssignableFrom(object2.getClass()) 
+	 * 			| && Bullet.class.isAssignableFrom(object1.getClass()))) 
+	 * 			| then
+	 * 			| object1.terminate()
+	 * 			| object2.terminate()
+	 * 			| else if(Ship.class.isAssignableFrom(object1.getClass()) 
+	 * 			| && Bullet.class.isAssignableFrom(object2.getClass()))
+	 * 			| 		then if(object2.getSource() != object1)
+	 * 			| 				then 
+	 * 			| 				object1.terminate()
+	 * 			| 				object2.terminate()
+	 * 			| 				else 
+	 * 			|		else if( Ship.class.isAssignableFrom(object2.getClass()) 
+	 * 			| 				&& Bullet.class.isAssignableFrom(object1.getClass()))
+	 * 			| 			 then if(object1.getSource() != object2) 
+	 * 			| 				  then 
+	 * 			| 				  object1.terminate()
+	 * 			| 				  object2.terminate()
+	 * 			| 				  else
+	 * 			| 			 else 
+	 * 			|			 object1.terminate()
+	 * 			| 			 object2.terminate()
 	 * 
+	 * @post If the given object1 is an asteroid when the given object2 is a bullet 
+	 * 			or if the given object2 is an asteroid and the given object 1 a bullet,  
+	 * 			then add the 2 child asteroids of object1 to this world.
+	 * 			| if((   Asteroid.class.isAssignableFrom(object1.getClass()) 
+	 * 			| && Bullet.class.isAssignableFrom(object2.getClass())  ) 
+	 * 			| || (   Asteroid.class.isAssignableFrom(object2.getClass()) 
+	 * 			| && Bullet.class.isAssignableFrom(object1.getClass())  )) 
+	 * 			| then new.getNbSpaceObjects() = getNbSpaceObjects() + 2
+	 * 
+	 * @throws IllegalStateException
+	 * 			This world is already terminated.
+	 * 			| isTerminated()
+	 * @throws IllegalArgumentException
+	 * 			None of the given space objects are bullets.
+	 * 			| !Bullet.class.isAssignableFrom(object1.getClass())
+	 * 			| && !Bullet.class.isAssignableFrom(object2.getClass())
+	 * @throws NotOfThisWorldException
+	 * 			None of the given space objects belong to this world.
+	 * 			| !hasAsSpaceObject(object1) 
+	 * 			| || !hasAsSpaceObject(object2)
 	 */
-	public void fireObject(SpaceObject projectile){
-		if(Bullet.class.isAssignableFrom(projectile.getClass())){
-				projectile.getWorld().addAsSpaceObject(projectile);
-		}
+	public void resolveBullet(SpaceObject object1, SpaceObject object2)throws IllegalStateException,
+					IllegalArgumentException, NotOfThisWorldException{
+		if(this.isTerminated())
+			throw new IllegalStateException();
+		if(!this.hasAsSpaceObject(object1) || !this.hasAsSpaceObject(object2))
+			throw new NotOfThisWorldException();
+		if(!Bullet.class.isAssignableFrom(object1.getClass()) 
+			&& !Bullet.class.isAssignableFrom(object2.getClass()))
+			throw new IllegalArgumentException("None of the arguments are bullets");
+				
+					if(Asteroid.class.isAssignableFrom(object1.getClass())){
+							
+						try{Asteroid asteroidCopy = new Asteroid((Asteroid) object1);
+						object1.terminate();
+						object2.terminate();
+						this.addAsSpaceObjects( asteroidCopy.split());
+						} catch (Exception ex){
+							
+						}
+												}else if(Asteroid.class.isAssignableFrom(object2.getClass())){
+						
+						try{Asteroid asteroidCopy = new Asteroid((Asteroid) object2);
+						object2.terminate();
+						object1.terminate();
+						this.addAsSpaceObjects( asteroidCopy.split());
+						} catch (Exception ex){
+								
+							}
+							
+						} else if(Ship.class.isAssignableFrom(object1.getClass())){
+							
+							if(((Bullet) object2).getSource() != (Ship)object1){
+								
+								object1.terminate();
+								object2.terminate();
+							}
+							else{
+								
+							}
+						} else if(Ship.class.isAssignableFrom(object2.getClass())){
+							
+							if(((Bullet) object1).getSource() != (Ship)object2){
+								
+								object1.terminate();
+								object2.terminate();
+							}
+						}
+						
+						else{
+							
+						object1.terminate();
+						object2.terminate();
+						
+						}
 	}
+	
 }
 
