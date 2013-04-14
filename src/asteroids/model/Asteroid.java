@@ -164,15 +164,32 @@ public class Asteroid extends SpaceObject {
 		return this.random;
 	}
 	/**
-	 * Returns a list of two child asteroids from this asteroid.
-	 * TODO afmaken
-	 * @return ...
-	 * 			| 
+	 * Generates the 2 child asteroids of this asteroid in this asteroids world.
+	 * 
+	 * @post ...
+	 * 			| if(getRadius() >=30)
+	 * 			| then 
+	 * 			| double childSpeedNorm = getVel().getNorm()*1.5
+	 * 			| double childDirection = getRandom().nextDouble()*2*Math.PI
+	 * 			| double childRadius = this.getRadius()/2
+	 * 			| for each index in 0..1:
+	 * 			| new.childDirection == childDirection + index*Math.PI
+	 * 			| result.get(index).getPos().getX() == getPos().getX()
+	 * 			|				+Math.cos(childDirection)*childRadius/2
+	 * 			| result.get(index).getPos().getY() == getPos().getY()
+	 * 			|				+Math.sin(childDirection)*childRadius/2
+	 * 			| result.get(index).getVel().getX() 
+	 * 			|			== Math.cos(chilDirection)*childSpeedNorm
+	 * 			| result.get(index).getVel().getY() 
+	 * 			|			== Math.sin(chilDirection)*childSpeedNorm
+	 * 			| result.get(index).getRadius() == childRadius
+	 * 			| result.get(index).getWorld() == getWorld()
+	 * 			| result.size() == 2
 	 * 
 	 */
 	public List<SpaceObject> split(){
-		if(this.getRadius() >= 30){
 		List<SpaceObject> children = new ArrayList<SpaceObject>();
+		if(this.getRadius() >= 30){
 		double childSpeedNorm = this.getVel().getNorm()*1.5;
 		double childDirection = this.getRandom().nextDouble()*2*Math.PI;
 		double childRadius = this.getRadius()/2;
@@ -190,7 +207,7 @@ public class Asteroid extends SpaceObject {
 		} catch(Exception ex){
 			
 		}
-		return children; 
-		} else return new ArrayList<SpaceObject>();
+		} 
+		return children;
 	}
 }

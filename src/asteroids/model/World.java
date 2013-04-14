@@ -1,3 +1,4 @@
+
 package asteroids.model;
 
 import java.util.ArrayList;
@@ -935,7 +936,8 @@ public class World {
 	 * 			terminate object2. Else do nothing. Else if the given object 2 is a ship
 	 * 			and the given object 1 is a bullet, then if the given object1 has not got
 	 * 			object2 as its source then terminate object1 and terminate object2. Else 
-	 * 			do nothing. Else terminate object1 and terminate object2.
+	 * 			if both given objects are bullets, then if they have both a different
+	 * 			source then terminate both objects. Else do nothing. Else terminate object1 and terminate object2.
 	 * 			| if((Asteroid.class.isAssignableFrom(object1.getClass()) 
 	 * 			| && Bullet.class.isAssignableFrom(object2.getClass())) 
 	 * 			| || (Asteroid.class.isAssignableFrom(object2.getClass()) 
@@ -949,17 +951,21 @@ public class World {
 	 * 			| 				then 
 	 * 			| 				object1.terminate()
 	 * 			| 				object2.terminate()
-	 * 			| 				else 
 	 * 			|		else if( Ship.class.isAssignableFrom(object2.getClass()) 
 	 * 			| 				&& Bullet.class.isAssignableFrom(object1.getClass()))
 	 * 			| 			 then if(object1.getSource() != object2) 
 	 * 			| 				  then 
 	 * 			| 				  object1.terminate()
 	 * 			| 				  object2.terminate()
-	 * 			| 				  else
-	 * 			| 			 else 
-	 * 			|			 object1.terminate()
-	 * 			| 			 object2.terminate()
+	 * 			| 			 else if(Bullet.class.isAssignableFrom(object1.getClass())
+	 * 			|					&& Bullet.class.isAssignableFrom(object2.getClass()))
+	 * 			|				  then if( object1.getSource() != object2.getSource())
+	 * 			|					   then 
+	 * 			|					   object1.terminate()
+	 * 			|					   ojbect2.terminate()					
+	 * 			| 				  else 
+	 * 			|			 	  object1.terminate()
+	 * 			| 			      object2.terminate()
 	 * 
 	 * @post If the given object1 is an asteroid when the given object2 is a bullet 
 	 * 			or if the given object2 is an asteroid and the given object 1 a bullet,  
@@ -1028,10 +1034,14 @@ public class World {
 								object1.terminate();
 								object2.terminate();
 							}
+						} else if(Bullet.class.isAssignableFrom(object1.getClass())
+									&& Bullet.class.isAssignableFrom(object2.getClass())){
+							if(((Bullet) object1).getSource() != ((Bullet) object2).getSource()){
+								object1.terminate();
+								object2.terminate();
+							}
 						}
-						
-						else{
-							
+						else{	
 						object1.terminate();
 						object2.terminate();
 						
