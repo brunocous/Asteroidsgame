@@ -89,6 +89,8 @@ public abstract class SpaceObject {
 	 *       | else new.getMaxSpeed()== Velocity.getSpeedOfLight()
 	 * @effect The new world for this new space object is equal to the given world.
 	 * 		 | this.setWorld(world)
+	 * @post The new state for this new space object is equal to active.
+	 * 		 | new.getState() = state.ACTIVE
 	 * @throws IllegalRadiusException
 	 *         The given radius is not a valid radius.
 	 *         |!isValidRadius()
@@ -100,7 +102,8 @@ public abstract class SpaceObject {
 	 * 			|!isValidMaximumSpeed()
 	 *         
 	 */
-	public SpaceObject( Position pos, Velocity vel, double radius, double maxSpeed, World world) throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
+	public SpaceObject( Position pos, Velocity vel, double radius, double maxSpeed, World world) 
+			throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
 		if(!isValidMaxSpeed(maxSpeed)){
 			throw new IllegalMaxSpeedException();
 			} else this.maxSpeed = maxSpeed;

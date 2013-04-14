@@ -39,7 +39,7 @@ public class Bullet extends SpaceObject {
 	private static final int MAX_NUMBER_OF_BOUNDARY_COLLISIONS = 2;
 
 	/**
-	 * The constructor for this new bullet.
+	 * Initialize a new bullet with a given ship.
 	 * @param source
 	 * 		The source of this new bullet.
 	 * @effect ...
@@ -49,6 +49,7 @@ public class Bullet extends SpaceObject {
 	 *			| , getInitialRadius(), source.getWorld())
 	 * @post ...
 	 * 			| (new this).getSource == source; 
+	 * 			| (new this).getNbBoundaryCollisions() == 0
 	 */
 	public Bullet(Ship source)
 			throws IllegalRadiusException, IllegalPositionException,IllegalMaxSpeedException{
