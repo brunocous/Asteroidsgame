@@ -903,9 +903,15 @@ public class World {
 	 * 			None of the given space objects belong to this world.
 	 * 			| !hasAsSpaceObject(object1) 
 	 * 			| || !hasAsSpaceObject(object2)
+	 * @throws NullPointerException
+	 * 			one of the 2 given space objects or both given space objects
+	 * 			are not effective.
+	 * 			| object1 == null || object2 == null
 	 */
 	public void resolve(SpaceObject object1, SpaceObject object2) throws IllegalStateException
-						, NotOfThisWorldException{
+						, NotOfThisWorldException, NullPointerException{
+		if(object1 == null || object2 == null)
+			throw new NullPointerException();
 		if(this.isTerminated())
 			throw new IllegalStateException();
 		if(!this.hasAsSpaceObject(object1) || !this.hasAsSpaceObject(object2))
@@ -1003,13 +1009,20 @@ public class World {
 	 * 			None of the given space objects belong to this world.
 	 * 			| !hasAsSpaceObject(object1) 
 	 * 			| || !hasAsSpaceObject(object2)
+	 * @throws NullPointerException
+	 * 			one of the 2 given space objects or both given space objects
+	 * 			are not effective.
+	 * 			| object1 == null || object2 == null
 	 */
 	public void resolveBullet(SpaceObject object1, SpaceObject object2)throws IllegalStateException,
-					IllegalArgumentException, NotOfThisWorldException{
+					IllegalArgumentException, NotOfThisWorldException, NullPointerException{
+		if(object1 == null || object2 == null)
+			throw new NullPointerException();
 		if(this.isTerminated())
 			throw new IllegalStateException();
 		if(!this.hasAsSpaceObject(object1) || !this.hasAsSpaceObject(object2))
 			throw new NotOfThisWorldException();
+		
 		if(!Bullet.class.isAssignableFrom(object1.getClass()) 
 			&& !Bullet.class.isAssignableFrom(object2.getClass()))
 			throw new IllegalArgumentException("None of the arguments are bullets");
