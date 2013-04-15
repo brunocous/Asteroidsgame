@@ -8,8 +8,10 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import asteroids.Util;
 import asteroids.model.*;
 import asteroids.model.Util.*;
+import asteroids.Error.*;
 
 public class WorldTest {
 	private SpaceObject defaultPosAsteroid, pos100xAsteroid, defaultPosShip, 
@@ -35,6 +37,7 @@ public class WorldTest {
 	private Velocity velNeg20x = new Velocity(-20,0);
 	
 	private Position pos100x50y = new Position(100,50);
+	private Position pos100x150y = new Position(100,150);
 
 	@Before
 	public void setUp() throws Exception {
@@ -208,13 +211,226 @@ public class WorldTest {
     			i++;
     	}
     }
-	@Test
-	public void resolve_2asteroids()throws Exception{
-		emptyWorld.addAsSpaceObject(defaultPosAsteroid);
+    @Test public void getTimeToFirstCollision_BoundaryCollision(){
+    	pos100xAsteroid.setWorld(emptyWorld);
+    	emptyWorld.addAsSpaceObject(pos100xAsteroid);
+    	assertTrue(emptyWorld.getTimeToFirstCollision() == 4.25);
+    }
+    @Test public void getTimeToFirstCollision_2spaceObjectsCollision(){
+    	emptyWorld.addAsSpaceObject(defaultPosAsteroid);
 		emptyWorld.addAsSpaceObject(pos100xAsteroid);
-		emptyWorld.resolve(defaultPosAsteroid,pos100xAsteroid);
-		assertTrue(defaultPosAsteroid.getVel().getX() == - 20);
-		assertTrue(pos100xAsteroid.getVel().getX() == 20);
+		assertTrue(emptyWorld.getTimeToFirstCollision() == 0.5);
+    }
+    @Test public void getTimeToFirstCollision_NoCollision()throws Exception{
+    	pos100xAsteroid.setPos(pos100x150y);
+    	emptyWorld.addAsSpaceObject(defaultPosAsteroid);
+		emptyWorld.addAsSpaceObject(pos100xAsteroid);
+		assertTrue(emptyWorld.getTimeToFirstCollision() == 4.25);
+    }
+    @Test public void getTimeToFirstCollision_NoSpaceObjectsInWorld(){
+    	assertTrue(Double.isInfinite(emptyWorld.getTimeToFirstCollision()));
+    }
+    @Test (expected = IllegalStateException.class)
+    public void getTimeToFirstCollision_terminatedWorld(){
+    	terminatedWorld.getTimeToFirstCollision();
+    }
+    @Test public void getTimeToBoundaryCollision_NormalCase() throws Exception{
+    	pos100xAsteroid.setWorld(emptyWorld);
+    	emptyWorld.addAsSpaceObject(pos100xAsteroid);
+    	assertTrue(emptyWorld.getTimeToBoundaryCollision(pos100xAsteroid) == 4.25);
+    }
+    @Test (expected = NullPointerException.class)
+    public void getTimeToBoundaryCollision_NotEffectiveSpaceObject() throws Exception{
+		assertTrue(emptyWorld.getTimeToBoundaryCollision(null) == 0.5);
+    }
+    @Test (expected = NotOfThisWorldException.class)
+    public void getTimeToBoundaryCollision_NotOfTheWorldSpaceObject()throws Exception{
+    	pos100xAsteroid.setWorld(worldWithSomeSpaceObjects);
+    	assertTrue(Double.isInfinite(emptyWorld.getTimeToBoundaryCollision(pos100xAsteroid)));
+    }
+    @Test (expected = IllegalStateException.class)
+    public void getTimeToBoundaryCollision_terminatedWorld() throws Exception{
+    	terminatedWorld.getTimeToBoundaryCollision(pos100xAsteroid);
+    }
+    @Test public void evolve_noCollision() throws Exception{
+    	Position[] somePositions = new Position[worldWithSomeSpaceObjects.getNbSpaceObjects()];
+    	int i = 0;
+    	for(SpaceObject obj :worldWithSomeSpaceObjects.getAllSpaceObjects()){
+    		somePositions[i] = obj.getPos();
+    		i++;
+    	}
+    	i=0;
+    	worldWithSomeSpaceObjects.evolve(0.003);
+    	for(SpaceObject obj: worldWithSomeSpaceObjects.getAllSpaceObjects()){
+    	assertTrue(obj.getPos().getX() ==  somePositions[i].getX()+(obj.getVel().getX()*0.003));
+    	assertTrue(obj.getPos().getY() ==  somePositions[i].getY()+(obj.getVel().getY()*0.003));
+    			i++;
+    	}
+    }
+    @Test public void evolve_BoundaryCollision()throws Exception{
+    	pos100xAsteroid.setWorld(emptyWorld);
+    	emptyWorld.addAsSpaceObject(pos100xAsteroid);
+    	emptyWorld.evolve(5);
+    	assertTrue(emptyWorld.getSpaceObjectAt(1).getVel().getX() == - velNeg20x.getX());
+    	assertTrue(emptyWorld.getSpaceObjectAt(1).getVel().getY() == velNeg20x.getY());
+
+    }
+    @Test public void evolve_SpaceObjectCollision()throws Exception{
+    	Velocity[] someVelocities = new Velocity[worldWithSomeSpaceObjects.getNbSpaceObjects()];
+    	int i = 0;
+    	for(SpaceObject obj :worldWithSomeSpaceObjects.getAllSpaceObjects()){
+    		someVelocities[i] = obj.getVel();
+    		i++;
+    	}
+    	i=0;
+    	worldWithSomeSpaceObjects.evolve(5);
+    	for(SpaceObject obj: worldWithSomeSpaceObjects.getAllSpaceObjects()){
+    	assertTrue(obj.getVel().getX() ==  - someVelocities[i].getX());
+    	assertTrue(obj.getVel().getY() ==  someVelocities[i].getY());
+    			i++;
+    	}
+    }
+    @Test (expected = IllegalStateException.class)
+    public void evolve_terminatedWorld() throws Exception{
+    	terminatedWorld.evolve(1);
+    }
+    @Test public void boundaryCollide_Ship()throws Exception{
+    	pos100xShip.setWorld(emptyWorld);
+    	pos100xShip.setPos(new Position(15,50));
+    	emptyWorld.addAsSpaceObject(pos100xShip);
+    	emptyWorld.boundaryCollide(pos100xShip);
+    	assertTrue(Util.fuzzyEquals(emptyWorld.getSpaceObjectAt(1).getVel().getX(), - velNeg20x.getX()));
+    	assertTrue(Util.fuzzyEquals(emptyWorld.getSpaceObjectAt(1).getVel().getY(), velNeg20x.getY()));
+    }
+    @Test public void boundaryCollide_Asteroid()throws Exception{
+    	pos100xAsteroid.setWorld(emptyWorld);
+    	pos100xAsteroid.setPos(new Position(15,50));
+    	emptyWorld.addAsSpaceObject(pos100xAsteroid);
+    	emptyWorld.boundaryCollide(pos100xAsteroid);
+    	assertTrue(Util.fuzzyEquals(emptyWorld.getSpaceObjectAt(1).getVel().getX(), -velNeg20x.getX()));
+    	assertTrue(Util.fuzzyEquals(emptyWorld.getSpaceObjectAt(1).getVel().getY(), velNeg20x.getY()));
+    }
+    @Test public void boundaryCollide_BulletBounceLegal() throws Exception{
+    	pos100xBullet.setWorld(emptyWorld);
+    	emptyWorld.addAsSpaceObject(pos100xBullet);
+    	emptyWorld.boundaryCollide(pos100xBullet);
+    	assertTrue(Util.fuzzyEquals(emptyWorld.getSpaceObjectAt(1).getVel().getX(), - Bullet.getInitialSpeed()));
+    	assertTrue(Util.fuzzyEquals(emptyWorld.getSpaceObjectAt(1).getVel().getY(), 0));
+    }
+    @Test public void boundaryCollide_BulletBounceIllegal()throws Exception{
+    	pos100xBullet.setWorld(emptyWorld);
+    	emptyWorld.addAsSpaceObject(pos100xBullet);
+    	((Bullet) pos100xBullet).bounce();
+    	emptyWorld.boundaryCollide(pos100xBullet);
+    	assertTrue(pos100xBullet.isTerminated());
+    }
+    @Test (expected = NotOfThisWorldException.class)
+    public void boundaryCollide_spaceObjectFromOtherWorld()throws Exception{
+    	worldWithSomeSpaceObjects.boundaryCollide(pos100xBullet);
+    }
+    @Test (expected = IllegalStateException.class)
+    public void boundaryCollide_terminatedWorld() throws Exception{
+    	terminatedWorld.boundaryCollide(defaultPosAsteroid);
+    }
+    @Test (expected = NullPointerException.class)
+    public void boundaryCollide_notEffectiveSpaceObject()throws Exception{
+    	worldWithSomeSpaceObjects.boundaryCollide(null);
+    }
+    @Test public void BounceOff_legalCase()throws Exception{
+    	World.bounceOff(pos100xAsteroid, defaultPosAsteroid);
+    	assertTrue(Util.fuzzyEquals(pos100xAsteroid.getVel().getX(), 91.11111111111109));
+    	assertTrue(Util.fuzzyEquals(pos100xAsteroid.getVel().getY(), 0));
+    	assertTrue(Util.fuzzyEquals(defaultPosAsteroid.getVel().getX(), -91.11111111111109));
+    	assertTrue(Util.fuzzyEquals(defaultPosAsteroid.getVel().getY(), 0));
+    }
+    @Test (expected = NullPointerException.class)
+    public void BounceOff_NotEffectiveSpaceObjects() throws Exception{
+    	World.bounceOff(null, null);
+    }
+	@Test
+	public void resolve_2Asteroids() throws Exception{
+		World.bounceOff(pos100xAsteroid, defaultPosAsteroid);
+    	assertTrue(Util.fuzzyEquals(pos100xAsteroid.getVel().getX(), 91.11111111111109));
+    	assertTrue(Util.fuzzyEquals(pos100xAsteroid.getVel().getY(), 0));
+    	assertTrue(Util.fuzzyEquals(defaultPosAsteroid.getVel().getX(), -91.11111111111109));
+    	assertTrue(Util.fuzzyEquals(defaultPosAsteroid.getVel().getY(), 0));
+	}
+	@Test
+	public void resolve_2Ships() throws Exception{
+		World w = new World();
+		pos100xShip.setWorld(w);
+		defaultPosShip.setWorld(w);
+		//TODO WEG
+		World.bounceOff(pos100xShip, defaultPosShip);
+		System.out.println(defaultPosShip.getVel() + "\t"+pos100xShip.getVel());
+    	assertTrue(Util.fuzzyEquals(pos100xShip.getVel().getX(), 91.111111111111));
+    	assertTrue(Util.fuzzyEquals(pos100xShip.getVel().getY(), 0));
+    	assertTrue(Util.fuzzyEquals(defaultPosShip.getVel().getX(), -91.111111111111));
+    	assertTrue(Util.fuzzyEquals(defaultPosShip.getVel().getY(), 0));
+	}
+	@Test
+	public void resolve_1Bullet()throws Exception{
+		
+	}
+	@Test
+	public void resolve_NotEffectiveSpaceObject()throws Exception{
+		
+	}
+	@Test
+	public void resolve_1asteroidAnd1Ship() throws Exception{
+		
+	}
+	@Test
+	public void resolve_terminatedWorld()throws Exception{
+		
+	}
+	@Test
+	public void resolve_SpaceObjectNotInWorld()throws Exception{
+		
+	}
+	@Test (expected = NullPointerException.class)
+	public void resolve_NotEffectiveSpaceObjects()throws Exception{
+		
+	}
+	@Test (expected = IllegalStateException.class)
+	public void resolve_TerminatedWorld()throws Exception{
+		
+	}
+	@Test (expected = NotOfThisWorldException.class)
+	public void resolve_spaceObjectFromOtherWorld()throws Exception{
+		
+	}
+	@Test
+	public void resolveBullet_2bulletsSameSource()throws Exception{
+		
+	}
+	@Test
+	public void resolveBullet_2bulletsDifferentSource()throws Exception{
+		
+	}
+	@Test
+	public void resolveBullet_1bulletOfShip()throws Exception{
+		
+	}
+	@Test
+	public void resolveBullet_1bulletOtherShip()throws Exception{
+		
+	}
+	@Test
+	public void resolveBullet_1bulletAndAsteroid()throws Exception{
+		
+	}
+	@Test (expected = NullPointerException.class)
+	public void resolveBullet_NotEffectiveSpaceObject()throws Exception{
+		
+	}
+	@Test (expected = IllegalStateException.class)
+	public void resolveBullet_TerminatedWorld()throws Exception{
+		
+	}
+	@Test (expected = NotOfThisWorldException.class)
+	public void resolveBullet_spaceObjectFromOtherWorld()throws Exception{
+		
 	}
 	
 	

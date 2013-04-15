@@ -521,7 +521,10 @@ public class World {
 	 * 			|			&& timeToBoundaryCollision !=0)
 	 * 			| then tempResult = timeToBoundaryCollision
 	 * 			| Result == tempResult
-	 * 
+	 * @return Double.POSITIVE_INFINITY if this world does not have any
+	 * 			space objects.
+	 * 			| if(getNbSpaceObjects() == 0)
+	 * 			| then result == Double.POSITIVE_INFINITY
 	 * @throws IllegalStateException
 	 * 			This world is already terminated.
 	 * 			| isTerminated()
@@ -596,8 +599,14 @@ public class World {
 	 * @throws IllegalStateException
 	 * 			This world is already terminated.
 	 * 			| isTerminated()
+	 * @throws NullPointerException
+	 * 			The given space object is not effective.
+	 * 			| spaceObject == null
 	 */
-	public double getTimeToBoundaryCollision(SpaceObject spaceObject) throws IllegalStateException, NotOfThisWorldException{
+	public double getTimeToBoundaryCollision(SpaceObject spaceObject) throws NullPointerException,
+				IllegalStateException, NotOfThisWorldException{
+		if(spaceObject == null)
+			throw new NullPointerException();
 		if(isTerminated())
 			throw new IllegalStateException();
 			if(!this.hasAsSpaceObject(spaceObject))
@@ -754,9 +763,14 @@ public class World {
 	 * @throws IllegalStateException
 	 * 			This world is already terminated.
 	 * 			| isTerminated()
+	 * @throws NullPointerException
+	 * 			The given space object is not effective.
+	 * 			| spaceObject == null
 	 */
-	public void boundaryCollide(SpaceObject spaceObject) throws IllegalStateException, 
+	public void boundaryCollide(SpaceObject spaceObject) throws NullPointerException, IllegalStateException, 
 					NotOfThisWorldException{
+		if(spaceObject == null)
+			throw new NullPointerException();
 		if(this.isTerminated())
 			throw new IllegalStateException();
 			if(!this.hasAsSpaceObject(spaceObject))
@@ -829,10 +843,12 @@ public class World {
 	 * 			| Vector velToAddJ = new Velocity(-J*deltaR.getX()/(sigma*mj), -J*deltaR.getY()/(sigma*mj));
 	 * 			| (new obj1).getVel() = obj1.getVel().add(velToAddI)
 	 * 			| (new obj2).getVel() = obj2.getVel().add(velToAddJ)
-	 * 
+	 * @throws NullPointerException
+	 * 			One of the given 2 space objects or both space objects
+	 * 			are not effective.
+	 * 			| (obj1 == null) || (obj2 == null)
 	 */
-	public static void bounceOff(SpaceObject obj1, SpaceObject obj2){
-		
+	public static void bounceOff(SpaceObject obj1, SpaceObject obj2) throws NullPointerException{
 		double mi = obj1.getMass();
 		double mj = obj2.getMass();
 		double sigma = obj1.getRadius()+ obj2.getRadius();
