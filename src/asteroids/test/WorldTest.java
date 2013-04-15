@@ -26,16 +26,25 @@ public class WorldTest {
 	private double heightInfinite = Double.POSITIVE_INFINITY;
 	
 	ArrayList<SpaceObject> someSpaceObjects;
+	
+	private double radius15 = 15;
+	
+	private double mass5000 = 5000;
+	
+	private Velocity vel20x = new Velocity(20,0);
+	private Velocity velNeg20x = new Velocity(-20,0);
+	
+	private Position pos100x50y = new Position(100,50);
 
 	@Before
 	public void setUp() throws Exception {
 		Ship defaultBulletSource = new Ship();
-		Ship pos100xBulletSource = new Ship(new Position(100,50), new Velocity(-20,0),Math.PI, 15,5000);
+		Ship pos100xBulletSource = new Ship(pos100x50y, velNeg20x,Math.PI, radius15,5000);
 		
-		defaultPosAsteroid = new Asteroid( new Position(), new Velocity(20,0), 15);
-		pos100xAsteroid = new Asteroid(new Position(100,50), new Velocity(-20,0), 15);
-		defaultPosShip = new Ship(new Position(), new Velocity(20,0),0,15,5000);
-		pos100xShip = new Ship(new Position(100,50), new Velocity(-20,0),Math.PI, 15,5000);
+		defaultPosAsteroid = new Asteroid( new Position(), vel20x, radius15);
+		pos100xAsteroid = new Asteroid(pos100x50y, velNeg20x, radius15);
+		defaultPosShip = new Ship(new Position(), vel20x,0,radius15,5000);
+		pos100xShip = new Ship(pos100x50y, velNeg20x,Math.PI, radius15,5000);
 		defaultPosBullet = new Bullet(defaultBulletSource);
 		pos100xBullet = new Bullet(pos100xBulletSource);
 		terminatedSpaceObject = new Asteroid();
@@ -46,12 +55,13 @@ public class WorldTest {
 		someSpaceObjects.add(pos100xAsteroid);
 		
 		emptyWorld = new World();
-		worldWithSomeSpaceObjects = emptyWorld;
+		worldWithSomeSpaceObjects = new World();
 		defaultPosAsteroid.setWorld(worldWithSomeSpaceObjects);
 		pos100xAsteroid.setWorld(worldWithSomeSpaceObjects);
 		worldWithSomeSpaceObjects.addAsSpaceObjects(someSpaceObjects);
 		terminatedWorld = new World();
 		terminatedWorld.terminate();
+		
 		
 	}
 	@Test
@@ -157,6 +167,46 @@ public class WorldTest {
         assertTrue(worldWithSomeSpaceObjects.getNbSpaceObjects() == result.size());
         for (int index=0; index<result.size(); index++)
             assertSame(worldWithSomeSpaceObjects.getSpaceObjectAt(index+1),result.get(index));
+    }
+    @Test public void getIndexOfSpaceObject_singleCase(){
+    	assertTrue(worldWithSomeSpaceObjects.getIndexOfSpaceObject(defaultPosAsteroid) == 0);
+    }
+    @Test public void addAsSpaceObject_legalCase() throws Exception{
+    	SpaceObject obj = new Asteroid(new Position(200,200), new Velocity(), radius15);
+    	obj.setWorld(worldWithSomeSpaceObjects);
+    	worldWithSomeSpaceObjects.addAsSpaceObject(obj);
+    	assertSame(worldWithSomeSpaceObjects.getSpaceObjectAt(worldWithSomeSpaceObjects.getNbSpaceObjects()), obj);
+    }
+    @Test public void removeSpaceObject_legalCase() throws Exception{
+    	worldWithSomeSpaceObjects.removeAsSpaceObject(defaultPosAsteroid);
+    	assertTrue(worldWithSomeSpaceObjects.getNbSpaceObjects() == 1);
+    }
+    @Test public void isSituatedInOrOnBoundaries_legalCase(){
+    	assertTrue(World.isSituatedInOrOnBoundaries(new Position(), radius15, emptyWorld));
+    }
+    @Test public void isSituatedInOrOnBoundaries_OutOfBounce(){
+    	assertFalse(World.isSituatedInOrOnBoundaries(new Position(-50,-50), radius15, emptyWorld));
+    }
+    @Test public void isSituatedInOrOnBoundaries_NotEffectivePosition(){
+    	assertTrue(World.isSituatedInOrOnBoundaries(null, radius15, emptyWorld));
+    }
+    @Test public void isSituatedInOrOnBoundaries_NotEffectiveWorld(){
+    	assertTrue(World.isSituatedInOrOnBoundaries(new Position(), radius15, null));
+    }
+    @Test public void updatePositions_singleCase(){
+    	Position[] somePositions = new Position[worldWithSomeSpaceObjects.getNbSpaceObjects()];
+    	int i = 0;
+    	for(SpaceObject obj :worldWithSomeSpaceObjects.getAllSpaceObjects()){
+    		somePositions[i] = obj.getPos();
+    		i++;
+    	}
+    	i=0;
+    	worldWithSomeSpaceObjects.updatePositions(0.5);
+    	for(SpaceObject obj: worldWithSomeSpaceObjects.getAllSpaceObjects()){
+    	assertTrue(obj.getPos().getX() ==  somePositions[i].getX()+(obj.getVel().getX()*0.5));
+    	assertTrue(obj.getPos().getY() ==  somePositions[i].getY()+(obj.getVel().getY()*0.5));
+    			i++;
+    	}
     }
 	@Test
 	public void resolve_2asteroids()throws Exception{

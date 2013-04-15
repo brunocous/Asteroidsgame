@@ -417,13 +417,13 @@ public class World {
 	 * 			| boolean xHigh = Util.fuzzyLessThanOrEqualTo(x + radius, world.getWidth())
 	 * 			| boolean yHigh = Util.fuzzyLessThanOrEqualTo(y + radius, world.getHeight())
 	 * 			| result == (xLow && yLow && xHigh && yHigh);
-	 * @return true if the given world is not effective.
-	 * 			| if(world == null) 
+	 * @return true if the given world or the given position are not effective.
+	 * 			| if(world == null || pos == null) 
 	 * 			| then result == true
 	 */
 	public static boolean isSituatedInOrOnBoundaries(Position pos, double radius, World world){
 		
-		if(world != null){
+		if(world != null && pos != null ){
 		double x = pos.getX();
 		double y = pos.getY();
 	
