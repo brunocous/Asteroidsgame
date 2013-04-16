@@ -360,77 +360,96 @@ public class WorldTest {
 		World w = new World();
 		pos100xShip.setWorld(w);
 		defaultPosShip.setWorld(w);
-		//TODO WEG
 		World.bounceOff(pos100xShip, defaultPosShip);
-		System.out.println(defaultPosShip.getVel() + "\t"+pos100xShip.getVel());
     	assertTrue(Util.fuzzyEquals(pos100xShip.getVel().getX(), 91.111111111111));
     	assertTrue(Util.fuzzyEquals(pos100xShip.getVel().getY(), 0));
     	assertTrue(Util.fuzzyEquals(defaultPosShip.getVel().getX(), -91.111111111111));
     	assertTrue(Util.fuzzyEquals(defaultPosShip.getVel().getY(), 0));
 	}
 	@Test
-	public void resolve_1Bullet()throws Exception{
-		
-	}
-	@Test
-	public void resolve_NotEffectiveSpaceObject()throws Exception{
-		
-	}
-	@Test
 	public void resolve_1asteroidAnd1Ship() throws Exception{
-		
-	}
-	@Test
-	public void resolve_terminatedWorld()throws Exception{
-		
-	}
-	@Test
-	public void resolve_SpaceObjectNotInWorld()throws Exception{
-		
+		defaultPosAsteroid.setWorld(emptyWorld);
+		pos100xShip.setWorld(emptyWorld);
+		emptyWorld.addAsSpaceObject(pos100xShip);
+		emptyWorld.addAsSpaceObject(defaultPosAsteroid);
+		emptyWorld.resolve(defaultPosAsteroid, pos100xShip);
+		assertTrue(pos100xShip.isTerminated());
 	}
 	@Test (expected = NullPointerException.class)
 	public void resolve_NotEffectiveSpaceObjects()throws Exception{
-		
+		worldWithSomeSpaceObjects.resolve(null, null);
 	}
 	@Test (expected = IllegalStateException.class)
 	public void resolve_TerminatedWorld()throws Exception{
+		terminatedWorld.resolve(defaultPosAsteroid, pos100xAsteroid);
 		
 	}
 	@Test (expected = NotOfThisWorldException.class)
 	public void resolve_spaceObjectFromOtherWorld()throws Exception{
-		
+		emptyWorld.resolve(defaultPosAsteroid, pos100xShip);
 	}
 	@Test
 	public void resolveBullet_2bulletsSameSource()throws Exception{
-		
+		SpaceObject bul = new Bullet((Ship) defaultPosShip);
+		defaultPosBullet.setWorld(emptyWorld);
+		bul.setWorld(emptyWorld);
+		bul.setPos(pos100x50y);
+		bul.setVel(velNeg20x);
+		emptyWorld.addAsSpaceObject(bul);
+		emptyWorld.addAsSpaceObject(defaultPosBullet);
+		emptyWorld.resolveBullet(defaultPosBullet, bul);
+		assertTrue(Util.fuzzyEquals(bul.getVel().getX(), -20));
+    	assertTrue(Util.fuzzyEquals(bul.getVel().getY(), 0));
+    	assertTrue(Util.fuzzyEquals(defaultPosBullet.getVel().getX(), 250));
+    	assertTrue(Util.fuzzyEquals(defaultPosBullet.getVel().getY(), 0));
 	}
 	@Test
 	public void resolveBullet_2bulletsDifferentSource()throws Exception{
-		
+		defaultPosBullet.setWorld(emptyWorld);
+		pos100xBullet.setWorld(emptyWorld);
+		emptyWorld.addAsSpaceObject(defaultPosBullet);
+		emptyWorld.addAsSpaceObject(pos100xBullet);
+		emptyWorld.resolveBullet(defaultPosBullet,pos100xBullet);
+		assertTrue(defaultPosBullet.isTerminated());
+		assertTrue(pos100xBullet.isTerminated());
 	}
 	@Test
 	public void resolveBullet_1bulletOfShip()throws Exception{
-		
+		defaultPosBullet.setWorld(emptyWorld);
+		defaultPosShip.setWorld(emptyWorld);
+		defaultPosBullet.setPos(pos100x50y);
+		defaultPosBullet.setVel(velNeg20x);
+		emptyWorld.addAsSpaceObject(defaultPosBullet);
+		emptyWorld.addAsSpaceObject(defaultPosShip);
+		emptyWorld.resolveBullet(defaultPosBullet, defaultPosShip);
+		System.out.println(((Bullet) defaultPosBullet).getSource() + "  "+defaultPosShip);
+		assertTrue(!defaultPosShip.isTerminated());
 	}
 	@Test
 	public void resolveBullet_1bulletOtherShip()throws Exception{
-		
+		defaultPosBullet.setWorld(emptyWorld);
+		pos100xShip.setWorld(emptyWorld);
+		emptyWorld.addAsSpaceObject(defaultPosBullet);
+		emptyWorld.addAsSpaceObject(pos100xShip);
+		emptyWorld.resolveBullet(defaultPosBullet, pos100xShip);
+		System.out.println(((Bullet) defaultPosBullet).getSource() + "  "+defaultPosShip);
+		assertTrue(pos100xShip.isTerminated());
 	}
 	@Test
 	public void resolveBullet_1bulletAndAsteroid()throws Exception{
-		
+		//TODO afmaken
 	}
 	@Test (expected = NullPointerException.class)
 	public void resolveBullet_NotEffectiveSpaceObject()throws Exception{
-		
+		worldWithSomeSpaceObjects.resolveBullet(null, null);
 	}
 	@Test (expected = IllegalStateException.class)
 	public void resolveBullet_TerminatedWorld()throws Exception{
-		
+		terminatedWorld.resolveBullet(defaultPosAsteroid, defaultPosShip);
 	}
 	@Test (expected = NotOfThisWorldException.class)
 	public void resolveBullet_spaceObjectFromOtherWorld()throws Exception{
-		
+		emptyWorld.resolveBullet(defaultPosAsteroid, pos100xAsteroid);
 	}
 	
 	
