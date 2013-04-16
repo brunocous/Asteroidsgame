@@ -944,7 +944,7 @@ public class World {
 				}
 	}
 	/**
-	 * Resolve a collision between 2 spaceObject when only one of the spaceObjects is a bullet.
+	 * Resolve a collision between 2 spaceObject when at least one of the spaceObjects is a bullet.
 	 * 
 	 * @param object1
 	 * 			The first object to be resolved.
