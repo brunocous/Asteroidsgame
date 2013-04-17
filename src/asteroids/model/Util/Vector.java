@@ -28,12 +28,12 @@ public abstract class Vector {
  * 			| else new.getY() = 0
  */
 	public Vector(double xComp, double yComp) {
-		if(isValidComponent(xComp))
+		
 			this.xComp = xComp;
-		else this.xComp = 0;
-		if(isValidComponent(yComp))
+		
+	
 			this.yComp = yComp;
-		else this.yComp = 0;
+
 	}
 /**
  * Initializes a default Vector.
