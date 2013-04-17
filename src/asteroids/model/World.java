@@ -4,6 +4,7 @@ package asteroids.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import asteroids.CollisionListener;
 import asteroids.Util;
 import asteroids.Error.IllegalPositionException;
 import asteroids.Error.NegativeTimeException;
@@ -643,7 +644,7 @@ public class World {
 	
 	/**
 	 * Evolves the world during an amount of time delta t.
-	 * 
+	 * TODO aanpassen voor de collisionListener
 	 * @param deltaT
 	 * 			The amount of time the world has to evolve.
 	 * @effect If the time to the first collision is greater than the given
@@ -681,7 +682,7 @@ public class World {
 	 * @throws IllegalPositionException
 	 * TODO wat hier schrijven?
 	 */
-	public void evolve(double deltaT) throws NegativeTimeException, IllegalStateException, IllegalPositionException{
+	public void evolve(double deltaT, CollisionListener coll) throws NegativeTimeException, IllegalStateException, IllegalPositionException{
 		if(isTerminated())
 			throw new IllegalStateException();
 		double tC=getTimeToFirstCollision();
@@ -711,7 +712,10 @@ public class World {
 						|| Util.fuzzyEquals(this.getSpaceObjectAt(i).getPos().getY()
 								+this.getSpaceObjectAt(i).getRadius(), getHeight()))
 				{
-					try{boundaryCollide(this.getSpaceObjectAt(i));
+					try{if(coll != null)
+						coll.boundaryCollision(this.getSpaceObjectAt(i), this.getSpaceObjectAt(i).getPos().getX(), this.getSpaceObjectAt(i).getPos().getX());
+						boundaryCollide(this.getSpaceObjectAt(i));
+					
 					}catch (NotOfThisWorldException ex){
 						assert this.getSpaceObjectAt(i).getWorld() != this;
 					}
@@ -724,8 +728,10 @@ public class World {
 					
 					if(Util.fuzzyEquals(SpaceObject.getDistanceBetween(this.getSpaceObjectAt(i),object2),0) 
 							&& this.getSpaceObjectAt(i)!=object2){
-						try {
+						try {if(coll != null)
+							coll.objectCollision(this.getSpaceObjectAt(i), object2, SpaceObject.getCollisionPosition(object2, this.getSpaceObjectAt(i)).getX(), SpaceObject.getCollisionPosition(this.getSpaceObjectAt(i), object2).getY());
 							resolve(this.getSpaceObjectAt(i),object2);
+							
 						} catch (NotOfThisWorldException e) {
 							assert this.getSpaceObjectAt(i).getWorld() != this;
 							assert object2.getWorld() != this;
