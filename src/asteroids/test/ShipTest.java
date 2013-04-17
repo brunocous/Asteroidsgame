@@ -44,28 +44,28 @@ public class ShipTest {
 		positiveInfiniteVelocity = new Velocity(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
 		zeroVelocity = new Velocity(0,0);
 		
-		speedOfLightShip = new Ship(positivePosition, speedOfLightVelocity, 0 , 15);
+		speedOfLightShip = new Ship(positivePosition, speedOfLightVelocity, 0 , 15, 100);
 		
-		positiveRadiusShip = new Ship(positivePosition, positiveVelocity, 0, 20);
-		largeRadiusAndNegativePositionShip = new Ship(negativePosition, positiveVelocity, 0, 5000);
+		positiveRadiusShip = new Ship(positivePosition, positiveVelocity, 0, 20, 100);
+		largeRadiusAndNegativePositionShip = new Ship(negativePosition, positiveVelocity, 0, 5000, 100);
 		
-		negativePositionShip = new Ship(negativePosition, positiveVelocity, 0,15);
-		zeroPositionShip = new Ship(zeroPosition, positiveVelocity, 0, 15);
-		positivePositionShip = new Ship(positivePosition, positiveVelocity, 0, 15);
-		nearInfinitePositionShip = new Ship(nearInfinitePosition, positiveVelocity,0,15);
-		nearNegativeInfinitePositionShip = new Ship(nearNegativeInfinitePosition, positiveVelocity,0,15);
+		negativePositionShip = new Ship(negativePosition, positiveVelocity, 0,15,100);
+		zeroPositionShip = new Ship(zeroPosition, positiveVelocity, 0, 15, 100);
+		positivePositionShip = new Ship(positivePosition, positiveVelocity, 0, 15, 100);
+		nearInfinitePositionShip = new Ship(nearInfinitePosition, positiveVelocity,0,15, 100);
+		nearNegativeInfinitePositionShip = new Ship(nearNegativeInfinitePosition, positiveVelocity,0,15,100);
 		
-		smallNegativeDirectionShip = new Ship(positivePosition, positiveVelocity, -1, 15);
-		smallPositiveDirectionShip = new Ship(positivePosition, positiveVelocity, 1, 15);
+		smallNegativeDirectionShip = new Ship(positivePosition, positiveVelocity, -1, 15, 100);
+		smallPositiveDirectionShip = new Ship(positivePosition, positiveVelocity, 1, 15, 100);
 		
-		zeroPositionZeroDirectionShip = new Ship(zeroPosition, new Velocity(50,0), 0, 15);
-		fiftyXPositionPiDirectionShip = new Ship(fiftyXPosition, new Velocity(-50,0), 0, 15);
+		zeroPositionZeroDirectionShip = new Ship(zeroPosition, new Velocity(50,0), 0, 15, 100);
+		fiftyXPositionPiDirectionShip = new Ship(fiftyXPosition, new Velocity(-50,0), 0, 15, 100);
 			
 	}
 
 	@Test
 	public final void extendedConstructor_LegalCase() throws Exception{
-		Ship theShip = new Ship(positivePosition, positiveVelocity, Math.PI, 11);
+		Ship theShip = new Ship(positivePosition, positiveVelocity, Math.PI, 11, 100);
 		assertTrue(theShip.getPos().equals(positivePosition));
 		assertTrue(theShip.getVel().equals(positiveVelocity));
 		assertTrue(Util.fuzzyEquals(Math.PI, theShip.getDirection()));
@@ -74,35 +74,35 @@ public class ShipTest {
 	 
 	@Test
 	public final void extendendConstructor_infiniteSpeedCase() throws Exception{
-		Ship theShip = new Ship(positivePosition, positiveInfiniteVelocity, Math.PI, 11);
+		Ship theShip = new Ship(positivePosition, positiveInfiniteVelocity, Math.PI, 11, 100);
 		assertTrue(theShip.getVel().equals(zeroVelocity));
 	}
 	
-	@Test (expected = IllegalArgumentException.class)
+	@Test (expected = IllegalPositionException.class)
 	public final void extendenConstructor_infinitePositionCase() throws Exception{
-		new Ship(infinitePosition, positiveVelocity, Math.PI, 20.0);
+		new Ship(infinitePosition, positiveVelocity, Math.PI, 20.0, 100);
 	}
 	
 	@Test (expected = IllegalRadiusException.class)
 	public final void extendenConstructor_negativeRadiusCase() throws Exception{
-		new Ship(positivePosition, positiveVelocity, Math.PI, -2.0);
+		new Ship(positivePosition, positiveVelocity, Math.PI, -2.0, 100);
 	}
 	@Test 
-	public final void defaultConstructor_legalCase(){
+	public final void defaultConstructor_legalCase() throws Exception{
 		Ship theShip = new Ship();
-		assertTrue(theShip.getPos().equals(zeroPosition));
-		assertTrue(theShip.getVel().equals(zeroVelocity));
+		assertTrue(theShip.getPos().equals(new Position()));
+		assertTrue(theShip.getVel().equals(new Velocity()));
 		assertTrue(Util.fuzzyEquals(0, theShip.getDirection()));
 		assertTrue(Util.fuzzyEquals(15, theShip.getRadius()));
 	}
 	
-	@Test (expected = IllegalArgumentException.class)
+	@Test (expected = IllegalPositionException.class)
 	public final void move_infiniteBorderCase() throws Exception{
-		Ship theShip = new Ship( infinitePosition, positiveVelocity, Math.PI, 15 );
+		Ship theShip = new Ship( infinitePosition, positiveVelocity, Math.PI, 15, 100);
 		theShip.move(0.0);
 	}
 	
-	@Test (expected = IllegalArgumentException.class)
+	@Test (expected = IllegalPositionException.class)
 	public final void move_overInfiniteBorderCase() throws Exception{
 		positivePositionShip.move(Double.MAX_VALUE - 2000);
 	}
@@ -155,26 +155,24 @@ public class ShipTest {
 	@Test
 	public final void thrust_positiveAmount() throws Exception{
 		positivePositionShip.thrust(10);
-		assertTrue(Util.fuzzyEquals(positivePositionShip.getVel().getVelX(), positiveVelocity.getVelX() + 10.0*Math.cos(positivePositionShip.getDirection())));
-		assertTrue(Util.fuzzyEquals(positivePositionShip.getVel().getVelY(), positiveVelocity.getVelY() + 10.0*Math.sin(positivePositionShip.getDirection())));	
+		assertTrue(Util.fuzzyEquals(positivePositionShip.getVel().getX(), positiveVelocity.getX() + 10.0*Math.cos(positivePositionShip.getDirection())*positivePositionShip.getForcePerSecond()/positivePositionShip.getMass()));
+		assertTrue(Util.fuzzyEquals(positivePositionShip.getVel().getY(), positiveVelocity.getY() + 10.0*Math.sin(positivePositionShip.getDirection())*positivePositionShip.getForcePerSecond()/positivePositionShip.getMass()));	
 	}
-	@Test
+	@Test (expected = NegativeTimeException.class)
 	public final void thrust_negativeAmount() throws Exception{
 		positivePositionShip.thrust( -10);
-		assertTrue(Util.fuzzyEquals(positivePositionShip.getVel().getVelX(), positiveVelocity.getVelX() + (-10.0)*Math.cos(positivePositionShip.getDirection())));
-		assertTrue(Util.fuzzyEquals(positivePositionShip.getVel().getVelY(), positiveVelocity.getVelY() + (-10.0)*Math.sin(positivePositionShip.getDirection())));	
 	}
 	@Test
 	public final void thrust_speedOfLight() throws Exception{
 		speedOfLightShip.thrust(0);
-		assertTrue(Util.fuzzyEquals(speedOfLightShip.getVel().getVelX(), speedOfLightVelocity.getVelX() + speedOfLightShip.getDirection()*Math.cos(0.0)));
-		assertTrue(Util.fuzzyEquals(speedOfLightShip.getVel().getVelY(), speedOfLightVelocity.getVelY() + speedOfLightShip.getDirection()*Math.sin(0.0)));
+		assertTrue(Util.fuzzyEquals(speedOfLightShip.getVel().getX(), speedOfLightVelocity.getX() + speedOfLightShip.getDirection()*Math.cos(0.0)));
+		assertTrue(Util.fuzzyEquals(speedOfLightShip.getVel().getY(), speedOfLightVelocity.getY() + speedOfLightShip.getDirection()*Math.sin(0.0)));
 	}
 	@Test
 	public final void thrust_overSpeedOfLight() throws Exception{
 		speedOfLightShip.thrust(10);
-		assertTrue(Util.fuzzyEquals(speedOfLightShip.getVel().getVelX(), speedOfLightVelocity.getVelX() + speedOfLightShip.getDirection()*Math.cos(10.0)));
-		assertTrue(Util.fuzzyEquals(speedOfLightShip.getVel().getVelY(), speedOfLightVelocity.getVelY() + speedOfLightShip.getDirection()*Math.sin(10.0)));
+		assertTrue(Util.fuzzyEquals(speedOfLightShip.getVel().getX(), speedOfLightVelocity.getX() + speedOfLightShip.getDirection()*Math.cos(10.0)));
+		assertTrue(Util.fuzzyEquals(speedOfLightShip.getVel().getY(), speedOfLightVelocity.getY() + speedOfLightShip.getDirection()*Math.sin(10.0)));
 	}
 	
 	@Test
@@ -226,7 +224,7 @@ public class ShipTest {
 		assertTrue(Util.fuzzyEquals(timeToCheck, Double.POSITIVE_INFINITY));
 	}
 	@Test
-	//TODO uitrekenen
+
 	public final void getTimeToCollision_sameOppositeDirectionAndSameVelocity(){
 		double timeToCheck = Ship.getTimeToCollision(zeroPositionZeroDirectionShip, fiftyXPositionPiDirectionShip);
 		
@@ -256,8 +254,8 @@ public class ShipTest {
 	@Test
 	public final void getCollisionPosition_sameDirrectionAndSameVelocity(){
 		Position posToCheck = Ship.getCollisionPosition(zeroPositionZeroDirectionShip, fiftyXPositionPiDirectionShip);
-		assertTrue(Util.fuzzyEquals(posToCheck.getPosX(), 25));
-		assertTrue(Util.fuzzyEquals(posToCheck.getPosY(), 0));
+		assertTrue(Util.fuzzyEquals(posToCheck.getX(), 25));
+		assertTrue(Util.fuzzyEquals(posToCheck.getY(), 0));
 	}
 	
 	@Test

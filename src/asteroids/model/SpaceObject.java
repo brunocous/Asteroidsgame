@@ -4,6 +4,7 @@ import asteroids.Util;
 import asteroids.Error.IllegalMaxSpeedException;
 import asteroids.Error.IllegalPositionException;
 import asteroids.Error.IllegalRadiusException;
+import asteroids.Error.NegativeTimeException;
 import asteroids.model.Util.Position;
 import asteroids.model.Util.Vector;
 import asteroids.model.Util.Velocity;
@@ -397,6 +398,32 @@ public boolean isValidPosition(Position position){
 	return (Vector.isValidVector(position.getX(),position.getY()) && World.isSituatedInOrOnBoundaries(position, this.getRadius(), this.getWorld()));
 	}
 
+/**
+ * Moves this Space Object according to the given amount of time deltaT and the current velocity of
+ * this Space Object.
+ * 
+ * @param deltaT The amount of time it takes for this Space Object to reach its new position.
+ * @post The new position vector of this ship is equal to the old position vector of this ship plus
+ * 		 the current velocity of this ship multiplied by the given deltaT.
+ * 		 |(new this).getPos() == this.getPos().add(new Position(deltaT*this.getVel().getX(),deltaT*this.getVel().getY()))
+ */
+
+public void move(double deltaT) throws NegativeTimeException{
+	
+	if(!isValidElapsedTime(deltaT)){
+		throw new NegativeTimeException();
+	}
+	else{
+	
+	double posX=this.getPos().getX()+ deltaT*this.getVel().getX();
+	double posY=this.getPos().getY()+ deltaT*this.getVel().getY();
+	try{
+		setPos(new Position(posX,posY));
+	}catch (IllegalPositionException ex){
+		assert !isValidPosition( new Position(posX,posY));
+	}
+}
+}
 /**
  * Check whether the given radius is a valid radius. In other words, check whether it is
  * higher than the minimum radius.

@@ -204,10 +204,12 @@ public class Ship extends SpaceObject{
  *         |!isValidElapsedTime()		
 	 */
 	public void thrust(double deltaT) throws NegativeTimeException{
-		if(this.isEnableThruster()){
+		
 		if(!super.isValidElapsedTime(deltaT)){
 			throw new NegativeTimeException();
 		}
+		else{ if(this.isEnableThruster()){
+		
 		if(Double.isInfinite(deltaT)){
 			this.setVel(new Velocity());
 		}else{
@@ -217,14 +219,8 @@ public class Ship extends SpaceObject{
 		Vector newSpeed = new Velocity(getVel().getX(), getVel().getY());
 		newSpeed = newSpeed.add(gainedSpeed);
 		
-		if(!isValidVelocity((Velocity) newSpeed)){
-			
-			Velocity result = correctSpeed((Velocity) newSpeed);
-			this.setVel(result);
-			
+		this.setVel((Velocity)newSpeed);
 		}
-		else
-			this.setVel((Velocity) this.getVel().add( (Velocity) gainedSpeed));
 		}
 		}
 	}

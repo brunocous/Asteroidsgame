@@ -457,13 +457,7 @@ public class World {
 		if(isTerminated())
 			throw new IllegalStateException();
 		for(SpaceObject object : this.getAllSpaceObjects()){
-			double posX=object.getPos().getX()+ deltaT*object.getVel().getX();
-			double posY=object.getPos().getY()+ deltaT*object.getVel().getY();
-			try{
-				object.setPos(new Position(posX,posY));
-			}catch (IllegalPositionException ex){
-				assert !object.isValidPosition( new Position(posX,posY));
-			}
+			object.move(deltaT);
 		}
 		
 	}
