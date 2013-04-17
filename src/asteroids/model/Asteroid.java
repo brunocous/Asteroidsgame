@@ -8,6 +8,7 @@ import asteroids.Error.IllegalMaxSpeedException;
 import asteroids.Error.IllegalPositionException;
 import asteroids.Error.IllegalRadiusException;
 import asteroids.model.Util.Position;
+import asteroids.model.Util.Vector;
 import asteroids.model.Util.Velocity;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
@@ -43,7 +44,7 @@ public class Asteroid extends SpaceObject {
 	 * 			random as its random and belongs to the given world.
 	 * 			| this(pos, vel, radius, random, world)
 	 */
-	public Asteroid(Position pos, Velocity vel, double radius,Random random, World world)
+	public Asteroid(Vector pos, Vector vel, double radius,Random random, World world)
 			throws IllegalRadiusException, IllegalPositionException, IllegalMaxSpeedException {
 		super(pos, vel, radius, world);
 		this.random = random;

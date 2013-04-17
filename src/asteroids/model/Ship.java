@@ -60,9 +60,16 @@ public class Ship extends SpaceObject{
 	 * @post The new mass of this ship is equal to the given mass if the given mass is valid.
 	 * 		 | if(isValidMass(mass))
 	 * 		 | then new.getMass() == mass
+	 * @throws IllegalRadiusException
+	 *         The given radius is not a valid radius.
+	 *         |!SpaceObject.isValidRadius(radius)
+	 * @throws IllegalPositionException
+	 *         The given pos is not a valid position.
+	 *         |!SpaceObject.isValidPosition((Position) pos)
+	 *         
 	 * @note This constructor inherits a constructor of space object.
 	 */
-	public Ship(Position pos,Velocity vel, double direction, double radius, double mass,World world) throws
+	public Ship(Vector pos,Vector vel, double direction, double radius, double mass,World world) throws
 	 		IllegalRadiusException, IllegalMaxSpeedException, IllegalPositionException{
 
 		super(pos, vel, radius, world);
@@ -93,8 +100,14 @@ public class Ship extends SpaceObject{
 	 * 			, the given radius as its direction, the given mass as its mass and does 
 	 * 			not belong to any world.
 	 * 			| this(pos,vel,direction,radius,mass,null);
+	 * @throws IllegalRadiusException
+	 *         The given radius is not a valid radius.
+	 *         |!SpaceObject.isValidRadius(radius)
+	 * @throws IllegalPositionException
+	 *         The given pos is not a valid position.
+	 *         |!SpaceObject.isValidPosition((Position) pos)
 	 */
-	public Ship(Position pos, Velocity vel, double direction, double radius, double mass) throws IllegalRadiusException, IllegalMaxSpeedException, IllegalPositionException{
+	public Ship(Vector pos, Vector vel, double direction, double radius, double mass) throws IllegalRadiusException, IllegalMaxSpeedException, IllegalPositionException{
 		this(pos,vel,direction,radius,mass,null);
 	}
 	

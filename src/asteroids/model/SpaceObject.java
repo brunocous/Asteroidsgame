@@ -140,7 +140,7 @@ public abstract class SpaceObject {
 	 *         |!isValidPosition((Position) pos)
 	 *         
 	 */
-	public SpaceObject( Position pos, Velocity vel, double radius,World world) throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
+	public SpaceObject( Vector pos, Vector vel, double radius,World world) throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
 		this(pos, vel, radius, Velocity.getSpeedOfLight(), world);
 	}
 	/**
@@ -164,7 +164,7 @@ public abstract class SpaceObject {
 	 *         |!isValidPosition((Position) pos)
 	 *         
 	 */
-	public SpaceObject( Position pos, Velocity vel, double radius) throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
+	public SpaceObject( Vector pos, Vector vel, double radius) throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
 		this(pos, vel, radius, Velocity.getSpeedOfLight(), null);
 	}
 	
