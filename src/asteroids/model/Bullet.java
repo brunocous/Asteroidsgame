@@ -1,5 +1,7 @@
 package asteroids.model;
 
+import java.util.Vector;
+
 import asteroids.Error.IllegalMaxSpeedException;
 import asteroids.Error.IllegalPositionException;
 import asteroids.Error.IllegalRadiusException;

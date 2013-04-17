@@ -104,7 +104,7 @@ public class ShipTest {
 	
 	@Test (expected = IllegalPositionException.class)
 	public final void move_overInfiniteBorderCase() throws Exception{
-		positivePositionShip.move(Double.MAX_VALUE - 2000);
+		positivePositionShip.move(Double.MAX_VALUE-2000);
 	}
 	@Test
 	public final void move_toZeroPosition() throws Exception{
