@@ -455,8 +455,10 @@ public class World {
 	 * @throws NegativeTimeException
 	 * 			The given deltaT is negative.
 	 * 			|!SpaceObject.isValidElapsedTime(deltaT)
+	 * @throws IllegalPositionException
+	 * 			TODO aanpassen hier!
 	 */
-	public void updatePositions(double deltaT) throws IllegalStateException, NegativeTimeException{
+	public void updatePositions(double deltaT) throws IllegalStateException, NegativeTimeException, IllegalPositionException{
 		if(isTerminated())
 			throw new IllegalStateException();
 		for(SpaceObject object : this.getAllSpaceObjects()){
@@ -676,8 +678,10 @@ public class World {
 	 * @throws IllegalStateException
 	 * 			This world is already terminated.
 	 * 			| isTerminated()
+	 * @throws IllegalPositionException
+	 * TODO wat hier schrijven?
 	 */
-	public void evolve(double deltaT) throws NegativeTimeException, IllegalStateException{
+	public void evolve(double deltaT) throws NegativeTimeException, IllegalStateException, IllegalPositionException{
 		if(isTerminated())
 			throw new IllegalStateException();
 		double tC=getTimeToFirstCollision();

@@ -154,9 +154,10 @@ public class ShipTest {
 	}
 	@Test
 	public final void thrust_positiveAmount() throws Exception{
-		positivePositionShip.thrust(10);
-		assertTrue(Util.fuzzyEquals(positivePositionShip.getVel().getX(), positiveVelocity.getX() + 10.0*Math.cos(positivePositionShip.getDirection())*positivePositionShip.getForcePerSecond()/positivePositionShip.getMass()));
-		assertTrue(Util.fuzzyEquals(positivePositionShip.getVel().getY(), positiveVelocity.getY() + 10.0*Math.sin(positivePositionShip.getDirection())*positivePositionShip.getForcePerSecond()/positivePositionShip.getMass()));	
+		positivePositionShip.setEnableThruster(true);
+		positivePositionShip.thrust(0.009);
+		assertTrue(Util.fuzzyEquals(positivePositionShip.getVel().getX(), 3E8));
+		assertTrue(Util.fuzzyEquals(positivePositionShip.getVel().getY(), 1.51515151515075E-4));	
 	}
 	@Test (expected = NegativeTimeException.class)
 	public final void thrust_negativeAmount() throws Exception{
@@ -265,7 +266,6 @@ public class ShipTest {
 		positivePositionShip.setVel(new Velocity(-50,0));
 		positivePositionShip.setDirection(Math.PI);
 		Position posToCheck = Ship.getCollisionPosition(zeroPositionShip, positivePositionShip);
-		System.out.println(posToCheck.toString());
 		assertTrue(posToCheck.equals(new Position(10.606601717798211,39.39339828220179)));
 		
 	}

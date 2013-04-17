@@ -229,7 +229,7 @@ public class Ship extends SpaceObject{
 			double acceleration = deltaT*this.getForcePerSecond() / this.getMass();
 		
 		Vector gainedSpeed = new Velocity(acceleration*Math.cos(this.getDirection()),acceleration*Math.sin(this.getDirection()));
-		Vector newSpeed = new Velocity(getVel().getX(), getVel().getY());
+		Vector newSpeed = new Velocity(this.getVel().getX(), this.getVel().getY());
 		newSpeed = newSpeed.add(gainedSpeed);
 		
 		this.setVel((Velocity)newSpeed);
