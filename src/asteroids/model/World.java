@@ -452,8 +452,11 @@ public class World {
 	 * @throws IllegalStateException
 	 * 			This world is already terminated.
 	 * 			| isTerminated()
+	 * @throws NegativeTimeException
+	 * 			The given deltaT is negative.
+	 * 			|!SpaceObject.isValidElapsedTime(deltaT)
 	 */
-	public void updatePositions(double deltaT) throws IllegalStateException{
+	public void updatePositions(double deltaT) throws IllegalStateException, NegativeTimeException{
 		if(isTerminated())
 			throw new IllegalStateException();
 		for(SpaceObject object : this.getAllSpaceObjects()){

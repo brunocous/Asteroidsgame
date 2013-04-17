@@ -656,7 +656,7 @@ protected Velocity correctSpeed(Velocity speed){
  */
 public static boolean isValidElapsedTime(double time){
 	
-	return !(time < 0);
+	return (Util.fuzzyEquals(time , 0) || !Util.fuzzyLessThanOrEqualTo(time, 0));
 	
 }
 /**
