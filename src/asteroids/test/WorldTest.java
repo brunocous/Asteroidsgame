@@ -16,6 +16,8 @@ import asteroids.Error.*;
 public class WorldTest {
 	private SpaceObject defaultPosAsteroid, pos100xAsteroid, defaultPosShip, 
 					pos100xShip,defaultPosBullet,pos100xBullet,terminatedSpaceObject;
+	private Ship defaultBulletSource;
+	private Ship pos100xBulletSource;
 	
 	
 	private World emptyWorld, worldWithSomeSpaceObjects, terminatedWorld;
@@ -27,7 +29,7 @@ public class WorldTest {
 	private double widthInfinite = Double.POSITIVE_INFINITY;
 	private double heightInfinite = Double.POSITIVE_INFINITY;
 	
-	ArrayList<SpaceObject> someSpaceObjects;
+	private ArrayList<SpaceObject> someSpaceObjects;
 	
 	private double radius15 = 15;
 	
@@ -41,13 +43,13 @@ public class WorldTest {
 
 	@Before
 	public void setUp() throws Exception {
-		Ship defaultBulletSource = new Ship();
-		Ship pos100xBulletSource = new Ship(pos100x50y, velNeg20x,Math.PI, radius15,5000);
+		defaultBulletSource = new Ship();
+		pos100xBulletSource = new Ship(pos100x50y, velNeg20x,Math.PI, radius15,mass5000);
 		
 		defaultPosAsteroid = new Asteroid( new Position(), vel20x, radius15);
 		pos100xAsteroid = new Asteroid(pos100x50y, velNeg20x, radius15);
-		defaultPosShip = new Ship(new Position(), vel20x,0,radius15,5000);
-		pos100xShip = new Ship(pos100x50y, velNeg20x,Math.PI, radius15,5000);
+		defaultPosShip = new Ship(new Position(), vel20x,0,radius15,mass5000);
+		pos100xShip = new Ship(pos100x50y, velNeg20x,Math.PI, radius15,mass5000);
 		defaultPosBullet = new Bullet(defaultBulletSource);
 		pos100xBullet = new Bullet(pos100xBulletSource);
 		terminatedSpaceObject = new Asteroid();
@@ -416,14 +418,13 @@ public class WorldTest {
 	@Test
 	public void resolveBullet_1bulletOfShip()throws Exception{
 		defaultPosBullet.setWorld(emptyWorld);
-		defaultPosShip.setWorld(emptyWorld);
+		defaultBulletSource.setWorld(emptyWorld);
 		defaultPosBullet.setPos(pos100x50y);
 		defaultPosBullet.setVel(velNeg20x);
 		emptyWorld.addAsSpaceObject(defaultPosBullet);
-		emptyWorld.addAsSpaceObject(defaultPosShip);
-		emptyWorld.resolveBullet(defaultPosBullet, defaultPosShip);
-		System.out.println(((Bullet) defaultPosBullet).getSource() + "  "+defaultPosShip);
-		assertTrue(!defaultPosShip.isTerminated());
+		emptyWorld.addAsSpaceObject(defaultBulletSource);
+		emptyWorld.resolveBullet(defaultPosBullet, defaultBulletSource);
+		assertFalse(defaultBulletSource.isTerminated());
 	}
 	@Test
 	public void resolveBullet_1bulletOtherShip()throws Exception{
@@ -437,7 +438,12 @@ public class WorldTest {
 	}
 	@Test
 	public void resolveBullet_1bulletAndAsteroid()throws Exception{
-		//TODO afmaken
+		defaultPosBullet.setWorld(emptyWorld);
+		pos100xAsteroid.setWorld(emptyWorld);
+		emptyWorld.addAsSpaceObject(defaultPosBullet);
+		emptyWorld.addAsSpaceObject(pos100xAsteroid);
+		emptyWorld.resolveBullet(defaultPosBullet, pos100xAsteroid);
+		assertTrue(pos100xAsteroid.isTerminated());
 	}
 	@Test (expected = NullPointerException.class)
 	public void resolveBullet_NotEffectiveSpaceObject()throws Exception{
