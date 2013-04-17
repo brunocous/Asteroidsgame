@@ -12,7 +12,7 @@ import be.kuleuven.cs.som.annotate.*;
 
 /** 
  * An abstract class of space objects involving a position, a velocity, a direction
- * , a maximum speed, a mass and a radius with moving facilities.
+ * ,a maximum speed, a mass and a radius with moving facilities.
  * 
  * @Invar The position that applies to all space objects must be a valid position.
  *        | isValidPosition(getPos())
@@ -31,11 +31,11 @@ public abstract class SpaceObject {
 	/**
 	 *  the position vector of a space object.
 	 */
-	protected Position pos;
+	protected Vector pos;
 	/**
 	 *  the velocity vector of a space object.
 	 */
-	protected Velocity vel;
+	protected Vector vel;
 	/**
 	 * the world the space object belongs to.
 	 */
@@ -94,16 +94,16 @@ public abstract class SpaceObject {
 	 * 		 | new.getState() = state.ACTIVE
 	 * @throws IllegalRadiusException
 	 *         The given radius is not a valid radius.
-	 *         |!isValidRadius()
+	 *         |!isValidRadius(radius)
 	 * @throws IllegalPositionException
 	 *         The given pos is not a valid position.
-	 *         |!isValidPosition()
+	 *         |!isValidPosition((Position) pos)
 	 * @throws IllegalMaxSpeedException
 	 * 			The given maxSpeed is not a valid maximum speed.
-	 * 			|!isValidMaximumSpeed()
+	 * 			|!isValidMaxSpeed(maxSpeed)
 	 *         
 	 */
-	public SpaceObject( Position pos, Velocity vel, double radius, double maxSpeed, World world) 
+	public SpaceObject( Vector pos, Vector vel, double radius, double maxSpeed, World world) 
 			throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
 		if(!isValidMaxSpeed(maxSpeed)){
 			throw new IllegalMaxSpeedException();
@@ -132,6 +132,13 @@ public abstract class SpaceObject {
 	 * 			the given velocity as its velocity, the given radius as its radius, with the
 	 * 			the speed of light as its maximum speed and the given world as its world. 
 	 * 			| this(pos, vel, radius, Velocity.getSpeedOfLight(), world)
+	 * @throws IllegalRadiusException
+	 *         The given radius is not a valid radius.
+	 *         |!isValidRadius(radius)
+	 * @throws IllegalPositionException
+	 *         The given pos is not a valid position.
+	 *         |!isValidPosition((Position) pos)
+	 *         
 	 */
 	public SpaceObject( Position pos, Velocity vel, double radius,World world) throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
 		this(pos, vel, radius, Velocity.getSpeedOfLight(), world);
@@ -149,6 +156,13 @@ public abstract class SpaceObject {
 	 * 			the given velocity as its velocity, the given radius as its radius, with the
 	 * 			the speed of light as its maximum speed and does not belong to a world. 
 	 * 			| this(pos, vel, radius, Velocity.getSpeedOfLight(), null)
+	 * @throws IllegalRadiusException
+	 *         The given radius is not a valid radius.
+	 *         |!isValidRadius(radius)
+	 * @throws IllegalPositionException
+	 *         The given pos is not a valid position.
+	 *         |!isValidPosition((Position) pos)
+	 *         
 	 */
 	public SpaceObject( Position pos, Velocity vel, double radius) throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
 		this(pos, vel, radius, Velocity.getSpeedOfLight(), null);
@@ -170,7 +184,7 @@ public abstract class SpaceObject {
 	 */
 	@Basic
 	public Position getPos() {
-		return pos;
+		return (Position) pos;
 	}
 	
 	/**
@@ -187,8 +201,8 @@ public abstract class SpaceObject {
 	 *         | isValidPosition(pos) == false
 	 */
 	@Basic
-	public void setPos(Position pos) throws IllegalPositionException{
-		if(!isValidPosition(pos)){
+	public void setPos(Vector pos) throws IllegalPositionException{
+		if(!isValidPosition((Position)pos)){
 			throw new IllegalPositionException();
 		}
 		else{
@@ -200,7 +214,7 @@ public abstract class SpaceObject {
 	 */
 	@Basic
 	public Velocity getVel() {
-		return vel;
+		return (Velocity) vel;
 	}
 	/**
 	 * Set the vel of this space object to the given vel.
@@ -217,15 +231,15 @@ public abstract class SpaceObject {
 	 *       |else new.getVel() == correctSpeed(vel)
 	 */
 	@Basic
-	public void setVel(Velocity vel) {
-		if (isValidVelocity(vel)){
+	public void setVel(Vector vel) {
+		if (isValidVelocity((Velocity) vel)){
 			this.vel = vel;			
 		}
 		else{ 
 			if(Double.isInfinite(vel.getX()) || Double.isInfinite(vel.getY())){
 			this.vel = new Velocity(0,0);
 			} else{
-			Velocity result = correctSpeed(vel);
+			Velocity result = correctSpeed((Velocity)vel);
 			this.vel = result;
 			}
 		}
@@ -536,7 +550,8 @@ public static boolean overlap(SpaceObject obj1, SpaceObject obj2) {
  *         | then result == Double.POSITIVE_INFINITY
  *         | else if(Util.fuzzyLessThanOrEqualTo(-Vector.scalarProduct(new Velocity(deltavx,deltavy),new Position(deltarx,deltary)),0) || Util.fuzzyLessThanOrEqualTo(d,0) )
  *         | else result == -(Vector.scalarProduct(new Velocity(deltavx, deltavy),new Position( deltarx,deltary))+Math.sqrt(d))/Vector.scalarProduct(new Velocity(deltavx,deltavy), new Velocity(deltavx,deltavy))
- *         
+ * 
+ *                 
  */
                       
 public static double getTimeToCollision(SpaceObject obj1, SpaceObject obj2) throws NullPointerException{
@@ -651,7 +666,7 @@ protected Velocity correctSpeed(Velocity speed){
  * @param time
  *        The amount of time to be checked in seconds.
  * @return true if and only if the given time is greater than or equal to zero.
- *         | result == !(time<0)
+ *         | result == (Util.fuzzyEquals(time , 0) || !Util.fuzzyLessThanOrEqualTo(time, 0))
  *        
  */
 public static boolean isValidElapsedTime(double time){
@@ -662,7 +677,7 @@ public static boolean isValidElapsedTime(double time){
 /**
  * Terminates a space object. 
  * @effect  The World, if any, is unset from this space object.
-*       	| unsetOwner()
+*       	| unsetWorld()
  * @effect The new state of this space object is terminated.
  * 			| setState(State.TERMINATED) 
  */
@@ -672,17 +687,20 @@ public void terminate(){
 	
 }
 /**
+ * Check whether this Space Object is terminated.
+ * 
  * @return True if and only if the state of this object is terminated.
  * 			| result == (this.getState() == State.TERMINATED)
  */
 public boolean isTerminated(){
 	return (this.getState() == State.TERMINATED);
 }
+
 /**
  * Unset the world, if any, from this space object.
  *
  * @post    This space object no longer has a world.
- *        | ! new.hasOwner()
+ *        | ! new.hasWorld()
  * @post    The former world of this space object, if any, no longer
  *          has this space object as one of its space objects.
  *        |    (getWorld() == null)
@@ -707,7 +725,7 @@ public void unsetWorld() {
  * @param projectile
  * 			The projectile to fire.
  * @post If this space object can fire the given bullet, then 
- * 			add the given bullet to the world where this space 
+ * 			add the given bullet to the world this space 
  * 			object belongs to.
  * 			| if(canFireBullet(projectile))
 			| then new.getWorld().getNbSpaceObjects() == getWorld().getNbSpaceObjects() + 1;
