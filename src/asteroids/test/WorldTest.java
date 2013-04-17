@@ -198,7 +198,7 @@ public class WorldTest {
     @Test public void isSituatedInOrOnBoundaries_NotEffectiveWorld(){
     	assertTrue(World.isSituatedInOrOnBoundaries(new Position(), radius15, null));
     }
-    @Test public void updatePositions_singleCase(){
+    @Test public void updatePositions_singleCase()throws Exception{
     	Position[] somePositions = new Position[worldWithSomeSpaceObjects.getNbSpaceObjects()];
     	int i = 0;
     	for(SpaceObject obj :worldWithSomeSpaceObjects.getAllSpaceObjects()){
@@ -268,6 +268,10 @@ public class WorldTest {
     	assertTrue(obj.getPos().getY() ==  somePositions[i].getY()+(obj.getVel().getY()*0.003));
     			i++;
     	}
+    }
+    @Test (expected = NegativeTimeException.class )
+    public void evolve_negativeTime() throws Exception{
+    	worldWithSomeSpaceObjects.evolve(-1);
     }
     @Test public void evolve_BoundaryCollision()throws Exception{
     	pos100xAsteroid.setWorld(emptyWorld);
