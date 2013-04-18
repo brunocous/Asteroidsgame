@@ -6,7 +6,6 @@ import java.util.List;
 
 import asteroids.CollisionListener;
 import asteroids.Util;
-import asteroids.Error.IllegalPositionException;
 import asteroids.Error.NegativeTimeException;
 import asteroids.Error.NotOfThisWorldException;
 import asteroids.model.Util.Position;
@@ -456,10 +455,8 @@ public class World {
 	 * @throws NegativeTimeException
 	 * 			The given deltaT is negative.
 	 * 			|!SpaceObject.isValidElapsedTime(deltaT)
-	 * @throws IllegalPositionException
-	 * 			TODO aanpassen hier!
 	 */
-	public void updatePositions(double deltaT) throws IllegalStateException, NegativeTimeException, IllegalPositionException{
+	public void updatePositions(double deltaT) throws IllegalStateException, NegativeTimeException{
 		if(isTerminated())
 			throw new IllegalStateException();
 		for(SpaceObject object : this.getAllSpaceObjects()){
@@ -644,15 +641,18 @@ public class World {
 	
 	/**
 	 * Evolves the world during an amount of time delta t.
-	 * TODO aanpassen voor de collisionListener
+	 * 
 	 * @param deltaT
 	 * 			The amount of time the world has to evolve.
+	 * @param coll
+	 * 			The collision listener to generate explosions.
 	 * @effect If the time to the first collision is greater than the given
 	 * 			amount of time deltaT, then update the positions and velocities
 	 * 			for a given amount of time deltaT of all the space objects of
 	 * 			this world. Else update the positions and velocities of all 
-	 * 			space objects of this world for an amount of time untill the 
-	 * 			first collision and resolve that collision.
+	 * 			space objects of this world for an amount of time until the 
+	 * 			first collision and resolve that collision. And if the given 
+	 * 			collision listener is effective, then generate an explosion.
 	 * 			| double tC = getTimeToFirstCollision()
 	 * 			| if(!tC > deltaT)
 	 * 			| then updatePositions(deltaT)
@@ -672,17 +672,17 @@ public class World {
 	 * 			| 		else for each spaceObject in spaceObjects:
 	 * 			| 			if(Util.fuzzyEquals(SpaceObject.getDistanceBetween(this.getSpaceObjectAt(i),spaceObject),0) 
 	 * 			|				&& this.getSpaceObjectAt(i)!= spaceObject)
-	 * 			|			then resolve(this.getSpaceObjectAt(i), spaceObject)
+	 * 			|			then if(coll != null)
+	 * 			|				 then coll.objectCollision(this.getSpaceObjectAt(i), object2, SpaceObject.getCollisionPosition(object2, this.getSpaceObjectAt(i)).getX(), SpaceObject.getCollisionPosition(this.getSpaceObjectAt(i), object2).getY())
+	 * 			|				     resolve(this.getSpaceObjectAt(i), spaceObject)
 	 * @throws NegativeTimeException
 	 * 			The given amount of time deltaT is negative.
 	 * 			| deltaT < 0
 	 * @throws IllegalStateException
 	 * 			This world is already terminated.
 	 * 			| isTerminated()
-	 * @throws IllegalPositionException
-	 * TODO wat hier schrijven?
 	 */
-	public void evolve(double deltaT, CollisionListener coll) throws NegativeTimeException, IllegalStateException, IllegalPositionException{
+	public void evolve(double deltaT, CollisionListener coll) throws NegativeTimeException, IllegalStateException{
 		if(isTerminated())
 			throw new IllegalStateException();
 		double tC=getTimeToFirstCollision();
@@ -712,9 +712,7 @@ public class World {
 						|| Util.fuzzyEquals(this.getSpaceObjectAt(i).getPos().getY()
 								+this.getSpaceObjectAt(i).getRadius(), getHeight()))
 				{
-					try{if(coll != null)
-						coll.boundaryCollision(this.getSpaceObjectAt(i), this.getSpaceObjectAt(i).getPos().getX(), this.getSpaceObjectAt(i).getPos().getX());
-						boundaryCollide(this.getSpaceObjectAt(i));
+					try{boundaryCollide(this.getSpaceObjectAt(i));
 					
 					}catch (NotOfThisWorldException ex){
 						assert this.getSpaceObjectAt(i).getWorld() != this;

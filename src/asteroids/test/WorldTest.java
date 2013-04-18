@@ -213,6 +213,13 @@ public class WorldTest {
     			i++;
     	}
     }
+    @Test public void updateVelocitties_SingleCase() throws Exception{
+    	defaultPosShip.setWorld(emptyWorld);
+    	emptyWorld.addAsSpaceObject(defaultPosShip);
+    	((Ship) defaultPosShip).setEnableThruster(true);
+    	emptyWorld.updateVelocities(0.02);
+    	assertTrue(defaultPosShip.getVel().getX() == Velocity.getSpeedOfLight());
+    }
     @Test public void getTimeToFirstCollision_BoundaryCollision(){
     	pos100xAsteroid.setWorld(emptyWorld);
     	emptyWorld.addAsSpaceObject(pos100xAsteroid);
@@ -262,7 +269,7 @@ public class WorldTest {
     		i++;
     	}
     	i=0;
-    	worldWithSomeSpaceObjects.evolve(0.003);
+    	worldWithSomeSpaceObjects.evolve(0.003,null);
     	for(SpaceObject obj: worldWithSomeSpaceObjects.getAllSpaceObjects()){
     	assertTrue(obj.getPos().getX() ==  somePositions[i].getX()+(obj.getVel().getX()*0.003));
     	assertTrue(obj.getPos().getY() ==  somePositions[i].getY()+(obj.getVel().getY()*0.003));
@@ -271,12 +278,12 @@ public class WorldTest {
     }
     @Test (expected = NegativeTimeException.class )
     public void evolve_negativeTime() throws Exception{
-    	worldWithSomeSpaceObjects.evolve(-1);
+    	worldWithSomeSpaceObjects.evolve(-1,null);
     }
     @Test public void evolve_BoundaryCollision()throws Exception{
     	pos100xAsteroid.setWorld(emptyWorld);
     	emptyWorld.addAsSpaceObject(pos100xAsteroid);
-    	emptyWorld.evolve(5);
+    	emptyWorld.evolve(5,null);
     	assertTrue(emptyWorld.getSpaceObjectAt(1).getVel().getX() == - velNeg20x.getX());
     	assertTrue(emptyWorld.getSpaceObjectAt(1).getVel().getY() == velNeg20x.getY());
 
@@ -289,7 +296,7 @@ public class WorldTest {
     		i++;
     	}
     	i=0;
-    	worldWithSomeSpaceObjects.evolve(5);
+    	worldWithSomeSpaceObjects.evolve(5,null);
     	for(SpaceObject obj: worldWithSomeSpaceObjects.getAllSpaceObjects()){
     	assertTrue(obj.getVel().getX() ==  - someVelocities[i].getX());
     	assertTrue(obj.getVel().getY() ==  someVelocities[i].getY());
@@ -298,7 +305,7 @@ public class WorldTest {
     }
     @Test (expected = IllegalStateException.class)
     public void evolve_terminatedWorld() throws Exception{
-    	terminatedWorld.evolve(1);
+    	terminatedWorld.evolve(1,null);
     }
     @Test public void boundaryCollide_Ship()throws Exception{
     	pos100xShip.setWorld(emptyWorld);

@@ -422,7 +422,7 @@ public boolean isValidPosition(Position position){
  * 		 |(new this).getPos() == this.getPos().add(new Position(deltaT*this.getVel().getX(),deltaT*this.getVel().getY()))
  */
 
-public void move(double deltaT) throws NegativeTimeException, IllegalPositionException{
+public void move(double deltaT) throws NegativeTimeException{
 	
 	if(!isValidElapsedTime(deltaT)){
 		throw new NegativeTimeException();
@@ -431,7 +431,11 @@ public void move(double deltaT) throws NegativeTimeException, IllegalPositionExc
 	
 	double posX=this.getPos().getX()+ deltaT*this.getVel().getX();
 	double posY=this.getPos().getY()+ deltaT*this.getVel().getY();
-		setPos(new Position(posX,posY));
+		try{setPos(new Position(posX,posY));
+		
+		}catch(IllegalPositionException ex){
+			assert (!this.isValidPosition(new Position(posX,posY)));
+		}
 
 	
 }

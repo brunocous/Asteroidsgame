@@ -102,9 +102,10 @@ public class ShipTest {
 		theShip.move(0.0);
 	}
 	
-	@Test (expected = IllegalPositionException.class)
+	@Test 
 	public final void move_overInfiniteBorderCase() throws Exception{
 		positivePositionShip.move(Double.MAX_VALUE-2000);
+		assertTrue(positivePosition.equals(positivePositionShip.getPos()));
 	}
 	@Test
 	public final void move_toZeroPosition() throws Exception{
@@ -156,7 +157,7 @@ public class ShipTest {
 	public final void thrust_positiveAmount() throws Exception{
 		positivePositionShip.setEnableThruster(true);
 		positivePositionShip.thrust(0.009);
-		assertTrue(Util.fuzzyEquals(positivePositionShip.getVel().getX(), 3E8));
+		assertTrue(Util.fuzzyEquals(positivePositionShip.getVel().getX(), Velocity.getSpeedOfLight()));
 		assertTrue(Util.fuzzyEquals(positivePositionShip.getVel().getY(), 1.51515151515075E-4));	
 	}
 	@Test (expected = NegativeTimeException.class)
