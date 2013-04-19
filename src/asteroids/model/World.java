@@ -659,7 +659,9 @@ public class World {
 	 * 			| 	   updateVelocitties(deltaT)
 	 * 			| else updatePositions(tC)
 	 * 			|	   updateVelocities(tC)
-	 * 			| for each i in 1..getNbSpaceObjects():
+	 * 			| int i =1
+	 * 			| boolean resolved = false
+	 * 			| while(i < getNbSpaceObjects() && resolved == false)
 	 * 			| 		if(Util.fuzzyEquals(getSpaceObjectAt(i).getPos().getX()
 	 * 			|				-getSpaceObjectAt(i).getRadius(), 0) 
 	 * 			| 			|| Util.fuzzyEquals(getSpaceObjectAt(i).getPos().getX()
@@ -668,7 +670,8 @@ public class World {
 	 * 			|				-getSpaceObjectAt(i).getRadius(), 0) 
 	 * 			| 			|| Util.fuzzyEquals(getSpaceObjectAt(i).getPos().getY()
 	 * 			|				+getSpaceObjectAt(i).getRadius(), getHeight()))
-	 * 			|		then boundaryCollide(getSpaceObjectAt(i))
+	 * 			|		then {boundaryCollide(getSpaceObjectAt(i)
+	 * 			|			 resolved = true}
 	 * 			| 		else for each spaceObject in spaceObjects:
 	 * 			| 			if(Util.fuzzyEquals(SpaceObject.getDistanceBetween(this.getSpaceObjectAt(i),spaceObject),0) 
 	 * 			|				&& this.getSpaceObjectAt(i)!= spaceObject)
@@ -679,6 +682,9 @@ public class World {
 	 * @throws IllegalStateException
 	 * 			This world is already terminated.
 	 * 			| isTerminated()
+	 * @throws NotOfThisWorldException
+	 * 			this.getSpaceObjectAt(i).getWorld() != this
+	 * 		   
 	 * @note Might also throw an IllegalPositionException using the method updatePositions(deltaT)
 	 */
 	public void evolve(double deltaT, CollisionListener coll) throws NegativeTimeException, IllegalStateException, IllegalPositionException{
