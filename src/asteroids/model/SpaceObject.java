@@ -345,7 +345,7 @@ public abstract class SpaceObject {
 	 *          world, and if this space object is terminated or the world of
 	 *          this space object has this space object as one of its space objects.
 	 *        | result ==
-	 *        |   canHaveAsShare(getWorld()) &&
+	 *        |   canHaveAsWorld(getWorld()) &&
 	 *        |   ( (getWorld()==null || getWorld().hasAsSpaceObject(this))
 	 */
 	public boolean hasProperWorld(){
