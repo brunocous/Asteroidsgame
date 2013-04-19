@@ -6,7 +6,6 @@ import java.util.List;
 
 import asteroids.CollisionListener;
 import asteroids.Util;
-import asteroids.Error.IllegalPositionException;
 import asteroids.Error.NegativeTimeException;
 import asteroids.Error.NotOfThisWorldException;
 import asteroids.model.Util.Position;
@@ -472,7 +471,6 @@ public class World {
 	 * @throws NegativeTimeException
 	 * 			The given deltaT is negative.
 	 * 			|!SpaceObject.isValidElapsedTime(deltaT)
-	 * 
 	 */
 	public void updatePositions(double deltaT) throws IllegalStateException, NegativeTimeException{
 		if(isTerminated())
@@ -659,15 +657,15 @@ public class World {
 	
 	/**
 	 * Evolves the world during an amount of time delta t.
-	 * TODO aanpassen voor de collisionListener
+	 * 
 	 * @param deltaT
 	 * 			The amount of time the world has to evolve.
 	 * @effect If the time to the first collision is greater than the given
 	 * 			amount of time deltaT, then update the positions and velocities
 	 * 			for a given amount of time deltaT of all the space objects of
 	 * 			this world. Else update the positions and velocities of all 
-	 * 			space objects of this world for an amount of time untill the 
-	 * 			first collision has occured and resolve that collision.
+	 * 			space objects of this world for an amount of time until the 
+	 * 			first collision has occurred and resolve that collision.
 	 * 			| double tC = getTimeToFirstCollision()
 	 * 			| if(!tC > deltaT)
 	 * 			| then updatePositions(deltaT)
@@ -696,7 +694,7 @@ public class World {
 	 * 			| deltaT < 0
 	 * @throws IllegalStateException
 	 * 			This world is already terminated.
-	 * 			| isTerminated()	 
+	 * 			| isTerminated()
 	 */
 	public void evolve(double deltaT, CollisionListener coll) throws NegativeTimeException, IllegalStateException{
 		
@@ -797,8 +795,6 @@ public class World {
 			throw new NullPointerException();
 		if(this.isTerminated())
 			throw new IllegalStateException();
-			if(!this.hasAsSpaceObject(spaceObject))
-				throw new NotOfThisWorldException();
 				if(Ship.class.isAssignableFrom(spaceObject.getClass()) 
 						|| Asteroid.class.isAssignableFrom(spaceObject.getClass())){
 			
