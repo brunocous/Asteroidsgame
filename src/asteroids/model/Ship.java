@@ -8,15 +8,16 @@ import asteroids.Error.NegativeTimeException;
 import asteroids.model.Util.*;
 import be.kuleuven.cs.som.annotate.*;
 
-//TODO dit aanpassen
 /** 
  * A class of spaceships involving a position, a velocity, a direction, 
  * a mass, a radius and a world with among others turning and accelerating facilities. 
  * 
- *  @invar The mass that applies to all ships must be a valid mass.
- *        | isValidMass(getMass())
+ * @Invar The mass that applies to all ships must be a valid mass.
+ *        	| isValidMass(getMass())
+ * @Invar The direction that applies to all ships must be a valid direction.
+ * 			| isValidDirection(getDirection())
  * 
- * @version 1.0
+ * @version 2.0
  * @author Bruno Coussement and Simon Telen
  *
  */

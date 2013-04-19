@@ -15,7 +15,22 @@ import asteroids.model.Util.Velocity;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
-
+/**
+ * A class representing a world involving a width, a height and a list of space objects
+ * with among others evolving and collision resolving facilities.
+ * 
+ * @Invar The width that applies to all worlds must be a valid width.
+ * 			| isValidWidth(getWidth())
+ * @Invar The height that applies to all worlds must be a valid height.
+ * 			| isValidHeight(getHeight())
+ * @Invar Each world must have proper space objects.
+ * 			| hasProperSpaceObjects()
+ * 
+ * @version 1.0
+ * @author Bruno Coussement and Simon Telen
+ * 
+ *
+ */
 public class World {
 
 	/**

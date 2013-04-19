@@ -20,6 +20,10 @@ import be.kuleuven.cs.som.annotate.*;
  *        | isValidVelocity(getVel())
  * @Invar The radius that applies to all space objects must be a valid radius.
  *        | isValidRadius(getRadius())
+ * @Invar Each space object must have a proper world.
+ * 		  | hasProperWorld()
+ * @Invar Each space object must have a valid maxSpeed.
+ * 		  | isValidMaxSpeed(getVel())
  * 
  * @version 1.0
  * @author Bruno Coussement and Simon Telen
