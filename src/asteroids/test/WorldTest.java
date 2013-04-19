@@ -284,7 +284,7 @@ public class WorldTest {
     	pos100xAsteroid.setWorld(emptyWorld);
     	emptyWorld.addAsSpaceObject(pos100xAsteroid);
     	emptyWorld.evolve(5,null);
-    	assertTrue(emptyWorld.getSpaceObjectAt(1).getVel().getX() == - velNeg20x.getX());
+    	assertTrue(emptyWorld.getSpaceObjectAt(1).getVel().getX() == velNeg20x.getX());
     	assertTrue(emptyWorld.getSpaceObjectAt(1).getVel().getY() == velNeg20x.getY());
 
     }
@@ -444,7 +444,6 @@ public class WorldTest {
 		emptyWorld.addAsSpaceObject(defaultPosBullet);
 		emptyWorld.addAsSpaceObject(pos100xShip);
 		emptyWorld.resolveBullet(defaultPosBullet, pos100xShip);
-		System.out.println(((Bullet) defaultPosBullet).getSource() + "  "+defaultPosShip);
 		assertTrue(pos100xShip.isTerminated());
 	}
 	@Test
