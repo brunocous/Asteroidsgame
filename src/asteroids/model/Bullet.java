@@ -88,6 +88,7 @@ public class Bullet extends SpaceObject {
 	 * 
 	 */
 	@Override
+	@Immutable
 	public double getMass() {
 
 		return 4 / 3 * Math.PI * Math.pow(this.getRadius(), 3) * getRhoBullet();
