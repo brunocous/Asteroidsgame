@@ -10,8 +10,13 @@ import be.kuleuven.cs.som.annotate.*;
 /**
  * A class of bullets involving a position, a velocity, a source and a radius.
  * 
- * @Invar Each bullet must have a valid number of boundary collisions
+ * @Invar Each bullet must have a valid number of boundary collisions.
  * 			| isValidNbBoundaryCollisions(getNbBoundaryCollisions())
+ * @Invar Each bullet must have a valid source.
+ * 			| hasProperSource(getSource())
+ * 
+ * @author Bruno Cousement and Simon Telen
+ * @version 1.0
  */
 public class Bullet extends SpaceObject {
 	
@@ -94,36 +99,27 @@ public class Bullet extends SpaceObject {
 	 * 
 	 * @param source
 	 * 			The candidate source of this bullet.
-	 * @return  If this bullet is not yet terminated, true if and
-	 *          only if the given space object is effective and not yet
+	 * @return  True if and only if the given source is effective and not yet
 	 *          terminated
-	 *        | if (! isTerminated())
-	 *        |   then result == (source != null) && (! source.isTerminated())
-	 * @return  If this world is terminated, true if and only if
-	 *          the given world is not effective.
-	 *        | if (! this.isTerminated())
-	 *        |   then result == (source == null)
+	 *        |   result == (source != null) && (! source.isTerminated())
 	 */
 	@Raw
 	public boolean canHaveAsSource(SpaceObject source){
-		if (this.isTerminated())
-			return (source == null);
 		return (source != null) && (!source.isTerminated());
 	}
 
 	/**
-	 * TODO afmaken
 	 * Check whether this bullet has a valid source.
 	 * 
 	 * @return  True if and only if this bullet can have its source as its
-	 *          source, and if this source is terminated 
+	 *          source, and if this source is terminated. 
 	 *        | result ==
-	 *        |   canHaveAsShare(getShare()) &&
-	 *        |   ( isTerminated() || getShare().hasAsPurchase(this))
+	 *        |  canHaveAsSource(getSource())
+	 *        | 	&& getWorld() == null
 	 */
-	public boolean hasProperWorld(){
-		return canHaveAsWorld(getWorld())
-				&&((getWorld() == null) || (getWorld().hasAsSpaceObject(this)));
+	public boolean hasProperSource(){
+		return this.canHaveAsSource(getSource())
+				&& this.getWorld() == null;
 	}
 	/**
 	 * Returns the source of this bullet
