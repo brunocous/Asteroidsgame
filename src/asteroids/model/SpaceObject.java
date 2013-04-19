@@ -107,6 +107,7 @@ public abstract class SpaceObject {
 	 * 			|!isValidMaxSpeed(maxSpeed)
 	 *         
 	 */
+	@Model
 	public SpaceObject( Vector pos, Vector vel, double radius, double maxSpeed, World world) 
 			throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
 		if(!isValidMaxSpeed(maxSpeed)){
@@ -144,6 +145,7 @@ public abstract class SpaceObject {
 	 *         |!isValidPosition((Position) pos)
 	 *         
 	 */
+	@Model
 	public SpaceObject( Vector pos, Vector vel, double radius,World world) throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
 		this(pos, vel, radius, Velocity.getSpeedOfLight(), world);
 	}
@@ -168,6 +170,7 @@ public abstract class SpaceObject {
 	 *         |!isValidPosition((Position) pos)
 	 *         
 	 */
+	@Model
 	public SpaceObject( Vector pos, Vector vel, double radius) throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
 		this(pos, vel, radius, Velocity.getSpeedOfLight(), null);
 	}
@@ -179,6 +182,7 @@ public abstract class SpaceObject {
 	 * 			does not belong to any world.
 	 * 			| this(new Position(), new Velocity(), 15)
 	 */
+	@Model
 	public SpaceObject() throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
 		this(new Position(), new Velocity(), 15);
 	}

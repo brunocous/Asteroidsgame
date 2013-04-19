@@ -27,6 +27,7 @@ public abstract class Vector {
  * 			| then new.getY() = yComp
  * 			| else new.getY() = 0
  */
+	@Model
 	public Vector(double xComp, double yComp) {
 		
 			this.xComp = xComp;
@@ -40,6 +41,7 @@ public abstract class Vector {
  * @Effect This new vector is initialized with 50 as 
  * 			its new x-component and 50 as its new y-component.
  */
+	@Model
 	public Vector() {
 		this(50,50);
 	}
