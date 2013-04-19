@@ -135,6 +135,7 @@ public class Bullet extends SpaceObject {
 	 * @return the initialSpeed
 	 */
 	@Basic
+	@Immutable
 	public static double getInitialSpeed() {
 		return INITIAL_SPEED;
 	}
@@ -143,6 +144,7 @@ public class Bullet extends SpaceObject {
 	 * @return the initialRadius
 	 */
 	@Basic
+	@Immutable
 	public static double getInitialRadius() {
 		return INITIAL_RADIUS;
 	}
