@@ -474,7 +474,7 @@ public class World {
 	 * 			|!SpaceObject.isValidElapsedTime(deltaT)
 	 * @note might also throw an IllegalPositionException using the method move(deltaT) from SpaceObject
 	 */
-	public void updatePositions(double deltaT) throws IllegalStateException, NegativeTimeException, IllegalPositionException{
+	public void updatePositions(double deltaT) throws IllegalStateException, NegativeTimeException{
 		if(isTerminated())
 			throw new IllegalStateException();
 		for(SpaceObject object : this.getAllSpaceObjects()){
@@ -696,13 +696,10 @@ public class World {
 	 * 			| deltaT < 0
 	 * @throws IllegalStateException
 	 * 			This world is already terminated.
-	 * 			| isTerminated()
-	 * @throws NotOfThisWorldException
-	 * 			this.getSpaceObjectAt(i).getWorld() != this
-	 * 		   
+	 * 			| isTerminated()	   
 	 * @note Might also throw an IllegalPositionException using the method updatePositions(deltaT)
 	 */
-	public void evolve(double deltaT, CollisionListener coll) throws NegativeTimeException, IllegalStateException, IllegalPositionException{
+	public void evolve(double deltaT, CollisionListener coll) throws NegativeTimeException, IllegalStateException{
 		
 		if(isTerminated())
 			throw new IllegalStateException();
