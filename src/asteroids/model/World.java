@@ -472,7 +472,7 @@ public class World {
 	 * @throws NegativeTimeException
 	 * 			The given deltaT is negative.
 	 * 			|!SpaceObject.isValidElapsedTime(deltaT)
-	 * @note might also throw an IllegalPositionException using the method move(deltaT) from SpaceObject
+	 * 
 	 */
 	public void updatePositions(double deltaT) throws IllegalStateException, NegativeTimeException{
 		if(isTerminated())
@@ -696,8 +696,7 @@ public class World {
 	 * 			| deltaT < 0
 	 * @throws IllegalStateException
 	 * 			This world is already terminated.
-	 * 			| isTerminated()	   
-	 * @note Might also throw an IllegalPositionException using the method updatePositions(deltaT)
+	 * 			| isTerminated()	 
 	 */
 	public void evolve(double deltaT, CollisionListener coll) throws NegativeTimeException, IllegalStateException{
 		
