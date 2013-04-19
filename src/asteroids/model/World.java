@@ -6,6 +6,7 @@ import java.util.List;
 
 import asteroids.CollisionListener;
 import asteroids.Util;
+import asteroids.Error.IllegalPositionException;
 import asteroids.Error.NegativeTimeException;
 import asteroids.Error.NotOfThisWorldException;
 import asteroids.model.Util.Position;
@@ -49,6 +50,7 @@ public class World {
 	 * Variable reflecting whether or not this world is terminated.
 	 */
 	private boolean isTerminated;
+	
 	/**
 	 * Initializes this new world with a given width and height.
 	 * @param width
@@ -61,14 +63,14 @@ public class World {
 	 * 		width.
 	 * 			| if(isValidWidth(width))
 	 * 			| then new.getWidth() == width
-	 * 			| else new.getWidth() == getMaxWidth();
+	 * 			| else new.getWidth() == getMaxWidth()
 	 * @post The new height of this new world is equal to the given height if 
 	 * 		the given height is a valid height. If the given height is not a valid
 	 * 		height, then the new height of this new world is equal to the maximum 
 	 * 		height.
 	 * 			| if(isValidHeight(height))
 	 * 			| then new.getHeight() == height
-	 * 			| else new.getHeight() == getMaxHeight();
+	 * 			| else new.getHeight() == getMaxHeight()
 	 * @post This new world does not have any space objects yet.
 	 * 			| new.getNbSpaceObjects() == 0
 	 */
@@ -122,7 +124,7 @@ public class World {
 	}
 	/**
 	 * checks whether the given height is valid.
-	 * @param heigth
+	 * @param height
 				The height to check.
 	 * @return True if and only if the given height is greater than 0 
 	 * 			and less than or equal to the maximum height of a world.
@@ -400,12 +402,13 @@ public class World {
 	 * Checks if all the points within the given radius from the given position  
 	 * from the x- and y-component of the position are within or equal to the 
 	 * values of the boundaries.
+	 * 
 	 * @param pos
 	 * 		  The position to be checked. 
 	 * @param radius
 	 * 		  The radius to be checked in km.
 	 * @param world
-	 * 		  The world with the boundaries.
+	 * 		  The world in which the position is to be checked.
 	 * @return True if and only if all the points within the given radius of the 
 	 * 			given position are within or on the values of the boundaries.
 	 * 		 	| double x = pos.getX()
@@ -440,23 +443,23 @@ public class World {
 	}
 	
 	/**
-	 * Updates the positions of each space object in this world for an amount of time delta T.
+	 * Updates the positions of each space object in this world for a given amount of time delta T.
 	 * @param deltaT
-	 * 			The amount of time.
-	 * @post Each of the space objects of this world updates their position by adding their 
+	 * 			The given amount of time.
+	 * @effect Each of the space objects of this world updates their position by adding their 
 	 *			current velocity multiplied by the given amount of time delta T to their 
 	 * 			current position.
 	 * 			| for each spaceObject in spaceObjects:
-	 * 			| (new spaceObject).getPos() == 
-	 * 			| spaceObject.getPos().add(deltaT*spaceObject.getVel())
+	 * 			| spaceObject.move(deltaT)
 	 * @throws IllegalStateException
 	 * 			This world is already terminated.
 	 * 			| isTerminated()
 	 * @throws NegativeTimeException
 	 * 			The given deltaT is negative.
 	 * 			|!SpaceObject.isValidElapsedTime(deltaT)
+	 * @note might also throw an IllegalPositionException using the method move(deltaT) from SpaceObject
 	 */
-	public void updatePositions(double deltaT) throws IllegalStateException, NegativeTimeException{
+	public void updatePositions(double deltaT) throws IllegalStateException, NegativeTimeException, IllegalPositionException{
 		if(isTerminated())
 			throw new IllegalStateException();
 		for(SpaceObject object : this.getAllSpaceObjects()){
@@ -477,10 +480,10 @@ public class World {
 	 * 			| ((Ship) spaceObject).thrust(deltaT)
 	 * @throws NegativeTimeException
 	 * 			The given amount of time is negative.
-	 * 			| deltaT < 0
+	 * 			|!SpaceObject.isValidElapsedTime(deltaT)
 	 * @throws IllegalStateException
 	 * 			This world is already terminated.
-	 * 			| isTerminated()
+	 * 			| this.isTerminated()
 	 */
 	public void updateVelocities(double deltaT) throws NegativeTimeException,
 					IllegalStateException{
@@ -641,18 +644,15 @@ public class World {
 	
 	/**
 	 * Evolves the world during an amount of time delta t.
-	 * 
+	 * TODO aanpassen voor de collisionListener
 	 * @param deltaT
 	 * 			The amount of time the world has to evolve.
-	 * @param coll
-	 * 			The collision listener to generate explosions.
 	 * @effect If the time to the first collision is greater than the given
 	 * 			amount of time deltaT, then update the positions and velocities
 	 * 			for a given amount of time deltaT of all the space objects of
 	 * 			this world. Else update the positions and velocities of all 
-	 * 			space objects of this world for an amount of time until the 
-	 * 			first collision and resolve that collision. And if the given 
-	 * 			collision listener is effective, then generate an explosion.
+	 * 			space objects of this world for an amount of time untill the 
+	 * 			first collision has occured and resolve that collision.
 	 * 			| double tC = getTimeToFirstCollision()
 	 * 			| if(!tC > deltaT)
 	 * 			| then updatePositions(deltaT)
@@ -672,17 +672,17 @@ public class World {
 	 * 			| 		else for each spaceObject in spaceObjects:
 	 * 			| 			if(Util.fuzzyEquals(SpaceObject.getDistanceBetween(this.getSpaceObjectAt(i),spaceObject),0) 
 	 * 			|				&& this.getSpaceObjectAt(i)!= spaceObject)
-	 * 			|			then if(coll != null)
-	 * 			|				 then coll.objectCollision(this.getSpaceObjectAt(i), object2, SpaceObject.getCollisionPosition(object2, this.getSpaceObjectAt(i)).getX(), SpaceObject.getCollisionPosition(this.getSpaceObjectAt(i), object2).getY())
-	 * 			|				     resolve(this.getSpaceObjectAt(i), spaceObject)
+	 * 			|			then resolve(this.getSpaceObjectAt(i), spaceObject)
 	 * @throws NegativeTimeException
 	 * 			The given amount of time deltaT is negative.
 	 * 			| deltaT < 0
 	 * @throws IllegalStateException
 	 * 			This world is already terminated.
 	 * 			| isTerminated()
+	 * @note Might also throw an IllegalPositionException using the method updatePositions(deltaT)
 	 */
-	public void evolve(double deltaT, CollisionListener coll) throws NegativeTimeException, IllegalStateException{
+	public void evolve(double deltaT, CollisionListener coll) throws NegativeTimeException, IllegalStateException, IllegalPositionException{
+		
 		if(isTerminated())
 			throw new IllegalStateException();
 		double tC=getTimeToFirstCollision();
@@ -712,7 +712,9 @@ public class World {
 						|| Util.fuzzyEquals(this.getSpaceObjectAt(i).getPos().getY()
 								+this.getSpaceObjectAt(i).getRadius(), getHeight()))
 				{
-					try{boundaryCollide(this.getSpaceObjectAt(i));
+					try{if(coll != null)
+						
+						boundaryCollide(this.getSpaceObjectAt(i));
 					
 					}catch (NotOfThisWorldException ex){
 						assert this.getSpaceObjectAt(i).getWorld() != this;
@@ -745,10 +747,10 @@ public class World {
 	}
 	
 	/**
-	 * Checks if the given space object can bounce off a boundary.
+	 * Makes a given Space Object bounce off a boundary.
 	 * 
 	 * @param spaceObject
-	 * 			The space object to check.
+	 * 			The space object that's going to bounce.
 	 * @effect The the given space object is a ship or if the given space object
 	 * 			is a an asteroid, then the given space object bounces off a boundary.
 	 * 			Else if the given space object is a bullet, then if the bullet can bounce
