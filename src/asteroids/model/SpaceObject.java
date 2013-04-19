@@ -323,12 +323,12 @@ public abstract class SpaceObject {
 	 * Check whether this space object can have the given world as its world.
 	 * @param  world
 	 *         The world to check.
-	 * @return  If this world is not yet terminated, true if and
+	 * @return  If this space object is not yet terminated, true if and
 	 *          only if the given world is effective and not yet
 	 *          terminated
 	 *        | if (! isTerminated())
 	 *        |   then result == (world != null) && (! world.isTerminated())
-	 * @return  If this world is terminated, true if and only if
+	 * @return  If this space object is terminated, true if and only if
 	 *          the given world is not effective.
 	 *        | if (! this.isTerminated())
 	 *        |   then result == (world == null)
