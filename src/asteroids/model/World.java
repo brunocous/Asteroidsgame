@@ -8,7 +8,6 @@ import asteroids.CollisionListener;
 import asteroids.Util;
 import asteroids.Error.NegativeTimeException;
 import asteroids.Error.NotOfThisWorldException;
-import asteroids.Error.UnhandledCombinationException;
 import asteroids.model.Util.Position;
 import asteroids.model.Util.Vector;
 import asteroids.model.Util.Velocity;
@@ -278,7 +277,7 @@ public class World {
 	 *          references this world as their world.
 	 *        | for each spaceObject in 1..this.getNbSpaceObjects():
 	 *        |   this.canHaveAsSpaceObjectAt(getOwningAt(index),index) &&
-	 *        |   (getSpaceObjectAt(index).getOwner() == this)
+	 *        |   (getSpaceObjectAt(index).getWorld() == this)
 	 */
 	public boolean hasProperSpaceObjects() {
 		for (int index = 1; index <= this.getNbSpaceObjects(); index++) {
@@ -317,7 +316,7 @@ public class World {
 	 *         space objects, that space object is registered at the resulting
 	 *         index. Otherwise, the resulting value is -1.
 	 *       | if (this.hasAsSpaceObject(spaceObject))
-	 *       |    then this.getOwningAt(result) == spaceObject
+	 *       |    then this.getSpaceObjectAt(result) == spaceObject
 	 *       |    else result == -1
 	 */
 	@Raw
@@ -334,7 +333,7 @@ public class World {
 	 * @return  Each element in the resulting list is the same as the
 	 *          space object of this world at the corresponding index.
 	 *        | for each index in 0..result-size()-1 :
-	 *        |   result.get(index) == getOwningAt(index+1)
+	 *        |   result.get(index) == getSpaceObjectAt(index+1)
 	 */
 	public List<SpaceObject> getAllSpaceObjects() {
 		return new ArrayList<SpaceObject>(spaceObjects);
@@ -356,7 +355,7 @@ public class World {
 	 *        | new.getNbSpaceObjects() == getNbSpaceObjects() + 1
 	 * @post    This world has the given space object as its new last
 	 *          space object.
-	 *        | (new this).getOwningAt(this.getNbSpaceObjects()+1) == spaceObject
+	 *        | (new this).getSpaceObjectAt(this.getNbSpaceObjects()+1) == spaceObject
 	 */
 	@Raw
 	public void addAsSpaceObject(@Raw SpaceObject spaceObject) {
@@ -369,7 +368,7 @@ public class World {
 	 * 
 	 * @param spaceObjectsToAdd
 	 * 		  	The space objects to be added.
-	 * @post ...
+	 * @effect ...
 	 * 			| for each index in 0..spaceObjectsToAdd.size()-1
 	 * 			| addAsSpaceObject(spaceObjectsToAdd.get(index))
 	 */
@@ -403,7 +402,7 @@ public class World {
 	 *        | (! (new this).hasAsSpaceObject(spaceObject))
 	 * @post    All space objects registered beyond the removed space object
 	 *          shift one position to the left.
-	 *        | for each index in getIndexOfOwning(spaceObject)+1..getNbSpaceObjects():
+	 *        | for each index in getIndexOfSpaceObject(spaceObject)+1..getNbSpaceObjects():
 	 *        |   (new this).getSpaceObjectAt(index-1) == this.getSpaceObjectAt(index) 
 	 */
 	@Raw
@@ -696,12 +695,8 @@ public class World {
 	 * @throws IllegalStateException
 	 * 			This world is already terminated.
 	 * 			| isTerminated()
-	 * @throws UnhandledCombinationException
-	 * 			| for some i and some object2 : getAllSpaceObjects()
-	 *          | object1 = this.getSpaceObjectAt(i)
-	 *          | !isHandledCombination(object1,object2)
 	 */
-	public void evolve(double deltaT, CollisionListener coll) throws UnhandledCombinationException, NegativeTimeException, IllegalStateException{
+	public void evolve(double deltaT, CollisionListener coll) throws NegativeTimeException, IllegalStateException{
 		
 		if(isTerminated())
 			throw new IllegalStateException();
@@ -910,9 +905,9 @@ public class World {
 	 * 			| then 
 	 * 			| bounceOff(object1,object2)
 	 * 			| else if(Bullet.class.isAssignableFrom(object1.getClass()) 
-	 * 			|	   resolveBullet((Bullet) object1,object2)
-	 * 			| else if(Bullet.class.isAssignableFrom(object2.getClass())
-	 * 			|	   resolveBullet((Bullet) object2, object1)
+	 * 			| || Bullet.class.isAssignableFrom(object2.getClass()))
+	 * 			| 	   then
+	 * 			|	   resolveBullet(object1,object2)
 	 * 			|	   else if(Asteroid.class.isAssignableFrom(object1.getClass()) 
 	 * 			| 			&& Ship.class.isAssignableFrom(object2.getClass())) 
 	 * 			|			then
@@ -932,14 +927,15 @@ public class World {
 	 * 			one of the 2 given space objects or both given space objects
 	 * 			are not effective.
 	 * 			| object1 == null || object2 == null
-	 * @throws UnhandledCombinationException
-	 * 			|!isHandledCombination(object1,object2)
-	 * */
+	 */
 	public void resolve(SpaceObject object1, SpaceObject object2) throws IllegalStateException
-						, NotOfThisWorldException, NullPointerException, UnhandledCombinationException{
-		
-		checkResolvingConditions(object1,object2);
-		
+						, NotOfThisWorldException, NullPointerException{
+		if(object1 == null || object2 == null)
+			throw new NullPointerException();
+		if(this.isTerminated())
+			throw new IllegalStateException();
+		if(!this.hasAsSpaceObject(object1) || !this.hasAsSpaceObject(object2))
+			throw new NotOfThisWorldException();
 				if(Ship.class.isAssignableFrom(object1.getClass()) && Ship.class.isAssignableFrom(object2.getClass())){
 			
 					bounceOff(object1,object2);
@@ -950,14 +946,9 @@ public class World {
 					bounceOff(object1,object2);
 			
 				}
-				else if(Bullet.class.isAssignableFrom(object1.getClass())){
+				else if(Bullet.class.isAssignableFrom(object1.getClass()) || Bullet.class.isAssignableFrom(object2.getClass())){
 		
-					resolveBullet((Bullet) object1, object2);
-				}
-				else if(Bullet.class.isAssignableFrom(object2.getClass())){
-					
-					resolveBullet((Bullet) object2, object1);
-					
+					resolveBullet(object1, object2);
 				}
 		
 				else if(Asteroid.class.isAssignableFrom(object1.getClass()) && Ship.class.isAssignableFrom(object2.getClass())){
@@ -971,96 +962,72 @@ public class World {
 					object1.terminate();
 			
 				}
-				else {
-					throw new UnhandledCombinationException();
-				}
+				/**
+				 * TODO 
+				 */
 	}
-	
-	/**
-	 * Check whether the combination of the types of the given object1 and object2 is handled in resolve(...)
-	 * @param object1 the first Space Object to be resolved.
-	 * @param object2 the second Space Object to be resolved.
-	 * @return ((Ship.class.isAssignableFrom(object1.getClass()) && Ship.class.isAssignableFrom(object2.getClass()))
-	 *			  			 || Asteroid.class.isAssignableFrom(object1.getClass()) && Asteroid.class.isAssignableFrom(object2.getClass())
-	 *			  			 || Bullet.class.isAssignableFrom(object1.getClass())
-	 *			  			 || Bullet.class.isAssignableFrom(object2.getClass())
-	 *			  			 || Asteroid.class.isAssignableFrom(object1.getClass()) && Ship.class.isAssignableFrom(object2.getClass())
-	 *			  			 || Ship.class.isAssignableFrom(object1.getClass()) && Asteroid.class.isAssignableFrom(object2.getClass()));
-	 *
-	 * @throws IllegalStateException, NotOfThisWorldException, NullPointerException using the method checkResolvingConditions(object1,object2)
-	 */
-	public boolean isHandledCombination(SpaceObject object1, SpaceObject object2) throws IllegalStateException,  NotOfThisWorldException, NullPointerException{
-		checkResolvingConditions(object1,object2);
-		boolean result =((Ship.class.isAssignableFrom(object1.getClass()) && Ship.class.isAssignableFrom(object2.getClass()))
-				  			 || Asteroid.class.isAssignableFrom(object1.getClass()) && Asteroid.class.isAssignableFrom(object2.getClass())
-				  			 || Bullet.class.isAssignableFrom(object1.getClass())
-				  			 || Bullet.class.isAssignableFrom(object2.getClass())
-				  			 || Asteroid.class.isAssignableFrom(object1.getClass()) && Ship.class.isAssignableFrom(object2.getClass())
-				  			 || Ship.class.isAssignableFrom(object1.getClass()) && Asteroid.class.isAssignableFrom(object2.getClass()));
-		return result;
-	}
-	/**
-	 * checks whether the given Space Objects object1 and object2 can be resolved.
-	 * 
-	 * @param object1 The first object we want to resolve.
-	 * @param object2 The seceond object we want to resolve.
-	 * @throws IllegalStateException
-	 *         |this.isTerminated()
-	 * @throws NotOfThisWorldException
-	 * 		   |(!this.hasAsSpaceObject(object1) || !this.hasAsSpaceObject(object2))
-	 * @throws NullPointerException
-	 * 		   |(object1 == null || object2 == null)
-	 */
-	
-	public void checkResolvingConditions(SpaceObject object1, SpaceObject object2) throws IllegalStateException
-	, NotOfThisWorldException, NullPointerException {
-		
-		if(object1 == null || object2 == null)
-			throw new NullPointerException();
-		if(this.isTerminated())
-			throw new IllegalStateException();
-		if(!this.hasAsSpaceObject(object1) || !this.hasAsSpaceObject(object2))
-			throw new NotOfThisWorldException();
-		
-	}
-	
 	/**
 	 * Resolve a collision between 2 spaceObject when at least one of the spaceObjects is a bullet.
 	 * 
 	 * @param object1
-	 * 			The first object to be resolved, which is a bullet.
+	 * 			The first object to be resolved.
 	 * @param object2
 	 * 			The second object to be resolved.
-	 * @effect If the given object2 is an asteroid, then terminate object1 and terminate object2.
-	 * 		   If the given object 2 is a ship, then if the given object1 has not got object2 as 
-	 *         its source then terminate object1 and terminate object2. Else 
+	 * @effect If the given object1 is an asteroid and the given object2 is a bullet 
+	 * 			or if the given object2 is an asteroid and the given object 1 a bullet, 
+	 * 			then terminate object1 and terminate object2. Else if the given object1
+	 * 			is a ship and the given object2 is a bullet, then if the given object2 
+	 * 			has not got the given object1 as its source then terminate object1 and 
+	 * 			terminate object2. Else do nothing. Else if the given object 2 is a ship
+	 * 			and the given object 1 is a bullet, then if the given object1 has not got
+	 * 			object2 as its source then terminate object1 and terminate object2. Else 
 	 * 			if both given objects are bullets, then if they have both a different
 	 * 			source then terminate both objects. Else do nothing. Else terminate object1 and terminate object2.
-	 * 			| if(Asteroid.class.isAssignableFrom(object2.getClass()) 
+	 * 			| if((Asteroid.class.isAssignableFrom(object1.getClass()) 
+	 * 			| && Bullet.class.isAssignableFrom(object2.getClass())) 
+	 * 			| || (Asteroid.class.isAssignableFrom(object2.getClass()) 
+	 * 			| && Bullet.class.isAssignableFrom(object1.getClass()))) 
 	 * 			| then
 	 * 			| object1.terminate()
 	 * 			| object2.terminate()
-	 * 			|		else if( Ship.class.isAssignableFrom(object2.getClass()))
+	 * 			| else if(Ship.class.isAssignableFrom(object1.getClass()) 
+	 * 			| && Bullet.class.isAssignableFrom(object2.getClass()))
+	 * 			| 		then if(object2.getSource() != object1)
+	 * 			| 				then 
+	 * 			| 				object1.terminate()
+	 * 			| 				object2.terminate()
+	 * 			|		else if( Ship.class.isAssignableFrom(object2.getClass()) 
+	 * 			| 				&& Bullet.class.isAssignableFrom(object1.getClass()))
 	 * 			| 			 then if(object1.getSource() != object2) 
 	 * 			| 				  then 
 	 * 			| 				  object1.terminate()
 	 * 			| 				  object2.terminate()
-	 * 			| 			 else if( Bullet.class.isAssignableFrom(object2.getClass()))
+	 * 			| 			 else if(Bullet.class.isAssignableFrom(object1.getClass())
+	 * 			|					&& Bullet.class.isAssignableFrom(object2.getClass()))
 	 * 			|				  then if( object1.getSource() != object2.getSource())
 	 * 			|					   then 
 	 * 			|					   object1.terminate()
-	 * 			|					   object2.terminate()					
+	 * 			|					   ojbect2.terminate()					
 	 * 			| 				  else 
 	 * 			|			 	  object1.terminate()
 	 * 			| 			      object2.terminate()
 	 * 
-	 * @post If the given object2 is an asteroid, then add the 2 child asteroids of object2 to this world.
-	 * 			| if(( Asteroid.class.isAssignableFrom(object2.getClass())))
+	 * @post If the given object1 is an asteroid when the given object2 is a bullet 
+	 * 			or if the given object2 is an asteroid and the given object 1 a bullet,  
+	 * 			then add the 2 child asteroids of object1 to this world.
+	 * 			| if((   Asteroid.class.isAssignableFrom(object1.getClass()) 
+	 * 			| && Bullet.class.isAssignableFrom(object2.getClass())  ) 
+	 * 			| || (   Asteroid.class.isAssignableFrom(object2.getClass()) 
+	 * 			| && Bullet.class.isAssignableFrom(object1.getClass())  )) 
 	 * 			| then new.getNbSpaceObjects() = getNbSpaceObjects() + 2
 	 * 
 	 * @throws IllegalStateException
 	 * 			This world is already terminated.
 	 * 			| isTerminated()
+	 * @throws IllegalArgumentException
+	 * 			None of the given space objects are bullets.
+	 * 			| !Bullet.class.isAssignableFrom(object1.getClass())
+	 * 			| && !Bullet.class.isAssignableFrom(object2.getClass())
 	 * @throws NotOfThisWorldException
 	 * 			None of the given space objects belong to this world.
 	 * 			| !hasAsSpaceObject(object1) 
@@ -1069,29 +1036,42 @@ public class World {
 	 * 			one of the 2 given space objects or both given space objects
 	 * 			are not effective.
 	 * 			| object1 == null || object2 == null
-	 * @throws UnhandledCombinationException
-	 * 			| !(Asteroid.class.isAssignableFrom(object2.getClass())||Ship.class.isAssignableFrom(object2.getClass())
-	 * 			| ||Bullet.class.isAssignableFrom(object2.getClass()))
 	 */
-	public void resolveBullet(Bullet object1, SpaceObject object2)throws IllegalStateException,
-				 NotOfThisWorldException, NullPointerException, UnhandledCombinationException{
+	public void resolveBullet(SpaceObject object1, SpaceObject object2)throws IllegalStateException,
+					IllegalArgumentException, NotOfThisWorldException, NullPointerException{
+		if(object1 == null || object2 == null)
+			throw new NullPointerException();
+		if(this.isTerminated())
+			throw new IllegalStateException();
+		if(!this.hasAsSpaceObject(object1) || !this.hasAsSpaceObject(object2))
+			throw new NotOfThisWorldException();
 		
-		checkResolvingConditions(object1, object2);
-
-		
-					if(Asteroid.class.isAssignableFrom(object2.getClass())){
+		if(!Bullet.class.isAssignableFrom(object1.getClass()) 
+			&& !Bullet.class.isAssignableFrom(object2.getClass()))
+			throw new IllegalArgumentException("None of the arguments are bullets");
+				
+					if(Asteroid.class.isAssignableFrom(object1.getClass())){
 							
-						try{Asteroid asteroidCopy = new Asteroid((Asteroid) object2);
+						try{Asteroid asteroidCopy = new Asteroid((Asteroid) object1);
 						object1.terminate();
 						object2.terminate();
 						this.addAsSpaceObjects( asteroidCopy.split());
 						} catch (Exception ex){
 							
 						}
+												}else if(Asteroid.class.isAssignableFrom(object2.getClass())){
+						
+						try{Asteroid asteroidCopy = new Asteroid((Asteroid) object2);
+						object2.terminate();
+						object1.terminate();
+						this.addAsSpaceObjects( asteroidCopy.split());
+						} catch (Exception ex){
+								
+							}
 							
-						} else if(Ship.class.isAssignableFrom(object2.getClass())){
+						} else if(Ship.class.isAssignableFrom(object1.getClass())){
 							
-							if((object1).getSource() != (Ship)object2){
+							if(((Bullet) object2).getSource() != (Ship)object1){
 								
 								object1.terminate();
 								object2.terminate();
@@ -1099,16 +1079,23 @@ public class World {
 							else{
 								
 							}
-						
-						} else if(Bullet.class.isAssignableFrom(object2.getClass())){
-							if((object1).getSource() != ((Bullet) object2).getSource()){
+						} else if(Ship.class.isAssignableFrom(object2.getClass())){
+							
+							if(((Bullet) object1).getSource() != (Ship)object2){
+								
+								object1.terminate();
+								object2.terminate();
+							}
+						} else if(Bullet.class.isAssignableFrom(object1.getClass())
+									&& Bullet.class.isAssignableFrom(object2.getClass())){
+							if(((Bullet) object1).getSource() != ((Bullet) object2).getSource()){
 								object1.terminate();
 								object2.terminate();
 							}
 						}
 						else{	
-						
-							throw new UnhandledCombinationException();
+						object1.terminate();
+						object2.terminate();
 						
 						}
 	}

@@ -1,5 +1,8 @@
 package asteroids.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import asteroids.Util;
 import asteroids.Error.IllegalMaxSpeedException;
 import asteroids.Error.IllegalPositionException;
@@ -10,12 +13,14 @@ import be.kuleuven.cs.som.annotate.*;
 
 /** 
  * A class of spaceships involving a position, a velocity, a direction, 
- * a mass, a radius and a world with among others turning and accelerating facilities. 
+ * a mass, a radius, a collection of bullets and a world with among others turning and accelerating facilities. 
  * 
  * @Invar The mass that applies to all ships must be a valid mass.
  *        	| isValidMass(getMass())
  * @Invar The direction that applies to all ships must be a valid direction.
  * 			| isValidDirection(getDirection())
+ * @Invar Each ship must have proper bullets.
+ * 			| hasProperBullets()
  * 
  * @version 2.0
  * @author Bruno Coussement and Simon Telen
@@ -37,9 +42,25 @@ public class Ship extends SpaceObject{
 	 */
 	private final double forcePerSecond;
 	/**
-	 *  the direction a ship is orientated in.
+	 *  The direction a ship is orientated in.
 	 */
 	private double direction;
+	/**
+	 * The maximum number of bullets a ship can be associated with in a world.
+	 */
+	private static final double MAX_NB_OF_BULLETS = 3;
+	/**
+	 * Variable referencing a list collecting all the bullets of
+	 * this ship.
+	 * 
+	 * @Invar   The referenced list is effective.
+	 *        | bullets != null
+	 * @Invar   Each bullet registered in the referenced list is
+	 *          effective and not yet terminated.
+	 *        | for each bullet in bullets:
+	 *        |   ( (bullet != null) && (!bullet.isTerminated()) )
+	 */
+	private ArrayList<Bullet> bullets;
 
 	/**
 	 * Initialize this new ship with given pos, vel, direction, mass, radius and world.
@@ -61,14 +82,16 @@ public class Ship extends SpaceObject{
 	 * @post The new mass of this ship is equal to the given mass if the given mass is valid.
 	 * 		 | if(isValidMass(mass))
 	 * 		 | then new.getMass() == mass
+	 * @post This new ship does not have any bullets yet.
+	 * 		 | getNbBullets() == 0
 	 * @throws IllegalRadiusException
 	 *         The given radius is not a valid radius.
-	 *         |!SpaceObject.isValidRadius(radius)
+	 *         |!Bullet.isValidRadius(radius)
 	 * @throws IllegalPositionException
 	 *         The given pos is not a valid position.
-	 *         |!SpaceObject.isValidPosition((Position) pos)
+	 *         |!Bullet.isValidPosition((Position) pos)
 	 *         
-	 * @note This constructor inherits a constructor of space object.
+	 * @note This constructor inherits a constructor of bullet.
 	 */
 	public Ship(Vector pos,Vector vel, double direction, double radius, double mass,World world) throws
 	 		IllegalRadiusException, IllegalMaxSpeedException, IllegalPositionException{
@@ -83,6 +106,7 @@ public class Ship extends SpaceObject{
 		this.setDirection(direction);
 		this.forcePerSecond = 1.1 * Math.pow(10, 18);
 		
+		this.bullets = new ArrayList<Bullet>();
 	}
 	
 	/**
@@ -103,10 +127,10 @@ public class Ship extends SpaceObject{
 	 * 			| this(pos,vel,direction,radius,mass,null);
 	 * @throws IllegalRadiusException
 	 *         The given radius is not a valid radius.
-	 *         |!SpaceObject.isValidRadius(radius)
+	 *         |!Bullet.isValidRadius(radius)
 	 * @throws IllegalPositionException
 	 *         The given pos is not a valid position.
-	 *         |!SpaceObject.isValidPosition((Position) pos)
+	 *         |!Bullet.isValidPosition((Position) pos)
 	 */
 	public Ship(Vector pos, Vector vel, double direction, double radius, double mass) throws IllegalRadiusException, IllegalMaxSpeedException, IllegalPositionException{
 		this(pos,vel,direction,radius,mass,null);
@@ -293,5 +317,249 @@ public class Ship extends SpaceObject{
 	public double getMass() {
 		return mass;
 	}
-		
+
+	/**
+	 * @return the maxNbOfBullets
+	 */
+	@Basic
+	@Immutable
+	public static double getMaxNbOfBullets() {
+		return MAX_NB_OF_BULLETS;
+	}
+	/**
+	 * Return the bullet of this ship at the given index.
+	 * 
+	 * @param   index
+	 *          The index of the bullet to return.
+	 * @throws  IndexOutOfBoundsException
+	 *          The given index is not positive or it exceeds the
+	 *          number of bullets of this ship.
+	 *        | (index < 1) || (index > getNbBullets())
+	 */
+	@Basic
+	@Raw
+	public Bullet getBulletAt(int index) throws IndexOutOfBoundsException {
+		return this.getAllBullets().get(index - 1);
+	}
+
+	/**
+	 * Return the number of bullets of this ship.
+	 */
+	@Basic
+	@Raw
+	public int getNbBullets() {
+		return this.getAllBullets().size();
+	}
+
+	/**
+	 * Check whether this ship can have the given bullet
+	 * as one of its bullets.
+	 * 
+	 * @param   bullet
+	 *          The bullet to check.
+	 * @return  True if and only if the given bullet is effective, and
+	 *          if that bullet can have this ship as its ship, and if 
+	 *          this ship has less than 3 bullets.
+	 *        | result ==
+	 *        |   (bullet != null) &&
+	 *        |   bullet.canHaveAsSource(this)
+	 *        |   getNbBullets()<3
+	 */
+	@Raw
+	public boolean canHaveAsBullet(Bullet bullet) {
+		return (bullet != null) && bullet.canHaveAsSource(this) && this.getNbBullets()<3;
+	}
+
+	/**
+	 * Check whether this ship can have the given bullet
+	 * as one of its bullets at the given index.
+	 * 
+	 * @param   bullet
+	 *          The bullet to check.
+	 * @param   index
+	 *          The index to check.
+	 * @return  False if the given index is not positive or exceeds
+	 *          the number of bullets of this ship + 1.
+	 *        | if ( (index < 1) || (index > this.getNbBullets()+1) )
+	 *        |   then result == false
+	 *          Otherwise, false if this ship cannot have the
+	 *          given bullet as one of its bullets.
+	 *        | else if (! canHaveAsBullet(bullet))
+	 *        |   then result == false
+	 *          Otherwise, true if and only if the given bullet is
+	 *          not already registered at another index.
+	 *        | else result ==
+	 *        |   for each I in 1..getNbBullets():
+	 *        |     ( (I == index) || (getBulletAt(I) != bullet) )
+	 */
+	@Raw
+	public boolean canHaveAsBulletAt(Bullet bullet, int index) {
+		if ((index < 1) || (index > this.getNbBullets() + 1))
+			return false;
+		if (!canHaveAsBullet(bullet))
+			return false;
+		for (int pos = 1; pos <= this.getNbBullets(); pos++)
+			if ((pos != index) && (this.getBulletAt(pos) == bullet))
+				return false;
+		return true;
+	}
+
+	/**
+	 * Check whether this ship has a proper list of bullets.
+	 * 
+	 * @return  True if and only if this ship can have each of its
+	 *          bullets at their index, and if each of these bullets
+	 *          references this ship as their ship.
+	 *        | for each bullet in 1..this.getNbBullets():
+	 *        |   this.canHaveAsBulletAt(getOwningAt(index),index) &&
+	 *        |   (getBulletAt(index).getSource() == this)
+	 */
+	public boolean hasProperBullets() {
+		for (int index = 1; index <= this.getNbBullets(); index++) {
+			if (!this.canHaveAsBulletAt(this.getBulletAt(index), index))
+				return false;
+			if (this.getBulletAt(index).getSource() != this)
+				return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Check whether this ship has the given bullet as one of
+	 * its bullets.
+	 *
+	 * @param   bullet
+	 *          The bullet to check.
+	 * @return  True if and only if this ship has the given bullet
+	 *          as one of its bullets at some index.
+	 *        | result ==
+	 *        |   for some index in 1..this.getNbBullets():
+	 *        |     this.getOwningAt(index).equals(bullet)
+	 */
+	@Raw
+	public boolean hasAsBullet(Bullet bullet) {
+		return this.getAllBullets().contains(bullet);
+	}
+
+	/**
+	 * Return the index at which the given bullet is registered
+	 * in the list of bullets for this ship.
+	 *  
+	 * @param  bullet
+	 *         The bullet to search for.
+	 * @return If this ship has the given bullet as one of its
+	 *         bullets, that bullet is registered at the resulting
+	 *         index. Otherwise, the resulting value is -1.
+	 *       | if (this.hasAsBullet(bullet))
+	 *       |    then this.getBulletAt(result) == bullet
+	 *       |    else result == -1
+	 */
+	@Raw
+	public int getIndexOfBullet(Bullet bullet) {
+		return this.getAllBullets().indexOf(bullet);
+	}
+
+	/**
+	 * Return a list of all the bullets of this ship.
+	 * 
+	 * @return  The size of the resulting list is equal to the number of
+	 *          bullets of this ship.
+	 *        | result.size() == getNbBullets()
+	 * @return  Each element in the resulting list is the same as the
+	 *          bullet of this ship at the corresponding index.
+	 *        | for each index in 0..result-size()-1 :
+	 *        |   result.get(index) == getBulletAt(index+1)
+	 */
+	public List<Bullet> getAllBullets() {
+		return new ArrayList<Bullet>(bullets);
+	}
+	/**
+	 * Add the given bullet at the end of the list of
+	 * bullets of this ship.
+	 * 
+	 * @param   bullet
+	 *          The bullet to be added.
+	 * @pre     The given bullet is effective and already references
+	 *          this ship as its ship.
+	 *        | (bullet != null) && (bullet.getSource() == this)
+	 * @pre     This ship does not not yet have the given bullet
+	 *          as one of its bullets.
+	 *        | ! hasAsBullet(bullet)
+	 * @post    The number of bullets of this ship is incremented
+	 *          by 1.
+	 *        | new.getNbBullets() == getNbBullets() + 1
+	 * @post    This ship has the given bullet as its new last
+	 *          bullet.
+	 *        | (new this).getBulletAt(this.getNbBullets()+1) == bullet
+	 */
+	@Raw
+	public void addAsBullet(@Raw Bullet bullet) {
+		assert (bullet != null) && (bullet.getSource() == this);
+		assert !this.hasAsBullet(bullet);
+		bullets.add(bullet);
+	}
+	/**
+	 * Adds the given bullets at the end of the list of bullets of this ship.
+	 * 
+	 * @param bulletsToAdd
+	 * 		  	The bullets to be added.
+	 * TODO hier documentatie afmaken
+	 * @effect ...
+	 * 			| for each index in 0..bulletsToAdd.size()-1
+	 * 			| addAsBullet(bulletsToAdd.get(index))
+	 */
+	@Raw 
+	public void addAsBullets(@Raw List<Bullet> bulletsToAdd){
+		for(Bullet objectToAdd: bulletsToAdd){
+			try{ this.addAsBullet(objectToAdd);
+			}catch (Exception ex){
+				assert ((objectToAdd == null) || (objectToAdd.getSource() != this));
+				assert this.hasAsBullet(objectToAdd);
+			}
+		}
+	}
+
+	/**
+	 * Remove the given bullet from the bullets of this ship.
+	 * 
+	 * @param   bullet
+	 *          The bullet to be removed.
+	 * @pre     The given bullet is effective and does not have any
+	 *          ship.
+	 *        | (bullet != null) && (bullet.getSource() == null)
+	 * @pre     This ship has the given bullet as one of
+	 *          its bullets.
+	 *        | hasAsOwning(bullet)
+	 * @post    The number of bullets of this ship is decremented
+	 *          by 1.
+	 *        | new.getNbBullets() == getNbBullets() - 1
+	 * @post    This ship no longer has the given bullet as
+	 *          one of its bullets.
+	 *        | (! (new this).hasAsBullet(bullet))
+	 * @post    All bullets registered beyond the removed bullet
+	 *          shift one position to the left.
+	 *        | for each index in getIndexOfBullet(bullet)+1..getNbBullets():
+	 *        |   (new this).getBulletAt(index-1) == this.getBulletAt(index) 
+	 */
+	@Raw
+	public void removeAsBullet(Bullet bullet) {
+		assert (bullet != null) && (bullet.getSource() == null);
+		assert (this.hasAsBullet(bullet));
+		bullets.remove(bullet);
+	}	
+	/**
+	 * Terminates a Ship.
+	 * @post    Each of the bullets of this ship no longer has
+	 *          a source.
+	 *        | for each space object in getAllSpaceObjects():
+	 *        |	  (! (new space object).hasSpaceObject())
+	 */
+	@Override
+	public void terminate(){
+		if (!isTerminated()) {
+			for (Bullet bullet : this.getAllBullets())
+				bullet.unsetSource();
+			this.terminate();
+		}
+	}
 	}

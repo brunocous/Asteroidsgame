@@ -114,6 +114,7 @@ public class Bullet extends SpaceObject {
 	 * 
 	 * @return  True if and only if this bullet can have its source as its
 	 *          source, and if this source is terminated. 
+	 *          TODO checken
 	 *        | result ==
 	 *        |  canHaveAsSource(getSource())
 	 *        | 	&& getWorld() == null
@@ -131,7 +132,14 @@ public class Bullet extends SpaceObject {
 		return this.source;
 
 	}
-
+	/**
+	 * @return True if and only if this bullet has a source.
+	 * 			| result == (getSource() != null)
+	 */
+@Basic
+public boolean hasSource(){
+	return this.getSource() != null;
+}
 	/**
 	 * @return the initialSpeed
 	 */
@@ -209,5 +217,28 @@ public class Bullet extends SpaceObject {
 	@Immutable
 	public static int getMaxNumberOfBoundaryCollisions() {
 		return MAX_NUMBER_OF_BOUNDARY_COLLISIONS;
+	}
+	/**
+	 * Unset the source, if any, from this bullet.
+	 *
+	 * @post    This bullet no longer has a source.
+	 *        | ! new.hasSource()
+	 * @post    The former ship of this bullet, if any, no longer
+	 *          has this bullet as one of its bullets.
+	 *        |    (getSource() == null)
+	 *        | || (! (new getSource()).hasAsSource(source))
+	 * @post    All bullets registered beyond the position at which
+	 *          this bullet was registered shift one position to the left.
+	 *        | (getSource() == null) ||
+	 *        | (for each index in
+	 *        |        getSource().getIndexOfBullet(bullet)+1..getSource().getNbBullets():
+	 *        |    (new getSource()).getBulletAt(index-1) == getSource().getBulletAt(index) ) 
+	 */
+	public void unsetSource() {
+		if (this.hasSource()) {
+			Ship formerSource = this.getSource();
+			this.setSource(null);
+			formerSource.removeAsBullet(this);
+		}
 	}
 }

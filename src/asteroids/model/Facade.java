@@ -1,5 +1,8 @@
 package asteroids.model;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -12,7 +15,7 @@ import asteroids.Error.IllegalRadiusException;
 import asteroids.Error.ModelException;
 import asteroids.model.Util.*;
 
-public class Facade implements IFacade<World, Ship, Asteroid,Bullet>{
+public class Facade implements IFacade<World, Ship, Asteroid,Bullet,Program>{
 
 	@Override
 	public World createWorld(double width, double height) {
@@ -301,7 +304,43 @@ public class Facade implements IFacade<World, Ship, Asteroid,Bullet>{
 	@Override
 	public Ship getBulletSource(Bullet bullet) {
 		return bullet.getSource();
+		}
+
+	@Override
+	public asteroids.IFacade.ParseOutcome<P> parseProgram(String text) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	
-}
+	@Override
+	public asteroids.IFacade.ParseOutcome<P> loadProgramFromStream(
+			InputStream stream) throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public asteroids.IFacade.ParseOutcome<P> loadProgramFromUrl(URL url)
+			throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isTypeCheckingSupported() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public asteroids.IFacade.TypeCheckOutcome typeCheckProgram(P program) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setShipProgram(Ship ship, P program) {
+		// TODO Auto-generated method stub
+		
+	}
+	}
