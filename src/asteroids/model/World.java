@@ -1069,11 +1069,15 @@ public class World {
 	 * 			one of the 2 given space objects or both given space objects
 	 * 			are not effective.
 	 * 			| object1 == null || object2 == null
+	 * @throws UnhandledCombinationException
+	 * 			| !(Asteroid.class.isAssignableFrom(object2.getClass())||Ship.class.isAssignableFrom(object2.getClass())
+	 * 			| ||Bullet.class.isAssignableFrom(object2.getClass()))
 	 */
 	public void resolveBullet(Bullet object1, SpaceObject object2)throws IllegalStateException,
-				 NotOfThisWorldException, NullPointerException{
+				 NotOfThisWorldException, NullPointerException, UnhandledCombinationException{
 		
 		checkResolvingConditions(object1, object2);
+
 		
 					if(Asteroid.class.isAssignableFrom(object2.getClass())){
 							
@@ -1103,8 +1107,8 @@ public class World {
 							}
 						}
 						else{	
-						object1.terminate();
-						object2.terminate();
+						
+							throw new UnhandledCombinationException();
 						
 						}
 	}
