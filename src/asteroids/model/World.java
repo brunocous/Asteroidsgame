@@ -962,6 +962,9 @@ public class World {
 					object1.terminate();
 			
 				}
+				/**
+				 * TODO 
+				 */
 	}
 	/**
 	 * Resolve a collision between 2 spaceObject when at least one of the spaceObjects is a bullet.

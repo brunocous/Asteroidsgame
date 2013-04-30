@@ -203,7 +203,7 @@ public abstract class SpaceObject {
 	 * @param radius
 	 * 		  The new radius for this space object.
 	 * @post The new pos for this space object is equal to the given pos.
-	 *       |new.getPos()= pos
+	 *       |new.getPos() == pos
 	 * @throws IllegalPositionException
 	 * 		   The given pos is not valid.
 	 *         | isValidPosition(pos) == false
