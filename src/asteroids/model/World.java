@@ -696,8 +696,12 @@ public class World {
 	 * @throws IllegalStateException
 	 * 			This world is already terminated.
 	 * 			| isTerminated()
+	 * @throws UnhandledCombinationException
+	 * 			| for some i and some object2 : getAllSpaceObjects()
+	 *          | object1 = this.getSpaceObjectAt(i)
+	 *          | !isHandledCombination(object1,object2)
 	 */
-	public void evolve(double deltaT, CollisionListener coll) throws NegativeTimeException, IllegalStateException{
+	public void evolve(double deltaT, CollisionListener coll) throws UnhandledCombinationException, NegativeTimeException, IllegalStateException{
 		
 		if(isTerminated())
 			throw new IllegalStateException();
@@ -929,13 +933,8 @@ public class World {
 	 * 			are not effective.
 	 * 			| object1 == null || object2 == null
 	 * @throws UnhandledCombinationException
-	 * 			|!((Ship.class.isAssignableFrom(object1.getClass()) && Ship.class.isAssignableFrom(object2.getCclass()))
-	 * 			| || Asteroid.class.isAssignableFrom(object1.getClass()) && Asteroid.class.isAssignableFrom(objet2.getClass())
-	 * 			| || Bullet.class.isAssignableFrom(object1.getClass())
-	 * 			| || Bullet.class.isAssignableFrom(object2.getClass())
-	 * 			| || Asteroid.class.isAssignableFrom(object1.getClass()) && Ship.class.isAssignableFrom(object2.getClass())
-	 *   		| || Ship.class.isAssignableFrom(object1.getClass()) && Asteroid.class.isAssignableFrom(object2.getClass()))
-	 */
+	 * 			|!isHandledCombination(object1,object2)
+	 * */
 	public void resolve(SpaceObject object1, SpaceObject object2) throws IllegalStateException
 						, NotOfThisWorldException, NullPointerException, UnhandledCombinationException{
 		
@@ -977,6 +976,29 @@ public class World {
 				}
 	}
 	
+	/**
+	 * Check whether the combination of the types of the given object1 and object2 is handled in resolve(...)
+	 * @param object1 the first Space Object to be resolved.
+	 * @param object2 the second Space Object to be resolved.
+	 * @return ((Ship.class.isAssignableFrom(object1.getClass()) && Ship.class.isAssignableFrom(object2.getClass()))
+	 *			  			 || Asteroid.class.isAssignableFrom(object1.getClass()) && Asteroid.class.isAssignableFrom(object2.getClass())
+	 *			  			 || Bullet.class.isAssignableFrom(object1.getClass())
+	 *			  			 || Bullet.class.isAssignableFrom(object2.getClass())
+	 *			  			 || Asteroid.class.isAssignableFrom(object1.getClass()) && Ship.class.isAssignableFrom(object2.getClass())
+	 *			  			 || Ship.class.isAssignableFrom(object1.getClass()) && Asteroid.class.isAssignableFrom(object2.getClass()));
+	 *
+	 * @throws IllegalStateException, NotOfThisWorldException, NullPointerException using the method checkResolvingConditions(object1,object2)
+	 */
+	public boolean isHandledCombination(SpaceObject object1, SpaceObject object2) throws IllegalStateException,  NotOfThisWorldException, NullPointerException{
+		checkResolvingConditions(object1,object2);
+		boolean result =((Ship.class.isAssignableFrom(object1.getClass()) && Ship.class.isAssignableFrom(object2.getClass()))
+				  			 || Asteroid.class.isAssignableFrom(object1.getClass()) && Asteroid.class.isAssignableFrom(object2.getClass())
+				  			 || Bullet.class.isAssignableFrom(object1.getClass())
+				  			 || Bullet.class.isAssignableFrom(object2.getClass())
+				  			 || Asteroid.class.isAssignableFrom(object1.getClass()) && Ship.class.isAssignableFrom(object2.getClass())
+				  			 || Ship.class.isAssignableFrom(object1.getClass()) && Asteroid.class.isAssignableFrom(object2.getClass()));
+		return result;
+	}
 	/**
 	 * checks whether the given Space Objects object1 and object2 can be resolved.
 	 * 
