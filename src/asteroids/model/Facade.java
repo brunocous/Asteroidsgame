@@ -14,6 +14,7 @@ import asteroids.Error.IllegalPositionException;
 import asteroids.Error.IllegalRadiusException;
 import asteroids.Error.ModelException;
 import asteroids.model.Util.*;
+import asteroids.model.programs.Program;
 
 public class Facade implements IFacade<World, Ship, Asteroid,Bullet,Program>{
 
@@ -307,20 +308,20 @@ public class Facade implements IFacade<World, Ship, Asteroid,Bullet,Program>{
 		}
 
 	@Override
-	public asteroids.IFacade.ParseOutcome<P> parseProgram(String text) {
+	public asteroids.IFacade.ParseOutcome<Program> parseProgram(String text) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public asteroids.IFacade.ParseOutcome<P> loadProgramFromStream(
+	public asteroids.IFacade.ParseOutcome<Program> loadProgramFromStream(
 			InputStream stream) throws IOException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public asteroids.IFacade.ParseOutcome<P> loadProgramFromUrl(URL url)
+	public asteroids.IFacade.ParseOutcome<Program> loadProgramFromUrl(URL url)
 			throws IOException {
 		// TODO Auto-generated method stub
 		return null;
@@ -333,13 +334,13 @@ public class Facade implements IFacade<World, Ship, Asteroid,Bullet,Program>{
 	}
 
 	@Override
-	public asteroids.IFacade.TypeCheckOutcome typeCheckProgram(P program) {
+	public asteroids.IFacade.TypeCheckOutcome typeCheckProgram(Program program) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void setShipProgram(Ship ship, P program) {
+	public void setShipProgram(Ship ship, Program program) {
 		// TODO Auto-generated method stub
 		
 	}
