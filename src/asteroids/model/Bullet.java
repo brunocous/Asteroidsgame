@@ -23,7 +23,7 @@ public class Bullet extends SpaceObject {
 	/**
 	 * The ship that fired this bullet.
 	 */
-	private final Ship source;
+	private Ship source;
 	/**
 	 * The density of a bullet in kg/km³.
 	 */
@@ -65,7 +65,7 @@ public class Bullet extends SpaceObject {
 				, new Velocity(Math.cos(source.getDirection())*getInitialSpeed(),Math.sin(source.getDirection())*getInitialSpeed())
 				, getInitialRadius(), source.getWorld());
 		
-		this.source = source;
+		this.setSource(source);
 	}
 
 	/**
@@ -114,14 +114,13 @@ public class Bullet extends SpaceObject {
 	 * 
 	 * @return  True if and only if this bullet can have its source as its
 	 *          source, and if this source is terminated. 
-	 *          TODO checken
+	 *          TODO VRAAG: wa moet het hier zijn?
 	 *        | result ==
 	 *        |  canHaveAsSource(getSource())
 	 *        | 	&& getWorld() == null
 	 */
 	public boolean hasProperSource(){
-		return this.canHaveAsSource(getSource())
-				&& this.getWorld() == null;
+		return this.canHaveAsSource(getSource());
 	}
 	/**
 	 * Returns the source of this bullet
@@ -131,6 +130,14 @@ public class Bullet extends SpaceObject {
 
 		return this.source;
 
+	}
+	/**
+	 * Sets the given given source as this bullets source.
+	 */
+	@Basic
+	@Raw
+	public void setSource(Ship source){
+		this.source = source;
 	}
 	/**
 	 * @return True if and only if this bullet has a source.
