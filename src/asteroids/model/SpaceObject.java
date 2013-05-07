@@ -730,15 +730,12 @@ public void unsetWorld() {
 	}
 }
 /**
- * Makes this spaceObject fire a projectile.
+ * Makes this spaceObject fire the given projectile.
  *  
  * @param projectile
  * 			The projectile to fire.
- * @post If this space object can fire the given bullet, then 
- * 			add the given bullet to the world this space 
- * 			object belongs to.
- * 			| if(canFireBullet(projectile))
-			| then new.getWorld().getNbSpaceObjects() == getWorld().getNbSpaceObjects() + 1;
+ * @effect Makes this space object fire the given projectile.
+ * 			| this.fireObject(projectile)
  * @throws IllegalStateException
  * 			This space object is already terminated.
  * 			| isTerminated()
@@ -746,31 +743,9 @@ public void unsetWorld() {
  */
 public void fireObject(SpaceObject projectile)throws IllegalStateException{
 	if(!isTerminated()){
-	if(Bullet.class.isAssignableFrom(projectile.getClass())){
-		if(this.canFireBullet((Bullet) projectile))
-			this.getWorld().addAsSpaceObject(projectile);
-	}else throw new IllegalStateException();
-	}
-}
-/**
- * Checks if the given bullet is a valid bullet.
- * @return True if and only if the given bullet is effective
- * 			and if the given bullet has this space Object 
- * 			as its source and if the given bullet and this
- * 			space object belong to the same world and if 
- * 			the world of this space object does not yet have
- * 			the given bullet.
- * 			| result == ((bullet != null) && (bullet.getSource() == this))
- * @throws IllegalStateException
- * 			This space object is already terminated.
- * 			| isTerminated()
- */
-public boolean canFireBullet(Bullet bullet) throws IllegalStateException{
-	if(!isTerminated()){
-	return ((bullet != null) && (bullet.getSource() == this) 
-			&& (bullet.getWorld() == this.getWorld()) 
-			&& !this.getWorld().hasAsSpaceObject(bullet));
-	} throw new IllegalStateException();
+		throw new IllegalStateException();
+	}else 
+	this.fireObject(projectile);
 }
 }
 

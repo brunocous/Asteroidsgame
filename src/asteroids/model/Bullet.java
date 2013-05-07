@@ -248,4 +248,15 @@ public boolean hasSource(){
 			formerSource.removeAsBullet(this);
 		}
 	}
+	/**
+	 * Terminates this bullet.
+	 * 
+	 * @effect Unsets the source of this bullet.
+	 * 			| unsetSource()
+	 */
+	@Override
+	public void terminate(){
+		this.unsetSource();
+		super.terminate();
+	}
 }

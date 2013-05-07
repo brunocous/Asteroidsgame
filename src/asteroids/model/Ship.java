@@ -359,15 +359,20 @@ public class Ship extends SpaceObject{
 	 *          The bullet to check.
 	 * @return  True if and only if the given bullet is effective, and
 	 *          if that bullet can have this ship as its ship, and if 
-	 *          this ship has less than 3 bullets.
+	 *          this ship has less than the maximum number of bullets a ship
+	 *          can have and if the given bullet and the this ship belong to the
+	 *          same world.
 	 *        | result ==
-	 *        |   (bullet != null) &&
+	 *        |   ((bullet != null) &&
 	 *        |   bullet.canHaveAsSource(this)
-	 *        |   getNbBullets()<3
+	 *        |   && getNbBullets()<getMaxNbBullets
+	 *        |	  && this.getWorld() == bullet.getWorld())
 	 */
 	@Raw
 	public boolean canHaveAsBullet(Bullet bullet) {
-		return (bullet != null) && bullet.canHaveAsSource(this) && this.getNbBullets()<3;
+		return (bullet != null) && bullet.canHaveAsSource(this) 
+				&& this.getNbBullets()< getMaxNbOfBullets()
+				&& this.getWorld() == bullet.getWorld();
 	}
 
 	/**
@@ -556,10 +561,41 @@ public class Ship extends SpaceObject{
 	 */
 	@Override
 	public void terminate(){
-		if (!isTerminated()) {
 			for (Bullet bullet : this.getAllBullets())
 				bullet.unsetSource();
-			this.terminate();
+			super.terminate();
+	}
+	/**
+	 * Makes this ship fire a given projectile.
+	 * 
+	 * @param projectile
+	 * 			The projectile to fire
+	 * @effect If the given space object is a bullet, then make this ship
+	 * 			fire the given space object.
+	 * 			| if(Bullet.class.isAssignableFrom(projectile.getClass())
+	 * 			| then fireBullet(projectile)
+	 */
+	@Override
+	public void fireObject(SpaceObject projectile){
+			if(Bullet.class.isAssignableFrom(projectile.getClass())){
+				this.fireBullet((Bullet) projectile);
+			}
+	}
+	/**
+	 * Makes this ship fire a given bullet
+	 * 
+	 * @post If this ship can the given bullet as its bullet,
+	 * 			then the number of spaceObjects of the world of this ship
+	 * 			is increased by 1 and the number of bullets of this ship
+	 * 			is increased by 1.
+	 * 			| if(canFireBullet(bullet))
+	 * 			| then new.getWorld().getNbSpaceObjects() == getNbSpaceObjects() +1
+	 * 			| new.getNbBullets() == getNbBullets +1
+	 */
+	public void fireBullet(Bullet bullet){
+		if(this.canHaveAsBullet(bullet)){
+			this.getWorld().addAsSpaceObject(bullet);
+			this.addAsBullet(bullet);
 		}
 	}
 	}
