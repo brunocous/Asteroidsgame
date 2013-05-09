@@ -597,5 +597,6 @@ public class Ship extends SpaceObject{
 			this.getWorld().addAsSpaceObject(bullet);
 			this.addAsBullet(bullet);
 		}
+		
 	}
 	}

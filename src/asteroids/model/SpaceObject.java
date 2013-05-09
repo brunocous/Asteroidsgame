@@ -567,10 +567,10 @@ public static boolean overlap(SpaceObject obj1, SpaceObject obj2) {
 public static double getTimeToCollision(SpaceObject obj1, SpaceObject obj2) throws NullPointerException{
 	
 	double result;
-	
+	// TODO doc
 	if (overlap(obj1,obj2)){
 		
-		result = Double.POSITIVE_INFINITY;
+		result = -1;
 		
 	}
 	else {
@@ -594,7 +594,6 @@ public static double getTimeToCollision(SpaceObject obj1, SpaceObject obj2) thro
 		
 	}
 	}
-	
 	return result;
 }
 

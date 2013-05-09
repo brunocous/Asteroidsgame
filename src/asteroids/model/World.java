@@ -412,6 +412,30 @@ public class World {
 		assert (this.hasAsSpaceObject(spaceObject));
 		spaceObjects.remove(spaceObject);
 	}
+	/**
+	 * Returns the index of the other space object if the given space object overlaps with
+	 * the other space object of this world.  
+	 * 
+	 * @param object
+	 * 			The space object to be checked at overlapping.
+	 * @return If the given space object overlaps with the other overlapping space object 
+	 * 			of this world, then the resulting value is the index of the other space object
+	 * 			of this world. 
+	 * 			Otherwise, the resulting value is -1.
+	 * 			| for each space object in getAllSpaceObjects():
+	 * 			| if(SpaceObject.overlap(space object, object)
+	 * 			| then result == getIndexOfSpaceObject(space object)
+	 * 			| else result == -1
+	 * 			
+	 */
+	public SpaceObject getIndexOfOtherOverlappingSpaceObject(SpaceObject object){
+		SpaceObject oth = null;
+		for(SpaceObject other: this.getAllSpaceObjects()){
+			if(SpaceObject.overlap(other, object) && other != object)
+				oth = other;
+		}
+		return oth;
+	}
 
 	/**
 	 * Checks if all the points within the given radius from the given position  
@@ -555,8 +579,11 @@ public class World {
 				
 				double timeToCollision = SpaceObject.getTimeToCollision(this.getSpaceObjectAt(i), this.getSpaceObjectAt(j));
 				
-				if ( !Double.isInfinite(timeToCollision) && Util.fuzzyLessThanOrEqualTo(timeToCollision, result) && !Util.fuzzyEquals(timeToCollision,0)){
-					
+				if ( !Double.isInfinite(timeToCollision) && Util.fuzzyLessThanOrEqualTo(timeToCollision, result) && !Util.fuzzyEquals(timeToCollision,0)
+							&& this.getSpaceObjectAt(i) != this.getSpaceObjectAt(j)){
+					/**
+					 * TODO doc. voor aanpassingen van gelijkheid hierboven
+					 */
 					result = timeToCollision;
 				
 				}
@@ -667,6 +694,7 @@ public class World {
 	 * 			this world. Else update the positions and velocities of all 
 	 * 			space objects of this world for an amount of time until the 
 	 * 			first collision has occurred and resolve that collision.
+	 * TODO aanpassen aan laatste aanpassingen
 	 * 			| double tC = getTimeToFirstCollision()
 	 * 			| if(!tC > deltaT)
 	 * 			| then updatePositions(deltaT)
@@ -712,9 +740,12 @@ public class World {
 		}
 		
 		else{
-			
+			if(Util.fuzzyEquals(-1, tC)){
+				tC = 0;
+			}
 			updatePositions(tC);
 			updateVelocities(tC);
+			
 			
 			int i = 1;
 			boolean resolved = false;
@@ -744,7 +775,7 @@ public class World {
 				else{
 				for(SpaceObject object2 : this.getAllSpaceObjects()){
 					
-					if(Util.fuzzyEquals(SpaceObject.getDistanceBetween(this.getSpaceObjectAt(i),object2),0) 
+					if(Util.fuzzyLessThanOrEqualTo(SpaceObject.getDistanceBetween(this.getSpaceObjectAt(i),object2),0.0) 
 							&& this.getSpaceObjectAt(i)!=object2){
 						try {if(coll != null)
 							coll.objectCollision(this.getSpaceObjectAt(i), object2, SpaceObject.getCollisionPosition(object2, this.getSpaceObjectAt(i)).getX(), SpaceObject.getCollisionPosition(this.getSpaceObjectAt(i), object2).getY());
@@ -762,6 +793,7 @@ public class World {
 		i++;
 		}
 	}
+		
 	}
 	
 	/**
@@ -1022,6 +1054,7 @@ public class World {
 		
 	}
 	
+	
 	/**
 	 * Resolve a collision between 2 spaceObject when at least one of the spaceObjects is a bullet.
 	 * 
@@ -1044,9 +1077,8 @@ public class World {
 	 * 			| 				  object1.terminate()
 	 * 			| 				  object2.terminate()
 	 * 			| 			 else if( Bullet.class.isAssignableFrom(object2.getClass()))
-	 * 			|				  then if( object1.getSource() != object2.getSource())
-	 * 			|					   then 
-	 * 			|					   object1.terminate()
+	 * TODO documenatie de tekst aanpassen dat de bullets bla bla
+	 * 			|				  then object1.terminate()
 	 * 			|					   object2.terminate()					
 	 * 			| 				  else 
 	 * 			|			 	  object1.terminate()
@@ -1099,10 +1131,9 @@ public class World {
 							}
 						
 						} else if(Bullet.class.isAssignableFrom(object2.getClass())){
-							if((object1).getSource() != ((Bullet) object2).getSource()){
 								object1.terminate();
 								object2.terminate();
-							}
+							
 						}
 						else{	
 						
@@ -1110,7 +1141,6 @@ public class World {
 						
 						}
 	}
-	
 }
 
 

@@ -198,7 +198,7 @@ public class Asteroid extends SpaceObject {
 		try{
 			for(int i = 0 ; i<=1 ;i++){
 				childDirection += i*Math.PI;
-				SpaceObject child = new Asteroid((Position) this.getPos().add(new Position(Math.cos(childDirection)*childRadius/2, Math.sin(childDirection)*childRadius/2)),
+				SpaceObject child = new Asteroid((Position) this.getPos().add(new Position(Math.cos(childDirection)*childRadius, Math.sin(childDirection)*childRadius)),
 												new Velocity(Math.cos(childDirection)*childSpeedNorm,Math.sin(childDirection)*childSpeedNorm),
 												childRadius, 
 												this.getRandom(),

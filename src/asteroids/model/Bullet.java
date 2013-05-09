@@ -4,6 +4,7 @@ import asteroids.Error.IllegalMaxSpeedException;
 import asteroids.Error.IllegalPositionException;
 import asteroids.Error.IllegalRadiusException;
 import asteroids.model.Util.Position;
+import asteroids.model.Util.Vector;
 import asteroids.model.Util.Velocity;
 import be.kuleuven.cs.som.annotate.*;
 
@@ -35,7 +36,7 @@ public class Bullet extends SpaceObject {
 	/**
 	 * The radius of a bullet that has been fired.
 	 */
-	private static final double INITIAL_RADIUS = 3;
+	private static final double INITIAL_RADIUS = 100;
 	/**
 	 * The number of times a bullet has hit a boundary.
 	 */
@@ -60,8 +61,9 @@ public class Bullet extends SpaceObject {
 	 */
 	public Bullet(Ship source)
 			throws IllegalRadiusException, IllegalPositionException,IllegalMaxSpeedException{
-		super(
-				new Position(source.getPos().getX() + Math.cos(source.getDirection())*(getInitialRadius()+source.getRadius()),source.getPos().getY() + Math.sin(source.getDirection())*(getInitialRadius()+source.getRadius()))
+		super( 
+				// TODO doc voor 0.1
+				new Position(source.getPos().getX() + Math.cos(source.getDirection())*(getInitialRadius()+source.getRadius()+0.1),source.getPos().getY() + Math.sin(source.getDirection())*(getInitialRadius()+source.getRadius()+0.1))
 				, new Velocity(Math.cos(source.getDirection())*getInitialSpeed(),Math.sin(source.getDirection())*getInitialSpeed())
 				, getInitialRadius(), source.getWorld());
 		
@@ -80,7 +82,6 @@ public class Bullet extends SpaceObject {
 		return RHO_BULLET;
 
 	}
-
 	/**
 	 * Returns the mass of this bullet.
 	 * 
