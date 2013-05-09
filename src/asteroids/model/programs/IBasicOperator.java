@@ -1,5 +1,5 @@
 package asteroids.model.programs;
 
-public interface IBasic {
+public interface IBasicOperator {
 
 }

@@ -1,7 +1,7 @@
 package asteroids.model.programs.statements;
 
-import asteroids.model.programs.IBasic;
+import asteroids.model.programs.IBasicOperator;
 
-public abstract class BasicStatement extends Statement implements IBasic{
+public abstract class BasicStatement extends Statement implements IBasicOperator{
 
 }

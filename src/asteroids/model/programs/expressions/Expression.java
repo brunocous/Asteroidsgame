@@ -122,7 +122,7 @@ public abstract class Expression implements Cloneable{
 	@Override
 	public int hashCode() {
 		if (! this.isMutable())
-			return (int) getValue();
+			return getValue();
 		else
 			return super.hashCode();
 	}

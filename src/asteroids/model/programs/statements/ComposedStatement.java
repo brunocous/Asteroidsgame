@@ -1,7 +1,7 @@
 package asteroids.model.programs.statements;
 
-import asteroids.model.programs.IComposed;
+import asteroids.model.programs.IComposedOperator;
 
-public abstract class ComposedStatement extends Statement implements IComposed {
+public abstract class ComposedStatement extends Statement implements IComposedOperator {
 
 }

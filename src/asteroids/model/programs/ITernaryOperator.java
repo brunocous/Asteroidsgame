@@ -1,5 +1,5 @@
 package asteroids.model.programs;
 
-public interface ITernaryOperator extends IComposed {
+public interface ITernaryOperator extends IComposedOperator {
 
 }
