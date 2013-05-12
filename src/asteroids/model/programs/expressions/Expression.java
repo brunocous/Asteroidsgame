@@ -66,7 +66,7 @@ public abstract class Expression implements Cloneable{
 	 *         this level, as we do for the method isIdenticalTo.
 	 */
 	@Override
-	public abstract boolean equals(Object other);
+	public abstract boolean equals(Expression other);
 	
 	/**
 	 * Check whether this expression is identical to the given expression.

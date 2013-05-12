@@ -4,9 +4,7 @@ public abstract class BasicExpression extends Expression {
 
 	private Expression value;
 	
-	public BasicExpression(Expression value){
-		this.value = value;
-	}
+	
 	@Override
 	public boolean hasAsSubExpression(Expression expression) {
 	

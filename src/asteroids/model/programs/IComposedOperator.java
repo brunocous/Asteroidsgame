@@ -1,5 +1,6 @@
 package asteroids.model.programs;
 
+import asteroids.model.programs.expressions.Expression;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 
