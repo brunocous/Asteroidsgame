@@ -1,5 +1,5 @@
 package asteroids.model.programs.types;
 
-public class Double extends Type {
+public class EntityLiteral extends Type {
 
 }

@@ -3,16 +3,24 @@ package asteroids.model.programs.expressions;
 
 import java.util.ArrayList;
 
+import asteroids.model.programs.types.BooleanLiteral;
+import asteroids.model.programs.types.Type;
+
 
 
 public class LogicAnd extends BinaryComposedExpression{
 	
 	private ArrayList<Expression> subexpressions;
+	private Type type = new BooleanLiteral();
 
 	public LogicAnd(Expression expression1, Expression expression2){
 		
 		super(expression1, expression2);
 		
+	}
+	
+	public Type getType(){
+		return type;
 	}
 	
 	public boolean isMutable(){

@@ -1,5 +1,5 @@
 package asteroids.model.programs.types;
 
-public class Bool extends Type {
+public class DoubleLiteral extends Type {
 
 }

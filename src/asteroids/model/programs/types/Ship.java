@@ -1,5 +1,5 @@
 package asteroids.model.programs.types;
 
-public class Ship extends Entity {
+public class Ship extends EntityLiteral {
 
 }

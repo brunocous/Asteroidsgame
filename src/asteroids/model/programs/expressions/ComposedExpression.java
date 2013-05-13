@@ -3,16 +3,14 @@ package asteroids.model.programs.expressions;
 import java.util.ArrayList;
 
 import asteroids.model.programs.IComposedOperator;
+import asteroids.model.programs.types.Type;
 
 public abstract class ComposedExpression extends Expression implements IComposedOperator{
 	
-	private ArrayList<Expression> expressions;
+
 	
-	public int getNbOperands(){
-		
-		return expressions.size();
-		
-	}
+	public abstract int getNbOperands();
+	
 
 	public Expression getOperandAt(int index) throws IndexOutOfBoundsException {
 		
@@ -24,6 +22,10 @@ public abstract class ComposedExpression extends Expression implements IComposed
 		
 		expressions.set(index, operand);
 		
+	}
+	public boolean equals(Expression other){
+		
+		return this.getValue().equals(other.getValue());
 	}
 	
 	public abstract Expression getValue();

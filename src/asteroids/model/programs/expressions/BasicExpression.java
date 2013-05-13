@@ -34,5 +34,20 @@ public abstract class BasicExpression extends Expression {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	/**
+	 * Return the hash code of this expression.
+	 */
+	@Override
+	public int hashCode() {
+		if (! this.isMutable())
+			return getValue();
+		else
+			return super.hashCode();
+	}
+	
+
+	
+
+
 
 }

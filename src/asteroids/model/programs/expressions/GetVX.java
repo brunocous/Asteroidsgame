@@ -2,14 +2,22 @@ package asteroids.model.programs.expressions;
 
 import java.util.ArrayList;
 
+import asteroids.model.programs.types.DoubleLiteral;
+import asteroids.model.programs.types.Type;
+
 public class GetVX extends UnaryComposedExpression {
 	
 private ArrayList<Expression> subexpression;
+private Type type = new DoubleLiteral();
 	
 	public GetVX(Entity subexpression){
 		
 		super(subexpression);
 		
+	}
+	
+	public Type getType(){
+		return type;
 	}
 	
 	public boolean equals(Expression other){

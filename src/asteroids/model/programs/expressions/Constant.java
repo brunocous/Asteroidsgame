@@ -1,17 +1,29 @@
 package asteroids.model.programs.expressions;
 
+import asteroids.model.programs.types.DoubleLiteral;
+import asteroids.model.programs.types.Type;
+
 
 public class Constant extends BasicExpression{
 
-	private double value;
+private double value;
+private Type type = new DoubleLiteral();
+
 	
-	public Constant(double value){
+public Constant(double value){
 		
 		this.value= (value);
 }
 	
 @Override
-	public Expression getValue(){
+public Type getType(){
+	
+	return type;
+	
+}
+
+@Override
+public Expression getValue(){
 		
 		return this;
 }	
@@ -26,19 +38,25 @@ public double getConstantValue(){
 	return value;
 	
 }
-@Override
+
 public boolean equals(Expression other) {
 	
-	return other.getValue() == getValue();
+	if(other.getType() == getType()){
+	return ((Constant)other).getConstantValue() == getConstantValue();
+	}
+	else{
+		return false;
+	}
+
 }
+
 
 @Override
 public String toString() {
 	
 	return null;
 }
-public boolean hasAsSubExpression(Expression expression) {
-	
-	return expression == this;
+
+
 }
-}
+

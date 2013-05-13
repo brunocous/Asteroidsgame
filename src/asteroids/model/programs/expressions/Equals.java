@@ -3,8 +3,12 @@ package asteroids.model.programs.expressions;
 
 import java.util.ArrayList;
 
+import asteroids.model.programs.types.BooleanLiteral;
+import asteroids.model.programs.types.Type;
+
 
 public class Equals extends BinaryComposedExpression{
+public Type type = new BooleanLiteral();
 	
 	private ArrayList<Expression> subexpressions;
 
@@ -12,6 +16,10 @@ public class Equals extends BinaryComposedExpression{
 		
 		super(expression1, expression2);
 		
+	}
+	
+	public Type getType(){
+		return type;
 	}
 	
 	public boolean isMutable(){
@@ -27,7 +35,7 @@ public class Equals extends BinaryComposedExpression{
 	
 	public boolean equals(Expression other){
 		
-		return this.getValue() == other.getValue();
+		return this.getValue().equals(other.getValue());
 	}
 	
 	public String toString(){

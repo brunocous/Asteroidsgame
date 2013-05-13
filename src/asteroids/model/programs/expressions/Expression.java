@@ -1,5 +1,7 @@
 package asteroids.model.programs.expressions;
 
+import asteroids.model.programs.types.Type;
+
 
 public abstract class Expression implements Cloneable{
 
@@ -65,8 +67,7 @@ public abstract class Expression implements Cloneable{
 	 * @note   We could have worked out a partial implementation at
 	 *         this level, as we do for the method isIdenticalTo.
 	 */
-	@Override
-	public abstract boolean equals(Expression other);
+	
 	
 	/**
 	 * Check whether this expression is identical to the given expression.
@@ -116,16 +117,6 @@ public abstract class Expression implements Cloneable{
 		}
 	}
 
-	/**
-	 * Return the hash code of this expression.
-	 */
-	@Override
-	public int hashCode() {
-		if (! this.isMutable())
-			return getValue();
-		else
-			return super.hashCode();
-	}
 
 	/**
 	 * Return a textual representation of this expression.
@@ -135,4 +126,5 @@ public abstract class Expression implements Cloneable{
 	 */
 	@Override
 	public abstract String toString();
+	public abstract Type getType();
 }
