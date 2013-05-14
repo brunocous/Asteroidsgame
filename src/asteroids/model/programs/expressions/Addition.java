@@ -55,10 +55,6 @@ public class Addition extends DoubleRepresentation{
 		
 	}
 	
-	public Expression getValue(){
-		
-		return new Constant(this.getJavaDouble());
-	}
 	
 	public DoubleRepresentation getLeftExpression(){
 		return leftExpression.clone();

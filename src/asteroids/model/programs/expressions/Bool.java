@@ -34,6 +34,12 @@
 		
 		return expression == this;
 	}
+	
+	@Override
+	public BooleanRepresentation clone(){
+		return new Bool(this.getJavaBoolean());
+	}
+
 
 
 	}

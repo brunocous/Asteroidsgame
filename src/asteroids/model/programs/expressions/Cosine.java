@@ -1,29 +1,42 @@
 package asteroids.model.programs.expressions;
 
-import java.util.ArrayList;
 
-import asteroids.model.programs.types.DoubleLiteral;
-import asteroids.model.programs.types.Type;
 
-public class Cosine extends ComposedExpression {
+public class Cosine extends DoubleRepresentation{
 		
-		private ArrayList<Expression> subexpression;
-		private Type type = new DoubleLiteral();
-		public Cosine(ArrayList<Expression> subexpression){
+		
+		public DoubleRepresentation argument;
 			
-			super(subexpression);
+		public Cosine(DoubleRepresentation argument){
+			
+			setArgument(argument);
 			
 		}
 		
-		public Type getType(){
-			return type;
+		public void setArgument(DoubleRepresentation argument){
+			
+			if(canHaveAsArgument(argument)){
+				
+				this.argument = argument;
+			}
+			else{
+				this.argument = new Constant(0);
+			}
 		}
 		
+		public boolean canHaveAsArgument(DoubleRepresentation argument){
+			
+			return true;
+			//TODO implementeren
+		}
+		
+		public double getJavaDouble(){
+			
+			return Math.cos(argument.getJavaDouble());
+			
+		}
 	
-		public Expression getValue(){
-			
-			return new Constant(Math.cos(((Constant)subexpression.get(0)).getConstantValue()));
-		}
+
 		
 		public String toString(){
 			
@@ -32,6 +45,12 @@ public class Cosine extends ComposedExpression {
 
 		public boolean isMutable(){
 			return false;
+		}
+
+		@Override
+		public boolean hasAsSubExpression(Expression expression) {
+		
+			return argument.equals(expression);
 		}
 		
 		

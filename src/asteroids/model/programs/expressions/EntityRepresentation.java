@@ -19,4 +19,9 @@ public abstract class EntityRepresentation extends Expression{
 		}
 	}
 	
+	@Override
+	public EntityRepresentation clone(){
+		return new Entity(this.getSpaceObject());
+	}
+
 }

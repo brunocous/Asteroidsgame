@@ -12,11 +12,6 @@ public Constant(double value){
 }
 	
 
-public Constant getValue(){
-		
-		return this;
-}	
-
 @Override
 public boolean isMutable() {
 	

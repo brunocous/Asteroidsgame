@@ -22,7 +22,11 @@ public abstract class DoubleRepresentation extends Expression {
 
 	public abstract boolean hasAsSubExpression(Expression expression);
 
-	public abstract Constant getValue();
+	public Constant getValue(){
+		
+		return new Constant(this.getJavaDouble());
+		
+	}
 
 	public abstract boolean isMutable() ;
 }
