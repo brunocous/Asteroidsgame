@@ -1,43 +1,57 @@
 package asteroids.model.programs.expressions;
 
-import java.util.ArrayList;
 
-import asteroids.model.programs.types.DoubleLiteral;
-import asteroids.model.programs.types.Type;
+import asteroids.Error.IllegalMaxSpeedException;
+import asteroids.Error.IllegalPositionException;
+import asteroids.Error.IllegalRadiusException;
+import asteroids.model.Ship;
 
-public class GetY extends ComposedExpression{
+
+public class GetY extends DoubleRepresentation {
 	
-private ArrayList<Expression> subexpression;
-private Type type = new DoubleLiteral();
+	private EntityRepresentation subExpression;
 	
-	public GetY(ArrayList<Expression> subexpression){
+	public GetY(EntityRepresentation subExpression) throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
 		
-		super(subexpression);
-		
-	}
-	
-	public Type getType(){
-		return type;
-	}
-	
-	public boolean equals(Expression other){
-		
-		return this.getValue() == other.getValue();
-	}
-	
-	public Expression getValue(){
-		
-		return new Constant(((Entity)subexpression.get(0)).getEntityValue().getPos().getY());
+		setSubExpression(subExpression);
 		
 	}
 	
-	public String toString(){
+	public void setSubExpression(EntityRepresentation subexpression) throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
 		
-		return "((Constant)getValue()).getConstantValue()";
+		if(canHaveAsSubExpression(subexpression)){
+			this.subExpression= subexpression;
+		}
+		else{
+			this.subExpression= new Entity(new Ship());
+		}
 	}
+	
+	public boolean canHaveAsSubExpression(EntityRepresentation subexpression){
+		return true;
+		//TODO implementeren
+	}
+	
 
 	public boolean isMutable(){
 		return false;
 	}
+
+	@Override
+	public double getJavaDouble() {
+		
+		return subExpression.getSpaceObject().getPos().getY();
+	}
+
+	@Override
+	public boolean hasAsSubExpression(Expression expression) {
+
+		return (subExpression.equals(expression));
+	}
+
+
+	
+	
+	
 
 }

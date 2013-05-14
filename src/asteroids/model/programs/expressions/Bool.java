@@ -13,10 +13,6 @@
 		}
 		
 
-	@Override	
-	public Bool getValue(){
-			return this;
-	}	
 
 	@Override
 	public boolean getJavaBoolean(){
@@ -35,11 +31,7 @@
 		return expression == this;
 	}
 	
-	@Override
-	public BooleanRepresentation clone(){
-		return new Bool(this.getJavaBoolean());
-	}
-
+	
 
 
 	}
