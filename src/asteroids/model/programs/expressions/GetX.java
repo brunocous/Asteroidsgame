@@ -37,10 +37,15 @@ public class GetX extends DoubleRepresentation {
 		return false;
 	}
 
+	public Entity getSubExpression(){
+		
+		return new Entity(subExpression.getSpaceObject());
+		
+	}
 	@Override
 	public double getJavaDouble() {
 		
-		return subExpression.getSpaceObject().getPos().getX();
+		return getSubExpression().getSpaceObject().getPos().getX();
 	}
 
 	@Override

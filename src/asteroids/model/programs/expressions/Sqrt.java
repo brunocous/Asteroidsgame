@@ -1,34 +1,42 @@
 package asteroids.model.programs.expressions;
 
-import java.util.ArrayList;
 
-import asteroids.model.programs.types.DoubleLiteral;
-import asteroids.model.programs.types.Type;
 
-public class Sqrt extends ComposedExpression {
+public class Sqrt extends DoubleRepresentation{
 		
-		private ArrayList<Expression> subexpression;
-		private Type type = new DoubleLiteral();
 		
-		public Sqrt(ArrayList<Expression> subexpression){
+		public DoubleRepresentation argument;
 			
-			super(subexpression);
+		public Sqrt(DoubleRepresentation argument){
+			
+			setArgument(argument);
 			
 		}
 		
-		public Type getType(){
-			return type;
+		public void setArgument(DoubleRepresentation argument){
+			
+			if(canHaveAsArgument(argument)){
+				
+				this.argument = argument;
+			}
+			else{
+				this.argument = new Constant(0);
+			}
 		}
 		
-		public boolean equals(Expression other){
+		public boolean canHaveAsArgument(DoubleRepresentation argument){
 			
-			return this.getValue() == other.getValue();
+			return true;
+			//TODO implementeren
 		}
 		
-		public Expression getValue(){
+		public double getJavaDouble(){
 			
-			return new Constant(Math.sqrt(((Constant)subexpression.get(0)).getConstantValue()));
+			return Math.sqrt(argument.getJavaDouble());
+			
 		}
+	
+
 		
 		public String toString(){
 			
@@ -38,8 +46,13 @@ public class Sqrt extends ComposedExpression {
 		public boolean isMutable(){
 			return false;
 		}
+
+		@Override
+		public boolean hasAsSubExpression(Expression expression) {
+		
+			return argument.equals(expression);
+		}
 		
 		
 
 	}
-

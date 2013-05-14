@@ -19,9 +19,19 @@ public abstract class EntityRepresentation extends Expression{
 		}
 	}
 	
+
 	@Override
 	public EntityRepresentation clone(){
 		return new Entity(this.getSpaceObject());
 	}
 
+	public abstract boolean hasAsSubExpression(Expression expression);
+
+	public Entity getValue(){
+		
+		return new Entity(this.getSpaceObject());
+		
+	}
+
+	public abstract boolean isMutable() ;
 }

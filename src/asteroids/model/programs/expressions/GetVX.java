@@ -37,12 +37,16 @@ public class GetVX extends DoubleRepresentation {
 		return false;
 	}
 
+	public Entity getSubExpression(){
+		
+		return new Entity(subExpression.getSpaceObject());
+		
+	}
 	@Override
 	public double getJavaDouble() {
 		
-		return subExpression.getSpaceObject().getVel().getX();
+		return getSubExpression().getSpaceObject().getVel().getX();
 	}
-
 	@Override
 	public boolean hasAsSubExpression(Expression expression) {
 

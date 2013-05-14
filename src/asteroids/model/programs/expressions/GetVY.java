@@ -37,10 +37,15 @@ public class GetVY extends DoubleRepresentation {
 		return false;
 	}
 
+	public Entity getSubExpression(){
+		
+		return new Entity(subExpression.getSpaceObject());
+		
+	}
 	@Override
 	public double getJavaDouble() {
 		
-		return subExpression.getSpaceObject().getVel().getY();
+		return getSubExpression().getSpaceObject().getVel().getY();
 	}
 
 	@Override

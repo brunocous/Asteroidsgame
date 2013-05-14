@@ -37,10 +37,15 @@ public class GetRadius extends DoubleRepresentation {
 		return false;
 	}
 
+	public Entity getSubExpression(){
+		
+		return new Entity(subExpression.getSpaceObject());
+		
+	}
 	@Override
 	public double getJavaDouble() {
 		
-		return subExpression.getSpaceObject().getRadius();
+		return getSubExpression().getSpaceObject().getRadius();
 	}
 
 	@Override

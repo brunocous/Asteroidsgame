@@ -1,34 +1,42 @@
 package asteroids.model.programs.expressions;
 
-import java.util.ArrayList;
 
-import asteroids.model.programs.types.DoubleLiteral;
-import asteroids.model.programs.types.Type;
 
-public class Sine extends ComposedExpression {
+public class Sine extends DoubleRepresentation{
 		
-		private ArrayList<Expression> subexpression;
-		private Type type = new DoubleLiteral();
 		
-		public Sine(ArrayList<Expression> subexpression){
+		public DoubleRepresentation argument;
 			
-			super(subexpression);
+		public Sine(DoubleRepresentation argument){
+			
+			setArgument(argument);
 			
 		}
 		
-		public Type getType(){
-			return type;
+		public void setArgument(DoubleRepresentation argument){
+			
+			if(canHaveAsArgument(argument)){
+				
+				this.argument = argument;
+			}
+			else{
+				this.argument = new Constant(0);
+			}
 		}
 		
-		public boolean equals(Expression other){
+		public boolean canHaveAsArgument(DoubleRepresentation argument){
 			
-			return this.getValue() == other.getValue();
+			return true;
+			//TODO implementeren
 		}
 		
-		public Expression getValue(){
+		public double getJavaDouble(){
 			
-			return new Constant(Math.sin(((Constant)subexpression.get(0)).getConstantValue()));
+			return Math.sin(argument.getJavaDouble());
+			
 		}
+	
+
 		
 		public String toString(){
 			
@@ -38,9 +46,14 @@ public class Sine extends ComposedExpression {
 		public boolean isMutable(){
 			return false;
 		}
+
+		@Override
+		public boolean hasAsSubExpression(Expression expression) {
+		
+			return argument.equals(expression);
+		}
 		
 		
 
 	}
-
 
