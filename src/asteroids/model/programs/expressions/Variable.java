@@ -3,7 +3,7 @@ package asteroids.model.programs.expressions;
 import asteroids.Error.IllegalStringNameException;
 import asteroids.model.programs.types.Type;
 
-public class Variable extends BasicExpression {
+public class Variable extends Expression {
 	
 	private final String name;
 	private Expression value;

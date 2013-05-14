@@ -17,6 +17,10 @@ public class Assignement extends StructuralStatement implements
 			throw new UnhandledCombinationException();
 		if(!canHaveAsFirstOperand(var))
 			throw new IllegalOperandException(this, var);
+		if(!canHaveAsSecondOperand(value))
+			throw new IllegalOperandException(this, value);
+		
+		
 			
 	}
 	
