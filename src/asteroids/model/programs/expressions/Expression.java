@@ -1,9 +1,11 @@
 package asteroids.model.programs.expressions;
 
+import asteroids.model.programs.IEntry;
 
 
 
-public abstract class Expression implements Cloneable{
+
+public abstract class Expression implements Cloneable,IEntry{
 
 
 	 
@@ -16,6 +18,7 @@ public abstract class Expression implements Cloneable{
 
 	@Override
 	public abstract Expression clone();
+	@Override
 	public abstract boolean equals(Expression other);
 
 	

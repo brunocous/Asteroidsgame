@@ -1,5 +1,5 @@
 package asteroids.model.programs;
 
 public interface IEntry {
-public abstract boolean equals(IEntry obj);
+public abstract boolean equals(IEntry other);
 }
