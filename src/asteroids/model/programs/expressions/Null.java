@@ -12,12 +12,6 @@ public class Null extends EntityRepresentation {
 	}
 	
 	
-	
-	@Override
-	public Expression getValue(){
-			
-			return this;
-	}	
 	@Override
 	public SpaceObject getSpaceObject(){
 		return value;

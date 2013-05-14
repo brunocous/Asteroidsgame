@@ -1,8 +1,7 @@
 package asteroids.model.programs.expressions;
 
 import asteroids.model.SpaceObject;
-import asteroids.model.programs.types.EntityLiteral;
-import asteroids.model.programs.types.Type;
+
 
 public class Self extends EntityRepresentation{
 	
@@ -14,11 +13,7 @@ public class Self extends EntityRepresentation{
 	}
 	
 
-	@Override
-	public Expression getValue(){
-			
-			return this;
-	}	
+	
 	@Override
 	public SpaceObject getSpaceObject(){
 		

@@ -12,7 +12,7 @@ public class Entity extends EntityRepresentation{
 		this.value = (value);
 	}
 	@Override
-	public Expression getValue(){
+	public Entity getValue(){
 			
 			return this;
 	}	
