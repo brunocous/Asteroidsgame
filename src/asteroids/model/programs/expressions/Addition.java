@@ -1,28 +1,54 @@
 package asteroids.model.programs.expressions;
 
 
-import java.util.ArrayList;
-
-import asteroids.model.programs.types.DoubleLiteral;
-import asteroids.model.programs.types.Type;
 
 
 
-public class Addition extends BinaryComposedExpression{
+
+
+public class Addition extends DoubleRepresentation{
 	
-	private ArrayList<Expression> subexpressions;
-	private Type type = new DoubleLiteral();
+	private DoubleRepresentation leftExpression;
+	private DoubleRepresentation rightExpression;
 
-	public Addition(Expression expression1, Expression expression2){
-		
-		super(expression1, expression2);
+
+	public Addition(DoubleRepresentation leftExpression, DoubleRepresentation RightExpression){
+	
+		setRightExpression(rightExpression);
+		setLeftExpression(leftExpression);
 		
 	}
 	
-	public Type getType(){
-		return type;
+	public void setRightExpression(DoubleRepresentation expression){
+		if(canHaveAsRightExpression(expression)){
+			rightExpression = expression;
+		}
+		else{
+			rightExpression = new Constant(0);
+		}
 	}
 	
+	public boolean canHaveAsRightExpression(DoubleRepresentation expression){
+		
+		return true; 
+		//TODO implementeren
+	}
+	
+	public void setLeftExpression(DoubleRepresentation expression){
+		if(canHaveAsLeftExpression(expression)){
+			leftExpression=expression;
+		}
+		else{
+			leftExpression=new Constant(0);
+		}
+	}
+	
+	public boolean canHaveAsLeftExpression(DoubleRepresentation expression){
+		
+		return true;
+		//TODO implementeren
+		
+	}
 	public boolean isMutable(){
 		
 		return false;
@@ -31,13 +57,27 @@ public class Addition extends BinaryComposedExpression{
 	
 	public Expression getValue(){
 		
-		return new Constant(subexpressions.get(0).getConstantValue()+subexpressions.get(1).getConstantValue());
+		return new Constant(this.getJavaDouble());
 	}
 	
-
-	public String toString(){
+	public DoubleRepresentation getLeftExpression(){
+		return leftExpression.clone();
+	}
+	
+	public DoubleRepresentation getRightExpression(){
+		return rightExpression.clone();
+	}
+	
+	@Override
+	public double getJavaDouble(){
 		
-		return getValue().toString();
+		return getLeftExpression().getJavaDouble()+getRightExpression().getJavaDouble();
+			
+	}
+
+	@Override
+	public boolean hasAsSubExpression(Expression expression) {
+		return (expression == getLeftExpression() || expression == getRightExpression());
 	}
 }
 

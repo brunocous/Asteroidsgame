@@ -8,15 +8,15 @@ import asteroids.model.programs.types.Type;
 
 
 
-public class LogicOr extends BinaryComposedExpression{
+public class LogicOr extends ComposedExpression{
 	
 	private ArrayList<Expression> subexpressions;
 	private Type type = new BooleanLiteral();
 	
 
-	public LogicOr(Expression expression1, Expression expression2){
+	public LogicOr(ArrayList<Expression> subexpressions){
 		
-		super(expression1, expression2);
+		super(subexpressions);
 		
 	}
 	

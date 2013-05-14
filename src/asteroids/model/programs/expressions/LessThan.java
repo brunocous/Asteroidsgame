@@ -6,14 +6,14 @@ import asteroids.Util;
 import asteroids.model.programs.types.BooleanLiteral;
 import asteroids.model.programs.types.Type;
 
-public class LessThan extends BinaryComposedExpression{
+public class LessThan extends ComposedExpression{
 	
 	private ArrayList<Constant> subexpressions;
 	private Type type = new BooleanLiteral();
 
-	public LessThan(Constant expression1, Constant expression2){
+	public LessThan(ArrayList<Expression> subexpressions){
 		
-		super(expression1, expression2);
+		super(subexpressions);
 		
 	}
 	

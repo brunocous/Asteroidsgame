@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import asteroids.model.programs.types.DoubleLiteral;
 import asteroids.model.programs.types.Type;
 
-public class GetRadius extends UnaryComposedExpression {
+public class GetRadius extends ComposedExpression {
 	
 	private ArrayList<Expression> subexpression;
 	private Type type = new DoubleLiteral();
 	
-	public GetRadius(Entity subexpression){
+	public GetRadius(ArrayList<Expression> subexpression){
 		
 		super(subexpression);
 		

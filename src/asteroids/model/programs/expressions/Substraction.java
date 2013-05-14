@@ -8,14 +8,14 @@ import asteroids.model.programs.types.Type;
 
 
 
-public class Substraction extends BinaryComposedExpression{
+public class Substraction extends ComposedExpression{
 	
 	private ArrayList<Constant> subexpressions;
 	private Type type = new DoubleLiteral();
 
-	public Substraction(Constant expression1, Constant expression2){
+	public Substraction(ArrayList<Expression> subexpressions){
 		
-		super(expression1, expression2);
+		super(subexpressions);
 		
 	}
 	public Type getType(){

@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import asteroids.model.programs.types.DoubleLiteral;
 import asteroids.model.programs.types.Type;
 
-public class Sqrt extends UnaryComposedExpression {
+public class Sqrt extends ComposedExpression {
 		
 		private ArrayList<Expression> subexpression;
 		private Type type = new DoubleLiteral();
 		
-		public Sqrt(Constant subexpression){
+		public Sqrt(ArrayList<Expression> subexpression){
 			
 			super(subexpression);
 			

@@ -7,15 +7,15 @@ import asteroids.Util;
 import asteroids.model.programs.types.BooleanLiteral;
 import asteroids.model.programs.types.Type;
 
-public class GreaterThanOrEqualTo extends BinaryComposedExpression{
+public class GreaterThanOrEqualTo extends ComposedExpression{
 	
 	private ArrayList<Constant> subexpressions;
 	private Type type = new BooleanLiteral();
 	
 
-	public GreaterThanOrEqualTo(Constant expression1, Constant expression2){
+	public GreaterThanOrEqualTo(ArrayList<Expression> subexpressions){
 		
-		super(expression1, expression2);
+		super(subexpressions);
 		
 	}
 	

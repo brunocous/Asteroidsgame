@@ -7,14 +7,14 @@ import asteroids.model.programs.types.BooleanLiteral;
 import asteroids.model.programs.types.Type;
 
 
-public class Equals extends BinaryComposedExpression{
+public class Equals extends ComposedExpression{
 public Type type = new BooleanLiteral();
 	
 	private ArrayList<Expression> subexpressions;
 
-	public Equals(Expression expression1, Expression expression2){
+	public Equals(ArrayList<Expression> subexpressions){
 		
-		super(expression1, expression2);
+		super(subexpressions);
 		
 	}
 	

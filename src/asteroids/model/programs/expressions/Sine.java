@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import asteroids.model.programs.types.DoubleLiteral;
 import asteroids.model.programs.types.Type;
 
-public class Sine extends UnaryComposedExpression {
+public class Sine extends ComposedExpression {
 		
 		private ArrayList<Expression> subexpression;
 		private Type type = new DoubleLiteral();
 		
-		public Sine(Constant subexpression){
+		public Sine(ArrayList<Expression> subexpression){
 			
 			super(subexpression);
 			

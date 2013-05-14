@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import asteroids.model.programs.types.BooleanLiteral;
 import asteroids.model.programs.types.Type;
 
-public class Negation extends UnaryComposedExpression {
+public class Negation extends ComposedExpression {
 		
 		private ArrayList<Expression> subexpression;
 		private Type type = new BooleanLiteral();
 		
-		public Negation(Expression subexpression){
+		public Negation(ArrayList<Expression> subexpressions){
 			
-			super(subexpression);
+			super(subexpressions);
 			
 		}
 		

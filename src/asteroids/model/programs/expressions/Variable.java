@@ -1,15 +1,34 @@
 package asteroids.model.programs.expressions;
 
+import asteroids.Error.IllegalStringNameException;
 import asteroids.model.programs.types.Type;
 
 public class Variable extends BasicExpression {
 	
+	private final String name;
 	private Expression value;
-	private Type type = null;
+	private final Type type = null;
 	
-	public Variable(Expression value){
-		super(value);
+	public Variable(Expression value, String name){
+		this.setValue(value);
+		if (canHaveAsName(name)){
+			this.name = name;
+		}
+		else{ 
+			throw new IllegalStringNameException();
+		}
 	}
+	
+
+	
+	public boolean canHaveAsName(String name){
+		return !(name.equals("")||name.equals(null));
+	}
+	
+	public String getName(){
+		return name;
+	}
+	
 	@Override
 	public Expression getValue(){
 			

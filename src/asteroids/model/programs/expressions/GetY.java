@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import asteroids.model.programs.types.DoubleLiteral;
 import asteroids.model.programs.types.Type;
 
-public class GetY extends UnaryComposedExpression{
+public class GetY extends ComposedExpression{
 	
 private ArrayList<Expression> subexpression;
 private Type type = new DoubleLiteral();
 	
-	public GetY(Entity subexpression){
+	public GetY(ArrayList<Expression> subexpression){
 		
 		super(subexpression);
 		

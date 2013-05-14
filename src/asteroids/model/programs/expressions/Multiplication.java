@@ -8,14 +8,14 @@ import asteroids.model.programs.types.Type;
 
 
 
-public class Multiplication extends BinaryComposedExpression{
+public class Multiplication extends ComposedExpression{
 	
-	private ArrayList<Constant> subexpressions;
+	private ArrayList<Expression> subexpressions;
 	private Type type = new DoubleLiteral();
 
-	public Multiplication(Constant expression1, Constant expression2){
+	public Multiplication(ArrayList<Expression> subexpressions){
 		
-		super(expression1, expression2);
+		super(subexpressions);
 		
 	}
 	

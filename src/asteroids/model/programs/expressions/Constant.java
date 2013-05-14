@@ -1,60 +1,39 @@
 package asteroids.model.programs.expressions;
 
-import asteroids.model.programs.types.DoubleLiteral;
-import asteroids.model.programs.types.Type;
 
 
-public class Constant extends BasicExpression{
+public class Constant extends DoubleRepresentation{
 
 private double value;
-private Type type = new DoubleLiteral();
 
-	
 public Constant(double value){
 		
 		this.value= (value);
 }
 	
-@Override
-public Type getType(){
-	
-	return type;
-	
-}
 
-@Override
-public Expression getValue(){
+public Constant getValue(){
 		
 		return this;
 }	
+
 @Override
 public boolean isMutable() {
 	
 	return false;
 }
 
-public double getConstantValue(){
+@Override
+public double getJavaDouble(){
 	
 	return value;
 	
 }
 
-public boolean equals(Expression other) {
-	
-	if(other.getType() == getType()){
-	return ((Constant)other).getConstantValue() == getConstantValue();
-	}
-	else{
-		return false;
-	}
-
-}
-
-
 @Override
-public String toString() {
-	
-	return null;
+public boolean hasAsSubExpression(Expression expression) {
+
+	return expression.equals(this);
 }
 
 

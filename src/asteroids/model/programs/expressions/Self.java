@@ -4,24 +4,23 @@ import asteroids.model.SpaceObject;
 import asteroids.model.programs.types.EntityLiteral;
 import asteroids.model.programs.types.Type;
 
-public class Self extends BasicExpression{
+public class Self extends EntityRepresentation{
 	
 	private SpaceObject value;
-	private Type type = new EntityLiteral();
+	
 	
 	public Self(SpaceObject value){
 		this.value = value;
 	}
 	
-	public Type getType(){
-		return type;
-	}
+
 	@Override
 	public Expression getValue(){
 			
 			return this;
 	}	
-	public SpaceObject getSelfValue(){
+	@Override
+	public SpaceObject getSpaceObject(){
 		
 		return value;
 		
@@ -33,22 +32,7 @@ public class Self extends BasicExpression{
 	}
 
 
-	public boolean equals(Expression other) {
-		
-		if(other.getType() == getType()){
-		return ((Self)other).getSelfValue() == getSelfValue();
-		}
-		else{
-			return false;
-		}
-
-	}
-	@Override
-	public String toString() {
-		
-		return null;
-	}
-
+	
 	@Override
 	public boolean hasAsSubExpression(Expression expression) {
 		

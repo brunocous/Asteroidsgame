@@ -8,15 +8,15 @@ import asteroids.model.programs.types.Type;
 
 
 
-public class Division extends BinaryComposedExpression{
+public class Division extends ComposedExpression{
 	
-	private ArrayList<Constant> subexpressions;
+	private ArrayList<Expression> subexpressions;
 	private Type type = new DoubleLiteral();
 	
 
-	public Division(Constant expression1, Constant expression2){
+	public Division(ArrayList<Expression> subexpressions){
 		
-		super(expression1, expression2);
+		super(subexpressions);
 		
 	}
 	

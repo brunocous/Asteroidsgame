@@ -7,14 +7,14 @@ import java.util.ArrayList;
 import asteroids.model.programs.types.BooleanLiteral;
 import asteroids.model.programs.types.Type;
 
-public class NotEqualTo extends BinaryComposedExpression{
+public class NotEqualTo extends ComposedExpression{
 	
 	private ArrayList<Expression> subexpressions;
 	private Type type = new BooleanLiteral();
 
-	public NotEqualTo(Expression expression1, Expression expression2){
+	public NotEqualTo(ArrayList<Expression> subexpressions){
 		
-		super(expression1, expression2);
+		super(subexpressions);
 		
 	}
 	
