@@ -18,7 +18,6 @@ public abstract class Expression implements Cloneable,IEntry{
 
 	@Override
 	public abstract Expression clone();
-	@Override
 	public abstract boolean equals(Expression other);
 
 	

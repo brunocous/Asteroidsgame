@@ -1,5 +1,6 @@
 package asteroids.model.programs;
 
-public interface IEntry {
+public interface IEntry extends IStructure{
+	
 public abstract boolean equals(IEntry other);
 }
