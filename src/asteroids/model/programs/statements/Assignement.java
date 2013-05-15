@@ -30,24 +30,22 @@ public class Assignement extends StructuralStatement{
 				return value;
 	}
 
-
-
-	@Override
-	public boolean hasAsSubEntry(IEntry entry) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
+		((Variable) getOperandAt(1)).setValue((Expression) getOperandAt(2));
 		
 	}
 
 	@Override
 	public boolean equals(Object other) {
-		// TODO Auto-generated method stub
-		return false;
+		if(this.getClass() == other.getClass()){
+			for(int pos = 1; pos <= getNbOperands(); pos++){
+				if(!getOperandAt(pos).equals(((Assignement) other).getOperandAt(pos)))
+						return false;
+			}
+			return true;
+		}
+		else return false;
 	}
 
 	@Override
