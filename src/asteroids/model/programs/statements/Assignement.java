@@ -25,29 +25,27 @@ public class Assignement extends StructuralStatement{
 			if ((index != 1) && (index != 2))
 				throw new IndexOutOfBoundsException();
 			if (index == 1)
-				return getFirstOperand();
+				return var;
 			else
-				return getSecondOperand();
-	}
-
-
-
-	@Override
-	public boolean hasAsSubEntry(IEntry entry) {
-		// TODO Auto-generated method stub
-		return false;
+				return value;
 	}
 
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
+		((Variable) getOperandAt(1)).setValue((Expression) getOperandAt(2));
 		
 	}
 
 	@Override
-	public boolean equals(Statement other) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean equals(Object other) {
+		if(this.getClass() == other.getClass()){
+			for(int pos = 1; pos <= getNbOperands(); pos++){
+				if(!getOperandAt(pos).equals(((Assignement) other).getOperandAt(pos)))
+						return false;
+			}
+			return true;
+		}
+		else return false;
 	}
 
 	@Override
@@ -56,19 +54,24 @@ public class Assignement extends StructuralStatement{
 	}
 	@Override
 	public boolean canHaveAsOperandAt(int index, IEntry operand) {
-		return super.canHaveAsOperandAt(index, operand) && ( (index == 1) || (index == 2) );
+		if(super.canHaveAsOperandAt(index, operand))
+			if(index == 1)
+				return operand.getClass().isAssignableFrom(Variable.class);
+			else if(index == 2)
+				return operand.getClass().isAssignableFrom(Expression.class);
+		return false;
+				
 	}
 	@Override
-	public void setOperandAt(int index, IEntry operand) {
+	public void setOperandAt(int index, IEntry operand) throws IllegalOperandException{
 		if(!canHaveAsOperandAt(index, operand))
 			throw new IllegalOperandException();
 		else
 			if(index == 1)
-				this.var = operand;
+				this.var = (Variable) operand;
 			else
-				this.value = operand;
-		}
+				this.value = (Expression) operand;
+	}
 		
 	}
 
-}

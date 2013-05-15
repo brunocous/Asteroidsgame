@@ -1,5 +1,6 @@
 package asteroids.model.programs.statements;
 
+import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.*;
 
 public abstract class StructuralStatement extends Statement implements IComposedStructure{
@@ -17,10 +18,18 @@ public abstract class StructuralStatement extends Statement implements IComposed
 	public boolean canHaveAsOperandAt(int index, IEntry entry){
 		return (entry != null) && (!entry.hasAsSubEntry(this)) && (index > 0);
 	}
-	@Override
-	public void setOperandAt(int index, IEntry operand) {
-		if(canHaveAsOperandAt(index, operand))
-			this.setOperandAt(index, operand);
 		
+	
+	@Override 
+	public boolean equals(Object other){
+		if ((other == null) || (getClass() != other.getClass()))
+			return false;
+		StructuralStatement otherStat = (StructuralStatement) other;
+		if (getNbOperands() != otherStat.getNbOperands())
+			return false;
+		for (int pos = 1; pos <= getNbOperands(); pos++)
+			if (!getOperandAt(pos).equals(otherStat.getOperandAt(pos)))
+				return false;
+		return true;
 	}
 }
