@@ -1,45 +1,48 @@
 package asteroids.model.programs.expressions;
 
-
-import java.util.ArrayList;
-
 import asteroids.Util;
-import asteroids.model.programs.types.BooleanLiteral;
-import asteroids.model.programs.types.Type;
+import asteroids.Error.IllegalOperandException;
+import asteroids.model.programs.IComposedStructure;
+import asteroids.model.programs.IEntry;
 
-public class LessThanOrEqualTo extends ComposedExpression{
+public class LessThanOrEqualTo extends BinaryBooleanRepresentation implements IComposedStructure{
 	
-	private ArrayList<Constant> subexpressions;
-	private Type type = new BooleanLiteral();
 
-	public LessThanOrEqualTo(ArrayList<Expression> subexpressions){
-		
-		super(subexpressions);
+	public LessThanOrEqualTo(DoubleRepresentation leftExpression, DoubleRepresentation rightExpression) throws IllegalOperandException{
+	
+		super(leftExpression, rightExpression);
 		
 	}
 	
-	public Type getType(){
-		return type;
+	@Override
+	public boolean canHaveAsOperandAt(int index, IEntry expression){
+		
+		if(index > getNbOperands()){
+			return false;
+		}
+		else{
+		if(DoubleRepresentation.class.isAssignableFrom(expression.getClass())){
+			return true;
+		}
+		else{
+			return false;
+		}
+		}
 	}
 	
-	public boolean isMutable(){
-		
-		return false;
-		
-	}
+
 	
-	public Expression getValue(){
+	@Override
+	public boolean getJavaBoolean(){
 		
-		return new Bool(Util.fuzzyLessThanOrEqualTo(subexpressions.get(0).getConstantValue(), subexpressions.get(1).getConstantValue()));
+		return (Util.fuzzyLessThanOrEqualTo(((DoubleRepresentation)getOperandAt(1)).getJavaDouble(),((DoubleRepresentation)getOperandAt(2)).getJavaDouble()));
+			
 	}
-	
-	public boolean equals(Expression other){
-		
-		return this.getValue() == other.getValue();
-	}
-	
+
 	public String toString(){
-		
-		return getValue().toString();
+		return "getJavaBoolean()";
 	}
+
+
+
 }

@@ -1,39 +1,35 @@
 package asteroids.model.programs.expressions;
 
 import asteroids.model.SpaceObject;
+import asteroids.model.programs.IEntry;
+
 
 
 public class Entity extends EntityRepresentation{
-	
-	private SpaceObject value;
-	
-	
-	public Entity (SpaceObject value){
-		this.value = (value);
-	}
-	@Override
-	public Entity getValue(){
-			
-			return this;
-	}	
-	
-	@Override
-	public SpaceObject getSpaceObject(){
+
+private SpaceObject value;
+
+public Entity(SpaceObject value){
 		
-		return value;
-		
-	}
-	@Override
-	public boolean isMutable() {
-		
-		return false;
-	}
+		this.value= (value);
+}
+	
 
 
-	@Override
-	public boolean hasAsSubExpression(Expression expression) {
-		
-		return expression == this;
-	}
+
+@Override
+public SpaceObject getSpaceObject(){
+	
+	return value;
+	
+}
+
+@Override
+public boolean hasAsSubEntry(IEntry subEntry) {
+
+	return subEntry.equals(this);
+}
+
 
 }
+

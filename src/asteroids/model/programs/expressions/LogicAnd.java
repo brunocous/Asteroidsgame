@@ -1,46 +1,48 @@
 package asteroids.model.programs.expressions;
 
 
-import java.util.ArrayList;
+import asteroids.Error.IllegalOperandException;
+import asteroids.model.programs.IComposedStructure;
+import asteroids.model.programs.IEntry;
 
-import asteroids.model.programs.types.BooleanLiteral;
-import asteroids.model.programs.types.Type;
-
-
-
-public class LogicAnd extends ComposedExpression{
+public class LogicAnd extends BinaryBooleanRepresentation implements IComposedStructure{
 	
-	private ArrayList<Expression> subexpressions;
-	private Type type = new BooleanLiteral();
 
-	public LogicAnd(ArrayList<Expression> subexpressions){
-		
-		super(subexpressions);
+	public LogicAnd(BooleanRepresentation leftExpression, BooleanRepresentation rightExpression) throws IllegalOperandException{
+	
+		super(leftExpression, rightExpression);
 		
 	}
 	
-	public Type getType(){
-		return type;
+	@Override
+	public boolean canHaveAsOperandAt(int index, IEntry expression){
+		
+		if(index > getNbOperands()){
+			return false;
+		}
+		else{
+		if(BooleanRepresentation.class.isAssignableFrom(expression.getClass())){
+			return true;
+		}
+		else{
+			return false;
+		}
+		}
 	}
 	
-	public boolean isMutable(){
-		
-		return false;
-		
-	}
+
 	
-	public Expression getValue(){
+	@Override
+	public boolean getJavaBoolean(){
 		
-		return new Bool(subexpressions.get(0).getBooleanValue()&&subexpressions.get(1).getBooleanValue());
+		return (((BooleanRepresentation)getOperandAt(1)).getJavaBoolean()&&((BooleanRepresentation)getOperandAt(2)).getJavaBoolean());
+			
 	}
-	
-	public boolean equals(Expression other){
-		
-		return this.getValue() == other.getValue();
-	}
-	
+
 	public String toString(){
-		
-		return getValue().toString();
+		return "getJavaBoolean()";
 	}
+
+
+
 }

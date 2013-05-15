@@ -35,7 +35,7 @@ public class LessThan extends BinaryBooleanRepresentation implements IComposedSt
 	@Override
 	public boolean getJavaBoolean(){
 		
-		return (Util.fuzzyLessThanOrEqualTo(((DoubleRepresentation)getOperandAt(1)).getJavaDouble(), (DoubleRepresentation)));
+		return (Util.fuzzyLessThanOrEqualTo(((DoubleRepresentation)getOperandAt(1)).getJavaDouble(), ((DoubleRepresentation)getOperandAt(2)).getJavaDouble()) && !Util.fuzzyEquals(((DoubleRepresentation)getOperandAt(1)).getJavaDouble(), ((DoubleRepresentation)getOperandAt(2)).getJavaDouble()));
 			
 	}
 
