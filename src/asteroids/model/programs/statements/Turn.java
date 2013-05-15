@@ -1,7 +1,7 @@
 package asteroids.model.programs.statements;
 
 import asteroids.Error.IllegalOperandException;
-import asteroids.model.Ship;
+import asteroids.model.*;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.expressions.DoubleRepresentation;
 import asteroids.model.programs.expressions.Entity;
@@ -33,8 +33,8 @@ public class Turn extends ActionStatement {
 
 	@Override
 	public void execute() {
-		
-
+		Ship ship = (Ship) ((Entity) getOperandAt(1)).getSpaceObject();
+			ship.turn(amount.getJavaDouble());
 	}
 
 	@Override
