@@ -4,7 +4,7 @@ import asteroids.Error.IllegalOperandException;
 
 public interface IComposedStructure extends IStructure{
 	
-public abstract IEntry getOperandAt(int index);
+public abstract IEntry getOperandAt(int index) throws IndexOutOfBoundsException;
 
 public abstract int getNbOperands();
 

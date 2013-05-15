@@ -1,13 +1,11 @@
 package asteroids.model.programs.statements;
 
 import asteroids.Error.*;
-import asteroids.model.programs.IBinaryStructure;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.expressions.Expression;
 import asteroids.model.programs.expressions.Variable;
 
-public class Assignement extends StructuralStatement implements
-		IBinaryStructure {
+public class Assignement extends StructuralStatement{
 
 	private Variable var;
 	private Expression value;
@@ -15,12 +13,8 @@ public class Assignement extends StructuralStatement implements
 	public Assignement(Variable var, Expression value) throws IllegalOperandException, UnhandledCombinationException{
 		if(!var.getValue().getClass().isAssignableFrom(value.getValue().getClass()))
 			throw new UnhandledCombinationException();
-		if(!canHaveAsFirstOperand(var))
-			throw new IllegalOperandException(this, var);
-		if(!canHaveAsSecondOperand(value))
-			throw new IllegalOperandException(this, value);
-		this.setFirstOperand(var);
-		this.setSecondOperand(value);
+		this.setOperandAt(1,var);
+		this.setOperandAt(2,value);
 		
 			
 	}
@@ -66,11 +60,13 @@ public class Assignement extends StructuralStatement implements
 	}
 	@Override
 	public void setOperandAt(int index, IEntry operand) {
-		if(canHaveAsOperandAt(index, operand)){
+		if(!canHaveAsOperandAt(index, operand))
+			throw new IllegalOperandException();
+		else
 			if(index == 1)
-				setFirstOperand(operand);
+				this.var = operand;
 			else
-				setSecondOperand(operand);
+				this.value = operand;
 		}
 		
 	}
