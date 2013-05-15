@@ -1,12 +1,16 @@
 package asteroids.model.programs.expressions;
 
+import asteroids.Error.IllegalOperandException;
+import asteroids.model.programs.IBinaryStructure;
+import asteroids.model.programs.IEntry;
 
 
 
 
 
 
-public class Addition extends DoubleRepresentation{
+
+public class Addition extends DoubleRepresentation implements IComposedStructure{
 	
 	private DoubleRepresentation leftExpression;
 	private DoubleRepresentation rightExpression;
@@ -14,54 +18,47 @@ public class Addition extends DoubleRepresentation{
 
 	public Addition(DoubleRepresentation leftExpression, DoubleRepresentation RightExpression){
 	
-		setRightExpression(rightExpression);
-		setLeftExpression(leftExpression);
+		setOperandAt(2, rightExpression);
+		setOperandAt(1, leftExpression);
 		
 	}
 	
-	public void setRightExpression(DoubleRepresentation expression){
-		if(canHaveAsRightExpression(expression)){
-			rightExpression = expression;
+	@Override
+	public void setOperandAt(int index, IEntry expression) throws IllegalOperandException{
+		if(canHaveAsOperandAt(index, expression)){
+			if(index == 2){
+				rightExpression = (DoubleRepresentation) expression;
+			}
+			if(index == 1){
+				leftExpression = (DoubleRepresentation) expression;
+			}
 		}
 		else{
-			rightExpression = new Constant(0);
+			throw new IllegalOperandException();
 		}
+	
 	}
 	
-	public boolean canHaveAsRightExpression(DoubleRepresentation expression){
+	public boolean canHaveAsOperandAt(int index, IEntry expression){
 		
+		if(!DoubleRepresentation.class.isAssignableFrom(expression.getClass())){
+			return false;
+		}
+		else{
 		return true; 
 		//TODO implementeren
-	}
-	
-	public void setLeftExpression(DoubleRepresentation expression){
-		if(canHaveAsLeftExpression(expression)){
-			leftExpression=expression;
-		}
-		else{
-			leftExpression=new Constant(0);
 		}
 	}
 	
-	public boolean canHaveAsLeftExpression(DoubleRepresentation expression){
-		
-		return true;
-		//TODO implementeren
-		
-	}
-	public boolean isMutable(){
-		
-		return false;
-		
-	}
 	
 	
-	public DoubleRepresentation getLeftExpression(){
-		return leftExpression.clone();
+	
+	public DoubleRepresentation getFirstOperand(){
+		return leftExpression;
 	}
 	
-	public DoubleRepresentation getRightExpression(){
-		return rightExpression.clone();
+	public DoubleRepresentation getSecondOperand(){
+		return rightExpression;
 	}
 	
 	@Override
@@ -72,7 +69,7 @@ public class Addition extends DoubleRepresentation{
 	}
 
 	@Override
-	public boolean hasAsSubExpression(Expression expression) {
+	public boolean hasAsSubEntry(IEntry expression){
 		return (expression == getLeftExpression() || expression == getRightExpression());
 	}
 }
