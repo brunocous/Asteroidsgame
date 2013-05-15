@@ -9,8 +9,8 @@ import asteroids.model.programs.expressions.Variable;
 public class Assignement extends StructuralStatement implements
 		IBinaryStructure {
 
-	private final Variable var;
-	private final Expression value;
+	private Variable var;
+	private Expression value;
 	
 	public Assignement(Variable var, Expression value) throws IllegalOperandException, UnhandledCombinationException{
 		if(!var.getValue().getClass().isAssignableFrom(value.getValue().getClass()))
@@ -19,7 +19,8 @@ public class Assignement extends StructuralStatement implements
 			throw new IllegalOperandException(this, var);
 		if(!canHaveAsSecondOperand(value))
 			throw new IllegalOperandException(this, value);
-		
+		this.setFirstOperand(var);
+		this.setSecondOperand(value);
 		
 			
 	}
@@ -45,26 +46,26 @@ public class Assignement extends StructuralStatement implements
 
 	@Override
 	public IEntry getFirstOperand() {
-		// TODO Auto-generated method stub
-		return null;
+		return var;
 	}
 
 	@Override
-	public void setFirstOperand(IEntry fOperand) {
-		// TODO Auto-generated method stub
+	public void setFirstOperand(IEntry fOperand) throws IllegalOperandException{
+		if(!canHaveAsFirstOperand(fOperand))
+			throw new IllegalOperandException(this, fOperand);
+		else
+		this.var =(Variable) fOperand;
 		
 	}
 
 	@Override
 	public boolean canHaveAsFirstOperand(IEntry fOperand) {
-		// TODO Auto-generated method stub
-		return false;
+		return canHaveAsOperandAt(1,fOperand);
 	}
 
 	@Override
 	public IEntry getSecondOperand() {
-		// TODO Auto-generated method stub
-		return null;
+		return value;
 	}
 
 	@Override
@@ -94,6 +95,20 @@ public class Assignement extends StructuralStatement implements
 	@Override
 	public int getNbOperands() {
 		return 2;
+	}
+	@Override
+	public boolean canHaveAsOperandAt(int index, IEntry operand) {
+		return super.canHaveAsOperandAt(index, operand) && ( (index == 1) || (index == 2) );
+	}
+	@Override
+	public void setOperandAt(int index, IEntry operand) {
+		if(canHaveAsOperandAt(index, operand)){
+			if(index == 1)
+				setFirstOperand(operand);
+			else
+				setSecondOperand(operand);
+		}
+		
 	}
 
 }

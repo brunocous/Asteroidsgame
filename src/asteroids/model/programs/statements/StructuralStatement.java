@@ -1,6 +1,5 @@
 package asteroids.model.programs.statements;
 
-import asteroids.model.programs.IEntry;
 import asteroids.model.programs.*;
 
 public abstract class StructuralStatement extends Statement implements IComposedStructure{
@@ -27,5 +26,10 @@ public abstract class StructuralStatement extends Statement implements IComposed
 	public boolean canHaveAsOperandAt(int index, IEntry entry){
 		return (entry != null) && (!entry.hasAsSubEntry(this)) && (index > 0);
 	}
-	
+	@Override
+	public void setOperandAt(int index, IEntry operand) {
+		if(canHaveAsOperandAt(index, operand))
+			this.setOperandAt(index, operand);
+		
+	}
 }

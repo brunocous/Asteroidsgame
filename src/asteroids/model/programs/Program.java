@@ -2,9 +2,14 @@ package asteroids.model.programs;
 
 import java.util.List;
 
+import be.kuleuven.cs.som.annotate.Raw;
+
+import asteroids.model.Ship;
 import asteroids.model.programs.parsing.ProgramFactory;
 
 public class Program<E, S, T> implements ProgramFactory{
+	
+	private Ship ship;
 
 	@Override
 	public Object createDoubleLiteral(int line, int column, double d) {
@@ -256,6 +261,19 @@ public class Program<E, S, T> implements ProgramFactory{
 	public Object createEntityType() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public Ship getShip() {
+		return ship;
+	}
+
+	public void setShip(@Raw Ship ship) {
+		assert canHaveAsShip(ship);
+		this.ship = ship;
+	}
+	
+	public boolean canHaveAsShip(Ship ship){
+		return (ship != null && !ship.hasAProgram());
 	}
 
 }

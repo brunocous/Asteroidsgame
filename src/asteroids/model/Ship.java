@@ -9,6 +9,7 @@ import asteroids.Error.IllegalPositionException;
 import asteroids.Error.IllegalRadiusException;
 import asteroids.Error.NegativeTimeException;
 import asteroids.model.Util.*;
+import asteroids.model.programs.Program;
 import be.kuleuven.cs.som.annotate.*;
 
 /** 
@@ -61,6 +62,10 @@ public class Ship extends SpaceObject{
 	 *        |   ( (bullet != null) && (!bullet.isTerminated()) )
 	 */
 	private ArrayList<Bullet> bullets;
+	/**
+	 * Variable referencing a program for this ship to execute.
+	 */
+	private Program program;
 
 	/**
 	 * Initialize this new ship with given pos, vel, direction, mass, radius and world.
@@ -598,5 +603,21 @@ public class Ship extends SpaceObject{
 			this.addAsBullet(bullet);
 		}
 		
+	}
+
+	public Program getProgram() {
+		return program;
+	}
+
+	public void setProgram(Program program) {
+		assert canHaveAsProgram(program);
+		this.program = program;
+		program.setShip(this);
+	}
+	public boolean canHaveAsProgram(Program program){
+		return (program.canHaveAsShip(this));
+	}
+	public boolean hasAProgram(){
+		return this.getProgram() != null;
 	}
 	}
