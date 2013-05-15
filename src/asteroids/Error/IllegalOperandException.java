@@ -13,7 +13,10 @@ public class IllegalOperandException extends Exception {
 		this.setTargetOperand(targetOperand);
 		this.setOperand(Operand);
 	}
-	
+	public IllegalOperandException(){
+		setTargetOperand(null);
+		setOperand(null);
+	}
 	public IEntry getTargetOperand() {
 		return targetOperand;
 	}
