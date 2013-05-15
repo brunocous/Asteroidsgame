@@ -1,5 +1,7 @@
 package asteroids.model.programs.expressions;
 
+import asteroids.model.programs.IEntry;
+
 
 
 public class Constant extends DoubleRepresentation{
@@ -22,9 +24,9 @@ public double getJavaDouble(){
 }
 
 @Override
-public boolean hasAsSubEntry(Expression expression) {
+public boolean hasAsSubEntry(IEntry subEntry) {
 
-	return expression.equals(this);
+	return subEntry.equals(this);
 }
 
 

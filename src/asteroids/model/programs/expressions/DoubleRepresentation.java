@@ -1,5 +1,7 @@
 package asteroids.model.programs.expressions;
 
+import asteroids.model.programs.IEntry;
+
 public abstract class DoubleRepresentation extends Expression {
 
 	public abstract double getJavaDouble();
@@ -16,7 +18,6 @@ public abstract class DoubleRepresentation extends Expression {
 	}
 	
 
-	public abstract boolean hasAsSubEntry(Expression expression);
 
 	public Constant getValue(){
 		
