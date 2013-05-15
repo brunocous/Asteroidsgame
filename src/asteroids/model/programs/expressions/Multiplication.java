@@ -1,47 +1,48 @@
 package asteroids.model.programs.expressions;
 
+import asteroids.Error.IllegalOperandException;
+import asteroids.model.programs.IComposedStructure;
+import asteroids.model.programs.IEntry;
 
-import java.util.ArrayList;
-
-import asteroids.model.programs.types.DoubleLiteral;
-import asteroids.model.programs.types.Type;
-
-
-
-public class Multiplication extends ComposedExpression{
+public class Multiplication extends BinaryDoubleRepresentation implements IComposedStructure{
 	
-	private ArrayList<Expression> subexpressions;
-	private Type type = new DoubleLiteral();
 
-	public Multiplication(ArrayList<Expression> subexpressions){
-		
-		super(subexpressions);
+	public Multiplication(DoubleRepresentation leftExpression, DoubleRepresentation rightExpression) throws IllegalOperandException{
+	
+		super(leftExpression, rightExpression);
 		
 	}
 	
-	public Type getType(){
-		return type;
+	@Override
+	public boolean canHaveAsOperandAt(int index, IEntry expression){
+		
+		if(index > getNbOperands()){
+			return false;
+		}
+		else{
+		if(!DoubleRepresentation.class.isAssignableFrom(expression.getClass())){
+			return false;
+		}
+		else{
+		return true; 
+		//TODO implementeren
+		}
+		}
 	}
 	
-	public boolean isMutable(){
-		
-		return false;
-		
-	}
+
 	
-	public Expression getValue(){
+	@Override
+	public double getJavaDouble(){
 		
-		return new Constant(subexpressions.get(0).getConstantValue()*subexpressions.get(1).getConstantValue());
+		return ((DoubleRepresentation)getOperandAt(1)).getJavaDouble()*((DoubleRepresentation)getOperandAt(2)).getJavaDouble();
+			
 	}
-	
-	public boolean equals(Expression other){
-		
-		return this.getValue() == other.getValue();
-	}
-	
+
 	public String toString(){
-		
-		return getValue().toString();
+		return "getJavaDouble()";
 	}
-}
 
+
+
+}
