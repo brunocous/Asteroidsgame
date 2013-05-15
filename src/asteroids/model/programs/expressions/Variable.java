@@ -1,13 +1,13 @@
 package asteroids.model.programs.expressions;
 
 import asteroids.Error.IllegalStringNameException;
-import asteroids.model.programs.types.Type;
+import asteroids.model.programs.IEntry;
 
 public class Variable extends Expression {
 	
 	private final String name;
 	private Expression value;
-	private final Type type = null;
+
 	
 	public Variable(Expression value, String name){
 		this.setValue(value);
@@ -77,6 +77,14 @@ public class Variable extends Expression {
 	public void setValue(Expression value){
 		
 		this.value = value;
+	}
+
+
+
+	@Override
+	public boolean hasAsSubEntry(IEntry subEntry) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

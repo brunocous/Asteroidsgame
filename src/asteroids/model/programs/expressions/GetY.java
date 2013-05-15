@@ -1,62 +1,48 @@
 package asteroids.model.programs.expressions;
 
-
-import asteroids.Error.IllegalMaxSpeedException;
-import asteroids.Error.IllegalPositionException;
-import asteroids.Error.IllegalRadiusException;
-import asteroids.model.Ship;
+import asteroids.Error.IllegalOperandException;
+import asteroids.model.programs.IComposedStructure;
+import asteroids.model.programs.IEntry;
 
 
-public class GetY extends DoubleRepresentation {
-	
-	private EntityRepresentation subExpression;
-	
-	public GetY(EntityRepresentation subExpression) throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
+
+public class GetY extends UnaryDoubleRepresentation implements IComposedStructure{
 		
-		setSubExpression(subExpression);
+	private EntityRepresentation argument;
+		
+	public GetY(DoubleRepresentation argument) throws IllegalOperandException{
+		
+		super(argument);
 		
 	}
 	
-	public void setSubExpression(EntityRepresentation subexpression) throws IllegalMaxSpeedException, IllegalPositionException, IllegalRadiusException{
-		
-		if(canHaveAsSubExpression(subexpression)){
-			this.subExpression= subexpression;
+		public boolean canHaveAsOperandAt(int index, IEntry argument){
+			
+			if(index ==1){
+			if(EntityRepresentation.class.isAssignableFrom(argument.getClass())){
+				return true;
+			}
+			else{
+				return false;
+				//TODO implementeren
+			}
+			}
+			else {
+				return false;
+			}
 		}
-		else{
-			this.subExpression= new Entity(new Ship());
+		
+		public double getJavaDouble(){
+			
+			return (argument.getSpaceObject().getPos().getY());
+			
 		}
-	}
-	
-	public boolean canHaveAsSubExpression(EntityRepresentation subexpression){
-		return true;
-		//TODO implementeren
-	}
 	
 
-	public boolean isMutable(){
-		return false;
-	}
-
-	public Entity getSubExpression(){
-		
-		return new Entity(subExpression.getSpaceObject());
-		
-	}
-	@Override
-	public double getJavaDouble() {
-		
-		return getSubExpression().getSpaceObject().getPos().getY();
-	}
-
-	@Override
-	public boolean hasAsSubExpression(Expression expression) {
-
-		return (subExpression.equals(expression));
-	}
-
+		public String toString(){
+			
+			return "getJavaDouble()";
+		}
 
 	
-	
-	
-
-}
+		}

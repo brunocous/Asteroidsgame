@@ -31,7 +31,5 @@ public abstract class DoubleRepresentation extends Expression {
 		
 	}
 	
-	public abstract void setOperandAt(int index, IEntry entry) throws IllegalOperandException;
-	public abstract IEntry getOperandAt(int index) throws IndexOutOfBoundsException;
-	public abstract int getNbOperands();
+
 }
