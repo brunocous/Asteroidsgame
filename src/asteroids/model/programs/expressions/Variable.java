@@ -1,90 +1,50 @@
 package asteroids.model.programs.expressions;
 
-import asteroids.Error.IllegalStringNameException;
+import asteroids.Error.IllegalVariableValueException;
 import asteroids.model.programs.IEntry;
 
-public class Variable extends Expression {
-	
-	private final String name;
-	private Expression value;
 
-	
-	public Variable(Expression value, String name){
-		this.setValue(value);
-		if (canHaveAsName(name)){
-			this.name = name;
-		}
-		else{ 
-			throw new IllegalStringNameException();
-		}
-	}
-	
 
-	
-	public boolean canHaveAsName(String name){
-		return !(name.equals("")||name.equals(null));
-	}
-	
-	public String getName(){
-		return name;
-	}
-	
-	@Override
-	public Expression getValue(){
-			
-			return value;
-	}	
-	
-	public Type getType(){
-		return type;
-	}
-	
-	public void setType(Type type){
-		
-		this.type= type;
-		
-	}
-	@Override
-	public boolean isMutable() {
-		
-		return true;
-	}
+public class Variable extends Expression{
 
-	public boolean equals(Expression other) {
-		
-		if(other.getType() == getType()){
-		return ((Variable)other).getVariableValue() == getVariableValue();
-		}
-		else{
-			return false;
-		}
+private Expression value;
 
-	}
-	
-	
-	@Override
-	public String toString() {
+public Variable(Expression value){
 		
-		return null;
-	}
-
-	@Override
-	public boolean hasAsSubExpression(Expression expression) {
-		
-		return expression == this;
-	}
+		this.value= (value);
+}
 	
-	public void setValue(Expression value){
-		
+public void setValue(Expression value) throws IllegalVariableValueException{
+	if(canHaveAsValue(value)){
 		this.value = value;
 	}
+	else{
+		throw new IllegalVariableValueException();
+	}
+}
 
-
-
-	@Override
-	public boolean hasAsSubEntry(IEntry subEntry) {
-		// TODO Auto-generated method stub
+public boolean canHaveAsValue(Expression value){
+	
+	if(BooleanRepresentation.class.isAssignableFrom(value.getClass()) ||
+			DoubleRepresentation.class.isAssignableFrom(value.getClass()) ||
+			EntityRepresentation.class.isAssignableFrom(value.getClass())){
+		return true;
+	}
+	else{
 		return false;
 	}
+}
+
+public Expression getValue(){
+	return value;
+}
+
+@Override
+public boolean hasAsSubEntry(IEntry subEntry) {
+
+	return subEntry.equals(this);
+}
+
 
 }
+
