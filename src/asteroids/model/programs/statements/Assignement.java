@@ -72,6 +72,10 @@ public class Assignement extends StructuralStatement{
 			else
 				this.value = (Expression) operand;
 	}
+	@Override
+	public String toString(){
+		return getOperandAt(1) + " is set to " + getOperandAt(2) + ".";
+	}
 		
 	}
 

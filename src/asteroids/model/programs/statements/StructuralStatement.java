@@ -1,6 +1,5 @@
 package asteroids.model.programs.statements;
 
-import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.*;
 
 public abstract class StructuralStatement extends Statement implements IComposedStructure{

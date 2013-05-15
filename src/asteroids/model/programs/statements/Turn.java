@@ -58,4 +58,8 @@ public class Turn extends ActionStatement {
 			this.amount = (DoubleRepresentation) operand;
 	}
 
+	@Override
+	public String toString(){
+		return getOperandAt(1) + " turns with an amount of " + getOperandAt(2) + " radians.";
+	}
 }

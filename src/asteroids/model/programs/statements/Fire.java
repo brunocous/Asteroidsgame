@@ -49,5 +49,9 @@ public class Fire extends ActionStatement {
 		}
 
 	}
+	@Override
+	public String toString(){
+		return getOperandAt(1) + " fires a bullet!!";
+	}
 
 }

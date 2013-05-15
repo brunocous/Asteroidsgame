@@ -1,6 +1,5 @@
 package asteroids.model.programs.statements;
 
-import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IComposedStructure;
 import asteroids.model.programs.IEntry;
 
