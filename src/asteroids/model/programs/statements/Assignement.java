@@ -45,42 +45,6 @@ public class Assignement extends StructuralStatement implements
 	}
 
 	@Override
-	public IEntry getFirstOperand() {
-		return var;
-	}
-
-	@Override
-	public void setFirstOperand(IEntry fOperand) throws IllegalOperandException{
-		if(!canHaveAsFirstOperand(fOperand))
-			throw new IllegalOperandException(this, fOperand);
-		else
-		this.var =(Variable) fOperand;
-		
-	}
-
-	@Override
-	public boolean canHaveAsFirstOperand(IEntry fOperand) {
-		return canHaveAsOperandAt(1,fOperand);
-	}
-
-	@Override
-	public IEntry getSecondOperand() {
-		return value;
-	}
-
-	@Override
-	public void setSecondOperand(IEntry sOperand) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean canHaveAsSecondOperand(IEntry sOperand) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public void execute() {
 		// TODO Auto-generated method stub
 		
