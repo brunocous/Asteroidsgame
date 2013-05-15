@@ -1,6 +1,7 @@
 package asteroids.model.programs.statements;
 
 import asteroids.Error.IllegalOperandException;
+import asteroids.model.Ship;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.expressions.DoubleRepresentation;
 import asteroids.model.programs.expressions.Entity;
@@ -10,32 +11,51 @@ public class Turn extends ActionStatement {
 	private Entity entity;
 	private DoubleRepresentation amount;
 	
-	public Turn()
+	public Turn(Entity entity, DoubleRepresentation amount) throws IllegalOperandException{
+		setOperandAt(1,entity);
+		setOperandAt(2, amount);
+	}
 	
 	
 	@Override
 	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException {
-		// TODO Auto-generated method stub
-		return null;
+		if(index == 1)
+			return entity;
+		if(index == 2)
+			return amount;
+		throw new IndexOutOfBoundsException();
 	}
 
 	@Override
 	public int getNbOperands() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 2;
 	}
 
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
+	public boolean canHaveAsOperandAt( int index, IEntry operand){
+		if(super.canHaveAsOperandAt(index, operand))
+			if(index == 1 && operand.getClass().isAssignableFrom(Entity.class)){
+				return ((Entity) operand).getValue().getSpaceObject().getClass().isAssignableFrom(Ship.class);
+			}
+			else if(index == 2)
+				return operand.getClass().isAssignableFrom(DoubleRepresentation.class);
+		return false;
+	}
+	@Override
 	public void setOperandAt(int index, IEntry operand)
 			throws IllegalOperandException {
-		// TODO Auto-generated method stub
-		
+		if(!canHaveAsOperandAt(index, operand))
+		throw new IllegalOperandException();
+		if(index == 1)
+			this.entity = (Entity) operand;
+		if(index == 2)
+			this.amount = (DoubleRepresentation) operand;
 	}
 
 }

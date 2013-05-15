@@ -33,4 +33,3 @@ public abstract class ActionStatement extends Statement implements IComposedStru
 	}
 
 }
-}
