@@ -11,6 +11,7 @@ import asteroids.model.programs.IEntry;
 public class Sequence extends StructuralStatement {
 
 	private ArrayList<Statement> statements;
+	private static final double MAX_WAITING_TIME = 0.2;
 	
 	public Sequence(){
 		statements = new ArrayList<Statement>();
@@ -66,9 +67,33 @@ public class Sequence extends StructuralStatement {
 	}
 	@Override
 	public void execute() {
+		// time stamp before any action
+		long timeStampBeforeAction = System.currentTimeMillis();
+		// starting the execution of this sequence
 		for(Statement statement: getAllStatements()){
+			//executes statement
 			statement.execute();
+			
+			//if statement is an action, then wait the amount of time equal to 
+			// the maximum amount of waiting time minus the amount of time until 
+			// an action statements was executed. 
+			if(statement.getClass().isAssignableFrom(ActionStatement.class)){
+				long timeStampAfterAction = System.currentTimeMillis();
+				long timeToWait = ((long) getMaxWaitingTime()) - (timeStampAfterAction - timeStampBeforeAction);
+				long now = System.currentTimeMillis();
+				while((now - timeStampAfterAction) < timeToWait){
+					now = System.currentTimeMillis();
+				}
+				timeStampBeforeAction = System.currentTimeMillis();
+			}
 		}
+	}
+	public boolean containsActionStatements(){
+		for(Statement statement: getAllStatements()){
+			if(statement.getClass().isAssignableFrom(ActionStatement.class))
+				return true;
+		}
+		return false;
 	}
 	@Override
 	public String toString(){
@@ -77,6 +102,9 @@ public class Sequence extends StructuralStatement {
 			result += "\n" + statement;
 		}
 		return result;
+	}
+	public static double getMaxWaitingTime() {
+		return MAX_WAITING_TIME;
 	}
 
 }

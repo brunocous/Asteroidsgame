@@ -32,7 +32,11 @@ public class Assignement extends StructuralStatement{
 
 	@Override
 	public void execute() {
-		((Variable) getOperandAt(1)).setValue((Expression) getOperandAt(2));
+		try{((Variable) getOperandAt(1)).setValue((Expression) getOperandAt(2));
+		
+		} catch(IllegalVariableValueException e){
+			assert !getOperandAt(1).getClass().isAssignableFrom(getOperandAt(2).getClass());
+		}
 		
 	}
 

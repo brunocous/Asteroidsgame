@@ -1,10 +1,15 @@
 package asteroids.model.programs;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import be.kuleuven.cs.som.annotate.Raw;
 
+import asteroids.model.Asteroid;
+import asteroids.model.Bullet;
 import asteroids.model.Ship;
+import asteroids.model.SpaceObject;
+import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.parsing.ProgramFactory;
 
 public class Program<E, S, T> implements ProgramFactory{
@@ -266,6 +271,9 @@ public class Program<E, S, T> implements ProgramFactory{
 	public Ship getShip() {
 		return ship;
 	}
+	public boolean hasShip(){
+		return getShip() != null;
+	}
 
 	public void setShip(@Raw Ship ship) {
 		assert canHaveAsShip(ship);
@@ -274,6 +282,32 @@ public class Program<E, S, T> implements ProgramFactory{
 	
 	public boolean canHaveAsShip(Ship ship){
 		return (ship != null && !ship.hasAProgram());
+	}
+	public List<Entity> getAllEntitiesByForEachType(ForeachType type){
+		if(hasShip()){
+			List<Entity> result = new LinkedList<Entity>();
+			if(type == ForeachType.ANY)
+				for(SpaceObject obj: getShip().getWorld().getAllSpaceObjects()){
+					result.add(new Entity(obj));
+				}
+			if(type == ForeachType.ASTEROID)
+				for(SpaceObject obj: getShip().getWorld().getAllSpaceObjects()){
+					if(obj.getClass().isAssignableFrom(Asteroid.class))
+					result.add(new Entity(obj));
+				}
+			if(type == ForeachType.BULLET)
+				for(SpaceObject obj: getShip().getWorld().getAllSpaceObjects()){
+					if(obj.getClass().isAssignableFrom(Bullet.class))
+					result.add(new Entity(obj));
+				}
+			if(type == ForeachType.SHIP)
+				for(SpaceObject obj: getShip().getWorld().getAllSpaceObjects()){
+					if(obj.getClass().isAssignableFrom(Ship.class))
+					result.add(new Entity(obj));
+				}
+			return result;
+		}
+		else return null;
 	}
 
 }
