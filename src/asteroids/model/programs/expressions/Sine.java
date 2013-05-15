@@ -8,7 +8,7 @@ import asteroids.model.programs.IEntry;
 
 public class Sine extends UnaryDoubleRepresentation implements IComposedStructure{
 		
-	private DoubleRepresentation argument;
+
 		
 	public Sine(DoubleRepresentation argument) throws IllegalOperandException{
 		
@@ -34,7 +34,7 @@ public class Sine extends UnaryDoubleRepresentation implements IComposedStructur
 		
 		public double getJavaDouble(){
 			
-			return Math.sin(argument.getJavaDouble());
+			return Math.sin(((DoubleRepresentation)getOperandAt(1)).getJavaDouble());
 			
 		}
 	

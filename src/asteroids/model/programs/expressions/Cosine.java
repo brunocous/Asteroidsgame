@@ -8,7 +8,7 @@ import asteroids.model.programs.IEntry;
 
 public class Cosine extends UnaryDoubleRepresentation implements IComposedStructure{
 		
-	private DoubleRepresentation argument;
+	
 		
 	public Cosine(DoubleRepresentation argument) throws IllegalOperandException{
 		
@@ -34,7 +34,7 @@ public class Cosine extends UnaryDoubleRepresentation implements IComposedStruct
 		
 		public double getJavaDouble(){
 			
-			return Math.cos(argument.getJavaDouble());
+			return Math.cos(((DoubleRepresentation)getOperandAt(1)).getJavaDouble());
 			
 		}
 	

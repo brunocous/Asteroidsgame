@@ -9,7 +9,7 @@ import asteroids.model.programs.IEntry;
 
 public class Sqrt extends UnaryDoubleRepresentation implements IComposedStructure{
 		
-	private DoubleRepresentation argument;
+
 		
 	public Sqrt(DoubleRepresentation argument) throws IllegalOperandException{
 		
@@ -35,7 +35,7 @@ public class Sqrt extends UnaryDoubleRepresentation implements IComposedStructur
 		
 		public double getJavaDouble(){
 			
-			return Math.sqrt(argument.getJavaDouble());
+			return Math.sqrt(((DoubleRepresentation)getOperandAt(1)).getJavaDouble());
 			
 		}
 	

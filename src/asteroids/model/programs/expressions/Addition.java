@@ -4,38 +4,22 @@ import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IComposedStructure;
 import asteroids.model.programs.IEntry;
 
-public class Addition extends DoubleRepresentation implements IComposedStructure{
+public class Addition extends BinaryDoubleRepresentation implements IComposedStructure{
 	
-	private DoubleRepresentation leftExpression;
-	private DoubleRepresentation rightExpression;
 
-
-	public Addition(DoubleRepresentation leftExpression, DoubleRepresentation RightExpression) throws IllegalOperandException{
+	public Addition(DoubleRepresentation leftExpression, DoubleRepresentation rightExpression) throws IllegalOperandException{
 	
-		setOperandAt(2, rightExpression);
-		setOperandAt(1, leftExpression);
+		super(leftExpression, rightExpression);
 		
 	}
 	
 	@Override
-	public void setOperandAt(int index, IEntry expression) throws IllegalOperandException{
-		
-		if(canHaveAsOperandAt(index, expression)){
-			if(index == 2){
-				rightExpression = (DoubleRepresentation) expression;
-			}
-			if(index == 1){
-				leftExpression = (DoubleRepresentation) expression;
-			}
-		}
-		else{
-			throw new IllegalOperandException();
-		}
-	
-	}
-	
 	public boolean canHaveAsOperandAt(int index, IEntry expression){
 		
+		if(index > getNbOperands()){
+			return false;
+		}
+		else{
 		if(!DoubleRepresentation.class.isAssignableFrom(expression.getClass())){
 			return false;
 		}
@@ -43,15 +27,10 @@ public class Addition extends DoubleRepresentation implements IComposedStructure
 		return true; 
 		//TODO implementeren
 		}
+		}
 	}
 	
-	public IEntry getFirstOperand(){
-		return leftExpression;
-	}
-	
-	public IEntry getSecondOperand(){
-		return rightExpression;
-	}
+
 	
 	@Override
 	public double getJavaDouble(){
@@ -60,28 +39,11 @@ public class Addition extends DoubleRepresentation implements IComposedStructure
 			
 	}
 
-	@Override
-	public boolean hasAsSubEntry(IEntry expression){
-		return (expression == getOperandAt(1) || expression == getOperandAt(2));
+	public String toString(){
+		return "getJavaDouble()";
 	}
 
-	@Override
-	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException{
-		if(index ==1){
-			return getFirstOperand();
-		}
-		else if(index ==2){
-			return getSecondOperand();
-		}
-		else{
-			throw new IndexOutOfBoundsException();
-		}
-	}
 
-	@Override
-	public int getNbOperands() {
-		
-		return 2;
-	}
+
 }
 

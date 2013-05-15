@@ -8,7 +8,7 @@ import asteroids.model.programs.IEntry;
 
 public class GetY extends UnaryDoubleRepresentation implements IComposedStructure{
 		
-	private EntityRepresentation argument;
+
 		
 	public GetY(DoubleRepresentation argument) throws IllegalOperandException{
 		
@@ -34,7 +34,7 @@ public class GetY extends UnaryDoubleRepresentation implements IComposedStructur
 		
 		public double getJavaDouble(){
 			
-			return (argument.getSpaceObject().getPos().getY());
+			return (((EntityRepresentation)getOperandAt(1)).getSpaceObject().getPos().getY());
 			
 		}
 	
