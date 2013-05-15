@@ -2,6 +2,8 @@ package asteroids.model.programs.expressions;
 
 
 
+
+
 public abstract class DoubleRepresentation extends Expression {
 
 	public abstract double getJavaDouble();
@@ -27,5 +29,6 @@ public abstract class DoubleRepresentation extends Expression {
 		return new Constant(this.getJavaDouble());
 		
 	}
+	
 
 }

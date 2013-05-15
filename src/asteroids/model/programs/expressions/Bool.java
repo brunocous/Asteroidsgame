@@ -1,6 +1,8 @@
 
 	package asteroids.model.programs.expressions;
 
+import asteroids.model.programs.IEntry;
+
 
 
 	public class Bool extends BooleanRepresentation{
@@ -18,17 +20,13 @@
 	public boolean getJavaBoolean(){
 		return value;
 	}
-	@Override
-	public boolean isMutable() {
-		
-		return false;
-	}
+	
 
 
 	@Override
-	public boolean hasAsSubExpression(Expression expression) {
+	public boolean hasAsSubEntry(IEntry expression) {
 		
-		return expression == this;
+		return expression.equals(this);
 	}
 	
 	

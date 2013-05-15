@@ -1,75 +1,57 @@
 package asteroids.model.programs.expressions;
 
+import asteroids.Error.IllegalOperandException;
+import asteroids.model.programs.IComposedStructure;
+import asteroids.model.programs.IEntry;
 
-import java.util.ArrayList;
-
-import asteroids.Util;
-import asteroids.model.programs.types.BooleanLiteral;
-import asteroids.model.programs.types.Type;
-
-
-public class Equals extends BooleanRepresentation{
-
+public class Equals extends BinaryBooleanRepresentation implements IComposedStructure{
 	
-	private Expression leftExpression;
-	private Expression rightExpression;
 
-	public Equals(Expression leftExpression, Expression rightExpression){
-		
-		setSubExpressions(leftExpression, rightExpression);
+	public Equals(Expression leftExpression, Expression rightExpression) throws IllegalOperandException{
+	
+		super(leftExpression, rightExpression);
 		
 	}
 	
-	public void setSubExpressions(Expression leftExpression,Expression rightExpression){
+	@Override
+	public boolean canHaveAsOperandAt(int index, IEntry expression){
 		
-		if(canHaveAsExpressions(leftExpression,rightExpression)){
-			this.leftExpression = leftExpression;
-			this.rightExpression = rightExpression;
+		if(index > getNbOperands()){
+			return false;
 		}
 		else{
-			this.leftExpression= new Constant(0);
-			this.rightExpression = new Constant(1);
+		if(index ==1 && getOperandAt(2) == null){
+			return true;
+		}
+		else if(index ==1 && expression.getClass().isAssignableFrom(getOperandAt(2).getClass())){
+			return true;
+		}
+		else if(index ==2 && getOperandAt(1) == null){
+			return true;
+		}
+		else if(index ==2 &&expression.getClass().isAssignableFrom(getOperandAt(2).getClass())){
+			return true;
+		}
+		else{
+		return false; 
+		
+		}
 		}
 	}
 	
-	public boolean canHaveAsExpressions(Expression leftExpression,Expression rightExpression){
-		
-		return true;
-		//TODO implementeren
-	}
-	
 
 	
-	public boolean isMutable(){
-		
-		return false;
-		
-	}
-
 	@Override
-	public boolean getJavaBoolean() {
-		//TODO voorwaarden
-		if(//leftExpression.getValue() geeft een Bool terug){
-			return ((BooleanRepresentation)leftExpression).equals(((BooleanRepresentation)rightExpression));
-	}
-		else if(//leftExpression.getValue() geeft een Constant terug){
-			return Util.fuzzyEquals(((DoubleRepresentation)leftExpression).equals((DoubleRepresentation)rightExpression));
-	}
-		else if(//leftExpression.getValue() geeft een Entity terug){
-			return ((EntityRepresentation)leftExpression).equals((EntityRepresenation)rightExpression);
-			}
-	
-			else return false;
-	}
-
-	@Override
-	public boolean hasAsSubExpression(Expression expression) {
+	public boolean getJavaBoolean(){
 		
-		return (leftExpression.equals(expression)||rightExpression.equals(expression));
+		return (getOperandAt(1).equals(getOperandAt(2)));
+			
 	}
 
+	public String toString(){
+		return "getJavaBoolean()";
+	}
 
 
 
 }
-

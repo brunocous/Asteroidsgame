@@ -1,44 +1,48 @@
 package asteroids.model.programs.expressions;
 
-import java.util.ArrayList;
+import asteroids.Error.IllegalOperandException;
+import asteroids.model.programs.IComposedStructure;
+import asteroids.model.programs.IEntry;
 
-import asteroids.model.programs.types.BooleanLiteral;
-import asteroids.model.programs.types.Type;
 
-public class Negation extends ComposedExpression {
+
+public class Negation extends UnaryBooleanRepresentation implements IComposedStructure{
 		
-		private ArrayList<Expression> subexpression;
-		private Type type = new BooleanLiteral();
+
 		
-		public Negation(ArrayList<Expression> subexpressions){
+	public Negation(DoubleRepresentation argument) throws IllegalOperandException{
+		
+		super(argument);
+		
+	}
+	
+		public boolean canHaveAsOperandAt(int index, IEntry argument){
 			
-			super(subexpressions);
-			
+			if(index ==1){
+			if(BooleanRepresentation.class.isAssignableFrom(argument.getClass())){
+				return true;
+			}
+			else{
+				return false;
+				//TODO implementeren
+			}
+			}
+			else {
+				return false;
+			}
 		}
 		
-		public Type getType(){
-			return type;
-		}
-		
-		public boolean equals(Expression other){
+		public boolean getJavaBoolean(){
 			
-			return this.getValue() == other.getValue();
-		}
-		
-		public Expression getValue(){
+			return !(((BooleanRepresentation)getOperandAt(1)).getJavaBoolean());
 			
-			return new Bool(!(((Bool)subexpression.get(0)).getBooleanValue()));
 		}
-		
+	
+
 		public String toString(){
 			
-			return "((Boolean)getValue()).getBooleanValue()";
+			return "getJavaBoolean()";
 		}
 
-		public boolean isMutable(){
-			return false;
+	
 		}
-		
-		
-
-	}

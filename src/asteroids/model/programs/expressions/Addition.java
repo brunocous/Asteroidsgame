@@ -1,46 +1,25 @@
 package asteroids.model.programs.expressions;
 
 import asteroids.Error.IllegalOperandException;
-import asteroids.model.programs.IBinaryStructure;
+import asteroids.model.programs.IComposedStructure;
 import asteroids.model.programs.IEntry;
 
-
-
-
-
-
-
-public class Addition extends DoubleRepresentation implements IComposedStructure{
+public class Addition extends BinaryDoubleRepresentation implements IComposedStructure{
 	
-	private DoubleRepresentation leftExpression;
-	private DoubleRepresentation rightExpression;
 
-
-	public Addition(DoubleRepresentation leftExpression, DoubleRepresentation RightExpression){
+	public Addition(DoubleRepresentation leftExpression, DoubleRepresentation rightExpression) throws IllegalOperandException{
 	
-		setOperandAt(2, rightExpression);
-		setOperandAt(1, leftExpression);
+		super(leftExpression, rightExpression);
 		
 	}
 	
 	@Override
-	public void setOperandAt(int index, IEntry expression) throws IllegalOperandException{
-		if(canHaveAsOperandAt(index, expression)){
-			if(index == 2){
-				rightExpression = (DoubleRepresentation) expression;
-			}
-			if(index == 1){
-				leftExpression = (DoubleRepresentation) expression;
-			}
-		}
-		else{
-			throw new IllegalOperandException();
-		}
-	
-	}
-	
 	public boolean canHaveAsOperandAt(int index, IEntry expression){
 		
+		if(index > getNbOperands()){
+			return false;
+		}
+		else{
 		if(!DoubleRepresentation.class.isAssignableFrom(expression.getClass())){
 			return false;
 		}
@@ -48,29 +27,23 @@ public class Addition extends DoubleRepresentation implements IComposedStructure
 		return true; 
 		//TODO implementeren
 		}
+		}
 	}
 	
-	
-	
-	
-	public DoubleRepresentation getFirstOperand(){
-		return leftExpression;
-	}
-	
-	public DoubleRepresentation getSecondOperand(){
-		return rightExpression;
-	}
+
 	
 	@Override
 	public double getJavaDouble(){
 		
-		return getLeftExpression().getJavaDouble()+getRightExpression().getJavaDouble();
+		return ((DoubleRepresentation)getOperandAt(1)).getJavaDouble()+((DoubleRepresentation)getOperandAt(2)).getJavaDouble();
 			
 	}
 
-	@Override
-	public boolean hasAsSubEntry(IEntry expression){
-		return (expression == getLeftExpression() || expression == getRightExpression());
+	public String toString(){
+		return "getJavaDouble()";
 	}
+
+
+
 }
 

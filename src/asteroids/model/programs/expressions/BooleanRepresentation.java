@@ -5,9 +5,12 @@ public abstract class BooleanRepresentation extends Expression {
 	public abstract boolean getJavaBoolean();
 	
 	@Override
-	public boolean equals(Expression other){
+	public boolean equals(Object other){
 		
-		if(other.getValue() == new Bool(this.getJavaBoolean())){
+		if( !BooleanRepresentation.class.isAssignableFrom(other.getClass())){
+			return false;
+		}
+		else if(((BooleanRepresentation)other).getValue() == new Bool(this.getJavaBoolean())){
 			return true;
 		}
 		else{
@@ -15,8 +18,7 @@ public abstract class BooleanRepresentation extends Expression {
 		}
 	}
 
-	@Override
-	public abstract boolean hasAsSubExpression(Expression expression);
+
 	
 	@Override
 	public Bool getValue(){
@@ -24,12 +26,5 @@ public abstract class BooleanRepresentation extends Expression {
 		return new Bool(this.getJavaBoolean());
 	}
 
-	@Override
-	public abstract boolean isMutable();
-	
-	@Override
-	public Bool clone(){
-		return new Bool(this.getJavaBoolean());
-	}
 
 }

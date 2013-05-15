@@ -1,59 +1,48 @@
 package asteroids.model.programs.expressions;
 
+import asteroids.Error.IllegalOperandException;
+import asteroids.model.programs.IComposedStructure;
+import asteroids.model.programs.IEntry;
 
 
-public class Sine extends DoubleRepresentation{
+
+public class Sine extends UnaryDoubleRepresentation implements IComposedStructure{
 		
+
 		
-		public DoubleRepresentation argument;
-			
-		public Sine(DoubleRepresentation argument){
-			
-			setArgument(argument);
-			
-		}
+	public Sine(DoubleRepresentation argument) throws IllegalOperandException{
 		
-		public void setArgument(DoubleRepresentation argument){
+		super(argument);
+		
+	}
+	
+		public boolean canHaveAsOperandAt(int index, IEntry argument){
 			
-			if(canHaveAsArgument(argument)){
-				
-				this.argument = argument;
+			if(index ==1){
+			if(DoubleRepresentation.class.isAssignableFrom(argument.getClass())){
+				return true;
 			}
 			else{
-				this.argument = new Constant(0);
+				return false;
+				//TODO implementeren
 			}
-		}
-		
-		public boolean canHaveAsArgument(DoubleRepresentation argument){
-			
-			return true;
-			//TODO implementeren
+			}
+			else {
+				return false;
+			}
 		}
 		
 		public double getJavaDouble(){
 			
-			return Math.sin(argument.getJavaDouble());
+			return Math.sin(((DoubleRepresentation)getOperandAt(1)).getJavaDouble());
 			
 		}
 	
 
-		
 		public String toString(){
 			
 			return "((Constant)getValue()).getConstantValue()";
 		}
 
-		public boolean isMutable(){
-			return false;
+	
 		}
-
-		@Override
-		public boolean hasAsSubExpression(Expression expression) {
-		
-			return argument.equals(expression);
-		}
-		
-		
-
-	}
-

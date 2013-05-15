@@ -1,83 +1,56 @@
 package asteroids.model.programs.expressions;
 
-
-
-
 import asteroids.Util;
+import asteroids.Error.IllegalOperandException;
+import asteroids.model.programs.IComposedStructure;
+import asteroids.model.programs.IEntry;
 
-
-
-
-public class Division extends DoubleRepresentation{
-	
-	private DoubleRepresentation numerator;
-	private DoubleRepresentation denominator;
+public class Division extends BinaryDoubleRepresentation implements IComposedStructure{
 	
 
-	public Division(DoubleRepresentation numerator, DoubleRepresentation denominator){
-		
-		setNumerator(numerator);
-		setDenominator(denominator);
+	public Division(DoubleRepresentation leftExpression, DoubleRepresentation rightExpression) throws IllegalOperandException{
+	
+		super(leftExpression, rightExpression);
 		
 	}
 	
-	public void setNumerator(DoubleRepresentation numerator){
-		if(canHaveAsNumerator(numerator)){
-			this.numerator=numerator;
+	@Override
+	public boolean canHaveAsOperandAt(int index, IEntry expression){
+		
+		if(index > getNbOperands()){
+			return false;
 		}
 		else{
-			this.numerator= new Constant(0);
-		}
-	}
-	
-	public boolean canHaveAsNumerator(DoubleRepresentation numerator){
-		return true;
-		//TODO implementeren
-	}
-	
-	public void setDenominator(DoubleRepresentation denominator){
-		if(canHaveAsDenominator(denominator)){
-			this.denominator=denominator;
+		if(!DoubleRepresentation.class.isAssignableFrom(expression.getClass())){
+			return false;
 		}
 		else{
-			this.denominator=new Constant(1);
+		if(index==2 && Util.fuzzyEquals(((DoubleRepresentation)expression).getJavaDouble(),0)){
+			return false;
+		}
+		else{
+			return true;
+		}
+		}
+		
 		}
 	}
 	
-	public boolean canHaveAsDenominator(DoubleRepresentation denominator){
-		
-		return !Util.fuzzyEquals(denominator.getJavaDouble(),0);
-		
-	}
-	
-	
-	public boolean isMutable(){
-		
-		return false;
-		
-	}
 
+	
 	@Override
-	public double getJavaDouble() {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getJavaDouble(){
+		
+		return ((DoubleRepresentation)getOperandAt(1)).getJavaDouble()+((DoubleRepresentation)getOperandAt(2)).getJavaDouble();
+			
 	}
 
-	public DoubleRepresentation getNumerator(){
-		return this.numerator.clone();
-		
-	}
-	
-	public DoubleRepresentation getDenominator(){
-		return this.denominator.clone();
-	}
-	@Override
-	public boolean hasAsSubExpression(Expression expression) {
-		
-		return (getNumerator().equals(expression) || getDenominator().equals(expression));
+	public String toString(){
+		return "getJavaDouble()";
 	}
 
-	
-	
+
+
 }
+
 
