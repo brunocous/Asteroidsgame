@@ -9,9 +9,9 @@ public class Variable extends Expression{
 
 private Expression value;
 
-public Variable(Expression value){
+public Variable(){
 		
-		this.value= (value);
+		this.value= null;
 }
 	
 public void setValue(Expression value) throws IllegalVariableValueException{
