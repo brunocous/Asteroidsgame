@@ -12,11 +12,7 @@ public Constant(double value){
 }
 	
 
-@Override
-public boolean isMutable() {
-	
-	return false;
-}
+
 
 @Override
 public double getJavaDouble(){
@@ -26,7 +22,7 @@ public double getJavaDouble(){
 }
 
 @Override
-public boolean hasAsSubExpression(Expression expression) {
+public boolean hasAsSubEntry(Expression expression) {
 
 	return expression.equals(this);
 }

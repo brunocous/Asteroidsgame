@@ -15,12 +15,8 @@ public abstract class DoubleRepresentation extends Expression {
 		}
 	}
 	
-	@Override
-	public DoubleRepresentation clone(){
-		return new Constant(this.getJavaDouble());
-	}
 
-	public abstract boolean hasAsSubExpression(Expression expression);
+	public abstract boolean hasAsSubEntry(Expression expression);
 
 	public Constant getValue(){
 		
@@ -28,5 +24,4 @@ public abstract class DoubleRepresentation extends Expression {
 		
 	}
 
-	public abstract boolean isMutable() ;
 }

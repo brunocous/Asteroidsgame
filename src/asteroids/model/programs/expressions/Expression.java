@@ -5,19 +5,15 @@ import asteroids.model.programs.IEntry;
 
 
 
-public abstract class Expression implements Cloneable,IEntry{
+public abstract class Expression implements IEntry{
 
 
 	 
-	public abstract boolean hasAsSubExpression(Expression expression);
+	public abstract boolean hasAsSubEntry(Expression expression);
 
 	public abstract Expression getValue();
 
 
-	public abstract boolean isMutable();
-
-	@Override
-	public abstract Expression clone();
 	public abstract boolean equals(Expression other);
 
 	
