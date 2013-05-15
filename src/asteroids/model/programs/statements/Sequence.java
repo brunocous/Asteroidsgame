@@ -22,7 +22,9 @@ public class Sequence extends StructuralStatement {
 	}
 	@Override
 	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException {
+		if(index >0 && index <= getNbOperands())
 		return this.getAllStatements().get(index - 1);
+		else throw new IndexOutOfBoundsException();
 	}
 	@Override
 	public int getNbOperands() {
@@ -36,7 +38,6 @@ public class Sequence extends StructuralStatement {
 	public boolean canHaveAsOperandAt(int index, IEntry operand){
 		return (super.canHaveAsOperandAt(index, operand) 
 				&& (index <= getNbOperands() +1) 
-				&& operand != null
 				&& operand.getClass().isAssignableFrom(Statement.class));
 	}
 	@Override
