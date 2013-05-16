@@ -5,11 +5,12 @@ import java.util.List;
 
 import be.kuleuven.cs.som.annotate.Raw;
 
+import asteroids.Error.IllegalOperandException;
 import asteroids.model.Asteroid;
 import asteroids.model.Bullet;
 import asteroids.model.Ship;
 import asteroids.model.SpaceObject;
-import asteroids.model.programs.expressions.Entity;
+import asteroids.model.programs.expressions.*;
 import asteroids.model.programs.parsing.ProgramFactory;
 
 public class Program<E, S, T> implements ProgramFactory{
@@ -18,20 +19,24 @@ public class Program<E, S, T> implements ProgramFactory{
 
 	@Override
 	public Object createDoubleLiteral(int line, int column, double d) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Constant(d);
 	}
 
 	@Override
 	public Object createBooleanLiteral(int line, int column, boolean b) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Bool(b);
 	}
 
 	@Override
 	public Object createAnd(int line, int column, Object e1, Object e2) {
-		// TODO Auto-generated method stub
-		return null;
+		if(e1.getClass().isAssignableFrom(BooleanRepresentation.class)
+				&& e2.getClass().isAssignableFrom(BooleanRepresentation.class))
+		try{return new LogicAnd((BooleanRepresentation) e1, (BooleanRepresentation) e2);
+		
+		}catch(IllegalOperandException ex){
+			
+		}
+		
 	}
 
 	@Override

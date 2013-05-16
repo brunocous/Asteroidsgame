@@ -1,11 +1,16 @@
 package asteroids.model;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+
+import sun.misc.IOUtils;
 
 import asteroids.CollisionListener;
 import asteroids.IFacade;
@@ -15,6 +20,7 @@ import asteroids.Error.IllegalRadiusException;
 import asteroids.Error.ModelException;
 import asteroids.model.Util.*;
 import asteroids.model.programs.Program;
+import asteroids.model.programs.parsing.ProgramParser;
 
 public class Facade implements IFacade<World, Ship, Asteroid,Bullet,Program>{
 
@@ -309,22 +315,30 @@ public class Facade implements IFacade<World, Ship, Asteroid,Bullet,Program>{
 
 	@Override
 	public asteroids.IFacade.ParseOutcome<Program> parseProgram(String text) {
-		// TODO Auto-generated method stub
-		return null;
+		Program program = new Program();
+		ProgramParser parser = new ProgramParser(program);
+		parser.parse(text);
+		if(parser.getErrors().isEmpty())
+			return this.new ParseOutcome<Program>(true, "hallo",program);
+		else
+			return new ParseOutcome<Program>(false, "It failed", program);
+		
 	}
 
 	@Override
 	public asteroids.IFacade.ParseOutcome<Program> loadProgramFromStream(
 			InputStream stream) throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+		String text = getStringFromInputStream(stream);
+		return parseProgram(text);
 	}
 
 	@Override
-	public asteroids.IFacade.ParseOutcome<Program> loadProgramFromUrl(URL url)
-			throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+	public asteroids.IFacade.ParseOutcome<Program> loadProgramFromUrl(URL url){
+			try{InputStream stream = url.openStream();
+			return this.loadProgramFromStream(stream);
+			} catch(Exception ex){
+				throw new ModelException(ex);
+			}
 	}
 
 	@Override
@@ -341,7 +355,35 @@ public class Facade implements IFacade<World, Ship, Asteroid,Bullet,Program>{
 
 	@Override
 	public void setShipProgram(Ship ship, Program program) {
-		// TODO Auto-generated method stub
+		ship.setProgram(program);
 		
+	}
+	private static String getStringFromInputStream(InputStream is) {
+		 
+		BufferedReader br = null;
+		StringBuilder sb = new StringBuilder();
+ 
+		String line;
+		try {
+ 
+			br = new BufferedReader(new InputStreamReader(is));
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+			}
+ 
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+ 
+		return sb.toString();
+ 
 	}
 	}

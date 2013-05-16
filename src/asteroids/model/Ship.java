@@ -88,7 +88,9 @@ public class Ship extends SpaceObject{
 	 * 		 | if(isValidMass(mass))
 	 * 		 | then new.getMass() == mass
 	 * @post This new ship does not have any bullets yet.
-	 * 		 | getNbBullets() == 0
+	 * 		 | new.getNbBullets() == 0
+	 * @post This new ship doen not have a program yet.
+	 * 		 | new.getProgram == null
 	 * @throws IllegalRadiusException
 	 *         The given radius is not a valid radius.
 	 *         |!Bullet.isValidRadius(radius)
