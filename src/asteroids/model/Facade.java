@@ -4,13 +4,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringWriter;
 import java.net.URL;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
-
-import sun.misc.IOUtils;
 
 import asteroids.CollisionListener;
 import asteroids.IFacade;
@@ -21,8 +19,9 @@ import asteroids.Error.ModelException;
 import asteroids.model.Util.*;
 import asteroids.model.programs.Program;
 import asteroids.model.programs.ProgramFactoryImpl;
-import asteroids.model.programs.parsing.ProgramFactory;
+import asteroids.model.programs.expressions.Expression;
 import asteroids.model.programs.parsing.ProgramParser;
+import asteroids.model.programs.statements.Statement;
 
 public class Facade implements IFacade<World, Ship, Asteroid,Bullet,Program>{
 
@@ -317,13 +316,13 @@ public class Facade implements IFacade<World, Ship, Asteroid,Bullet,Program>{
 
 	@Override
 	public asteroids.IFacade.ParseOutcome<Program> parseProgram(String text) {
-		ProgramFactory<E,S,T> factory = new ProgramFactoryImpl();
-		ProgramParser parser = new ProgramParser(program);
+		ProgramFactoryImpl<Expression ,Statement,Expression> factory = new ProgramFactoryImpl<Expression ,Statement,Expression>();
+		ProgramParser<Expression, Statement, Expression> parser = new ProgramParser<Expression ,Statement,Expression>(factory );
 		parser.parse(text);
-		if(parser.getErrors().isEmpty())
-			return this.new ParseOutcome<Program>(true, "hallo",program);
-		else
-			return new ParseOutcome<Program>(false, "It failed", program);
+		List<String> errors = parser.getErrors();
+		if(! errors.isEmpty()) 
+		return ParseOutcome.failure(errors.get(0));
+		else return ParseOutcome.success(new Program(parser.getGlobals(), parser.getStatement(), parser.getErrors()));
 		
 	}
 
@@ -335,24 +334,22 @@ public class Facade implements IFacade<World, Ship, Asteroid,Bullet,Program>{
 	}
 
 	@Override
-	public asteroids.IFacade.ParseOutcome<Program> loadProgramFromUrl(URL url){
-			try{InputStream stream = url.openStream();
+	public asteroids.IFacade.ParseOutcome<Program> loadProgramFromUrl(URL url)throws IOException{
+			InputStream stream = url.openStream();
 			return this.loadProgramFromStream(stream);
-			} catch(Exception ex){
-				throw new ModelException(ex);
-			}
 	}
 
 	@Override
 	public boolean isTypeCheckingSupported() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public asteroids.IFacade.TypeCheckOutcome typeCheckProgram(Program program) {
-		// TODO Auto-generated method stub
-		return null;
+		if(program.hasTypeCheckingErrors()) 
+				return asteroids.IFacade.TypeCheckOutcome.failure("Program contains type errors.");
+		else return TypeCheckOutcome.success();
+				
 	}
 
 	@Override
@@ -360,7 +357,7 @@ public class Facade implements IFacade<World, Ship, Asteroid,Bullet,Program>{
 		ship.setProgram(program);
 		
 	}
-	private static String getStringFromInputStream(InputStream is) {
+	private static String getStringFromInputStream(InputStream is) throws IOException{
 		 
 		BufferedReader br = null;
 		StringBuilder sb = new StringBuilder();
@@ -377,11 +374,8 @@ public class Facade implements IFacade<World, Ship, Asteroid,Bullet,Program>{
 			e.printStackTrace();
 		} finally {
 			if (br != null) {
-				try {
 					br.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				
 			}
 		}
  

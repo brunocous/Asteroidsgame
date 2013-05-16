@@ -22,6 +22,9 @@ import be.kuleuven.cs.som.annotate.*;
  * 			| isValidDirection(getDirection())
  * @Invar Each ship must have proper bullets.
  * 			| hasProperBullets()
+ * @Invar If a ship has a program, then it must have a proper program.
+ * 			| if(hasProgram)
+ * 			| then hasProperProgram()
  * 
  * @version 2.0
  * @author Bruno Coussement and Simon Telen
@@ -65,7 +68,7 @@ public class Ship extends SpaceObject{
 	/**
 	 * Variable referencing a program for this ship to execute.
 	 */
-	private Program program;
+	private Program program = null;
 
 	/**
 	 * Initialize this new ship with given pos, vel, direction, mass, radius and world.
@@ -621,5 +624,8 @@ public class Ship extends SpaceObject{
 	}
 	public boolean hasAProgram(){
 		return this.getProgram() != null;
+	}
+	public boolean hasProperProgram(){
+		return canHaveAsProgram(getProgram());
 	}
 	}

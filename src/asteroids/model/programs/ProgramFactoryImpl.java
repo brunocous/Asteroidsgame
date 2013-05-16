@@ -3,10 +3,12 @@ package asteroids.model.programs;
 import java.util.LinkedList;
 import java.util.List;
 
+import asteroids.model.programs.expressions.Expression;
 import asteroids.model.programs.parsing.ProgramFactory;
+import asteroids.model.programs.statements.Statement;
 import be.kuleuven.cs.som.annotate.Raw;
 
-public class ProgramFactoryImpl<E, S, T> implements ProgramFactory{
+public class ProgramFactoryImpl<Expression ,Statement,Expression> implements ProgramFactory{
 
 	@Override
 	public Object createDoubleLiteral(int line, int column, double d) {
@@ -259,4 +261,5 @@ public class ProgramFactoryImpl<E, S, T> implements ProgramFactory{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

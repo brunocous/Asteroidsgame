@@ -96,7 +96,7 @@ public interface IFacade<World, Ship, Asteroid, Bullet, Program> {
    */
   public void removeShip(World world, Ship ship);
 
-  /**a
+  /**
    * Remove <code>asteroid</code> from <code>world</code>.
    */
   public void removeAsteroid(World world, Asteroid asteroid);
