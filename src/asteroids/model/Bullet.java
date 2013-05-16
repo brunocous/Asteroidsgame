@@ -36,7 +36,7 @@ public class Bullet extends SpaceObject {
 	/**
 	 * The radius of a bullet that has been fired.
 	 */
-	private static final double INITIAL_RADIUS = 100;
+	private static final double INITIAL_RADIUS = 3;
 	/**
 	 * The number of times a bullet has hit a boundary.
 	 */

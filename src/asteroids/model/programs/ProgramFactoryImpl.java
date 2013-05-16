@@ -3,12 +3,14 @@ package asteroids.model.programs;
 import java.util.LinkedList;
 import java.util.List;
 
-import asteroids.model.programs.expressions.Expression;
 import asteroids.model.programs.parsing.ProgramFactory;
-import asteroids.model.programs.statements.Statement;
 import be.kuleuven.cs.som.annotate.Raw;
 
-public class ProgramFactoryImpl<Expression ,Statement,Expression> implements ProgramFactory{
+/**
+ * 			SIMON: als je dit leest: De type van argumenten in deze klassen moet E's,S'en en T's zijn!
+ * 			En dus niet Object gewoon! Kijk in IFacade hoe het moet.
+ */
+public class ProgramFactoryImpl<E,S,T> implements ProgramFactory{
 
 	@Override
 	public Object createDoubleLiteral(int line, int column, double d) {
