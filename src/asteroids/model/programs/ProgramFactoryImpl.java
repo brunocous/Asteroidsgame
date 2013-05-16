@@ -13,9 +13,8 @@ import asteroids.model.SpaceObject;
 import asteroids.model.programs.expressions.*;
 import asteroids.model.programs.parsing.ProgramFactory;
 
-public class Program<E, S, T> implements ProgramFactory{
+public class ProgramFactoryImpl<E, S, T> implements ProgramFactory{
 	
-	private Ship ship;
 
 	@Override
 	public Object createDoubleLiteral(int line, int column, double d) {
@@ -273,21 +272,6 @@ public class Program<E, S, T> implements ProgramFactory{
 		return null;
 	}
 
-	public Ship getShip() {
-		return ship;
-	}
-	public boolean hasShip(){
-		return getShip() != null;
-	}
-
-	public void setShip(@Raw Ship ship) {
-		assert canHaveAsShip(ship);
-		this.ship = ship;
-	}
-	
-	public boolean canHaveAsShip(Ship ship){
-		return (ship != null && !ship.hasAProgram());
-	}
 	public List<Entity> getAllEntitiesByForEachType(ForeachType type){
 		if(hasShip()){
 			List<Entity> result = new LinkedList<Entity>();

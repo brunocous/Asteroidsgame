@@ -1,5 +1,6 @@
 package asteroids.model.programs.expressions;
 
+import asteroids.Error.IllegalOperandException;
 import asteroids.Error.IllegalVariableValueException;
 import asteroids.model.programs.IEntry;
 
@@ -8,10 +9,13 @@ import asteroids.model.programs.IEntry;
 public class Variable extends Expression{
 
 private Expression value;
+private final String name;
 
-public Variable(){
-		
-		this.value= null;
+public Variable(String name)throws IllegalOperandException{
+	if(!canHaveAsName(name))
+		throw new IllegalOperandException();
+	this.name = name;
+	this.value= null;
 }
 	
 public void setValue(Expression value) throws IllegalVariableValueException{
@@ -34,7 +38,12 @@ public boolean canHaveAsValue(Expression value){
 		return false;
 	}
 }
-
+public String getName(){
+	return name;
+}
+public boolean canHaveAsName(String name){
+	return name != null && name != "";
+}
 public Expression getValue(){
 	return value;
 }
