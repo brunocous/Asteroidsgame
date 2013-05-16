@@ -26,5 +26,9 @@ public abstract class BooleanRepresentation extends Expression {
 		return new Bool(this.getJavaBoolean());
 	}
 
+	@Override
+	public String toString(){
+		return String.valueOf(getJavaBoolean());
+	}
 
 }

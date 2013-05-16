@@ -39,10 +39,7 @@ public class Negation extends UnaryBooleanRepresentation implements IComposedStr
 		}
 	
 
-		public String toString(){
-			
-			return "getJavaBoolean()";
-		}
+	
 
 	
 		}

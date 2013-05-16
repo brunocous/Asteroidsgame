@@ -39,10 +39,7 @@ public class GetVY extends UnaryDoubleRepresentation implements IComposedStructu
 		}
 	
 
-		public String toString(){
-			
-			return "getJavaDouble()";
-		}
+		
 
 	
 		}

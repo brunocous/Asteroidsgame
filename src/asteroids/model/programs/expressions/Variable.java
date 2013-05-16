@@ -45,6 +45,22 @@ public boolean hasAsSubEntry(IEntry subEntry) {
 	return subEntry.equals(this);
 }
 
-
+public String toString(){
+	if(BooleanRepresentation.class.isAssignableFrom(getValue().getClass()) ){
+		return ((BooleanRepresentation) getValue()).toString();
+	}
+	else if(DoubleRepresentation.class.isAssignableFrom(getValue().getClass())){
+		return ((DoubleRepresentation)getValue()).toString();
+	}
+	else if(EntityRepresentation.class.isAssignableFrom(getValue().getClass())){
+		return ((EntityRepresentation)getValue()).toString();
+	}
+	else if(getValue()==null){
+		return "null";
+	}
+	else{
+		return "Unknown value";
+	}
+}
 }
 

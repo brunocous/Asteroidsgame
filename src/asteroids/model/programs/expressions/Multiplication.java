@@ -39,10 +39,5 @@ public class Multiplication extends BinaryDoubleRepresentation implements ICompo
 			
 	}
 
-	public String toString(){
-		return "getJavaDouble()";
-	}
-
-
 
 }

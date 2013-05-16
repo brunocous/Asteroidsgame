@@ -39,10 +39,7 @@ public class Addition extends BinaryDoubleRepresentation implements IComposedStr
 			
 	}
 
-	public String toString(){
-		return "getJavaDouble()";
-	}
-
+	
 
 
 }

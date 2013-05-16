@@ -39,11 +39,6 @@ public class Sqrt extends UnaryDoubleRepresentation implements IComposedStructur
 			
 		}
 	
-
-		public String toString(){
-			
-			return "((Constant)getValue()).getConstantValue()";
-		}
-
+	
 	
 		}

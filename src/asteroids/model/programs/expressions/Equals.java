@@ -48,9 +48,7 @@ public class Equals extends BinaryBooleanRepresentation implements IComposedStru
 			
 	}
 
-	public String toString(){
-		return "getJavaBoolean()";
-	}
+
 
 
 

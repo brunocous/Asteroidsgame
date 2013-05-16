@@ -39,10 +39,6 @@ public class GetRadius extends UnaryDoubleRepresentation implements IComposedStr
 		}
 	
 
-		public String toString(){
-			
-			return "getJavaDouble()";
-		}
-
+		
 	
 		}

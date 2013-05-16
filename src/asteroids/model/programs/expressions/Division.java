@@ -45,10 +45,7 @@ public class Division extends BinaryDoubleRepresentation implements IComposedStr
 			
 	}
 
-	public String toString(){
-		return "getJavaDouble()";
-	}
-
+	
 
 
 }

@@ -39,9 +39,7 @@ public class GreaterThanOrEqualTo extends BinaryBooleanRepresentation implements
 			
 	}
 
-	public String toString(){
-		return "getJavaBoolean()";
-	}
+	
 
 
 

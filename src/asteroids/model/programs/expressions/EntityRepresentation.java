@@ -27,6 +27,18 @@ public abstract class EntityRepresentation extends Expression {
 		
 		return new Entity(this.getSpaceObject());
 	}
+	
+	@Override
+	public String toString(){
+		
+		if(getSpaceObject() != null){
+			return getSpaceObject().toString();
+		}
+		else{
+			return "null";
+		}
+		
+	}
 
 
 }

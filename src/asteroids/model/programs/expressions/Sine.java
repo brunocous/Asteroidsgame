@@ -39,10 +39,7 @@ public class Sine extends UnaryDoubleRepresentation implements IComposedStructur
 		}
 	
 
-		public String toString(){
-			
-			return "((Constant)getValue()).getConstantValue()";
-		}
+	
 
 	
 		}

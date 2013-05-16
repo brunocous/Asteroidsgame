@@ -39,9 +39,7 @@ public class LogicOr extends BinaryBooleanRepresentation implements IComposedStr
 			
 	}
 
-	public String toString(){
-		return "getJavaBoolean()";
-	}
+
 
 
 

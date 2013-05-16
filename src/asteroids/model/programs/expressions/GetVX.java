@@ -39,10 +39,5 @@ public class GetVX extends UnaryDoubleRepresentation implements IComposedStructu
 		}
 	
 
-		public String toString(){
-			
-			return "getJavaDouble()";
-		}
-
 	
 		}

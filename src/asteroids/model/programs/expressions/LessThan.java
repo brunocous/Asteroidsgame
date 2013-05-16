@@ -39,9 +39,7 @@ public class LessThan extends BinaryBooleanRepresentation implements IComposedSt
 			
 	}
 
-	public String toString(){
-		return "getJavaBoolean()";
-	}
+
 
 
 

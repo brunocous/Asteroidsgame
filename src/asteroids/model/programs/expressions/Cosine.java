@@ -39,10 +39,5 @@ public class Cosine extends UnaryDoubleRepresentation implements IComposedStruct
 		}
 	
 
-		public String toString(){
-			
-			return "((Constant)getValue()).getConstantValue()";
-		}
-
 	
 		}

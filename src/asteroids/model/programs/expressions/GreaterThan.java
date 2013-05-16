@@ -39,9 +39,7 @@ public class GreaterThan extends BinaryBooleanRepresentation implements ICompose
 			
 	}
 
-	public String toString(){
-		return "getJavaBoolean()";
-	}
+
 
 
 

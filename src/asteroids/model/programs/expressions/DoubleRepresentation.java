@@ -23,12 +23,17 @@ public abstract class DoubleRepresentation extends Expression {
 	}
 	
 
-
+	@Override
 	public Constant getValue(){
 		
 		return new Constant(this.getJavaDouble());
 		
 	}
+	
+	@Override
+	public String toString(){
+		return Double.toString(getJavaDouble());
+		}
 	
 
 }

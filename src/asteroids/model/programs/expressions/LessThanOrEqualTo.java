@@ -39,9 +39,6 @@ public class LessThanOrEqualTo extends BinaryBooleanRepresentation implements IC
 			
 	}
 
-	public String toString(){
-		return "getJavaBoolean()";
-	}
 
 
 

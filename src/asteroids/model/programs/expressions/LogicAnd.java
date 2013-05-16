@@ -39,10 +39,7 @@ public class LogicAnd extends BinaryBooleanRepresentation implements IComposedSt
 			
 	}
 
-	public String toString(){
-		return "getJavaBoolean()";
-	}
-
+	
 
 
 }

@@ -39,10 +39,6 @@ public class GetX extends UnaryDoubleRepresentation implements IComposedStructur
 		}
 	
 
-		public String toString(){
-			
-			return "getJavaDouble()";
-		}
-
+	
 	
 		}

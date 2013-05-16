@@ -48,9 +48,6 @@ public class NotEqualTo extends BinaryBooleanRepresentation implements IComposed
 			
 	}
 
-	public String toString(){
-		return "getJavaBoolean()";
-	}
 
 
 
