@@ -3,39 +3,27 @@ package asteroids.model.programs;
 import java.util.LinkedList;
 import java.util.List;
 
+import asteroids.model.programs.parsing.ProgramFactory;
 import be.kuleuven.cs.som.annotate.Raw;
 
-import asteroids.Error.IllegalOperandException;
-import asteroids.model.Asteroid;
-import asteroids.model.Bullet;
-import asteroids.model.Ship;
-import asteroids.model.SpaceObject;
-import asteroids.model.programs.expressions.*;
-import asteroids.model.programs.parsing.ProgramFactory;
-
 public class ProgramFactoryImpl<E, S, T> implements ProgramFactory{
-	
 
 	@Override
 	public Object createDoubleLiteral(int line, int column, double d) {
-		return new Constant(d);
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public Object createBooleanLiteral(int line, int column, boolean b) {
-		return new Bool(b);
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public Object createAnd(int line, int column, Object e1, Object e2) {
-		if(e1.getClass().isAssignableFrom(BooleanRepresentation.class)
-				&& e2.getClass().isAssignableFrom(BooleanRepresentation.class))
-		try{return new LogicAnd((BooleanRepresentation) e1, (BooleanRepresentation) e2);
-		
-		}catch(IllegalOperandException ex){
-			
-		}
-		
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -271,32 +259,4 @@ public class ProgramFactoryImpl<E, S, T> implements ProgramFactory{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	public List<Entity> getAllEntitiesByForEachType(ForeachType type){
-		if(hasShip()){
-			List<Entity> result = new LinkedList<Entity>();
-			if(type == ForeachType.ANY)
-				for(SpaceObject obj: getShip().getWorld().getAllSpaceObjects()){
-					result.add(new Entity(obj));
-				}
-			if(type == ForeachType.ASTEROID)
-				for(SpaceObject obj: getShip().getWorld().getAllSpaceObjects()){
-					if(obj.getClass().isAssignableFrom(Asteroid.class))
-					result.add(new Entity(obj));
-				}
-			if(type == ForeachType.BULLET)
-				for(SpaceObject obj: getShip().getWorld().getAllSpaceObjects()){
-					if(obj.getClass().isAssignableFrom(Bullet.class))
-					result.add(new Entity(obj));
-				}
-			if(type == ForeachType.SHIP)
-				for(SpaceObject obj: getShip().getWorld().getAllSpaceObjects()){
-					if(obj.getClass().isAssignableFrom(Ship.class))
-					result.add(new Entity(obj));
-				}
-			return result;
-		}
-		else return null;
-	}
-
 }

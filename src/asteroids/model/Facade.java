@@ -20,6 +20,8 @@ import asteroids.Error.IllegalRadiusException;
 import asteroids.Error.ModelException;
 import asteroids.model.Util.*;
 import asteroids.model.programs.Program;
+import asteroids.model.programs.ProgramFactoryImpl;
+import asteroids.model.programs.parsing.ProgramFactory;
 import asteroids.model.programs.parsing.ProgramParser;
 
 public class Facade implements IFacade<World, Ship, Asteroid,Bullet,Program>{
@@ -315,7 +317,7 @@ public class Facade implements IFacade<World, Ship, Asteroid,Bullet,Program>{
 
 	@Override
 	public asteroids.IFacade.ParseOutcome<Program> parseProgram(String text) {
-		Program program = new Program();
+		ProgramFactory<E,S,T> factory = new ProgramFactoryImpl();
 		ProgramParser parser = new ProgramParser(program);
 		parser.parse(text);
 		if(parser.getErrors().isEmpty())
