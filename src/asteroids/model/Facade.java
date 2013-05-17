@@ -316,7 +316,7 @@ public class Facade implements IFacade<World, Ship, Asteroid,Bullet,Program>{
 
 	@Override
 	public asteroids.IFacade.ParseOutcome<Program> parseProgram(String text) {
-		ProgramFactoryImpl<Expression ,Statement,Expression> factory = new ProgramFactoryImpl<Expression ,Statement,Expression>();
+		ProgramFactoryImpl factory = new ProgramFactoryImpl();
 		ProgramParser<Expression, Statement, Expression> parser = new ProgramParser<Expression ,Statement,Expression>( factory );
 		parser.parse(text);
 		List<String> errors = parser.getErrors();

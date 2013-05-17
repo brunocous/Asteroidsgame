@@ -543,6 +543,7 @@ public class AsteroidsParserMyListener<E, S, T> implements AsteroidsParserListen
   public void exitEveryRule(ParserRuleContext ctx) {
   }
 
+  
   @Override
   public void visitTerminal(TerminalNode node) {
   }
