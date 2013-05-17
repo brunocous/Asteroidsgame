@@ -3,15 +3,6 @@ package asteroids.model.programs.statements;
 import asteroids.model.programs.*;
 
 public abstract class StructuralStatement extends Statement implements IComposedStructure{
-
-	public boolean hasAsSubEntry(IEntry entry){
-		if (entry == this)
-			return true;
-		for (int pos = 1; pos <= this.getNbOperands(); pos++)
-			if (this.getOperandAt(pos).hasAsSubEntry(entry))
-				return true;
-		return false;
-	}
 		
 	
 	@Override 

@@ -3,26 +3,30 @@ package asteroids.model.programs;
 import java.util.LinkedList;
 import java.util.List;
 
+import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.expressions.*;
 import asteroids.model.programs.parsing.ProgramFactory;
-import asteroids.model.programs.statements.Statement;
+import asteroids.model.programs.statements.*;
 import be.kuleuven.cs.som.annotate.Raw;
 
 public class ProgramFactoryImpl<E extends Expression, S extends Statement, T extends Expression> implements ProgramFactory{
 
 	@Override
-	public E createDoubleLiteral(int line, int column, double d) {
-		return (E) new Constant(d);
+	public Object createDoubleLiteral(int line, int column, double d) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	public E createBooleanLiteral(int line, int column, boolean b) {
-		return (E) new Bool(b);
+	public Object createBooleanLiteral(int line, int column, boolean b) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	public Expression createAnd(int line, int column, E e1, E e2) {
-		return (E) new LogicAnd((BooleanRepresentation) e1, (BooleanRepresentation) e2);
+	public Object createAnd(int line, int column, Object e1, Object e2) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -39,12 +43,14 @@ public class ProgramFactoryImpl<E extends Expression, S extends Statement, T ext
 
 	@Override
 	public Object createNull(int line, int column) {
-		return (E) new Null();
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public Object createSelf(int line, int column) {
-		return (E) new Self(null);
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -182,9 +188,8 @@ public class ProgramFactoryImpl<E extends Expression, S extends Statement, T ext
 	}
 
 	@Override
-	public Object createFire(int line, int column) {
-		// TODO Auto-generated method stub
-		return null;
+	public S createFire(int line, int column) {
+		return (S) new Fire();
 	}
 
 	@Override
@@ -229,8 +234,11 @@ public class ProgramFactoryImpl<E extends Expression, S extends Statement, T ext
 
 	@Override
 	public Object createSequence(int line, int column, List statements) {
-		// TODO Auto-generated method stub
-		return null;
+		try{ return new Sequence(statements);
+		
+		}catch(IllegalOperandException e){
+			return null;
+		}
 	}
 
 	@Override
@@ -256,5 +264,7 @@ public class ProgramFactoryImpl<E extends Expression, S extends Statement, T ext
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	
 
 }

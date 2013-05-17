@@ -4,7 +4,6 @@ import asteroids.Error.IllegalMaxSpeedException;
 import asteroids.Error.IllegalPositionException;
 import asteroids.Error.IllegalRadiusException;
 import asteroids.model.Util.Position;
-import asteroids.model.Util.Vector;
 import asteroids.model.Util.Velocity;
 import be.kuleuven.cs.som.annotate.*;
 

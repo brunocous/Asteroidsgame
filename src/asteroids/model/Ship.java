@@ -5,6 +5,7 @@ import java.util.List;
 
 import asteroids.Util;
 import asteroids.Error.IllegalMaxSpeedException;
+import asteroids.Error.IllegalOperandException;
 import asteroids.Error.IllegalPositionException;
 import asteroids.Error.IllegalRadiusException;
 import asteroids.Error.NegativeTimeException;
@@ -114,7 +115,7 @@ public class Ship extends SpaceObject{
 		else this.mass = mass;
 		
 		this.setDirection(direction);
-		this.forcePerSecond = 1.1 * Math.pow(1.1, 18);
+		this.forcePerSecond = 1.1 * Math.pow(10, 18);
 		
 		this.bullets = new ArrayList<Bullet>();
 	}
@@ -257,12 +258,10 @@ public class Ship extends SpaceObject{
 			throw new NegativeTimeException();
 		}
 		else{ if(this.isEnableThruster()){
-		
 		if(Double.isInfinite(deltaT)){
 			this.setVel(new Velocity());
 		}else{
 			double acceleration = deltaT*this.getForcePerSecond() / this.getMass();
-		
 		Vector gainedSpeed = new Velocity(acceleration*Math.cos(this.getDirection()),acceleration*Math.sin(this.getDirection()));
 		Vector newSpeed = new Velocity(this.getVel().getX(), this.getVel().getY());
 		newSpeed = newSpeed.add(gainedSpeed);
@@ -614,7 +613,7 @@ public class Ship extends SpaceObject{
 		return program;
 	}
 
-	public void setProgram(Program program) {
+	public void setProgram(@Raw Program program) throws IllegalOperandException{
 		assert canHaveAsProgram(program);
 		this.program = program;
 		program.setShip(this);
@@ -627,5 +626,9 @@ public class Ship extends SpaceObject{
 	}
 	public boolean hasProperProgram(){
 		return canHaveAsProgram(getProgram());
+	}
+	public void runProgram(){
+		if(hasAProgram() && !getProgram().isRunning())
+			getProgram().execute();
 	}
 	}

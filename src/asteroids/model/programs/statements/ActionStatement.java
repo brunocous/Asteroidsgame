@@ -16,13 +16,4 @@ public abstract class ActionStatement extends Statement {
 				return false;
 		return true;
 	}
-	@Override
-	public boolean hasAsSubEntry(IEntry entry){
-		if (entry == this)
-			return true;
-		for (int pos = 1; pos <= this.getNbOperands(); pos++)
-			if (this.getOperandAt(pos).hasAsSubEntry(entry))
-				return true;
-		return false;
-	}
 }

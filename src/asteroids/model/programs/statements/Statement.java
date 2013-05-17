@@ -15,4 +15,15 @@ public abstract class Statement implements IEntry,IComposedStructure {
 	}
 	public abstract void setShip(Entity ship) throws IllegalOperandException;
 
+	public boolean hasAsSubEntry(IEntry entry){
+		if (entry == this)
+			return true;
+		for (int pos = 1; pos <= this.getNbOperands(); pos++){
+			if(this.getOperandAt(pos) ==  null)
+				return false;
+			if (this.getOperandAt(pos).hasAsSubEntry(entry))
+				return true;
+		}
+		return false;
+	}
 }

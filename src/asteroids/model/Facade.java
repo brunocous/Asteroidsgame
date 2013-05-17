@@ -317,7 +317,7 @@ public class Facade implements IFacade<World, Ship, Asteroid,Bullet,Program>{
 	@Override
 	public asteroids.IFacade.ParseOutcome<Program> parseProgram(String text) {
 		ProgramFactoryImpl<Expression ,Statement,Expression> factory = new ProgramFactoryImpl<Expression ,Statement,Expression>();
-		ProgramParser<Expression, Statement, Expression> parser = new ProgramParser<Expression ,Statement,Expression>(factory );
+		ProgramParser<Expression, Statement, Expression> parser = new ProgramParser<Expression ,Statement,Expression>( factory );
 		parser.parse(text);
 		List<String> errors = parser.getErrors();
 		if(! errors.isEmpty()) 
@@ -353,8 +353,11 @@ public class Facade implements IFacade<World, Ship, Asteroid,Bullet,Program>{
 	}
 
 	@Override
-	public void setShipProgram(Ship ship, Program program) {
-		ship.setProgram(program);
+	public void setShipProgram(Ship ship, Program program){
+		try{ ship.setProgram(program);
+		}catch(Exception e){
+			throw new ModelException(e);
+		}
 		
 	}
 	private static String getStringFromInputStream(InputStream is) throws IOException{

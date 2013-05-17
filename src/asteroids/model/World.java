@@ -728,6 +728,7 @@ public class World {
 	 * 			
 	 */
 	public void evolve(double deltaT, CollisionListener coll) throws UnhandledCombinationException, NegativeTimeException, IllegalStateException{
+		runPrograms();
 		
 		if(isTerminated())
 			throw new IllegalStateException();
@@ -795,7 +796,14 @@ public class World {
 	}
 		
 	}
-	
+	public void runPrograms(){
+		for(SpaceObject sp: getAllSpaceObjects()){
+			if(sp.getClass().isAssignableFrom(Ship.class)){
+				((Ship) sp).runProgram();
+			}
+				
+		}
+	}
 	/**
 	 * Makes a given Space Object bounce off a boundary.
 	 * 
