@@ -114,7 +114,7 @@ public class Ship extends SpaceObject{
 		else this.mass = mass;
 		
 		this.setDirection(direction);
-		this.forcePerSecond = 1.1 * Math.pow(10, 18);
+		this.forcePerSecond = 1.1 * Math.pow(1.1, 18);
 		
 		this.bullets = new ArrayList<Bullet>();
 	}

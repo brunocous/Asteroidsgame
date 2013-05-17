@@ -40,6 +40,7 @@ public class Program {
 		return statement != null;
 	}
 	public void execute(){
+		if(!hasTypeCheckingErrors())
 		this.getStatement().execute();
 	}
 	public boolean hasShip(){
@@ -49,7 +50,10 @@ public class Program {
 		return ship;
 	}
 	public boolean canHaveAsShip(Ship ship){
-		return ship!= null && !ship.hasAProgram() && !hasShip();
+		return ship!= null 
+				&& !ship.hasAProgram() 
+				&& !hasShip() 
+				&& !hasTypeCheckingErrors();
 	}
 	public void setShip(Ship ship){
 		assert canHaveAsShip(ship);
