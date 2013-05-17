@@ -1,6 +1,7 @@
 package asteroids.model.programs.statements;
 
 import asteroids.Error.*;
+import asteroids.model.Ship;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.expressions.Expression;
 import asteroids.model.programs.expressions.Variable;
@@ -58,7 +59,7 @@ public class Assignement extends StructuralStatement{
 	}
 	@Override
 	public boolean canHaveAsOperandAt(int index, IEntry operand) {
-		if(super.canHaveAsOperandAt(index, operand))
+		if(super.canHaveAsOperandAt(index, operand) && operand != null)
 			if(index == 1)
 				return operand.getClass().isAssignableFrom(Variable.class);
 			else if(index == 2)
@@ -79,6 +80,11 @@ public class Assignement extends StructuralStatement{
 	@Override
 	public String toString(){
 		return getOperandAt(1) + " is set to " + getOperandAt(2) + ".";
+	}
+
+	@Override
+	public void execute(Ship ship) {
+		execute();
 	}
 		
 	}

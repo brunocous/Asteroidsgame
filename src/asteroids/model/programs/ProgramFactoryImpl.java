@@ -3,31 +3,26 @@ package asteroids.model.programs;
 import java.util.LinkedList;
 import java.util.List;
 
+import asteroids.model.programs.expressions.*;
 import asteroids.model.programs.parsing.ProgramFactory;
+import asteroids.model.programs.statements.Statement;
 import be.kuleuven.cs.som.annotate.Raw;
 
-/**
- * 			SIMON: als je dit leest: De type van argumenten in deze klassen moet E's,S'en en T's zijn!
- * 			En dus niet Object gewoon! Kijk in IFacade hoe het moet.
- */
-public class ProgramFactoryImpl<E,S,T> implements ProgramFactory{
+public class ProgramFactoryImpl<E extends Expression, S extends Statement, T extends Expression> implements ProgramFactory{
 
 	@Override
-	public Object createDoubleLiteral(int line, int column, double d) {
-		// TODO Auto-generated method stub
-		return null;
+	public E createDoubleLiteral(int line, int column, double d) {
+		return (E) new Constant(d);
 	}
 
 	@Override
-	public Object createBooleanLiteral(int line, int column, boolean b) {
-		// TODO Auto-generated method stub
-		return null;
+	public E createBooleanLiteral(int line, int column, boolean b) {
+		return (E) new Bool(b);
 	}
 
 	@Override
-	public Object createAnd(int line, int column, Object e1, Object e2) {
-		// TODO Auto-generated method stub
-		return null;
+	public Expression createAnd(int line, int column, E e1, E e2) {
+		return (E) new LogicAnd((BooleanRepresentation) e1, (BooleanRepresentation) e2);
 	}
 
 	@Override
@@ -44,14 +39,12 @@ public class ProgramFactoryImpl<E,S,T> implements ProgramFactory{
 
 	@Override
 	public Object createNull(int line, int column) {
-		// TODO Auto-generated method stub
-		return null;
+		return (E) new Null();
 	}
 
 	@Override
 	public Object createSelf(int line, int column) {
-		// TODO Auto-generated method stub
-		return null;
+		return (E) new Self(null);
 	}
 
 	@Override

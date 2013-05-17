@@ -7,7 +7,7 @@ import asteroids.model.programs.IEntry;
 
 public class Self extends EntityRepresentation {
 
-	private SpaceObject value;
+	private final SpaceObject value;
 	
 public Self(Ship ship){
 	

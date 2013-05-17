@@ -9,8 +9,8 @@ public class Fire extends ActionStatement {
 
 	private Entity ship;
 	
-	public Fire(Entity entity) throws IllegalOperandException{
-		setOperandAt(1,entity);
+	public Fire() throws IllegalOperandException{
+		setOperandAt(1,null);
 	}
 	@Override
 	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException {
@@ -52,6 +52,13 @@ public class Fire extends ActionStatement {
 	@Override
 	public String toString(){
 		return getOperandAt(1) + " fires a bullet!!";
+	}
+	@Override
+	public void execute(Ship ship) {
+		try{ship.fireObject(new Bullet(ship));
+		} catch(Exception e){
+			assert false;
+		}
 	}
 
 }

@@ -58,6 +58,7 @@ public class Program {
 	public void setShip(Ship ship){
 		assert canHaveAsShip(ship);
 		this.ship = ship;
+		
 	}
 
 	public List<String> getErrors() {

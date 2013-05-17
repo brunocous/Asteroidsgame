@@ -1,9 +1,9 @@
 package asteroids.model.programs.statements;
 
-import asteroids.model.programs.IComposedStructure;
+import asteroids.model.Ship;
 import asteroids.model.programs.IEntry;
 
-public abstract class ActionStatement extends Statement implements IComposedStructure {
+public abstract class ActionStatement extends Statement {
 
 	@Override
 	public boolean equals(Object other) {
@@ -25,10 +25,6 @@ public abstract class ActionStatement extends Statement implements IComposedStru
 			if (this.getOperandAt(pos).hasAsSubEntry(entry))
 				return true;
 		return false;
-	}
-	@Override
-	public boolean canHaveAsOperandAt(int index, IEntry entry){
-		return (entry != null) && (!entry.hasAsSubEntry(this)) && (index > 0);
 	}
 
 }
