@@ -1,6 +1,5 @@
 package asteroids.model.programs.statements;
 
-import asteroids.model.Ship;
 import asteroids.model.programs.IEntry;
 
 public abstract class ActionStatement extends Statement {
@@ -26,5 +25,4 @@ public abstract class ActionStatement extends Statement {
 				return true;
 		return false;
 	}
-
 }

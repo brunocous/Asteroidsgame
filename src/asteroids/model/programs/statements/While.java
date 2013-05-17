@@ -3,6 +3,7 @@ package asteroids.model.programs.statements;
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.expressions.BooleanRepresentation;
+import asteroids.model.programs.expressions.Entity;
 
 public class While extends StructuralStatement {
 
@@ -58,6 +59,10 @@ public class While extends StructuralStatement {
 	@Override 
 	public String toString(){
 		return "While " + getOperandAt(1) + " do " + getOperandAt(2);
+	}
+	@Override
+	public void setShip(Entity ship) throws IllegalOperandException {
+		((Statement) getOperandAt(2)).setShip(ship);
 	}
 
 }

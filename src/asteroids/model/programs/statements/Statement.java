@@ -1,16 +1,18 @@
 package asteroids.model.programs.statements;
 
-import asteroids.model.Ship;
+import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IComposedStructure;
 import asteroids.model.programs.IEntry;
+import asteroids.model.programs.expressions.Entity;
 
 public abstract class Statement implements IEntry,IComposedStructure {
 
 	public abstract void execute();
-	public abstract void execute(Ship ship);
 	
 	@Override
 	public boolean canHaveAsOperandAt(int index, IEntry entry){
-		return  (!entry.hasAsSubEntry(this)) && (index > 0);
+		return  entry != null && (!entry.hasAsSubEntry(this)) && (index > 0);
 	}
+	public abstract void setShip(Entity ship) throws IllegalOperandException;
+
 }

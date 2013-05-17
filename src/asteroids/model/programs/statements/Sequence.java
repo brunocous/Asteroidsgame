@@ -7,6 +7,7 @@ import be.kuleuven.cs.som.annotate.Raw;
 
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
+import asteroids.model.programs.expressions.Entity;
 
 public class Sequence extends StructuralStatement {
 
@@ -108,4 +109,9 @@ public class Sequence extends StructuralStatement {
 		return MAX_WAITING_TIME;
 	}
 
+	public void setShip(Entity ship) throws IllegalOperandException{
+		for(Statement st: getAllStatements()){
+			st.setShip(ship);
+		}
+	}
 }

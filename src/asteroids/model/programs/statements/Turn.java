@@ -8,11 +8,10 @@ import asteroids.model.programs.expressions.Entity;
 
 public class Turn extends ActionStatement {
 
-	private Entity entity;
+	private Entity entity = null;
 	private DoubleRepresentation amount;
 	
 	public Turn(Entity entity, DoubleRepresentation amount) throws IllegalOperandException{
-		setOperandAt(1,entity);
 		setOperandAt(2, amount);
 	}
 	
@@ -61,5 +60,12 @@ public class Turn extends ActionStatement {
 	@Override
 	public String toString(){
 		return getOperandAt(1) + " turns with an amount of " + getOperandAt(2) + " radians.";
+	}
+
+
+	@Override
+	public void setShip(Entity ship) throws IllegalOperandException {
+		setOperandAt(1, ship);
+		
 	}
 }

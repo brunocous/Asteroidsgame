@@ -8,11 +8,10 @@ import asteroids.model.programs.expressions.Entity;
 
 public class Thrust extends ActionStatement {
 
-	private Entity ship;
+	private Entity ship = null;
 	private BooleanRepresentation enable;
 	
-	public Thrust(Entity ship, BooleanRepresentation enable) throws IllegalOperandException{
-		setOperandAt(1,ship);
+	public Thrust(Entity ship, BooleanRepresentation enable) throws IllegalOperandException{ 
 		setOperandAt(2,enable);
 	}
 	
@@ -61,6 +60,12 @@ public class Thrust extends ActionStatement {
 				return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void setShip(Entity ship) throws IllegalOperandException {
+		setOperandAt(1, ship);
+		
 	}
 
 }

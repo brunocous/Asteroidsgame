@@ -6,17 +6,21 @@ import asteroids.model.programs.IEntry;
 import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.expressions.EntitySequence;
 import asteroids.model.programs.expressions.Variable;
+import asteroids.model.programs.kind.Kind;
 
 public class Foreach extends StructuralStatement {
 
-	private EntitySequence entities;
+	private EntitySequence entities = null;
 	private Variable localVar;
 	private StructuralStatement body;
+	private final Kind kind;
 	
-	public Foreach(EntitySequence entities, Variable localVar, StructuralStatement body) throws IllegalOperandException{
-		setOperandAt(1,entities);
+	public Foreach(Kind kind, Variable localVar, StructuralStatement body) throws IllegalOperandException{
 		setOperandAt(2,localVar);
 		setOperandAt(3,body);
+		if(canHaveAsOperandAt(4, kind))
+			this.kind = kind;
+		else throw new IllegalOperandException();
 	}
 	@Override
 	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException {
@@ -26,12 +30,15 @@ public class Foreach extends StructuralStatement {
 			return localVar;
 		if(index == 3)
 			return body;
+		if(index == 4)
+			return kind;
 		throw new IndexOutOfBoundsException();
+		
 	}
 
 	@Override
 	public int getNbOperands() {
-		return 3;
+		return 4;
 	}
 
 	@Override
@@ -60,6 +67,8 @@ public class Foreach extends StructuralStatement {
 				else 
 					return true;
 			}
+			if(index == 4 && operand.getClass().isAssignableFrom(Kind.class))
+				return Kind.isValidKind((Kind) operand);
 		}
 			return false;
 	}
@@ -76,9 +85,16 @@ public class Foreach extends StructuralStatement {
 		}
 
 	}
+	public void setShip(Entity ship) throws IllegalOperandException{
+		setOperandAt(1, EntitySequence.getEntitySequence( ship.getSpaceObject().getWorld(), (Kind) getOperandAt(4)));
+		((Statement) getOperandAt(3)).setShip( ship );
+	}
 	@Override
 	public String toString(){
-		return "For each " + getOperandAt(2) + "\nof  " + getOperandAt(1) + "\ndo " + getOperandAt(3);
+		return "For each " + getOperandAt(4) + "\nof  " + getOperandAt(1) + "\ndo " + getOperandAt(3);
 	}
+	
+		
+		 
 
 }

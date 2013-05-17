@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import asteroids.model.Ship;
+import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.expressions.Expression;
 import asteroids.model.programs.statements.Statement;
 
@@ -58,6 +59,8 @@ public class Program {
 	public void setShip(Ship ship){
 		assert canHaveAsShip(ship);
 		this.ship = ship;
+		Entity shipEntity = new Entity(getShip());
+		getStatement().setShip(shipEntity);
 		
 	}
 

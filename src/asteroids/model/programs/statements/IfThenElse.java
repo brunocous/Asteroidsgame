@@ -3,6 +3,7 @@ package asteroids.model.programs.statements;
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.expressions.BooleanRepresentation;
+import asteroids.model.programs.expressions.Entity;
 
 public class IfThenElse extends StructuralStatement {
 
@@ -68,5 +69,11 @@ public class IfThenElse extends StructuralStatement {
 	@Override
 	public String toString(){
 		return "If " + getOperandAt(1) + ", then \n" + getOperandAt(2) + ". \nElse " + getOperandAt(3) + ".";
+	}
+	@Override
+	public void setShip(Entity ship) throws IllegalOperandException {
+		((Statement) getOperandAt(2)).setShip(ship);
+		((Statement) getOperandAt(3)).setShip(ship);
+		
 	}
 }

@@ -7,18 +7,18 @@ import asteroids.model.*;
 
 public class Fire extends ActionStatement {
 
-	private Entity ship;
+	private Entity ship = null;
 	
-	public Fire() throws IllegalOperandException{
-		setOperandAt(1,null);
-	}
 	@Override
 	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException {
 		if(index == 1)
-			return ship;
+			return getShip();
 		else throw new IndexOutOfBoundsException();
 	}
 
+	public Entity getShip(){
+		return ship;
+	}
 	@Override
 	public int getNbOperands() {
 		return 1;
@@ -27,9 +27,8 @@ public class Fire extends ActionStatement {
 	@Override
 	public void setOperandAt(int index, IEntry operand)
 			throws IllegalOperandException {
-		if(canHaveAsOperandAt(index, operand))
-			this.ship = (Entity) operand;
-		else throw new IllegalOperandException();
+		if(index == 1)
+			setShip((Entity) operand);
 
 	}
 
@@ -42,7 +41,7 @@ public class Fire extends ActionStatement {
 	}
 	@Override
 	public void execute() {
-		Ship ship = (Ship) ((Entity) getOperandAt(1)).getSpaceObject();
+		Ship ship = (Ship) getShip().getSpaceObject();
 		try{ ship.fireObject(new Bullet(ship));
 		}catch (Exception e){
 			assert false;
@@ -54,11 +53,11 @@ public class Fire extends ActionStatement {
 		return getOperandAt(1) + " fires a bullet!!";
 	}
 	@Override
-	public void execute(Ship ship) {
-		try{ship.fireObject(new Bullet(ship));
-		} catch(Exception e){
-			assert false;
-		}
+	public void setShip(Entity ship) throws IllegalOperandException{
+		if(canHaveAsOperandAt(1,ship))
+		this.ship = ship;
+		else throw new IllegalOperandException();
 	}
+	
 
 }

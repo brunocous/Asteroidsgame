@@ -2,6 +2,7 @@ package asteroids.model.programs.statements;
 
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
+import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.expressions.Expression;
 
 public class Print extends StructuralStatement {
@@ -47,6 +48,11 @@ public class Print extends StructuralStatement {
 	@Override
 	public String toString(){
 		return "\n Printing the following: \n\t" + getOperandAt(1);
+	}
+	@Override
+	public void setShip(Entity ship) throws IllegalOperandException {
+		assert true;
+		
 	}
 
 }

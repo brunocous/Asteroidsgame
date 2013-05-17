@@ -1,8 +1,8 @@
 package asteroids.model.programs.statements;
 
 import asteroids.Error.*;
-import asteroids.model.Ship;
 import asteroids.model.programs.IEntry;
+import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.expressions.Expression;
 import asteroids.model.programs.expressions.Variable;
 
@@ -83,8 +83,8 @@ public class Assignement extends StructuralStatement{
 	}
 
 	@Override
-	public void execute(Ship ship) {
-		execute();
+	public void setShip(Entity ship) throws IllegalOperandException {
+		assert true;
 	}
 		
 	}
