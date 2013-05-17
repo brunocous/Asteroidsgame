@@ -11,7 +11,7 @@ public class Turn extends ActionStatement {
 	private Entity entity = null;
 	private DoubleRepresentation amount;
 	
-	public Turn(Entity entity, DoubleRepresentation amount) throws IllegalOperandException{
+	public Turn( DoubleRepresentation amount) throws IllegalOperandException{
 		setOperandAt(2, amount);
 	}
 	

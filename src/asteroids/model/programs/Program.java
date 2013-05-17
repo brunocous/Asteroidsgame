@@ -11,13 +11,13 @@ import asteroids.model.programs.statements.Statement;
 
 public class Program {
 
-	private final Map<String,Expression> globals;
+	private final Map<String,Object> globals;
 	private final Statement statement;
 	private Ship ship = null;
 	private final List<String> errors;
 	private boolean isRunning;
 
-	public Program(Map<String,Expression> globals, Statement statement, List<String> errors){
+	public Program(Map<String,Object> globals, Statement statement, List<String> errors){
 		if(!canHaveAsGlobals(globals))
 			throw new IllegalArgumentException();
 		else
@@ -30,14 +30,14 @@ public class Program {
 		this.errors = errors;
 	}
 
-	public Map<String,Expression> getGlobals() {
+	public Map<String,Object> getGlobals() {
 		return globals;
 	}
 
 	public Statement getStatement() {
 		return statement;
 	}
-	public boolean canHaveAsGlobals(Map<String,Expression> globals){
+	public boolean canHaveAsGlobals(Map<String,Object> globals){
 		return globals != null;
 	}
 	public boolean canHaveAsStatement(Statement statement){

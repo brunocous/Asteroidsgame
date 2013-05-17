@@ -9,6 +9,9 @@ public class Fire extends ActionStatement {
 
 	private Entity ship = null;
 	
+	public Fire(){
+		
+	}
 	@Override
 	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException {
 		if(index == 1)
