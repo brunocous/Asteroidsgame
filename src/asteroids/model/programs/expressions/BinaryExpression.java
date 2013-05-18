@@ -17,16 +17,16 @@ public abstract class BinaryExpression extends Expression implements IComposedSt
 		
 	}
 	
-
-	public void setOperandAt(int index, Expression argument){
+	@Override
+	public void setOperandAt(int index, IEntry argument){
 		
-		if(canHaveAsOperandAt(index,argument)){
+		if(canHaveAsOperandAt(index,argument) && Expression.class.isAssignableFrom(argument.getClass())){
 			
 			if(index ==1){
-			this.argument1 = argument;
+			this.argument1 = (Expression) argument;
 			}
 			else if(index==2){
-			this.argument2 = argument;
+			this.argument2 = (Expression) argument;
 			}
 			
 		}
