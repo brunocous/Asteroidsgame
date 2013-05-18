@@ -45,6 +45,9 @@ public boolean canHaveAsName(String name){
 public Expression getValue(){
 	return value.getValue();
 }
+public Expression getVariableValue(){
+	return value;
+}
 
 @Override
 public Object getRealValue() {
@@ -64,7 +67,13 @@ public Object getRealValue() {
 
 @Override
 public boolean hasAsSubEntry(IEntry subEntry) {
-	return value.hasAsSubEntry(subEntry);
+	return getVariableValue().hasAsSubEntry(subEntry);
+}
+
+
+@Override
+public boolean isTypeChecked(){
+	return getVariableValue().isTypeChecked();
 }
 
 

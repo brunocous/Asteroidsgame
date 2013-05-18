@@ -17,5 +17,11 @@ public abstract class BasicExpression extends Expression{
 
 		return subEntry.equals(this);
 	}
+	
+
+	@Override
+	public boolean isTypeChecked(){
+		return true;
+	}
 
 }
