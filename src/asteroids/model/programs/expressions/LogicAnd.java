@@ -1,9 +1,8 @@
 package asteroids.model.programs.expressions;
 
 
-import asteroids.model.programs.IEntry;
 
-public class LogicAnd extends BinaryExpression {
+public class LogicAnd extends Logic {
 	
 
 	public LogicAnd(Expression leftExpression, Expression rightExpression){
@@ -11,19 +10,7 @@ public class LogicAnd extends BinaryExpression {
 		super(leftExpression, rightExpression);
 		
 	}
-	
-	@Override
-	public boolean canHaveAsOperandAt(int index, IEntry expression){
-		
-		if(index > getNbOperands()){
-			return false;
-		}
-		
-		else{
-		return true; 
-		}
-		}
-	
+
 	
 
 	public Boolean getRealValue(){
@@ -32,11 +19,6 @@ public class LogicAnd extends BinaryExpression {
 		BooleanLiteral constant2 = (BooleanLiteral) (getOperandAt(2).getValue());
 		return (constant1).getRealValue() && (constant2).getRealValue();
 			
-	}
-
-	public Expression getValue(){
-		
-		return new BooleanLiteral(getRealValue());
 	}
 
 
