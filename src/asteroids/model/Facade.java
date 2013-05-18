@@ -317,7 +317,7 @@ public class Facade implements IFacade<World, Ship, Asteroid,Bullet,Program>{
 	@Override
 	public asteroids.IFacade.ParseOutcome<Program> parseProgram(String text) {
 		ProgramFactoryImpl factory = new ProgramFactoryImpl();
-		ProgramParser<Expression, Statement, Expression> parser = new ProgramParser<Expression ,Statement,Expression>( factory );
+		ProgramParser<Expression, Statement, Object> parser = new ProgramParser<Expression ,Statement,Object>( factory );
 		parser.parse(text);
 		List<String> errors = parser.getErrors();
 		if(! errors.isEmpty()) 
@@ -341,7 +341,7 @@ public class Facade implements IFacade<World, Ship, Asteroid,Bullet,Program>{
 
 	@Override
 	public boolean isTypeCheckingSupported() {
-		return true;
+		return false;
 	}
 
 	@Override

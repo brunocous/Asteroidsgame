@@ -2,11 +2,12 @@ package asteroids.model.programs;
 
 import java.util.List;
 
+import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.expressions.*;
 import asteroids.model.programs.parsing.ProgramFactory;
 import asteroids.model.programs.statements.*;
 
-public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement, Expression>{
+public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement, Object>{
 
 	@Override
 	public Expression createDoubleLiteral(int line, int column, double d) {
@@ -196,14 +197,16 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 
 	@Override
 	public Statement createFire(int line, int column) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Fire();
 	}
 
 	@Override
 	public Statement createTurn(int line, int column, Expression angle) {
-		// TODO Auto-generated method stub
-		return null;
+		try{return new Turn( (DoubleRepresentation) angle);
+		
+		}catch(IllegalOperandException e){
+			return null;
+		}
 	}
 
 	@Override
@@ -244,8 +247,12 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 	@Override
 	public Statement createSequence(int line, int column,
 			List<Statement> statements) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		try{return new Sequence(statements);
+		
+		}catch(IllegalOperandException e){
+			return null;
+		}
 	}
 
 	@Override
@@ -255,21 +262,18 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 	}
 
 	@Override
-	public Expression createDoubleType() {
-		// TODO Auto-generated method stub
-		return null;
+	public Object createDoubleType() {
+		return DoubleRepresentation.class;
 	}
 
 	@Override
-	public Expression createBooleanType() {
-		// TODO Auto-generated method stub
-		return null;
+	public Object createBooleanType() {
+		return BooleanRepresentation.class;
 	}
 
 	@Override
-	public Expression createEntityType() {
-		// TODO Auto-generated method stub
-		return null;
+	public Object createEntityType() {
+		return EntityRepresentation.class;
 	}
 
 
