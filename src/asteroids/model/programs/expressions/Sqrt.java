@@ -7,7 +7,7 @@ import asteroids.model.programs.IEntry;
 
 
 
-public class Sqrt extends UnaryDoubleRepresentation implements IComposedStructure{
+public class Sqrt extends UnaryExpression implements IComposedStructure{
 		
 
 		

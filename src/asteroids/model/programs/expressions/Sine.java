@@ -6,7 +6,7 @@ import asteroids.model.programs.IEntry;
 
 
 
-public class Sine extends UnaryDoubleRepresentation implements IComposedStructure{
+public class Sine extends UnaryExpression implements IComposedStructure{
 		
 
 		

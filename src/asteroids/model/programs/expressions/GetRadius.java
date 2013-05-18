@@ -6,7 +6,7 @@ import asteroids.model.programs.IEntry;
 
 
 
-public class GetRadius extends UnaryDoubleRepresentation implements IComposedStructure{
+public class GetRadius extends UnaryExpression implements IComposedStructure{
 		
 
 		

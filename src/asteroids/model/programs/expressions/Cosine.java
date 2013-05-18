@@ -6,36 +6,45 @@ import asteroids.model.programs.IEntry;
 
 
 
-public class Cosine extends UnaryDoubleRepresentation implements IComposedStructure{
+public class Cosine extends UnaryExpression{
 		
 	
 		
-	public Cosine(DoubleRepresentation argument) throws IllegalOperandException{
+	public Cosine(Expression argument) throws IllegalOperandException{
 		
 		super(argument);
 		
 	}
 	
-		public boolean canHaveAsOperandAt(int index, IEntry argument){
+	@Override
+	public boolean canHaveAsOperandAt(int index, IEntry argument){
 			
 			if(index ==1){
-			if(DoubleRepresentation.class.isAssignableFrom(argument.getClass())){
-				return true;
+			return true;
 			}
 			else{
 				return false;
 				//TODO implementeren
 			}
-			}
-			else {
-				return false;
-			}
-		}
+			
+	
+	}
 		
-		public double getJavaDouble(){
+	
+
+		@Override
+		public Double getRealValue() {
 			
-			return Math.cos(((DoubleRepresentation)getOperandAt(1)).getJavaDouble());
+			DoubleLiteral constant1 = (DoubleLiteral) (getOperandAt(1).getValue());
 			
+			return constant1.getRealValue();
+			
+		}
+
+		@Override
+		public Expression getValue() {
+			
+			new DoubleLiteral(getRealValue());
 		}
 	
 

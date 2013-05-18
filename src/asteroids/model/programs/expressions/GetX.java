@@ -6,7 +6,7 @@ import asteroids.model.programs.IEntry;
 
 
 
-public class GetX extends UnaryDoubleRepresentation implements IComposedStructure{
+public class GetX extends UnaryExpression implements IComposedStructure{
 		
 
 		

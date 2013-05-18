@@ -6,7 +6,7 @@ import asteroids.model.programs.IEntry;
 
 
 
-public class GetVY extends UnaryDoubleRepresentation implements IComposedStructure{
+public class GetVY extends UnaryExpression implements IComposedStructure{
 		
 	
 		
