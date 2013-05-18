@@ -1,14 +1,12 @@
 package asteroids.model.programs.expressions;
 
 
-import asteroids.Error.IllegalOperandException;
-import asteroids.model.programs.IComposedStructure;
 import asteroids.model.programs.IEntry;
 
-public class LogicAnd extends BinaryBooleanRepresentation implements IComposedStructure{
+public class LogicAnd extends BinaryExpression {
 	
 
-	public LogicAnd(BooleanRepresentation leftExpression, BooleanRepresentation rightExpression) throws IllegalOperandException{
+	public LogicAnd(Expression leftExpression, Expression rightExpression){
 	
 		super(leftExpression, rightExpression);
 		
@@ -20,26 +18,26 @@ public class LogicAnd extends BinaryBooleanRepresentation implements IComposedSt
 		if(index > getNbOperands()){
 			return false;
 		}
+		
 		else{
-		if(BooleanRepresentation.class.isAssignableFrom(expression.getClass())){
-			return true;
-		}
-		else{
-			return false;
+		return true; 
 		}
 		}
-	}
+	
 	
 
-	
-	@Override
-	public boolean getJavaBoolean(){
+	public Boolean getRealValue(){
 		
-		return (((BooleanRepresentation)getOperandAt(1)).getJavaBoolean()&&((BooleanRepresentation)getOperandAt(2)).getJavaBoolean());
+		BooleanLiteral constant1 = (BooleanLiteral) (getOperandAt(1).getValue());
+		BooleanLiteral constant2 = (BooleanLiteral) (getOperandAt(2).getValue());
+		return (constant1).getRealValue() && (constant2).getRealValue();
 			
 	}
 
-	
+	public Expression getValue(){
+		
+		return new BooleanLiteral(getRealValue());
+	}
 
 
 }

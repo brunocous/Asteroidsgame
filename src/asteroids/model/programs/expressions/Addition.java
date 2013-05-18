@@ -1,8 +1,9 @@
 package asteroids.model.programs.expressions;
 
+
 import asteroids.model.programs.IEntry;
 
-public class Addition extends BinaryExpression{
+public class Addition extends BinaryExpression {
 	
 
 	public Addition(Expression leftExpression, Expression rightExpression){
@@ -12,7 +13,7 @@ public class Addition extends BinaryExpression{
 	}
 	
 	@Override
-	public boolean canHaveAsOperandAt(int index, Expression expression){
+	public boolean canHaveAsOperandAt(int index, IEntry expression){
 		
 		if(index > getNbOperands()){
 			return false;

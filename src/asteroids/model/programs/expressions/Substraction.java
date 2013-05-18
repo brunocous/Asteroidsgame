@@ -1,86 +1,43 @@
 package asteroids.model.programs.expressions;
 
-import asteroids.Error.IllegalOperandException;
-import asteroids.model.programs.IComposedStructure;
+
 import asteroids.model.programs.IEntry;
 
-public class Substraction extends DoubleRepresentation implements IComposedStructure{
+public class Substraction extends BinaryExpression {
 	
-	private DoubleRepresentation leftExpression;
-	private DoubleRepresentation rightExpression;
 
-
-	public Substraction(DoubleRepresentation leftExpression, DoubleRepresentation RightExpression) throws IllegalOperandException{
+	public Substraction(Expression leftExpression, Expression rightExpression){
 	
-		setOperandAt(2, rightExpression);
-		setOperandAt(1, leftExpression);
+		super(leftExpression, rightExpression);
 		
 	}
 	
 	@Override
-	public void setOperandAt(int index, IEntry expression) throws IllegalOperandException{
-		
-		if(canHaveAsOperandAt(index, expression)){
-			if(index == 2){
-				rightExpression = (DoubleRepresentation) expression;
-			}
-			if(index == 1){
-				leftExpression = (DoubleRepresentation) expression;
-			}
-		}
-		else{
-			throw new IllegalOperandException();
-		}
-	
-	}
-	
 	public boolean canHaveAsOperandAt(int index, IEntry expression){
 		
-		if(!DoubleRepresentation.class.isAssignableFrom(expression.getClass())){
+		if(index > getNbOperands()){
 			return false;
 		}
+		
 		else{
 		return true; 
-		//TODO implementeren
 		}
-	}
+		}
 	
-	public IEntry getFirstOperand(){
-		return leftExpression;
-	}
 	
-	public IEntry getSecondOperand(){
-		return rightExpression;
-	}
-	
-	@Override
-	public double getJavaDouble(){
+
+	public Double getRealValue(){
 		
-		return ((DoubleRepresentation)getOperandAt(1)).getJavaDouble()-((DoubleRepresentation)getOperandAt(2)).getJavaDouble();
+		DoubleLiteral constant1 = (DoubleLiteral) (getOperandAt(1).getValue());
+		DoubleLiteral constant2 = (DoubleLiteral) (getOperandAt(2).getValue());
+		return (constant1).getRealValue()-(constant2).getRealValue();
 			
 	}
 
-	@Override
-	public boolean hasAsSubEntry(IEntry expression){
-		return (expression == getOperandAt(1) || expression == getOperandAt(2));
+	public Expression getValue(){
+		
+		return new DoubleLiteral(getRealValue());
 	}
 
-	@Override
-	public IEntry getOperandAt(int index) {
-		if(index ==1){
-			return getFirstOperand();
-		}
-		else if(index ==2){
-			return getSecondOperand();
-		}
-		else{
-			return null;
-		}
-	}
 
-	@Override
-	public int getNbOperands() {
-		// TODO Auto-generated method stub
-		return 2;
-	}
 }

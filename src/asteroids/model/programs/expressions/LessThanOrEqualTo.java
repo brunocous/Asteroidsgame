@@ -1,14 +1,13 @@
 package asteroids.model.programs.expressions;
 
 import asteroids.Util;
-import asteroids.Error.IllegalOperandException;
-import asteroids.model.programs.IComposedStructure;
+
 import asteroids.model.programs.IEntry;
 
-public class LessThanOrEqualTo extends BinaryBooleanRepresentation implements IComposedStructure{
+public class LessThanOrEqualTo extends BinaryExpression {
 	
 
-	public LessThanOrEqualTo(DoubleRepresentation leftExpression, DoubleRepresentation rightExpression) throws IllegalOperandException{
+	public LessThanOrEqualTo (Expression leftExpression, Expression rightExpression){
 	
 		super(leftExpression, rightExpression);
 		
@@ -20,26 +19,26 @@ public class LessThanOrEqualTo extends BinaryBooleanRepresentation implements IC
 		if(index > getNbOperands()){
 			return false;
 		}
+		
 		else{
-		if(DoubleRepresentation.class.isAssignableFrom(expression.getClass())){
-			return true;
-		}
-		else{
-			return false;
+		return true; 
 		}
 		}
-	}
+	
 	
 
-	
-	@Override
-	public boolean getJavaBoolean(){
+	public Boolean getRealValue(){
 		
-		return (Util.fuzzyLessThanOrEqualTo(((DoubleRepresentation)getOperandAt(1)).getJavaDouble(),((DoubleRepresentation)getOperandAt(2)).getJavaDouble()));
+		DoubleLiteral constant1 = (DoubleLiteral) (getOperandAt(1).getValue());
+		DoubleLiteral constant2 = (DoubleLiteral) (getOperandAt(2).getValue());
+		return (Util.fuzzyLessThanOrEqualTo(constant1.getRealValue(), constant2.getRealValue()));
 			
 	}
 
-
+	public Expression getValue(){
+		
+		return new BooleanLiteral(getRealValue());
+	}
 
 
 }

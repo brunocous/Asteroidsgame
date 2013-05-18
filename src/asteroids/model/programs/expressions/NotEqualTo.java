@@ -1,13 +1,11 @@
 package asteroids.model.programs.expressions;
 
-import asteroids.Error.IllegalOperandException;
-import asteroids.model.programs.IComposedStructure;
 import asteroids.model.programs.IEntry;
 
-public class NotEqualTo extends BinaryBooleanRepresentation implements IComposedStructure{
+public class NotEqualTo extends BinaryExpression{
 	
 
-	public NotEqualTo(Expression leftExpression, Expression rightExpression) throws IllegalOperandException{
+	public NotEqualTo(Expression leftExpression, Expression rightExpression){
 	
 		super(leftExpression, rightExpression);
 		
@@ -20,33 +18,41 @@ public class NotEqualTo extends BinaryBooleanRepresentation implements IComposed
 			return false;
 		}
 		else{
-		if(index ==1 && getOperandAt(2) == null){
-			return true;
-		}
-		else if(index ==1 && expression.getClass().isAssignableFrom(getOperandAt(2).getClass())){
-			return true;
-		}
-		else if(index ==2 && getOperandAt(1) == null){
-			return true;
-		}
-		else if(index ==2 &&expression.getClass().isAssignableFrom(getOperandAt(2).getClass())){
-			return true;
-		}
-		else{
-		return false; 
-		
-		}
+		 return true;
 		}
 	}
 	
 
 	
-	@Override
-	public boolean getJavaBoolean(){
+	public Boolean getRealValue(){
 		
-		return (!getOperandAt(1).equals(getOperandAt(2)));
-			
+		if(getOperandAt(1).getClass().isAssignableFrom(BooleanLiteral.class)){
+		BooleanLiteral bool1 = (BooleanLiteral) (getOperandAt(1).getValue());
+		BooleanLiteral bool2 = (BooleanLiteral) (getOperandAt(2).getValue());
+		return !(bool1).equals(bool2);
+		}
+		else if(getOperandAt(1).getClass().isAssignableFrom(DoubleLiteral.class)){
+		DoubleLiteral constant1 = (DoubleLiteral) (getOperandAt(1).getValue());
+		DoubleLiteral constant2 = (DoubleLiteral) (getOperandAt(2).getValue());
+		return !(constant1).equals(constant2);
+		}
+		else if(getOperandAt(1).getClass().isAssignableFrom(Entity.class)){
+		Entity entity1 = (Entity) (getOperandAt(1).getValue());
+		Entity entity2 = (Entity) (getOperandAt(2).getValue());
+		return !(entity1).equals(entity2);
+		}
+		else{
+			return false;
+		}
+				
 	}
+
+	public Expression getValue(){
+		
+		return new BooleanLiteral(getRealValue());
+	}
+
+
 
 
 

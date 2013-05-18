@@ -1,13 +1,12 @@
 package asteroids.model.programs.expressions;
 
-import asteroids.Error.IllegalOperandException;
-import asteroids.model.programs.IComposedStructure;
+
 import asteroids.model.programs.IEntry;
 
-public class Multiplication extends BinaryExpression implements IComposedStructure{
+public class Multiplication extends BinaryExpression {
 	
 
-	public Multiplication(DoubleRepresentation leftExpression, DoubleRepresentation rightExpression) throws IllegalOperandException{
+	public Multiplication(Expression leftExpression, Expression rightExpression){
 	
 		super(leftExpression, rightExpression);
 		
@@ -19,24 +18,25 @@ public class Multiplication extends BinaryExpression implements IComposedStructu
 		if(index > getNbOperands()){
 			return false;
 		}
-		else{
-		if(!DoubleRepresentation.class.isAssignableFrom(expression.getClass())){
-			return false;
-		}
+		
 		else{
 		return true; 
-		//TODO implementeren
 		}
 		}
-	}
+	
 	
 
-	
-	@Override
-	public double getJavaDouble(){
+	public Double getRealValue(){
 		
-		return ((DoubleRepresentation)getOperandAt(1)).getJavaDouble()*((DoubleRepresentation)getOperandAt(2)).getJavaDouble();
+		DoubleLiteral constant1 = (DoubleLiteral) (getOperandAt(1).getValue());
+		DoubleLiteral constant2 = (DoubleLiteral) (getOperandAt(2).getValue());
+		return (constant1).getRealValue()*(constant2).getRealValue();
 			
+	}
+
+	public Expression getValue(){
+		
+		return new DoubleLiteral(getRealValue());
 	}
 
 

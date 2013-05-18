@@ -5,7 +5,7 @@ import asteroids.model.programs.IEntry;
 
 
 
-	public class BooleanLiteral extends BooleanRepresentation{
+	public class BooleanLiteral extends Expression{
 
 		private boolean value;
 		
@@ -17,11 +17,14 @@ import asteroids.model.programs.IEntry;
 
 
 	@Override
-	public boolean getJavaBoolean(){
+	public Boolean getRealValue(){
 		return value;
 	}
 	
-
+	@Override
+	public Expression getValue(){
+		return new BooleanLiteral(getRealValue());
+	}
 
 	@Override
 	public boolean hasAsSubEntry(IEntry expression) {
