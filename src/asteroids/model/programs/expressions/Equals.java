@@ -1,8 +1,7 @@
 package asteroids.model.programs.expressions;
 
-import asteroids.model.programs.IEntry;
 
-public class Equals extends BinaryExpression{
+public class Equals extends Comparison{
 	
 
 	public Equals(Expression leftExpression, Expression rightExpression){
@@ -10,20 +9,9 @@ public class Equals extends BinaryExpression{
 		super(leftExpression, rightExpression);
 		
 	}
-	
-	@Override
-	public boolean canHaveAsOperandAt(int index, IEntry expression){
-		
-		if(index > getNbOperands()){
-			return false;
-		}
-		else{
-			return true;
-		}
-	}
-	
 
-	
+
+	@Override
 	public Boolean getRealValue(){
 		
 		if(getOperandAt(1).getClass().isAssignableFrom(BooleanLiteral.class)){
@@ -46,14 +34,6 @@ public class Equals extends BinaryExpression{
 		}
 				
 	}
-
-	public Expression getValue(){
-		
-		return new BooleanLiteral(getRealValue());
-	}
-
-
-
 
 
 

@@ -2,9 +2,9 @@ package asteroids.model.programs.expressions;
 
 import asteroids.Util;
 
-import asteroids.model.programs.IEntry;
 
-public class GreaterThan extends BinaryExpression {
+
+public class GreaterThan extends Inequality {
 	
 
 	public GreaterThan (Expression leftExpression, Expression rightExpression){
@@ -12,21 +12,7 @@ public class GreaterThan extends BinaryExpression {
 		super(leftExpression, rightExpression);
 		
 	}
-	
 	@Override
-	public boolean canHaveAsOperandAt(int index, IEntry expression){
-		
-		if(index > getNbOperands()){
-			return false;
-		}
-		
-		else{
-		return true; 
-		}
-		}
-	
-	
-
 	public Boolean getRealValue(){
 		
 		DoubleLiteral constant1 = (DoubleLiteral) (getOperandAt(1).getValue());
@@ -34,11 +20,5 @@ public class GreaterThan extends BinaryExpression {
 		return (!Util.fuzzyLessThanOrEqualTo(constant1.getRealValue(), constant2.getRealValue()));
 			
 	}
-
-	public Expression getValue(){
-		
-		return new BooleanLiteral(getRealValue());
-	}
-
 
 }

@@ -1,8 +1,8 @@
 package asteroids.model.programs.expressions;
 
-import asteroids.model.programs.IEntry;
 
-public class NotEqualTo extends BinaryExpression{
+
+public class NotEqualTo extends Comparison{
 	
 
 	public NotEqualTo(Expression leftExpression, Expression rightExpression){
@@ -10,20 +10,10 @@ public class NotEqualTo extends BinaryExpression{
 		super(leftExpression, rightExpression);
 		
 	}
-	
-	@Override
-	public boolean canHaveAsOperandAt(int index, IEntry expression){
-		
-		if(index > getNbOperands()){
-			return false;
-		}
-		else{
-		 return true;
-		}
-	}
-	
 
 	
+
+	@Override
 	public Boolean getRealValue(){
 		
 		if(getOperandAt(1).getClass().isAssignableFrom(BooleanLiteral.class)){
@@ -46,14 +36,6 @@ public class NotEqualTo extends BinaryExpression{
 		}
 				
 	}
-
-	public Expression getValue(){
-		
-		return new BooleanLiteral(getRealValue());
-	}
-
-
-
 
 
 

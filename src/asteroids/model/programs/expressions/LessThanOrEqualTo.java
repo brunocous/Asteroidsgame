@@ -2,9 +2,8 @@ package asteroids.model.programs.expressions;
 
 import asteroids.Util;
 
-import asteroids.model.programs.IEntry;
 
-public class LessThanOrEqualTo extends BinaryExpression {
+public class LessThanOrEqualTo extends Inequality {
 	
 
 	public LessThanOrEqualTo (Expression leftExpression, Expression rightExpression){
@@ -13,31 +12,14 @@ public class LessThanOrEqualTo extends BinaryExpression {
 		
 	}
 	
+	
 	@Override
-	public boolean canHaveAsOperandAt(int index, IEntry expression){
-		
-		if(index > getNbOperands()){
-			return false;
-		}
-		
-		else{
-		return true; 
-		}
-		}
-	
-	
-
 	public Boolean getRealValue(){
 		
 		DoubleLiteral constant1 = (DoubleLiteral) (getOperandAt(1).getValue());
 		DoubleLiteral constant2 = (DoubleLiteral) (getOperandAt(2).getValue());
 		return (Util.fuzzyLessThanOrEqualTo(constant1.getRealValue(), constant2.getRealValue()));
 			
-	}
-
-	public Expression getValue(){
-		
-		return new BooleanLiteral(getRealValue());
 	}
 
 
