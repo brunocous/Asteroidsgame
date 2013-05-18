@@ -3,7 +3,7 @@ package asteroids.model.programs.expressions;
 import asteroids.Util;
 import asteroids.model.programs.IEntry;
 
-public class Division extends BinaryExpression{
+public class Division extends BinaryMath{
 	
 
 	public Division(Expression leftExpression, Expression rightExpression){
@@ -23,15 +23,6 @@ public class Division extends BinaryExpression{
 			
 	}
 
-	public Expression getValue(){
-		
-		return new DoubleLiteral(getRealValue());
-	}
-
-
-
-
-	
 	@Override
 	public boolean canHaveAsOperandAt(int index, IEntry expression){
 		

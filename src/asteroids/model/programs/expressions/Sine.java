@@ -1,10 +1,10 @@
 package asteroids.model.programs.expressions;
 
-import asteroids.model.programs.IEntry;
 
 
 
-public class Sine extends UnaryExpression{
+
+public class Sine extends UnaryMath{
 		
 	
 		
@@ -13,21 +13,6 @@ public class Sine extends UnaryExpression{
 		super(argument);
 		
 	}
-	
-	@Override
-	public boolean canHaveAsOperandAt(int index, IEntry argument){
-			
-			if(index ==1){
-			return true;
-			}
-			else{
-				return false;
-				//TODO implementeren
-			}
-			
-	
-	}
-		
 	
 
 		@Override
@@ -39,11 +24,6 @@ public class Sine extends UnaryExpression{
 			
 		}
 
-		@Override
-		public Expression getValue() {
-			
-			return new DoubleLiteral(getRealValue());
-		}
 	
 
 	

@@ -1,10 +1,10 @@
 package asteroids.model.programs.expressions;
 
-import asteroids.model.programs.IEntry;
 
 
 
-public class Cosine extends UnaryExpression{
+
+public class Cosine extends UnaryMath{
 		
 	
 		
@@ -13,21 +13,6 @@ public class Cosine extends UnaryExpression{
 		super(argument);
 		
 	}
-	
-	@Override
-	public boolean canHaveAsOperandAt(int index, IEntry argument){
-			
-			if(index ==1){
-			return true;
-			}
-			else{
-				return false;
-				//TODO implementeren
-			}
-			
-	
-	}
-		
 	
 
 		@Override
@@ -39,12 +24,6 @@ public class Cosine extends UnaryExpression{
 			
 		}
 
-		@Override
-		public Expression getValue() {
-			
-			return new DoubleLiteral(getRealValue());
-		}
-	
-
+		
 	
 		}

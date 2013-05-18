@@ -1,11 +1,10 @@
 package asteroids.model.programs.expressions;
 
 
-import asteroids.model.programs.IEntry;
 
 
 
-public class GetRadius extends UnaryExpression{
+public class GetRadius extends SpaceObjectInspector{
 		
 	
 		
@@ -15,37 +14,20 @@ public class GetRadius extends UnaryExpression{
 		
 	}
 	
-	@Override
-	public boolean canHaveAsOperandAt(int index, IEntry argument){
-			
-			if(index ==1){
-			return true;
-			}
-			else{
-				return false;
-				
-			}
-			
-	
-	}
+
 		
 	
 
-		@Override
-		public Double getRealValue() {
+	@Override
+	public Double getRealValue() {
 			
 			Entity entity1 = (Entity) (getOperandAt(1).getValue());
 			
 			return entity1.getRealValue().getRadius();
 			
-		}
+	}
 
-		@Override
-		public Expression getValue() {
-			
-			return new DoubleLiteral(getRealValue());
-		}
 	
 
 	
-		}
+	}

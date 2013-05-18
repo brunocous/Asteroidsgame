@@ -7,7 +7,7 @@ import asteroids.model.SpaceObject;
 
 public class Self extends BasicExpression {
 
-private final SpaceObject value;
+private SpaceObject value;
 	
 public Self(Ship ship){
 	

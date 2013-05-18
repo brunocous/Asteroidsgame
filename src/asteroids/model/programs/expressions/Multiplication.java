@@ -1,9 +1,7 @@
 package asteroids.model.programs.expressions;
 
 
-import asteroids.model.programs.IEntry;
-
-public class Multiplication extends BinaryExpression {
+public class Multiplication extends BinaryMath {
 	
 
 	public Multiplication(Expression leftExpression, Expression rightExpression){
@@ -11,18 +9,6 @@ public class Multiplication extends BinaryExpression {
 		super(leftExpression, rightExpression);
 		
 	}
-	
-	@Override
-	public boolean canHaveAsOperandAt(int index, IEntry expression){
-		
-		if(index > getNbOperands()){
-			return false;
-		}
-		
-		else{
-		return true; 
-		}
-		}
 	
 	
 
@@ -32,11 +18,6 @@ public class Multiplication extends BinaryExpression {
 		DoubleLiteral constant2 = (DoubleLiteral) (getOperandAt(2).getValue());
 		return (constant1).getRealValue()*(constant2).getRealValue();
 			
-	}
-
-	public Expression getValue(){
-		
-		return new DoubleLiteral(getRealValue());
 	}
 
 

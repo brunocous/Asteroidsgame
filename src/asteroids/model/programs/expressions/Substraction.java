@@ -1,9 +1,6 @@
 package asteroids.model.programs.expressions;
 
-
-import asteroids.model.programs.IEntry;
-
-public class Substraction extends BinaryExpression {
+public class Substraction extends BinaryMath{
 	
 
 	public Substraction(Expression leftExpression, Expression rightExpression){
@@ -12,19 +9,6 @@ public class Substraction extends BinaryExpression {
 		
 	}
 	
-	@Override
-	public boolean canHaveAsOperandAt(int index, IEntry expression){
-		
-		if(index > getNbOperands()){
-			return false;
-		}
-		
-		else{
-		return true; 
-		}
-		}
-	
-	
 
 	public Double getRealValue(){
 		
@@ -32,11 +16,6 @@ public class Substraction extends BinaryExpression {
 		DoubleLiteral constant2 = (DoubleLiteral) (getOperandAt(2).getValue());
 		return (constant1).getRealValue()-(constant2).getRealValue();
 			
-	}
-
-	public Expression getValue(){
-		
-		return new DoubleLiteral(getRealValue());
 	}
 
 
