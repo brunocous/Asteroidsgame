@@ -4,7 +4,7 @@ import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IComposedStructure;
 import asteroids.model.programs.IEntry;
 
-public class Addition extends BinaryExpression implements IComposedStructure{
+public class Addition extends BinaryExpression{
 	
 
 	public Addition(Expression leftExpression, Expression rightExpression){
