@@ -22,17 +22,16 @@ public class Addition extends BinaryExpression implements IComposedStructure{
 		
 		else{
 		return true; 
-		//TODO implementeren
 		}
 		}
 	
 	
 
-	
-	@Override
-	public double getJavaDouble(){
+	public double getRealValue(){
 		
-		return ((DoubleRepresentation)getOperandAt(1)).getJavaDouble()+((DoubleRepresentation)getOperandAt(2)).getJavaDouble();
+		Constant constant1 = (Constant) (getOperandAt(1).getValue());
+		Constant constant2 = (Constant) (getOperandAt(2).getValue());
+		return (constant1).getRealValue()+(constant2).getRealValue();
 			
 	}
 

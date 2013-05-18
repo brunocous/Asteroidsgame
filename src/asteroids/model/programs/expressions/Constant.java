@@ -4,7 +4,7 @@ import asteroids.model.programs.IEntry;
 
 
 
-public class Constant extends DoubleRepresentation{
+public class Constant extends Expression{
 
 private double value;
 
@@ -13,17 +13,17 @@ public Constant(double value){
 		this.value= (value);
 }
 	
+public Expression getValue(){
+	return new Constant(getRealValue());
+}
 
 
-
-@Override
-public double getJavaDouble(){
+public double getRealValue(){
 	
 	return value;
 	
 }
 
-@Override
 public boolean hasAsSubEntry(IEntry subEntry) {
 
 	return subEntry.equals(this);

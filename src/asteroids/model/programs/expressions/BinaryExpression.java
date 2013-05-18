@@ -6,10 +6,10 @@ import asteroids.model.programs.IEntry;
 
 public abstract class BinaryExpression extends DoubleRepresentation implements IComposedStructure{
 	
-	private IEntry argument1;
-	private IEntry argument2;
+	private Expression argument1;
+	private Expression argument2;
 	
-	public BinaryExpression(IEntry argument1, IEntry argument2) throws IllegalOperandException{
+	public BinaryExpression(Expression argument1, Expression argument2) {
 		
 		setOperandAt(1, argument1);
 		setOperandAt(2, argument2);
@@ -17,8 +17,8 @@ public abstract class BinaryExpression extends DoubleRepresentation implements I
 		
 	}
 	
-	@Override
-	public void setOperandAt(int index, IEntry argument){
+
+	public void setOperandAt(int index, Expression argument){
 		
 		if(canHaveAsOperandAt(index,argument)){
 			
@@ -48,7 +48,7 @@ public abstract class BinaryExpression extends DoubleRepresentation implements I
 
 	
 	@Override
-	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException {
+	public Expression getOperandAt(int index) throws IndexOutOfBoundsException {
 
 		if(index ==1){
 			return argument1;
