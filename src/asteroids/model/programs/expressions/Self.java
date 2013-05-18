@@ -2,7 +2,7 @@ package asteroids.model.programs.expressions;
 
 import asteroids.model.Ship;
 import asteroids.model.SpaceObject;
-import asteroids.model.programs.IEntry;
+
 
 
 public class Self extends BasicExpression {
