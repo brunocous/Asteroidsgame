@@ -5,12 +5,12 @@ import asteroids.model.programs.IEntry;
 
 
 
-	public class Bool extends BooleanRepresentation{
+	public class BooleanLiteral extends BooleanRepresentation{
 
 		private boolean value;
 		
 		
-		public Bool(boolean value) {
+		public BooleanLiteral(boolean value) {
 			this.value = (value);
 		}
 		

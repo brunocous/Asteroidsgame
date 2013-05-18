@@ -27,15 +27,18 @@ public class Addition extends BinaryExpression implements IComposedStructure{
 	
 	
 
-	public double getRealValue(){
+	public Double getRealValue(){
 		
-		Constant constant1 = (Constant) (getOperandAt(1).getValue());
-		Constant constant2 = (Constant) (getOperandAt(2).getValue());
+		DoubleLiteral constant1 = (DoubleLiteral) (getOperandAt(1).getValue());
+		DoubleLiteral constant2 = (DoubleLiteral) (getOperandAt(2).getValue());
 		return (constant1).getRealValue()+(constant2).getRealValue();
 			
 	}
 
-	
+	public Expression getValue(){
+		
+		return new DoubleLiteral(getRealValue());
+	}
 
 
 }

@@ -4,21 +4,21 @@ import asteroids.model.programs.IEntry;
 
 
 
-public class Constant extends Expression{
+public class DoubleLiteral extends Expression{
 
 private double value;
 
-public Constant(double value){
+public DoubleLiteral(double value){
 		
 		this.value= (value);
 }
 	
 public Expression getValue(){
-	return new Constant(getRealValue());
+	return new DoubleLiteral(getRealValue());
 }
 
 
-public double getRealValue(){
+public Double getRealValue(){
 	
 	return value;
 	

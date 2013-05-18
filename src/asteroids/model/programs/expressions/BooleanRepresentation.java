@@ -10,7 +10,7 @@ public abstract class BooleanRepresentation extends Expression {
 		if( !BooleanRepresentation.class.isAssignableFrom(other.getClass())){
 			return false;
 		}
-		else if(((BooleanRepresentation)other).getValue() == new Bool(this.getJavaBoolean())){
+		else if(((BooleanRepresentation)other).getValue() == new BooleanLiteral(this.getJavaBoolean())){
 			return true;
 		}
 		else{
@@ -21,9 +21,9 @@ public abstract class BooleanRepresentation extends Expression {
 
 	
 	@Override
-	public Bool getValue(){
+	public BooleanLiteral getValue(){
 		
-		return new Bool(this.getJavaBoolean());
+		return new BooleanLiteral(this.getJavaBoolean());
 	}
 
 	@Override

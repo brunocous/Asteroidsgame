@@ -1,10 +1,10 @@
 package asteroids.model.programs.expressions;
 
-import asteroids.Error.IllegalOperandException;
+
 import asteroids.model.programs.IComposedStructure;
 import asteroids.model.programs.IEntry;
 
-public abstract class BinaryExpression extends DoubleRepresentation implements IComposedStructure{
+public abstract class BinaryExpression extends Expression implements IComposedStructure{
 	
 	private Expression argument1;
 	private Expression argument2;
@@ -66,6 +66,9 @@ public abstract class BinaryExpression extends DoubleRepresentation implements I
 		
 		return 2;
 	}
+	
+
+
 	
 
 }
