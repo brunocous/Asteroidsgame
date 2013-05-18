@@ -33,12 +33,12 @@ public class Division extends BinaryExpression{
 
 	
 	@Override
-	public boolean canHaveAsOperandAt(int index, Expression expression){
+	public boolean canHaveAsOperandAt(int index, IEntry expression){
 		
 		if(index > getNbOperands()){
 			return false;
 		}
-		else if(index==2 && Util.fuzzyEquals(((DoubleLiteral)(expression.getValue())).getRealValue(),0)){
+		else if(index==2 && Util.fuzzyEquals(((DoubleLiteral)(((Expression)expression).getValue())).getRealValue(),0)){
 			return false;
 		}
 		else{
