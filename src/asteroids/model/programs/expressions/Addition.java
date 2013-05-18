@@ -12,7 +12,7 @@ public class Addition extends BinaryExpression{
 	}
 	
 	@Override
-	public boolean canHaveAsOperandAt(int index, IEntry expression){
+	public boolean canHaveAsOperandAt(int index, Expression expression){
 		
 		if(index > getNbOperands()){
 			return false;

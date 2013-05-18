@@ -35,7 +35,7 @@ public abstract class BinaryExpression extends Expression implements IComposedSt
 		}
 	}
 	
-	public abstract boolean canHaveAsOperandAt(int index, IEntry argument);
+	public abstract boolean canHaveAsOperandAt(int index, Expression argument);
 
 
 

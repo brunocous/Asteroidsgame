@@ -1,53 +1,55 @@
 package asteroids.model.programs.expressions;
 
 import asteroids.Util;
-import asteroids.Error.IllegalOperandException;
-import asteroids.model.programs.IComposedStructure;
 import asteroids.model.programs.IEntry;
 
-public class Division extends BinaryExpression implements IComposedStructure{
+public class Division extends BinaryExpression{
 	
 
-	public Division(DoubleRepresentation leftExpression, DoubleRepresentation rightExpression) throws IllegalOperandException{
+	public Division(Expression leftExpression, Expression rightExpression){
 	
 		super(leftExpression, rightExpression);
 		
 	}
 	
+
+	
+
+	public Double getRealValue(){
+		
+		DoubleLiteral constant1 = (DoubleLiteral) (getOperandAt(1).getValue());
+		DoubleLiteral constant2 = (DoubleLiteral) (getOperandAt(2).getValue());
+		return (constant1).getRealValue()/(constant2).getRealValue();
+			
+	}
+
+	public Expression getValue(){
+		
+		return new DoubleLiteral(getRealValue());
+	}
+
+
+
+
+	
 	@Override
-	public boolean canHaveAsOperandAt(int index, IEntry expression){
+	public boolean canHaveAsOperandAt(int index, Expression expression){
 		
 		if(index > getNbOperands()){
 			return false;
 		}
-		else{
-		if(!DoubleRepresentation.class.isAssignableFrom(expression.getClass())){
-			return false;
-		}
-		else{
-		if(index==2 && Util.fuzzyEquals(((DoubleRepresentation)expression).getJavaDouble(),0)){
+		else if(index==2 && Util.fuzzyEquals(((DoubleLiteral)(expression.getValue())).getRealValue(),0)){
 			return false;
 		}
 		else{
 			return true;
 		}
-		}
+		
 		
 		}
-	}
-	
-
-	
-	@Override
-	public double getJavaDouble(){
-		
-		return ((DoubleRepresentation)getOperandAt(1)).getJavaDouble()+((DoubleRepresentation)getOperandAt(2)).getJavaDouble();
-			
-	}
-
-	
-
-
 }
+	
+
+
 
 
