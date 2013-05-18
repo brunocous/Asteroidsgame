@@ -4,10 +4,10 @@ import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IComposedStructure;
 import asteroids.model.programs.IEntry;
 
-public class Addition extends BinaryDoubleRepresentation implements IComposedStructure{
+public class Addition extends BinaryExpression implements IComposedStructure{
 	
 
-	public Addition(DoubleRepresentation leftExpression, DoubleRepresentation rightExpression) throws IllegalOperandException{
+	public Addition(Expression leftExpression, Expression rightExpression){
 	
 		super(leftExpression, rightExpression);
 		
@@ -19,16 +19,13 @@ public class Addition extends BinaryDoubleRepresentation implements IComposedStr
 		if(index > getNbOperands()){
 			return false;
 		}
-		else{
-		if(!DoubleRepresentation.class.isAssignableFrom(expression.getClass())){
-			return false;
-		}
+		
 		else{
 		return true; 
 		//TODO implementeren
 		}
 		}
-	}
+	
 	
 
 	

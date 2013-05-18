@@ -4,7 +4,7 @@ import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IComposedStructure;
 import asteroids.model.programs.IEntry;
 
-public class Multiplication extends BinaryDoubleRepresentation implements IComposedStructure{
+public class Multiplication extends BinaryExpression implements IComposedStructure{
 	
 
 	public Multiplication(DoubleRepresentation leftExpression, DoubleRepresentation rightExpression) throws IllegalOperandException{

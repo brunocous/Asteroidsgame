@@ -5,7 +5,7 @@ import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IComposedStructure;
 import asteroids.model.programs.IEntry;
 
-public class Division extends BinaryDoubleRepresentation implements IComposedStructure{
+public class Division extends BinaryExpression implements IComposedStructure{
 	
 
 	public Division(DoubleRepresentation leftExpression, DoubleRepresentation rightExpression) throws IllegalOperandException{

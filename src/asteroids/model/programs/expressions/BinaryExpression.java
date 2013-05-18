@@ -4,12 +4,12 @@ import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IComposedStructure;
 import asteroids.model.programs.IEntry;
 
-public abstract class BinaryDoubleRepresentation extends DoubleRepresentation implements IComposedStructure{
+public abstract class BinaryExpression extends DoubleRepresentation implements IComposedStructure{
 	
 	private IEntry argument1;
 	private IEntry argument2;
 	
-	public BinaryDoubleRepresentation(IEntry argument1, IEntry argument2) throws IllegalOperandException{
+	public BinaryExpression(IEntry argument1, IEntry argument2) throws IllegalOperandException{
 		
 		setOperandAt(1, argument1);
 		setOperandAt(2, argument2);
@@ -18,7 +18,7 @@ public abstract class BinaryDoubleRepresentation extends DoubleRepresentation im
 	}
 	
 	@Override
-	public void setOperandAt(int index, IEntry argument) throws IllegalOperandException{
+	public void setOperandAt(int index, IEntry argument){
 		
 		if(canHaveAsOperandAt(index,argument)){
 			
@@ -31,7 +31,7 @@ public abstract class BinaryDoubleRepresentation extends DoubleRepresentation im
 			
 		}
 		else{
-			throw new IllegalOperandException();
+			
 		}
 	}
 	
