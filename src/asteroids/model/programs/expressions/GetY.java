@@ -1,44 +1,51 @@
 package asteroids.model.programs.expressions;
 
-import asteroids.Error.IllegalOperandException;
-import asteroids.model.programs.IComposedStructure;
+
 import asteroids.model.programs.IEntry;
 
 
 
-public class GetY extends UnaryExpression implements IComposedStructure{
+public class GetY extends UnaryExpression{
 		
-
+	
 		
-	public GetY(DoubleRepresentation argument) throws IllegalOperandException{
+	public GetY(Expression argument) {
 		
 		super(argument);
 		
 	}
 	
-		public boolean canHaveAsOperandAt(int index, IEntry argument){
+	@Override
+	public boolean canHaveAsOperandAt(int index, IEntry argument){
 			
 			if(index ==1){
-			if(EntityRepresentation.class.isAssignableFrom(argument.getClass())){
-				return true;
+			return true;
 			}
 			else{
 				return false;
-				//TODO implementeren
+				
 			}
-			}
-			else {
-				return false;
-			}
-		}
+			
+	
+	}
 		
-		public double getJavaDouble(){
+	
+
+		@Override
+		public Double getRealValue() {
 			
-			return (((EntityRepresentation)getOperandAt(1)).getSpaceObject().getPos().getY());
+			Entity entity1 = (Entity) (getOperandAt(1).getValue());
 			
+			return entity1.getRealValue().getPos().getY();
+			
+		}
+
+		@Override
+		public Expression getValue() {
+			
+			return new DoubleLiteral(getRealValue());
 		}
 	
 
-		
 	
 		}

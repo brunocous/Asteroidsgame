@@ -4,13 +4,13 @@ import asteroids.model.programs.IEntry;
 
 
 
-public class DoubleLiteral extends Expression{
+public class DoubleLiteral extends BasicExpression{
 
 private double value;
 
 public DoubleLiteral(double value){
 		
-		this.value= (value);
+		super(value);
 }
 	
 public Expression getValue(){
@@ -24,10 +24,6 @@ public Double getRealValue(){
 	
 }
 
-public boolean hasAsSubEntry(IEntry subEntry) {
-
-	return subEntry.equals(this);
-}
 
 
 }

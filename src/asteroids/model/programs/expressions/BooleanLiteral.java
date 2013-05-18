@@ -5,13 +5,13 @@ import asteroids.model.programs.IEntry;
 
 
 
-	public class BooleanLiteral extends Expression{
+	public class BooleanLiteral extends BasicExpression{
 
 		private boolean value;
 		
 		
 		public BooleanLiteral(boolean value) {
-			this.value = (value);
+			super(value);
 		}
 		
 
@@ -26,13 +26,6 @@ import asteroids.model.programs.IEntry;
 		return new BooleanLiteral(getRealValue());
 	}
 
-	@Override
-	public boolean hasAsSubEntry(IEntry expression) {
-		
-		return expression.equals(this);
-	}
-	
-	
 
 
 	}

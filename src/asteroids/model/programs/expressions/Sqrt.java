@@ -1,44 +1,50 @@
 package asteroids.model.programs.expressions;
 
-import asteroids.Util;
-import asteroids.Error.IllegalOperandException;
-import asteroids.model.programs.IComposedStructure;
 import asteroids.model.programs.IEntry;
 
 
 
-public class Sqrt extends UnaryExpression implements IComposedStructure{
+public class Sqrt extends UnaryExpression{
 		
-
+	
 		
-	public Sqrt(DoubleRepresentation argument) throws IllegalOperandException{
+	public Sqrt(Expression argument) {
 		
 		super(argument);
 		
 	}
 	
-		public boolean canHaveAsOperandAt(int index, IEntry argument){
+	@Override
+	public boolean canHaveAsOperandAt(int index, IEntry argument){
 			
 			if(index ==1){
-			if(DoubleRepresentation.class.isAssignableFrom(argument.getClass()) && (!Util.fuzzyLessThanOrEqualTo(((DoubleRepresentation)argument).getJavaDouble(),0) || Util.fuzzyEquals(((DoubleRepresentation)argument).getJavaDouble(),0))){
-				return true;
+			return true;
 			}
 			else{
 				return false;
 				//TODO implementeren
 			}
-			}
-			else {
-				return false;
-			}
-		}
+			
+	
+	}
 		
-		public double getJavaDouble(){
+	
+
+		@Override
+		public Double getRealValue() {
 			
-			return Math.sqrt(((DoubleRepresentation)getOperandAt(1)).getJavaDouble());
+			DoubleLiteral constant1 = (DoubleLiteral) (getOperandAt(1).getValue());
+			
+			return Math.sqrt(constant1.getRealValue());
 			
 		}
+
+		@Override
+		public Expression getValue() {
+			
+			return new DoubleLiteral(getRealValue());
+		}
 	
-	
+
 	
 		}

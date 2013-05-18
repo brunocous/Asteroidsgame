@@ -1,44 +1,49 @@
 package asteroids.model.programs.expressions;
 
-import asteroids.Error.IllegalOperandException;
-import asteroids.model.programs.IComposedStructure;
 import asteroids.model.programs.IEntry;
 
 
 
-public class Sine extends UnaryExpression implements IComposedStructure{
+public class Sine extends UnaryExpression{
 		
-
+	
 		
-	public Sine(DoubleRepresentation argument) throws IllegalOperandException{
+	public Sine(Expression argument) {
 		
 		super(argument);
 		
 	}
 	
-		public boolean canHaveAsOperandAt(int index, IEntry argument){
+	@Override
+	public boolean canHaveAsOperandAt(int index, IEntry argument){
 			
 			if(index ==1){
-			if(DoubleRepresentation.class.isAssignableFrom(argument.getClass())){
-				return true;
+			return true;
 			}
 			else{
 				return false;
 				//TODO implementeren
 			}
-			}
-			else {
-				return false;
-			}
-		}
+			
+	
+	}
 		
-		public double getJavaDouble(){
-			
-			return Math.sin(((DoubleRepresentation)getOperandAt(1)).getJavaDouble());
-			
-		}
 	
 
+		@Override
+		public Double getRealValue() {
+			
+			DoubleLiteral constant1 = (DoubleLiteral) (getOperandAt(1).getValue());
+			
+			return Math.sin(constant1.getRealValue());
+			
+		}
+
+		@Override
+		public Expression getValue() {
+			
+			return new DoubleLiteral(getRealValue());
+		}
 	
 
 	

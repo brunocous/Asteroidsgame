@@ -5,24 +5,26 @@ import asteroids.model.SpaceObject;
 import asteroids.model.programs.IEntry;
 
 
-public class Self extends EntityRepresentation {
+public class Self extends BasicExpression {
 
-	private final SpaceObject value;
+private final SpaceObject value;
 	
 public Self(Ship ship){
 	
-	value =ship;
+	super(ship);
 	
 }
 
-public SpaceObject getSpaceObject(){
+public SpaceObject getRealValue(){
 	return value;
 }
 
-@Override
-public boolean hasAsSubEntry(IEntry subEntry) {
+
+
+public Expression getValue(){
 	
-	return subEntry.equals(this);
+	return new Entity(value);
+	
 }
 }
 
