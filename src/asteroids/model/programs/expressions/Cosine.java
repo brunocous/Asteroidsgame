@@ -6,7 +6,6 @@ package asteroids.model.programs.expressions;
 
 public class Cosine extends UnaryMath{
 		
-	
 		
 	public Cosine(Expression argument) {
 		

@@ -20,10 +20,10 @@ public SpaceObjectInspector(Expression argument) {
 				return false;
 				
 			}
-			
-	
+
 	}
-		
+			
+
 	
 
 public abstract Double getRealValue();
@@ -33,5 +33,10 @@ public Expression getValue() {
 	return new DoubleLiteral(getRealValue());
 }
 	
+@Override
+public boolean isTypeChecked(){
+	
+	return getOperandAt(1).getValue().getClass().isAssignableFrom(Entity.class);
+}
 
 }

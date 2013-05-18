@@ -31,6 +31,11 @@ public abstract Double getRealValue();
 		return new DoubleLiteral(getRealValue());
 	}
 
+	@Override
+	public boolean isTypeChecked(){
+		return ( getOperandAt(1).getValue().getClass().isAssignableFrom(DoubleLiteral.class)
+				&& getOperandAt(2).getValue().getClass().isAssignableFrom(DoubleLiteral.class));
+	}
 
 
 }

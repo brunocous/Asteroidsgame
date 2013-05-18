@@ -6,9 +6,7 @@ import asteroids.model.programs.IEntry;
 
 
 public class Negation extends UnaryExpression{
-		
-	
-		
+
 	public Negation(Expression argument) {
 		
 		super(argument);
@@ -46,6 +44,9 @@ public class Negation extends UnaryExpression{
 			return new BooleanLiteral(getRealValue());
 		}
 	
-
+		@Override
+		public boolean isTypeChecked(){
+			return getOperandAt(1).getClass().isAssignableFrom(BooleanLiteral.class);
+		}
 	
 		}

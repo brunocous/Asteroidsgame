@@ -4,4 +4,5 @@ public interface IEntry extends IStructure{
 	
 public abstract boolean equals(Object other);
 public abstract String toString();
+public abstract boolean isTypeChecked();
 }
