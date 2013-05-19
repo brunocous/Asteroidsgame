@@ -1,6 +1,7 @@
 package asteroids.model.programs.expressions;
 
 import asteroids.model.programs.IEntry;
+import asteroids.model.programs.type.Type;
 
 
 
@@ -9,6 +10,7 @@ public class Variable extends Expression{
 
 private Expression value;
 private final String name;
+private Type type;
 
 public Variable(String name){
 	
@@ -19,7 +21,7 @@ public Variable(String name){
 	this.name = name;
 	}
 	this.value= null;
-	
+	this.type = null;
 }
 	
 public void setValue(Expression value) {
@@ -75,7 +77,17 @@ public boolean hasAsSubEntry(IEntry subEntry) {
 public boolean isTypeChecked(){
 	return getVariableValue().isTypeChecked();
 }
-
+@Override
+public void setShip(Entity ship){
+	assert true;
+}
+public void setType(Type type){
+	if(Type.isValidType(type))
+		this.type = type;
+}
+public Type getType(){
+	return type;
+}
 
 }
 

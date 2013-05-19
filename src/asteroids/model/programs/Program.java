@@ -6,18 +6,18 @@ import java.util.Map;
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.Ship;
 import asteroids.model.programs.expressions.Entity;
-import asteroids.model.programs.expressions.Expression;
 import asteroids.model.programs.statements.Statement;
+import asteroids.model.programs.type.Type;
 
 public class Program {
 
-	private final Map<String,Object> globals;
+	private final Map<String,Type> globals;
 	private final Statement statement;
 	private Ship ship = null;
 	private final List<String> errors;
 	private boolean isRunning;
 
-	public Program(Map<String,Object> globals, Statement statement, List<String> errors){
+	public Program(Map<String,Type> globals, Statement statement, List<String> errors){
 		if(!canHaveAsGlobals(globals))
 			throw new IllegalArgumentException();
 		else
@@ -30,14 +30,14 @@ public class Program {
 		this.errors = errors;
 	}
 
-	public Map<String,Object> getGlobals() {
+	public Map<String,Type> getGlobals() {
 		return globals;
 	}
 
 	public Statement getStatement() {
 		return statement;
 	}
-	public boolean canHaveAsGlobals(Map<String,Object> globals){
+	public boolean canHaveAsGlobals(Map<String,Type> globals){
 		return globals != null;
 	}
 	public boolean canHaveAsStatement(Statement statement){
@@ -82,5 +82,9 @@ public class Program {
 
 	public void setIsRunning(boolean isRunning) {
 		this.isRunning = isRunning;
+	}
+	public boolean typeCheck(){
+		
+		return statement.isTypeChecked();
 	}
 }

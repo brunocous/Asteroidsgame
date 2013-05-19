@@ -8,7 +8,7 @@ public class Thrust extends ShipActionStatement {
 
 	private boolean enable;
 	
-	public Thrust(boolean enable) throws IllegalOperandException{ 
+	public Thrust(boolean enable){ 
 		super();
 		this.enable = enable;
 	}

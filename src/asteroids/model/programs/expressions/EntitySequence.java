@@ -9,7 +9,7 @@ import asteroids.Error.IllegalOperandException;
 import asteroids.model.*;
 import asteroids.model.programs.IComposedStructure;
 import asteroids.model.programs.IEntry;
-import asteroids.model.programs.kind.Kind;
+import asteroids.model.programs.type.Type;
 
 public class EntitySequence extends Expression implements IComposedStructure{
 
@@ -75,10 +75,10 @@ public class EntitySequence extends Expression implements IComposedStructure{
 				&& operand != null
 				&& operand.getClass().isAssignableFrom(Entity.class));
 	}
-	public static EntitySequence getEntitySequence(World world, Kind kind){
+	public static EntitySequence makeEntitySequence(World world, Type type){
 		     EntitySequence result = new EntitySequence();
 	        for(SpaceObject obj: world.getAllSpaceObjects()){
-	        	if(obj.getClass().isAssignableFrom(kind.getClassReference()))
+	        	if(obj.getClass().isAssignableFrom(type.getClassReference()))
 		         try{result.addAsEntity(new Entity(obj));
 		         
 		         }catch(IllegalOperandException e){
@@ -95,7 +95,10 @@ public class EntitySequence extends Expression implements IComposedStructure{
 	public Expression getValue() {
 		return this;
 	}
-		
-		  
+	
+	@Override
+	public void setShip(Entity ship){
+		assert true;
+	}
 
 }

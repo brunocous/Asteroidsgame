@@ -4,6 +4,7 @@ import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.expressions.Expression;
+import asteroids.model.programs.type.Type;
 
 public class IfThenElse extends StructuralStatement {
 
@@ -11,10 +12,10 @@ public class IfThenElse extends StructuralStatement {
 	private Statement ifBody;
 	private Statement elseBody;
 	
-	public IfThenElse(Expression condition, Statement ifBody, Statement elseBody) throws IllegalOperandException{
-		setOperandAt(1,condition);
-		setOperandAt(2,ifBody);
-		setOperandAt(3,elseBody);
+	public IfThenElse(Expression condition, Statement ifBody, Statement elseBody){
+		this.condition = condition;
+		this.ifBody = ifBody;
+		this.elseBody = elseBody;
 	}
 	@Override
 	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException {
@@ -67,7 +68,8 @@ public class IfThenElse extends StructuralStatement {
 	public boolean canHaveAsOperandAt(int index, IEntry operand){
 		if(super.canHaveAsOperandAt(index, operand)){
 			if(index == 1 && operand.getClass().isAssignableFrom(Expression.class))
-				return ((Expression) operand).getRealValue().getClass().isAssignableFrom(boolean.class);
+				return ((Expression) operand).getRealValue().getClass().isAssignableFrom(Type.BOOLEAN.getClassReference());
+			
 			if((index == 2 || index == 3) && operand.getClass().isAssignableFrom(Statement.class))
 				return ((Statement) operand).isTypeChecked();
 		}

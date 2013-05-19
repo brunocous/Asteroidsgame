@@ -6,20 +6,20 @@ import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.expressions.EntitySequence;
 import asteroids.model.programs.expressions.Expression;
 import asteroids.model.programs.expressions.Variable;
-import asteroids.model.programs.kind.Kind;
+import asteroids.model.programs.type.Type;
 
 public class Foreach extends StructuralStatement {
 
 	private Expression entities = null;
 	private Expression localVar;
 	private Statement body;
-	private final Kind kind;
+	private final Type type;
 	
-	public Foreach(Kind kind, Variable localVar, StructuralStatement body) throws IllegalOperandException{
+	public Foreach(Type type, Variable localVar, StructuralStatement body) throws IllegalOperandException{
 		this.localVar = localVar;
 		this.body = body;
-		if(canHaveAsOperandAt(4, kind))
-			this.kind = kind;
+		if(canHaveAsOperandAt(4, type))
+			this.type = type;
 		else throw new IllegalOperandException();
 	}
 	@Override
@@ -31,7 +31,7 @@ public class Foreach extends StructuralStatement {
 		if(index == 3)
 			return getBody();
 		if(index == 4)
-			return getKind();
+			return getType();
 		throw new IndexOutOfBoundsException();
 		
 	}
@@ -44,8 +44,8 @@ public class Foreach extends StructuralStatement {
 	public Statement getBody(){
 		return body;
 	}
-	public Kind getKind(){
-		return kind;
+	public Type getType(){
+		return type;
 	}
 
 	@Override
@@ -77,8 +77,8 @@ public class Foreach extends StructuralStatement {
 				return !((StructuralStatement) operand).containsAnActionStatement() 
 						&& ((StructuralStatement) operand).isTypeChecked();
 			}
-			if(index == 4 && operand.getClass().isAssignableFrom(Kind.class))
-				return Kind.isValidKind((Kind) operand);
+			if(index == 4 && operand.getClass().isAssignableFrom(Type.class))
+				return Type.isValidType((Type) operand);
 		}
 			return false;
 	}
@@ -91,7 +91,7 @@ public class Foreach extends StructuralStatement {
 		}
 	}
 	public void setShip(Entity ship) throws IllegalOperandException{
-		setOperandAt(1, EntitySequence.getEntitySequence( ship.getRealValue().getWorld(), getKind()));
+		setOperandAt(1, EntitySequence.makeEntitySequence( ship.getRealValue().getWorld(), getType()));
 		getBody().setShip( ship );
 	}
 	@Override

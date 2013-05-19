@@ -12,23 +12,25 @@ public class Assignement extends StructuralStatement{
 
 	private Expression var;
 	private Expression newValue;
+	private String variableName;
 	
-	public Assignement(Expression var, Expression newValue){
-		this.var = var;
+	public Assignement(String variableName, Expression newValue){
+		this.var = null;
 		this.newValue = newValue;
-		
+		this.variableName = variableName;
 			
 	}
 	
 	@Override
 	public IEntry getOperandAt(int index) 
 		throws IndexOutOfBoundsException {
-			if ((index != 1) && (index != 2))
-				throw new IndexOutOfBoundsException();
 			if (index == 1)
 				return getVar();
-			else
+			if ((index == 2))
 				return getNewValue();
+			if ((index == 3))
+				return getVariableName();
+			throw new IndexOutOfBoundsException();
 	}
 
 	@Override
@@ -46,7 +48,7 @@ public class Assignement extends StructuralStatement{
 			if(index == 1)
 				return operand.getClass().isAssignableFrom(Variable.class);
 			if(index == 2 && operand.getClass().isAssignableFrom(Expression.class))
-				return ((Variable) getVar()).getType().getClass().isAssignableFrom(((Expression) operand).getRealValue().getClass())
+				return ((Variable) getVar()).getType().getClassReference().isAssignableFrom(((Expression) operand).getRealValue().getClass())
 						&& ((Expression) operand).isTypeChecked();
 		return false;
 				
@@ -80,6 +82,10 @@ public class Assignement extends StructuralStatement{
 	}
 	public Expression getNewValue(){
 		return newValue;
+	}
+
+	public String getVariableName() {
+		return variableName;
 	}
 	}
 

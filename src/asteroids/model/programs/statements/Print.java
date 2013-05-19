@@ -9,7 +9,7 @@ public class Print extends StructuralStatement {
 
 	private Expression expression;
 	
-	public Print(Expression expression)throws IllegalOperandException{
+	public Print(Expression expression){
 		this.expression = expression;
 	}
 	@Override

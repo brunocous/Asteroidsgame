@@ -4,12 +4,13 @@ import asteroids.Error.IllegalOperandException;
 import asteroids.model.*;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.expressions.Expression;
+import asteroids.model.programs.type.Type;
 
 public class Turn extends ShipActionStatement {
 
 	private Expression amount;
 	
-	public Turn( Expression amount) throws IllegalOperandException{
+	public Turn( Expression amount){
 		super();
 		this.amount = amount;
 	}
@@ -37,7 +38,7 @@ public class Turn extends ShipActionStatement {
 	public boolean canHaveAsOperandAt( int index, IEntry operand){
 		if(super.canHaveAsOperandAt(index, operand) && index == 2 
 				&& operand.getClass().isAssignableFrom(Expression.class))
-				return ((Expression) operand).getRealValue().getClass().isAssignableFrom(double.class);
+				return ((Expression) operand).getRealValue().getClass().isAssignableFrom(Type.DOUBLE.getClassReference());
 		return false;
 	}
 	@Override

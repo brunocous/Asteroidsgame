@@ -51,5 +51,10 @@ public abstract class UnaryExpression extends Expression implements IComposedStr
 		
 		return 1;
 	}
+	
+	@Override
+	public void setShip(Entity ship){
+		getOperandAt(1).setShip(ship);
+	}
 
 }

@@ -23,4 +23,8 @@ public abstract class BasicExpression extends Expression{
 		return true;
 	}
 
+	@Override
+	public void setShip(Entity ship){
+		assert true;
+	}
 }

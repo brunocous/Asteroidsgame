@@ -64,7 +64,11 @@ public abstract class BinaryExpression extends Expression implements IComposedSt
 		
 		return 2;
 	}
-	
+	@Override
+	public void setShip(Entity ship){
+		getOperandAt(1).setShip(ship);
+		getOperandAt(2).setShip(ship);
+	}
 
 
 	

@@ -2,167 +2,143 @@ package asteroids.model.programs;
 
 import java.util.List;
 
-import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.expressions.*;
 import asteroids.model.programs.parsing.ProgramFactory;
 import asteroids.model.programs.statements.*;
+import asteroids.model.programs.type.*;
 
-public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement, Object>{
+public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement, Type>{
 
 	@Override
 	public Expression createDoubleLiteral(int line, int column, double d) {
-		// TODO Auto-generated method stub
-		return null;
+		return new DoubleLiteral(d);
 	}
 
 	@Override
 	public Expression createBooleanLiteral(int line, int column, boolean b) {
-		// TODO Auto-generated method stub
-		return null;
+		return new BooleanLiteral(b);
 	}
 
 	@Override
 	public Expression createAnd(int line, int column, Expression e1,
 			Expression e2) {
-		// TODO Auto-generated method stub
-		return null;
+		return new LogicAnd(e1,e2);
 	}
 
 	@Override
 	public Expression createOr(int line, int column, Expression e1,
 			Expression e2) {
-		// TODO Auto-generated method stub
-		return null;
+		return new LogicOr(e1,e2);
 	}
 
 	@Override
 	public Expression createNot(int line, int column, Expression e) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Negation(e);
 	}
 
 	@Override
 	public Expression createNull(int line, int column) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Null();
 	}
 
 	@Override
 	public Expression createSelf(int line, int column) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Self();
 	}
 
 	@Override
 	public Expression createGetX(int line, int column, Expression e) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GetX(e);
 	}
 
 	@Override
 	public Expression createGetY(int line, int column, Expression e) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GetY(e);
 	}
 
 	@Override
 	public Expression createGetVX(int line, int column, Expression e) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GetVX(e);
 	}
 
 	@Override
 	public Expression createGetVY(int line, int column, Expression e) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GetVY(e);
 	}
 
 	@Override
 	public Expression createGetRadius(int line, int column, Expression e) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GetRadius(e);
 	}
 
 	@Override
 	public Expression createVariable(int line, int column, String name) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Variable(name);
 	}
 
 	@Override
 	public Expression createLessThan(int line, int column, Expression e1,
 			Expression e2) {
-		// TODO Auto-generated method stub
-		return null;
+		return new LessThan(e1,e2);
 	}
 
 	@Override
 	public Expression createGreaterThan(int line, int column, Expression e1,
 			Expression e2) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GreaterThan(e1,e2);
 	}
 
 	@Override
 	public Expression createLessThanOrEqualTo(int line, int column,
 			Expression e1, Expression e2) {
-		// TODO Auto-generated method stub
-		return null;
+		return new LessThanOrEqualTo(e1,e2);
 	}
 
 	@Override
 	public Expression createGreaterThanOrEqualTo(int line, int column,
 			Expression e1, Expression e2) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GreaterThanOrEqualTo(e1,e2);
 	}
 
 	@Override
 	public Expression createEquality(int line, int column, Expression e1,
 			Expression e2) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Equals(e1,e2);
 	}
 
 	@Override
 	public Expression createInequality(int line, int column, Expression e1,
 			Expression e2) {
-		// TODO Auto-generated method stub
-		return null;
+		return new NotEqualTo(e1,e2);
 	}
 
 	@Override
 	public Expression createAdd(int line, int column, Expression e1,
 			Expression e2) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Addition(e1,e2);
 	}
 
 	@Override
 	public Expression createSubtraction(int line, int column, Expression e1,
 			Expression e2) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Substraction(e1,e2);
 	}
 
 	@Override
 	public Expression createMul(int line, int column, Expression e1,
 			Expression e2) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Multiplication(e1,e2);
 	}
 
 	@Override
 	public Expression createDivision(int line, int column, Expression e1,
 			Expression e2) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Division(e1,e2);
 	}
 
 	@Override
 	public Expression createSqrt(int line, int column, Expression e) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Sqrt(e);
 	}
 
 	@Override
@@ -173,26 +149,22 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 
 	@Override
 	public Expression createSin(int line, int column, Expression e) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Sine(e);
 	}
 
 	@Override
 	public Expression createCos(int line, int column, Expression e) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Cosine(e);
 	}
 
 	@Override
 	public Statement createEnableThruster(int line, int column) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Thrust(true);
 	}
 
 	@Override
 	public Statement createDisableThruster(int line, int column) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Thrust(false);
 	}
 
 	@Override
@@ -202,81 +174,85 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 
 	@Override
 	public Statement createTurn(int line, int column, Expression angle) {
-		try{return new Turn( (DoubleRepresentation) angle);
-		
-		}catch(IllegalOperandException e){
-			return null;
-		}
+		return new Turn(angle);
 	}
 
 	@Override
 	public Statement createAssignment(int line, int column, String variable,
 			Expression rhs) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Assignement(variable, rhs);
 	}
 
 	@Override
 	public Statement createIf(int line, int column, Expression condition,
 			Statement then, Statement otherwise) {
-		// TODO Auto-generated method stub
-		return null;
+		return new IfThenElse(condition, then, otherwise);
 	}
 
 	@Override
 	public Statement createWhile(int line, int column, Expression condition,
 			Statement body) {
-		// TODO Auto-generated method stub
-		return null;
+		return new While(condition,body);
 	}
 
 	@Override
+	//TODO variabelen
 	public Statement createForeach(int line, int column,
 			asteroids.model.programs.parsing.ProgramFactory.ForeachType type,
 			String variableName, Statement body) {
-		// TODO Auto-generated method stub
+		//return new Foreach(convertForeachType(type),variableName,body);
 		return null;
 	}
 
 	@Override
 	public Statement createSkip(int line, int column) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Skip();
 	}
 
 	@Override
 	public Statement createSequence(int line, int column,
 			List<Statement> statements) {
-		
-		try{return new Sequence(statements);
-		
-		}catch(IllegalOperandException e){
-			return null;
-		}
+		return new Sequence(statements);
 	}
 
 	@Override
 	public Statement createPrint(int line, int column, Expression e) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Print(e);
 	}
 
 	@Override
-	public Object createDoubleType() {
-		return DoubleRepresentation.class;
+	public Type createDoubleType() {
+		return Type.DOUBLE;
 	}
 
 	@Override
-	public Object createBooleanType() {
-		return BooleanRepresentation.class;
+	public Type createBooleanType() {
+		return Type.BOOLEAN;
 	}
 
 	@Override
-	public Object createEntityType() {
-		return EntityRepresentation.class;
+	public Type createEntityType() {
+		return Type.ANY;
+	}
+	private static Type convertForeachType(ForeachType type){
+		Type result;
+		switch(type){
+		case ANY:
+			result = Type.ANY; 
+			break;
+		case BULLET:
+			result = Type.BULLET; 
+			break;
+		case SHIP:
+			result = Type.SHIP; 
+			break;
+		case ASTEROID:
+			result = Type.ASTEROID; 
+			break;
+		default: result = null; break;
+		}
+		return result;
 	}
 
-
-	
 
 }

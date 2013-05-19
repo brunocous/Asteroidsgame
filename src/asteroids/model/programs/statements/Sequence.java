@@ -16,7 +16,7 @@ public class Sequence extends StructuralStatement {
 	public Sequence(){
 		statements = new ArrayList<Statement>();
 	}
-	public Sequence(List<Statement> statementsToAdd) throws IllegalOperandException{
+	public Sequence(List<Statement> statementsToAdd){
 		this();
 		addAllStatements(statementsToAdd);
 	}
@@ -48,10 +48,10 @@ public class Sequence extends StructuralStatement {
 		getAllStatements().add(index-1, (Statement) operand);
 
 	}
-	public void addAsStatement(Statement statement) throws IllegalOperandException{
-		setOperandAt(getNbOperands()+1,statement);
+	public void addAsStatement(Statement statement) {
+			getAllStatements().add(statement);
 	}
-	public void addAllStatements(List<Statement> statementsToAdd) throws IllegalOperandException{
+	public void addAllStatements(List<Statement> statementsToAdd) {
 		for(Statement statement: statementsToAdd){
 			addAsStatement(statement);	
 		}

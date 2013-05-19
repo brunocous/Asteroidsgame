@@ -9,17 +9,16 @@ public class Self extends BasicExpression {
 
 private SpaceObject value;
 	
-public Self(Ship ship){
-	
-	super(ship);
-	
+public Self(){
+	super(null);
 }
 
 public SpaceObject getRealValue(){
 	return value;
 }
-public void setShip(Ship obj){
-	this.value = obj;
+@Override
+public void setShip(Entity ship){
+	this.value = ship.getRealValue();
 }
 
 

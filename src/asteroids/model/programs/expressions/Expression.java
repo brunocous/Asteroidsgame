@@ -44,6 +44,7 @@ public abstract class Expression implements IEntry{
 			return null;
 		}
 	}
+	public abstract void setShip(Entity ship);
 
 	
 }

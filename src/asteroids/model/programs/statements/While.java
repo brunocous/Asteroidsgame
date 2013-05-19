@@ -1,18 +1,17 @@
 package asteroids.model.programs.statements;
 
-import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
-
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.expressions.Expression;
 import asteroids.model.programs.expressions.Entity;
+import asteroids.model.programs.type.Type;
 
 public class While extends StructuralStatement {
 
 	private Expression condition;
 	private Statement body;
 	
-	public While(Expression condition, Statement body)throws IllegalOperandException{
+	public While(Expression condition, Statement body){
 		this.condition = condition;
 		this.body = body;
 	}
@@ -51,7 +50,7 @@ public class While extends StructuralStatement {
 	public boolean canHaveAsOperandAt(int index, IEntry operand){
 		if(super.canHaveAsOperandAt(index, operand)){
 			if(index == 1 && operand.getClass().isAssignableFrom(Expression.class))
-				return ((Expression) operand).getRealValue().getClass().isAssignableFrom(boolean.class);
+				return ((Expression) operand).getRealValue().getClass().isAssignableFrom(Type.BOOLEAN.getClassReference());
 			if(index == 2 && operand.getClass().isAssignableFrom(Statement.class))
 				return true;
 		}
