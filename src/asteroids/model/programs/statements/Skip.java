@@ -44,5 +44,9 @@ public class Skip extends ActionStatement {
 		assert true;
 		
 	}
+	@Override
+	public boolean isTypeChecked() {
+		return true;
+	}
 
 }

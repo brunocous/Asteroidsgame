@@ -1,23 +1,23 @@
 package asteroids.model.programs.statements;
 
 import asteroids.Error.IllegalOperandException;
-import asteroids.Error.IllegalVariableValueException;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.expressions.EntitySequence;
+import asteroids.model.programs.expressions.Expression;
 import asteroids.model.programs.expressions.Variable;
 import asteroids.model.programs.kind.Kind;
 
 public class Foreach extends StructuralStatement {
 
-	private EntitySequence entities = null;
-	private Variable localVar;
-	private StructuralStatement body;
+	private Expression entities = null;
+	private Expression localVar;
+	private Statement body;
 	private final Kind kind;
 	
 	public Foreach(Kind kind, Variable localVar, StructuralStatement body) throws IllegalOperandException{
-		setOperandAt(2,localVar);
-		setOperandAt(3,body);
+		this.localVar = localVar;
+		this.body = body;
 		if(canHaveAsOperandAt(4, kind))
 			this.kind = kind;
 		else throw new IllegalOperandException();
@@ -25,15 +25,27 @@ public class Foreach extends StructuralStatement {
 	@Override
 	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException {
 		if(index == 1)
-			return entities;
+			return getEntities();
 		if(index == 2)
-			return localVar;
+			return getLocalVar();
 		if(index == 3)
-			return body;
+			return getBody();
 		if(index == 4)
-			return kind;
+			return getKind();
 		throw new IndexOutOfBoundsException();
 		
+	}
+	public Expression getEntities(){
+		return entities;
+	}
+	public Expression getLocalVar(){
+		return localVar;
+	}
+	public Statement getBody(){
+		return body;
+	}
+	public Kind getKind(){
+		return kind;
 	}
 
 	@Override
@@ -47,11 +59,11 @@ public class Foreach extends StructuralStatement {
 		if(!canHaveAsOperandAt(index,operand))
 			throw new IllegalOperandException();
 		if(index == 1)
-			this.entities = (EntitySequence) operand;
+			this.entities = (Expression) operand;
 		if(index == 2)
-			this.localVar = (Variable) operand;
+			this.localVar = (Expression) operand;
 		if(index == 3)
-			this.body = (StructuralStatement) operand;
+			this.body = (Statement) operand;
 
 	}
 	@Override
@@ -62,10 +74,8 @@ public class Foreach extends StructuralStatement {
 			if(index == 2 && operand.getClass().isAssignableFrom(Variable.class))
 				return true;
 			if(index == 3 && operand.getClass().isAssignableFrom(StructuralStatement.class)){
-				if(operand.getClass().isAssignableFrom(Sequence.class))
-					return !((Sequence) operand).containsActionStatements();
-				else 
-					return true;
+				return !((StructuralStatement) operand).containsAnActionStatement() 
+						&& ((StructuralStatement) operand).isTypeChecked();
 			}
 			if(index == 4 && operand.getClass().isAssignableFrom(Kind.class))
 				return Kind.isValidKind((Kind) operand);
@@ -75,23 +85,24 @@ public class Foreach extends StructuralStatement {
 
 	@Override
 	public void execute() {
-		for(int pos=1;pos <= ((EntitySequence) getOperandAt(1)).getNbOperands();pos++){
-			try{ Entity entityVar = (Entity) ((Variable) getOperandAt(pos)).getValue();
-			((Variable) getOperandAt(2)).setValue(entityVar);
-			((StructuralStatement) getOperandAt(3)).execute();
-			}catch(IllegalVariableValueException e){
-				assert !((Variable) getOperandAt(2)).canHaveAsValue((Entity) ((Variable) getOperandAt(pos)).getValue());
-			}
+		for(Entity entity: ((EntitySequence) getEntities()).getAllEntities()){
+			((Variable) getLocalVar()).setValue(entity); 
+			getBody().execute();
 		}
-
 	}
 	public void setShip(Entity ship) throws IllegalOperandException{
-		setOperandAt(1, EntitySequence.getEntitySequence( ship.getSpaceObject().getWorld(), (Kind) getOperandAt(4)));
-		((Statement) getOperandAt(3)).setShip( ship );
+		setOperandAt(1, EntitySequence.getEntitySequence( ship.getRealValue().getWorld(), getKind()));
+		getBody().setShip( ship );
 	}
 	@Override
 	public String toString(){
 		return "For each " + getOperandAt(4) + "\nof  " + getOperandAt(1) + "\ndo " + getOperandAt(3);
+	}
+	@Override
+	public boolean isTypeChecked() {
+		return canHaveAsOperandAt(2,getLocalVar()) 
+				&& canHaveAsOperandAt(3, getBody());
+				
 	}
 	
 		

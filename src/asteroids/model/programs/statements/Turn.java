@@ -3,69 +3,56 @@ package asteroids.model.programs.statements;
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.*;
 import asteroids.model.programs.IEntry;
-import asteroids.model.programs.expressions.DoubleRepresentation;
-import asteroids.model.programs.expressions.Entity;
+import asteroids.model.programs.expressions.Expression;
 
-public class Turn extends ActionStatement {
+public class Turn extends ShipActionStatement {
 
-	private Entity entity = null;
-	private DoubleRepresentation amount;
+	private Expression amount;
 	
-	public Turn( DoubleRepresentation amount) throws IllegalOperandException{
-		setOperandAt(2, amount);
+	public Turn( Expression amount) throws IllegalOperandException{
+		super();
+		this.amount = amount;
 	}
 	
-	
+	@Override 
+	public boolean isTypeChecked(){
+		return super.isTypeChecked() && canHaveAsOperandAt(2, getAmount());
+	}
 	@Override
 	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException {
 		if(index == 1)
-			return entity;
+			return getShip();
 		if(index == 2)
-			return amount;
+			return getAmount();
 		throw new IndexOutOfBoundsException();
 	}
 
 	@Override
-	public int getNbOperands() {
-		return 2;
-	}
-
-	@Override
 	public void execute() {
-		Ship ship = (Ship) ((Entity) getOperandAt(1)).getSpaceObject();
-			ship.turn(amount.getJavaDouble());
+		Ship ship = (Ship) getShip().getRealValue();
+			ship.turn((double) getAmount().getRealValue());
 	}
 
 	@Override
 	public boolean canHaveAsOperandAt( int index, IEntry operand){
-		if(super.canHaveAsOperandAt(index, operand))
-			if(index == 1 && operand.getClass().isAssignableFrom(Entity.class)){
-				return ((Entity) operand).getValue().getSpaceObject().getClass().isAssignableFrom(Ship.class);
-			}
-			else if(index == 2)
-				return operand.getClass().isAssignableFrom(DoubleRepresentation.class);
+		if(super.canHaveAsOperandAt(index, operand) && index == 2 
+				&& operand.getClass().isAssignableFrom(Expression.class))
+				return ((Expression) operand).getRealValue().getClass().isAssignableFrom(double.class);
 		return false;
 	}
 	@Override
 	public void setOperandAt(int index, IEntry operand)
 			throws IllegalOperandException {
-		if(!canHaveAsOperandAt(index, operand))
-		throw new IllegalOperandException();
-		if(index == 1)
-			this.entity = (Entity) operand;
-		if(index == 2)
-			this.amount = (DoubleRepresentation) operand;
+		super.setOperandAt(index, operand);
+		if(index == 2 && canHaveAsOperandAt(index, operand))
+			this.amount = (Expression) operand;
 	}
 
 	@Override
 	public String toString(){
 		return getOperandAt(1) + " turns with an amount of " + getOperandAt(2) + " radians.";
 	}
-
-
-	@Override
-	public void setShip(Entity ship) throws IllegalOperandException {
-		setOperandAt(1, ship);
-		
+	public Expression getAmount(){
+		return amount;
 	}
 }

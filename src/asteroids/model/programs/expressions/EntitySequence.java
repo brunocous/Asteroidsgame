@@ -10,9 +10,8 @@ import asteroids.model.*;
 import asteroids.model.programs.IComposedStructure;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.kind.Kind;
-import asteroids.model.programs.parsing.ProgramFactory.ForeachType;
 
-public class EntitySequence extends EntityRepresentation implements IComposedStructure{
+public class EntitySequence extends Expression implements IComposedStructure{
 
 	private List<Entity> entities;
 	
@@ -38,15 +37,10 @@ public class EntitySequence extends EntityRepresentation implements IComposedStr
 		return false;
 	}
 
-	@Override
-	public SpaceObject getSpaceObject() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	public List<SpaceObject> getAllSpaceObjects(){
+	public List<SpaceObject> getRealValue(){
 		List<SpaceObject> result = new LinkedList<SpaceObject>();
 		for(Entity ent: getAllEntities()){
-			result.add(ent.getSpaceObject());
+			result.add(ent.getRealValue());
 		}
 		return result;
 	}
@@ -83,44 +77,25 @@ public class EntitySequence extends EntityRepresentation implements IComposedStr
 	}
 	public static EntitySequence getEntitySequence(World world, Kind kind){
 		     EntitySequence result = new EntitySequence();
-		     if(kind == Kind.ANY){
 	        for(SpaceObject obj: world.getAllSpaceObjects()){
+	        	if(obj.getClass().isAssignableFrom(kind.getClassReference()))
 		         try{result.addAsEntity(new Entity(obj));
 		         
 		         }catch(IllegalOperandException e){
 		        	 assert !result.canHaveAsOperandAt(result.getNbOperands() + 1, new Entity(obj));
 		         }
 		        }
-		      if(kind == Kind.ASTEROID)
-		        for(SpaceObject obj: world.getAllSpaceObjects()){
-		          if(obj.getClass().isAssignableFrom(Asteroid.class))
-		        	  try{result.addAsEntity(new Entity(obj));
-				         
-				         }catch(IllegalOperandException e){
-				        	 assert !result.canHaveAsOperandAt(result.getNbOperands() + 1, new Entity(obj));
-				         }
-		       }
-		      if(kind == Kind.BULLET)
-		        for(SpaceObject obj: world.getAllSpaceObjects()){
-		          if(obj.getClass().isAssignableFrom(Bullet.class))
-		        	  try{result.addAsEntity(new Entity(obj));
-				         
-				         }catch(IllegalOperandException e){
-				        	 assert !result.canHaveAsOperandAt(result.getNbOperands() + 1, new Entity(obj));
-				         }
-		        }
-		      if(kind == Kind.SHIP)
-		        for(SpaceObject obj: world.getAllSpaceObjects()){
-		          if(obj.getClass().isAssignableFrom(Ship.class))
-		        	  try{result.addAsEntity(new Entity(obj));
-				         
-				         }catch(IllegalOperandException e){
-				        	 assert !result.canHaveAsOperandAt(result.getNbOperands() + 1, new Entity(obj));
-				         }
-		        }
 		      return result;
 		    }
-		    else return null;
-		  }
+	@Override
+	public boolean isTypeChecked() {
+		return true;
+	}
+	@Override
+	public Expression getValue() {
+		return this;
+	}
+		
+		  
 
 }

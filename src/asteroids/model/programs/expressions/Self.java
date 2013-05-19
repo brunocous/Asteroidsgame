@@ -18,7 +18,9 @@ public Self(Ship ship){
 public SpaceObject getRealValue(){
 	return value;
 }
-
+public void setShip(Ship obj){
+	this.value = obj;
+}
 
 
 public Expression getValue(){

@@ -8,9 +8,9 @@ public abstract class UnaryExpression extends Expression implements IComposedStr
 
 	private Expression argument;
 	
-	public UnaryExpression(IEntry argument){
+	public UnaryExpression(Expression argument){
 		
-		setOperandAt(1, argument);
+		this.argument = argument;
 		
 	}
 	

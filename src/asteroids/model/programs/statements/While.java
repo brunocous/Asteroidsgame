@@ -1,26 +1,34 @@
 package asteroids.model.programs.statements;
 
+import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
+
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
-import asteroids.model.programs.expressions.BooleanRepresentation;
+import asteroids.model.programs.expressions.Expression;
 import asteroids.model.programs.expressions.Entity;
 
 public class While extends StructuralStatement {
 
-	private BooleanRepresentation condition;
+	private Expression condition;
 	private Statement body;
 	
-	public While(BooleanRepresentation condition, Statement body)throws IllegalOperandException{
-		setOperandAt(1, condition);
-		setOperandAt(2, body);
+	public While(Expression condition, Statement body)throws IllegalOperandException{
+		this.condition = condition;
+		this.body = body;
 	}
 	@Override
 	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException {
 		if(index ==1)
-			return condition;
+			return getCondition();
 		if(index == 2)
-			return body;
+			return getBody();
 		throw new IndexOutOfBoundsException();
+	}
+	public Expression getCondition(){
+		return condition;
+	}
+	public Statement getBody(){
+		return body;
 	}
 
 	@Override
@@ -34,7 +42,7 @@ public class While extends StructuralStatement {
 		if(!canHaveAsOperandAt(index, operand))
 			throw new IllegalOperandException();
 		if(index == 1)
-			this.condition = (BooleanRepresentation) operand;
+			this.condition = (Expression) operand;
 		if(index == 2)
 			this.body = (Statement) operand;
 
@@ -42,8 +50,8 @@ public class While extends StructuralStatement {
 	@Override
 	public boolean canHaveAsOperandAt(int index, IEntry operand){
 		if(super.canHaveAsOperandAt(index, operand)){
-			if(index == 1 && operand.getClass().isAssignableFrom(BooleanRepresentation.class))
-				return true;
+			if(index == 1 && operand.getClass().isAssignableFrom(Expression.class))
+				return ((Expression) operand).getRealValue().getClass().isAssignableFrom(boolean.class);
 			if(index == 2 && operand.getClass().isAssignableFrom(Statement.class))
 				return true;
 		}
@@ -52,8 +60,8 @@ public class While extends StructuralStatement {
 
 	@Override
 	public void execute() {
-		while(((BooleanRepresentation) getOperandAt(1)).getJavaBoolean()){
-			((Statement) getOperandAt(2)).execute();
+		while((boolean) getCondition().getRealValue()){
+			getBody().execute();
 		}
 	}
 	@Override 
@@ -62,7 +70,13 @@ public class While extends StructuralStatement {
 	}
 	@Override
 	public void setShip(Entity ship) throws IllegalOperandException {
-		((Statement) getOperandAt(2)).setShip(ship);
+		getCondition().setShip(ship);
+		getBody().setShip(ship);
+	}
+	@Override
+	public boolean isTypeChecked() {
+		return canHaveAsOperandAt(1, getCondition())
+				&& getBody().isTypeChecked();
 	}
 
 }

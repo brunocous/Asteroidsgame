@@ -1,21 +1,21 @@
 package asteroids.model.programs.statements;
 
 import asteroids.Error.*;
+import asteroids.model.Ship;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.expressions.Expression;
+import asteroids.model.programs.expressions.Self;
 import asteroids.model.programs.expressions.Variable;
 
 public class Assignement extends StructuralStatement{
 
-	private Variable var;
-	private Expression value;
+	private Expression var;
+	private Expression newValue;
 	
-	public Assignement(Variable var, Expression value) throws IllegalOperandException, UnhandledCombinationException{
-		if(!var.getValue().getClass().isAssignableFrom(value.getValue().getClass()))
-			throw new UnhandledCombinationException();
-		this.setOperandAt(1,var);
-		this.setOperandAt(2,value);
+	public Assignement(Expression var, Expression newValue){
+		this.var = var;
+		this.newValue = newValue;
 		
 			
 	}
@@ -26,31 +26,14 @@ public class Assignement extends StructuralStatement{
 			if ((index != 1) && (index != 2))
 				throw new IndexOutOfBoundsException();
 			if (index == 1)
-				return var;
+				return getVar();
 			else
-				return value;
+				return getNewValue();
 	}
 
 	@Override
 	public void execute() {
-		try{((Variable) getOperandAt(1)).setValue((Expression) getOperandAt(2));
-		
-		} catch(IllegalVariableValueException e){
-			assert !getOperandAt(1).getClass().isAssignableFrom(getOperandAt(2).getClass());
-		}
-		
-	}
-
-	@Override
-	public boolean equals(Object other) {
-		if(this.getClass() == other.getClass()){
-			for(int pos = 1; pos <= getNbOperands(); pos++){
-				if(!getOperandAt(pos).equals(((Assignement) other).getOperandAt(pos)))
-						return false;
-			}
-			return true;
-		}
-		else return false;
+		((Variable) getVar()).setValue(newValue);
 	}
 
 	@Override
@@ -59,11 +42,12 @@ public class Assignement extends StructuralStatement{
 	}
 	@Override
 	public boolean canHaveAsOperandAt(int index, IEntry operand) {
-		if(super.canHaveAsOperandAt(index, operand) && operand != null)
+		if(super.canHaveAsOperandAt(index, operand) && operand != null )
 			if(index == 1)
 				return operand.getClass().isAssignableFrom(Variable.class);
-			else if(index == 2)
-				return operand.getClass().isAssignableFrom(Expression.class);
+			if(index == 2 && operand.getClass().isAssignableFrom(Expression.class))
+				return ((Variable) getVar()).getType().getClass().isAssignableFrom(((Expression) operand).getRealValue().getClass())
+						&& ((Expression) operand).isTypeChecked();
 		return false;
 				
 	}
@@ -74,8 +58,8 @@ public class Assignement extends StructuralStatement{
 		else
 			if(index == 1)
 				this.var = (Variable) operand;
-			else
-				this.value = (Expression) operand;
+			if(index == 2)
+				this.newValue = (Expression) operand;
 	}
 	@Override
 	public String toString(){
@@ -84,8 +68,18 @@ public class Assignement extends StructuralStatement{
 
 	@Override
 	public void setShip(Entity ship) throws IllegalOperandException {
-		assert true;
+		getNewValue().setShip(ship);
 	}
-		
+
+	@Override
+	public boolean isTypeChecked() {
+		return canHaveAsOperandAt(2, getNewValue());
+	}
+	public Expression getVar(){
+		return var;
+	}
+	public Expression getNewValue(){
+		return newValue;
+	}
 	}
 

@@ -10,13 +10,16 @@ public class Print extends StructuralStatement {
 	private Expression expression;
 	
 	public Print(Expression expression)throws IllegalOperandException{
-		setOperandAt(1,expression);
+		this.expression = expression;
 	}
 	@Override
 	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException {
 		if(index == 1) 
-			return expression;
+			return getExpression();
 		throw new IndexOutOfBoundsException();
+	}
+	public Expression getExpression(){
+		return expression;
 	}
 
 	@Override
@@ -29,7 +32,7 @@ public class Print extends StructuralStatement {
 			throws IllegalOperandException {
 		if(!canHaveAsOperandAt(index, operand))
 			throw new IllegalOperandException();
-		if(index == 1 )
+		if(index == 1)
 			this.expression = (Expression) operand;
 
 	}
@@ -37,22 +40,27 @@ public class Print extends StructuralStatement {
 	public boolean canHaveAsOperandAt(int index, IEntry operand){
 		return (super.canHaveAsOperandAt(index, operand)
 				&& operand.getClass().isAssignableFrom(Expression.class)
-				&& index == 1);
+				&& index == 1
+				&& ((Expression) operand).isTypeChecked());
 	}
 
 	@Override
 	public void execute() {
-		System.out.println(getOperandAt(1));
+		System.out.println(getExpression());
 	}
 	
 	@Override
 	public String toString(){
-		return "\n Printing the following: \n\t" + getOperandAt(1);
+		return "\n Printing the following: \n\t" + getExpression();
 	}
 	@Override
 	public void setShip(Entity ship) throws IllegalOperandException {
-		assert true;
+		getExpression().setShip(ship);
 		
+	}
+	@Override
+	public boolean isTypeChecked() {
+		return canHaveAsOperandAt(1, getExpression());
 	}
 
 }
