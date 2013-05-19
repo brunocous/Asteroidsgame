@@ -10,8 +10,8 @@ public class Entity extends BasicExpression{
 private SpaceObject value;
 
 public Entity(SpaceObject value){
+		this.value = value;
 		
-		super(value);
 }
 
 

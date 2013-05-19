@@ -22,6 +22,7 @@ import asteroids.model.programs.ProgramFactoryImpl;
 import asteroids.model.programs.expressions.Expression;
 import asteroids.model.programs.parsing.ProgramParser;
 import asteroids.model.programs.statements.Statement;
+import asteroids.model.programs.type.*;
 
 public class Facade implements IFacade<World, Ship, Asteroid,Bullet,Program>{
 
@@ -317,7 +318,7 @@ public class Facade implements IFacade<World, Ship, Asteroid,Bullet,Program>{
 	@Override
 	public asteroids.IFacade.ParseOutcome<Program> parseProgram(String text) {
 		ProgramFactoryImpl factory = new ProgramFactoryImpl();
-		ProgramParser<Expression, Statement, Object> parser = new ProgramParser<Expression ,Statement,Object>( factory );
+		ProgramParser<Expression, Statement, Type> parser = new ProgramParser<Expression ,Statement,Type>( factory );
 		parser.parse(text);
 		List<String> errors = parser.getErrors();
 		if(! errors.isEmpty()) 
@@ -341,7 +342,7 @@ public class Facade implements IFacade<World, Ship, Asteroid,Bullet,Program>{
 
 	@Override
 	public boolean isTypeCheckingSupported() {
-		return false;
+		return true;
 	}
 
 	@Override
