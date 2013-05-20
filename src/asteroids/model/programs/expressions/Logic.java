@@ -35,8 +35,8 @@ public abstract class Logic extends BinaryExpression {
 
 	@Override
 	public boolean isTypeChecked(){
-		return ( getOperandAt(1).getValue().getClass().isAssignableFrom(BooleanLiteral.class)
-				&& getOperandAt(2).getValue().getClass().isAssignableFrom(BooleanLiteral.class));
+		return ( getOperandAt(1).getValue() instanceof BooleanLiteral
+				&& getOperandAt(2).getValue() instanceof BooleanLiteral);
 	}
 	
 	@Override

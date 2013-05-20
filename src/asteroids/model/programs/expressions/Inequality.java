@@ -40,8 +40,8 @@ public abstract class Inequality extends BinaryExpression{
 
 	@Override
 	public boolean isTypeChecked(){
-		return ( getOperandAt(1).getValue().getClass().isAssignableFrom(DoubleLiteral.class)
-				&& getOperandAt(2).getValue().getClass().isAssignableFrom(DoubleLiteral.class));
+		return ( getOperandAt(1).getValue() instanceof DoubleLiteral
+				&& getOperandAt(2).getValue() instanceof DoubleLiteral);
 	}
 
 }
