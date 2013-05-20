@@ -30,6 +30,7 @@ public class Turn extends ShipActionStatement {
 
 	@Override
 	public void execute() {
+		super.execute();
 		Ship ship = (Ship) getShip().getRealValue();
 			ship.turn((double) getAmount().getRealValue());
 	}

@@ -14,4 +14,13 @@ public abstract class ActionStatement extends Statement {
 				return false;
 		return true;
 	}
+	
+	@Override 
+	public void execute(){
+		try{Thread.sleep(200);
+		
+		}catch(Exception e){
+			assert false;
+		}
+	}
 }

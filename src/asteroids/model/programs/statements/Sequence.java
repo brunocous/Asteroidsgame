@@ -6,6 +6,7 @@ import java.util.List;
 import be.kuleuven.cs.som.annotate.Raw;
 
 import asteroids.Error.IllegalOperandException;
+import asteroids.model.SpaceObject;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.expressions.Entity;
 
@@ -68,21 +69,9 @@ public class Sequence extends StructuralStatement {
 	}
 	@Override
 	public void execute() {
-		// starting the execution of this sequence
 		for(Statement statement: getAllStatements()){
-			
-			//if statement is an action, then wait the amount of time equal to 
-			// the maximum amount of waiting time minus the amount of time until 
-			// an action statements was executed. 
-			if(statement.getClass().isAssignableFrom(ActionStatement.class)){
-				try{Thread.sleep(200);
-				
-				}catch (Exception e){
-					assert false;
-				}
-			}
-			
 			//executes statement
+			System.out.println("ik ga em nu executen in sequence");
 			statement.execute();
 		}
 	}

@@ -6,6 +6,7 @@ public class Fire extends ShipActionStatement {
 	
 	@Override
 	public void execute() {
+		super.execute();
 		Ship ship = (Ship) getShip().getRealValue();
 		try{ ship.fireObject(new Bullet(ship));
 		}catch (Exception e){

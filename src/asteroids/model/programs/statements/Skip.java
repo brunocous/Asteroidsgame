@@ -33,9 +33,6 @@ public class Skip extends ActionStatement {
 		return false;
 	}
 	@Override
-	public void execute() {
-	}
-	@Override
 	public String toString(){
 		return "Take 0.2 seconds the time to think about how much time 0.2 seconds";
 	}

@@ -1,6 +1,5 @@
 package asteroids.model.programs.statements;
 
-import asteroids.Error.IllegalOperandException;
 import asteroids.model.Ship;
 import asteroids.model.programs.IEntry;
 
@@ -25,6 +24,7 @@ public class Thrust extends ShipActionStatement {
 
 	@Override
 	public void execute() {
+		super.execute();
 		Ship tship = (Ship) getShip().getRealValue();
 		tship.setEnableThruster(isEnabled());
 	}

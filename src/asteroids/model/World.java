@@ -580,7 +580,7 @@ public class World {
 				double timeToCollision = SpaceObject.getTimeToCollision(this.getSpaceObjectAt(i), this.getSpaceObjectAt(j));
 				
 				if ( !Double.isInfinite(timeToCollision) && Util.fuzzyLessThanOrEqualTo(timeToCollision, result) && !Util.fuzzyEquals(timeToCollision,0)
-							&& this.getSpaceObjectAt(i) != this.getSpaceObjectAt(j)){
+							&& !areAssociatedWithEachOther(this.getSpaceObjectAt(i),this.getSpaceObjectAt(j))){
 					/**
 					 * TODO doc. voor aanpassingen van gelijkheid hierboven
 					 */
@@ -606,11 +606,32 @@ public class World {
 				assert this.getSpaceObjectAt(k).getWorld() != this;
 			}
 		}
-			
 		return result;
 		
 	}
-	
+/**
+ * Checks if the given space objects are associated with each other.
+ * 
+ * @param obj1
+ * 		The first object to check
+ * @param obj2
+ * 		The second object to check
+ * @return True if and only if the 2 given space object reference to the same object,
+ * 			or if the first given space object is a bullet and if the second one is its source,
+ * 			or is the second given space object is a bullet and if the first one is its source.
+ * 			| result == ( (obj1 == obj2) || 
+ * 			|		(obj1.getClass().isAssignableFrom(Bullet.class) && (((Bullet) obj1).getSource() == obj2))
+ * 			|		|| (obj2.getClass().isAssignableFrom(Bullet.class) && (((Bullet) obj2).getSource() == obj1)))
+ */
+	private boolean areAssociatedWithEachOther(SpaceObject obj1, SpaceObject obj2){
+		if(obj1 == obj2)
+			return true;
+		if(obj1.getClass().isAssignableFrom(Bullet.class))
+			return (((Bullet) obj1).getSource() == obj2);
+		if(obj2.getClass().isAssignableFrom(Bullet.class))
+			return (((Bullet) obj2).getSource() == obj1);
+		return false;
+	}
 	/**
 	 * The amount of time until the given space object collides with a boundary.
 	 * 
@@ -728,11 +749,11 @@ public class World {
 	 * 			
 	 */
 	public void evolve(double deltaT, CollisionListener coll) throws UnhandledCombinationException, NegativeTimeException, IllegalStateException{
-		runPrograms();
 		
 		if(isTerminated())
 			throw new IllegalStateException();
 		double tC=getTimeToFirstCollision();
+		runPrograms(Math.min(deltaT, tC));
 		if(!Util.fuzzyLessThanOrEqualTo(tC, deltaT)){
 			
 			updatePositions(deltaT);
@@ -762,8 +783,7 @@ public class World {
 						|| Util.fuzzyEquals(this.getSpaceObjectAt(i).getPos().getY()
 								+this.getSpaceObjectAt(i).getRadius(), getHeight()))
 				{
-					try{if(coll != null)
-						
+					try{
 						boundaryCollide(this.getSpaceObjectAt(i));
 					
 					}catch (NotOfThisWorldException ex){
@@ -775,13 +795,13 @@ public class World {
 				
 				else{
 				for(SpaceObject object2 : this.getAllSpaceObjects()){
-					
 					if(Util.fuzzyLessThanOrEqualTo(SpaceObject.getDistanceBetween(this.getSpaceObjectAt(i),object2),0.0) 
 							&& this.getSpaceObjectAt(i)!=object2){
-						try {if(coll != null)
+						System.out.println(SpaceObject.getDistanceBetween(this.getSpaceObjectAt(i),object2));
+						if(coll != null)
 							coll.objectCollision(this.getSpaceObjectAt(i), object2, SpaceObject.getCollisionPosition(object2, this.getSpaceObjectAt(i)).getX(), SpaceObject.getCollisionPosition(this.getSpaceObjectAt(i), object2).getY());
-							resolve(this.getSpaceObjectAt(i),object2);
-							
+						try {							
+						resolve(this.getSpaceObjectAt(i),object2);
 						} catch (NotOfThisWorldException e) {
 							assert this.getSpaceObjectAt(i).getWorld() != this;
 							assert object2.getWorld() != this;
@@ -796,10 +816,11 @@ public class World {
 	}
 		
 	}
-	public void runPrograms(){
+	public void runPrograms(double dt){
+		double numberOfExecutions = Math.round(dt);
 		for(SpaceObject sp: getAllSpaceObjects()){
 			if(sp.getClass().isAssignableFrom(Ship.class)){
-				((Ship) sp).runProgram();
+				((Ship) sp).runProgram(dt);
 			}
 				
 		}
@@ -1133,9 +1154,6 @@ public class World {
 								
 								object1.terminate();
 								object2.terminate();
-							}
-							else{
-								
 							}
 						
 						} else if(Bullet.class.isAssignableFrom(object2.getClass())){

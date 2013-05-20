@@ -616,6 +616,7 @@ public class Ship extends SpaceObject{
 	public void setProgram(@Raw Program program) throws IllegalOperandException{
 		assert canHaveAsProgram(program);
 		this.program = program;
+		
 		program.setShip(this);
 	}
 	public boolean canHaveAsProgram(Program program){
@@ -627,8 +628,9 @@ public class Ship extends SpaceObject{
 	public boolean hasProperProgram(){
 		return canHaveAsProgram(getProgram());
 	}
-	public void runProgram(){
-		if(hasAProgram() && !getProgram().isRunning())
-			getProgram().execute();
+	public void runProgram(double numberOfRuns){
+		if(hasAProgram() && !getProgram().isRunning()){
+			getProgram().execute(numberOfRuns);
+		}
 	}
 	}

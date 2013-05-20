@@ -531,7 +531,8 @@ public static boolean overlap(SpaceObject obj1, SpaceObject obj2) {
 		result=true;
 	} 
 	else{
-			if(asteroids.Util.fuzzyLessThanOrEqualTo(getDistanceBetween(obj1,obj2),0) && !asteroids.Util.fuzzyEquals(getDistanceBetween(obj1,obj2), 0)){
+			if(asteroids.Util.fuzzyLessThanOrEqualTo(getDistanceBetween(obj1,obj2),0) 
+					&& !asteroids.Util.fuzzyEquals(getDistanceBetween(obj1,obj2), 0)){
 				result= true;
 			} 
 	}
@@ -569,7 +570,6 @@ public static double getTimeToCollision(SpaceObject obj1, SpaceObject obj2) thro
 	double result;
 	// TODO doc
 	if (overlap(obj1,obj2)){
-		
 		result = -1;
 		
 	}
@@ -745,6 +745,7 @@ public void fireObject(SpaceObject projectile)throws IllegalStateException{
 		throw new IllegalStateException();
 	}else 
 	this.fireObject(projectile);
+	
 }
 }
 

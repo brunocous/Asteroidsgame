@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import asteroids.Error.IllegalOperandException;
+import asteroids.model.Bullet;
 import asteroids.model.Ship;
 import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.statements.Statement;
@@ -43,9 +44,10 @@ public class Program {
 	public boolean canHaveAsStatement(Statement statement){
 		return statement != null;
 	}
-	public void execute(){
+	public void execute(double numberOfRuns){
 		setIsRunning(true);
 		if(!hasTypeCheckingErrors())
+			System.out.println("ik ga hem nu runnen in program");
 		this.getStatement().execute();
 		setIsRunning(false);
 	}
