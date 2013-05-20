@@ -750,15 +750,19 @@ public class World {
 	 */
 	public void evolve(double deltaT, CollisionListener coll) throws UnhandledCombinationException, NegativeTimeException, IllegalStateException{
 		
+		runPrograms();
+		double elapsedTime = 0;
+		while (Util.fuzzyLessThanOrEqualTo(elapsedTime, 0.2)){
+			
 		if(isTerminated())
 			throw new IllegalStateException();
 		double tC=getTimeToFirstCollision();
-		runPrograms(Math.min(deltaT, tC));
+		
 		if(!Util.fuzzyLessThanOrEqualTo(tC, deltaT)){
 			
 			updatePositions(deltaT);
 			updateVelocities(deltaT);
-			
+			elapsedTime = elapsedTime +deltaT;
 		}
 		
 		else{
@@ -813,14 +817,16 @@ public class World {
 			}
 		i++;
 		}
+			elapsedTime = elapsedTime +tC;
+	}
 	}
 		
 	}
-	public void runPrograms(double dt){
-		double numberOfExecutions = Math.round(dt);
+	public void runPrograms(){
+		
 		for(SpaceObject sp: getAllSpaceObjects()){
 			if(sp.getClass().isAssignableFrom(Ship.class)){
-				((Ship) sp).runProgram(dt);
+				((Ship) sp).runProgram();
 			}
 				
 		}

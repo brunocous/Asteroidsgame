@@ -17,6 +17,7 @@ public class Program {
 	private Ship ship = null;
 	private final List<String> errors;
 	private boolean isRunning;
+	
 
 	public Program(Map<String,Type> globals, Statement statement, List<String> errors){
 		if(!canHaveAsGlobals(globals))
@@ -44,7 +45,7 @@ public class Program {
 	public boolean canHaveAsStatement(Statement statement){
 		return statement != null;
 	}
-	public void execute(double numberOfRuns){
+	public void execute(){
 		setIsRunning(true);
 		if(!hasTypeCheckingErrors())
 			System.out.println("ik ga hem nu runnen in program");

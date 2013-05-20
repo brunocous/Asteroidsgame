@@ -13,6 +13,7 @@ import asteroids.model.programs.expressions.Entity;
 public class Sequence extends StructuralStatement {
 
 	private ArrayList<Statement> statements;
+	private int executionPosition = 1;
 	
 	public Sequence(){
 		statements = new ArrayList<Statement>();
@@ -67,14 +68,23 @@ public class Sequence extends StructuralStatement {
 	public boolean hasAsStatement(Statement statement){
 		return getAllStatements().contains(statement);
 	}
+	
 	@Override
-	public void execute() {
-		for(Statement statement: getAllStatements()){
+	public boolean execute() {
+		int i = executionPosition;
+		boolean encounteredAction = false;
+		while(i<= getNbOperands() && encounteredAction == false){
 			//executes statement
 			System.out.println("ik ga em nu executen in sequence");
-			statement.execute();
+			
+			encounteredAction= ((Statement)getOperandAt(i)).execute();
+			
+			i++;
 		}
+		executionPosition = i;
+		return !(i == getNbOperands()+1);
 	}
+	
 	@Override
 	public String toString(){
 		String result = "";

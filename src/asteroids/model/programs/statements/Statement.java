@@ -10,7 +10,7 @@ import asteroids.model.programs.type.Type;
 
 public abstract class Statement implements IEntry,IComposedStructure {
 
-	public abstract void execute();
+	public abstract boolean execute();
 	
 	@Override
 	public boolean canHaveAsOperandAt(int index, IEntry entry){

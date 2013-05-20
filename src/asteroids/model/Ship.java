@@ -628,9 +628,9 @@ public class Ship extends SpaceObject{
 	public boolean hasProperProgram(){
 		return canHaveAsProgram(getProgram());
 	}
-	public void runProgram(double numberOfRuns){
+	public void runProgram(){
 		if(hasAProgram() && !getProgram().isRunning()){
-			getProgram().execute(numberOfRuns);
+			getProgram().execute();
 		}
 	}
 	}
