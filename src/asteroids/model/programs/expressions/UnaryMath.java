@@ -1,9 +1,11 @@
 package asteroids.model.programs.expressions;
 
 import asteroids.model.programs.IEntry;
+import asteroids.model.programs.type.Type;
 
 public abstract class UnaryMath extends UnaryExpression {
 
+	public static final Type TYPE = Type.DOUBLE;
 public UnaryMath(Expression argument) {
 	
 	super(argument);
@@ -22,6 +24,11 @@ public boolean canHaveAsOperandAt(int index, IEntry argument){
 		}
 		
 
+}
+
+@Override
+public Type getType(){
+	return TYPE;
 }
 
 @Override

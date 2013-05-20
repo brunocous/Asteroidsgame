@@ -1,9 +1,12 @@
 package asteroids.model.programs.statements;
 
+import java.util.Map;
+
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IComposedStructure;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.expressions.Entity;
+import asteroids.model.programs.type.Type;
 
 public abstract class Statement implements IEntry,IComposedStructure {
 
@@ -26,4 +29,6 @@ public abstract class Statement implements IEntry,IComposedStructure {
 		}
 		return false;
 	}
+	
+	public abstract boolean isTypeChecked(Map<String,Type> globals);
 }

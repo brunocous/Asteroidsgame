@@ -7,15 +7,16 @@ import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.expressions.Expression;
 import asteroids.model.programs.expressions.Self;
 import asteroids.model.programs.expressions.Variable;
+import asteroids.model.programs.type.*;
+import java.util.*;
 
 public class Assignement extends StructuralStatement{
 
-	private Expression var;
 	private Expression newValue;
 	private String variableName;
 	
 	public Assignement(String variableName, Expression newValue){
-		this.var = null;
+		
 		this.newValue = newValue;
 		this.variableName = variableName;
 			
@@ -74,12 +75,15 @@ public class Assignement extends StructuralStatement{
 	}
 
 	@Override
-	public boolean isTypeChecked() {
-		return canHaveAsOperandAt(2, getNewValue());
+	public boolean isTypeChecked(Map<String, Type> globals) {
+		if(globals.get(getVariableName()) == newValue.getType()){
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
-	public Expression getVar(){
-		return var;
-	}
+
 	public Expression getNewValue(){
 		return newValue;
 	}

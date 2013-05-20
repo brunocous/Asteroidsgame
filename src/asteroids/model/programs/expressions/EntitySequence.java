@@ -14,6 +14,7 @@ import asteroids.model.programs.type.Type;
 public class EntitySequence extends Expression implements IComposedStructure{
 
 	private List<Entity> entities;
+	private static final Type TYPE = Type.ANY;
 	
 	public EntitySequence(){
 		entities = null;
@@ -26,6 +27,10 @@ public class EntitySequence extends Expression implements IComposedStructure{
 			addAsEntity(ent);
 		}
 		
+	}
+	
+	public Type getType(){
+		return TYPE;
 	}
 	public void addAsEntity(@Raw Entity ent) throws IllegalOperandException{
 		setOperandAt(getNbOperands()+1, ent);

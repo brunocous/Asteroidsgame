@@ -1,10 +1,13 @@
 package asteroids.model.programs.expressions;
 
+import asteroids.model.programs.type.*;
+
 import asteroids.model.programs.IEntry;
 
 public abstract class Inequality extends BinaryExpression{
 	
-
+	public final static Type TYPE = Type.BOOLEAN;
+	
 	public Inequality (Expression leftExpression, Expression rightExpression){
 	
 		super(leftExpression, rightExpression);
@@ -30,6 +33,10 @@ public abstract class Inequality extends BinaryExpression{
 		return new BooleanLiteral(getRealValue());
 	}
 	
+	@Override
+	public Type getType(){
+		return TYPE;
+	}
 
 	@Override
 	public boolean isTypeChecked(){

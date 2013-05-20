@@ -1,9 +1,13 @@
 package asteroids.model.programs.expressions;
 
+import asteroids.model.programs.type.*;
+
 import asteroids.model.programs.IEntry;
 
 public abstract class Logic extends BinaryExpression {
 
+	public static final Type TYPE = Type.BOOLEAN;
+	
 	public Logic(Expression leftExpression, Expression rightExpression){
 		
 		super(leftExpression, rightExpression);
@@ -33,5 +37,10 @@ public abstract class Logic extends BinaryExpression {
 	public boolean isTypeChecked(){
 		return ( getOperandAt(1).getValue().getClass().isAssignableFrom(BooleanLiteral.class)
 				&& getOperandAt(2).getValue().getClass().isAssignableFrom(BooleanLiteral.class));
+	}
+	
+	@Override
+	public Type getType(){
+		return TYPE;
 	}
 }

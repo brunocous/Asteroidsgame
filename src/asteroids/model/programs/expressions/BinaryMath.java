@@ -1,9 +1,11 @@
 package asteroids.model.programs.expressions;
 
 import asteroids.model.programs.IEntry;
+import asteroids.model.programs.type.Type;
 
 public abstract class BinaryMath extends BinaryExpression {
 	
+	public final static Type TYPE = Type.DOUBLE;
 	public BinaryMath(Expression leftExpression, Expression rightExpression){
 		
 		super(leftExpression, rightExpression);
@@ -21,8 +23,11 @@ public abstract class BinaryMath extends BinaryExpression {
 		return true; 
 		}
 		}
-	
-	
+
+@Override
+public Type getType(){
+	return TYPE;
+}
 
 public abstract Double getRealValue();
 

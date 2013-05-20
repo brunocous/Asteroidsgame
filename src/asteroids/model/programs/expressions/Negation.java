@@ -1,18 +1,26 @@
 package asteroids.model.programs.expressions;
 
 
+import asteroids.model.programs.type.*;
+
 import asteroids.model.programs.IEntry;
 
 
 
 public class Negation extends UnaryExpression{
 
+	public static final Type TYPE = Type.BOOLEAN;
+	
 	public Negation(Expression argument) {
 		
 		super(argument);
 		
 	}
 	
+	@Override
+	public Type getType(){
+		return TYPE;
+	}
 	@Override
 	public boolean canHaveAsOperandAt(int index, IEntry argument){
 			

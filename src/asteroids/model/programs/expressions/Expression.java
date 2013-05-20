@@ -2,6 +2,7 @@ package asteroids.model.programs.expressions;
 
 import asteroids.model.SpaceObject;
 import asteroids.model.programs.IEntry;
+import asteroids.model.programs.type.Type;
 
 
 
@@ -29,6 +30,8 @@ public abstract class Expression implements IEntry{
 	}
 	}
 	
+	public abstract Type getType();
+	
 	public String toString(){
 		
 		if(getValue().getClass().isAssignableFrom(DoubleLiteral.class)){
@@ -45,6 +48,6 @@ public abstract class Expression implements IEntry{
 		}
 	}
 	public abstract void setShip(Entity ship);
-
+	public abstract boolean isTypeChecked();
 	
 }

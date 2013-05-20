@@ -9,7 +9,7 @@ public class Null extends  BasicExpression {
 	private SpaceObject value;
 	
 public Null(){
-	super(null);
+	this.value = (null);
 	
 }
 

@@ -1,8 +1,12 @@
 package asteroids.model.programs.expressions;
 
+import asteroids.model.programs.type.*;
+
 import asteroids.model.programs.IEntry;
 
 public abstract class SpaceObjectInspector extends UnaryExpression{
+
+public final static Type TYPE = Type.DOUBLE;
 
 public SpaceObjectInspector(Expression argument) {
 		
@@ -24,7 +28,10 @@ public SpaceObjectInspector(Expression argument) {
 	}
 			
 
-	
+@Override
+public Type getType(){
+	return TYPE;
+}
 
 public abstract Double getRealValue();
 @Override
