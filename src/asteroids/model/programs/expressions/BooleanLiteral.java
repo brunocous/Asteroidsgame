@@ -10,7 +10,7 @@
 		
 		
 		public BooleanLiteral(boolean value) {
-			super(value);
+			this.value = (value);
 		}
 		
 

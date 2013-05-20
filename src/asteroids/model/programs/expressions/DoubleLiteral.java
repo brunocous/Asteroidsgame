@@ -10,7 +10,7 @@ private double value;
 
 public DoubleLiteral(double value){
 		
-		super(value);
+		this.value = (value);
 }
 	
 public Expression getValue(){

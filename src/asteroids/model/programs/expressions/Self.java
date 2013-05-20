@@ -1,6 +1,5 @@
 package asteroids.model.programs.expressions;
 
-import asteroids.model.Ship;
 import asteroids.model.SpaceObject;
 
 
@@ -10,7 +9,7 @@ public class Self extends BasicExpression {
 private SpaceObject value;
 	
 public Self(){
-	super(null);
+	this.value =(null);
 }
 
 public SpaceObject getRealValue(){
