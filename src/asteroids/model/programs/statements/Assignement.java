@@ -1,12 +1,9 @@
 package asteroids.model.programs.statements;
 
 import asteroids.Error.*;
-import asteroids.model.Ship;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.expressions.Expression;
-import asteroids.model.programs.expressions.Self;
-import asteroids.model.programs.expressions.Variable;
 import asteroids.model.programs.type.*;
 import java.util.*;
 
@@ -25,32 +22,25 @@ public class Assignement extends StructuralStatement{
 	@Override
 	public IEntry getOperandAt(int index) 
 		throws IndexOutOfBoundsException {
-			if (index == 1)
-				return getVar();
-			if ((index == 2))
+			if ((index == 1))
 				return getNewValue();
-			if ((index == 3))
-				return getVariableName();
 			throw new IndexOutOfBoundsException();
 	}
 
 	@Override
-	public void execute() {
-		((Variable) getVar()).setValue(newValue);
+	public boolean execute() {
+		return false;
 	}
 
 	@Override
 	public int getNbOperands() {
-		return 2;
+		return 1;
 	}
 	@Override
 	public boolean canHaveAsOperandAt(int index, IEntry operand) {
 		if(super.canHaveAsOperandAt(index, operand) && operand != null )
-			if(index == 1)
-				return operand.getClass().isAssignableFrom(Variable.class);
-			if(index == 2 && operand.getClass().isAssignableFrom(Expression.class))
-				return ((Variable) getVar()).getType().getClassReference().isAssignableFrom(((Expression) operand).getRealValue().getClass())
-						&& ((Expression) operand).isTypeChecked();
+			if(index == 1 && operand.getClass().isAssignableFrom(Expression.class))
+				return true;
 		return false;
 				
 	}
@@ -58,15 +48,13 @@ public class Assignement extends StructuralStatement{
 	public void setOperandAt(int index, IEntry operand) throws IllegalOperandException{
 		if(!canHaveAsOperandAt(index, operand))
 			throw new IllegalOperandException();
-		else
+		else 
 			if(index == 1)
-				this.var = (Variable) operand;
-			if(index == 2)
 				this.newValue = (Expression) operand;
 	}
 	@Override
 	public String toString(){
-		return getOperandAt(1) + " is set to " + getOperandAt(2) + ".";
+		return getVariableName() + " is set to " + getOperandAt(1) + ".";
 	}
 
 	@Override
@@ -76,12 +64,8 @@ public class Assignement extends StructuralStatement{
 
 	@Override
 	public boolean isTypeChecked(Map<String, Type> globals) {
-		if(globals.get(getVariableName()) == newValue.getType()){
-			return true;
-		}
-		else {
-			return false;
-		}
+		return (globals.get(getVariableName()) == newValue.getType()) ? true:false;
+			
 	}
 
 	public Expression getNewValue(){

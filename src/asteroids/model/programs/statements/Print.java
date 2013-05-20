@@ -1,9 +1,12 @@
 package asteroids.model.programs.statements;
 
+import java.util.Map;
+
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.expressions.Expression;
+import asteroids.model.programs.type.Type;
 
 public class Print extends StructuralStatement {
 
@@ -39,14 +42,14 @@ public class Print extends StructuralStatement {
 	@Override
 	public boolean canHaveAsOperandAt(int index, IEntry operand){
 		return (super.canHaveAsOperandAt(index, operand)
-				&& operand.getClass().isAssignableFrom(Expression.class)
-				&& index == 1
-				&& ((Expression) operand).isTypeChecked());
+				&& operand instanceof Expression)
+				&& index == 1;
 	}
 
 	@Override
-	public void execute() {
+	public boolean execute() {
 		System.out.println(getExpression());
+		return false;
 	}
 	
 	@Override
@@ -59,7 +62,7 @@ public class Print extends StructuralStatement {
 		
 	}
 	@Override
-	public boolean isTypeChecked() {
+	public boolean isTypeChecked(Map<String,Type> globals) {
 		return canHaveAsOperandAt(1, getExpression());
 	}
 

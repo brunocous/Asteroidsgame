@@ -23,10 +23,10 @@ public class Thrust extends ShipActionStatement {
 	}
 
 	@Override
-	public void execute() {
-		super.execute();
+	public boolean execute() {
 		Ship tship = (Ship) getShip().getRealValue();
 		tship.setEnableThruster(isEnabled());
+		return true;
 	}
 	@Override
 	public String toString(){

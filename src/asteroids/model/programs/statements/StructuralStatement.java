@@ -21,8 +21,8 @@ public abstract class StructuralStatement extends Statement implements IComposed
 	public boolean containsAnActionStatement(){
 		for(int pos  =1; pos <= getNbOperands(); pos++){
 			IEntry operand  = getOperandAt(pos);
-			if(operand.getClass().isAssignableFrom(Statement.class)){
-				if(operand.getClass().isAssignableFrom(ActionStatement.class))
+			if(operand instanceof Statement){
+				if(operand instanceof ActionStatement)
 					return true;
 				if( ((StructuralStatement) operand).containsAnActionStatement())
 					return true;

@@ -2,13 +2,14 @@ package asteroids.model.programs.statements;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import be.kuleuven.cs.som.annotate.Raw;
 
 import asteroids.Error.IllegalOperandException;
-import asteroids.model.SpaceObject;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.expressions.Entity;
+import asteroids.model.programs.type.Type;
 
 public class Sequence extends StructuralStatement {
 
@@ -40,7 +41,7 @@ public class Sequence extends StructuralStatement {
 	public boolean canHaveAsOperandAt(int index, IEntry operand){
 		return (super.canHaveAsOperandAt(index, operand) 
 				&& (index <= getNbOperands() +1) 
-				&& operand.getClass().isAssignableFrom(Statement.class));
+				&& operand instanceof Statement);
 	}
 	@Override
 	public void setOperandAt(int index, IEntry operand)
@@ -100,9 +101,9 @@ public class Sequence extends StructuralStatement {
 		}
 	}
 	@Override
-	public boolean isTypeChecked() {
+	public boolean isTypeChecked(Map<String, Type> globals) {
 		for(Statement st: getAllStatements()){
-			if(!st.isTypeChecked())
+			if(!st.isTypeChecked(globals))
 				return false;
 		}
 		return true;

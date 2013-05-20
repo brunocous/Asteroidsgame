@@ -1,8 +1,11 @@
 package asteroids.model.programs.statements;
 
+import java.util.Map;
+
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.expressions.Entity;
+import asteroids.model.programs.type.*;
 
 public class Skip extends ActionStatement {
 
@@ -34,7 +37,7 @@ public class Skip extends ActionStatement {
 	}
 	@Override
 	public String toString(){
-		return "Take 0.2 seconds the time to think about how much time 0.2 seconds";
+		return "Take 0.2 seconds the time to think about how much time 0.2 seconds are";
 	}
 	@Override
 	public void setShip(Entity ship) throws IllegalOperandException {
@@ -42,7 +45,11 @@ public class Skip extends ActionStatement {
 		
 	}
 	@Override
-	public boolean isTypeChecked() {
+	public boolean isTypeChecked(Map<String, Type> globals) {
+		return true;
+	}
+	@Override
+	public boolean execute() {
 		return true;
 	}
 

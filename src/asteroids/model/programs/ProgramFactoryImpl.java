@@ -196,12 +196,10 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 	}
 
 	@Override
-	//TODO variabelen
 	public Statement createForeach(int line, int column,
 			asteroids.model.programs.parsing.ProgramFactory.ForeachType type,
 			String variableName, Statement body) {
-		//return new Foreach(convertForeachType(type),variableName,body);
-		return null;
+		return new Foreach(convertForeachType(type),variableName,body);
 	}
 
 	@Override

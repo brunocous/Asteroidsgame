@@ -1,34 +1,33 @@
 package asteroids.model.programs.statements;
 
+import java.util.Map;
+
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.expressions.EntitySequence;
 import asteroids.model.programs.expressions.Expression;
-import asteroids.model.programs.expressions.Variable;
 import asteroids.model.programs.type.Type;
 
 public class Foreach extends StructuralStatement {
 
 	private Expression entities = null;
-	private Expression localVar;
 	private Statement body;
 	private final Type type;
+	private String variableName;
 	
-	public Foreach(Type type, Variable localVar, StructuralStatement body) throws IllegalOperandException{
-		this.localVar = localVar;
+	public Foreach(Type type, String variableName, Statement body){
+		this.variableName = variableName;
 		this.body = body;
-		if(canHaveAsOperandAt(4, type))
+		if(canHaveAsOperandAt(3, type))
 			this.type = type;
-		else throw new IllegalOperandException();
+		else this.type = null;
 	}
 	@Override
 	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException {
 		if(index == 1)
 			return getEntities();
 		if(index == 2)
-			return getLocalVar();
-		if(index == 3)
 			return getBody();
 		if(index == 4)
 			return getType();
@@ -38,8 +37,8 @@ public class Foreach extends StructuralStatement {
 	public Expression getEntities(){
 		return entities;
 	}
-	public Expression getLocalVar(){
-		return localVar;
+	public String getVariableName(){
+		return variableName;
 	}
 	public Statement getBody(){
 		return body;
@@ -50,7 +49,7 @@ public class Foreach extends StructuralStatement {
 
 	@Override
 	public int getNbOperands() {
-		return 4;
+		return 3;
 	}
 
 	@Override
@@ -61,34 +60,30 @@ public class Foreach extends StructuralStatement {
 		if(index == 1)
 			this.entities = (Expression) operand;
 		if(index == 2)
-			this.localVar = (Expression) operand;
-		if(index == 3)
 			this.body = (Statement) operand;
 
 	}
 	@Override
 	public boolean canHaveAsOperandAt(int index, IEntry operand){
 		if(super.canHaveAsOperandAt(index, operand)){
-			if(index == 1 && operand.getClass().isAssignableFrom(EntitySequence.class))
+			if(index == 1 && operand instanceof EntitySequence)
 				return true;
-			if(index == 2 && operand.getClass().isAssignableFrom(Variable.class))
+			if(index == 2 && operand instanceof StructuralStatement){
 				return true;
-			if(index == 3 && operand.getClass().isAssignableFrom(StructuralStatement.class)){
-				return !((StructuralStatement) operand).containsAnActionStatement() 
-						&& ((StructuralStatement) operand).isTypeChecked();
 			}
-			if(index == 4 && operand.getClass().isAssignableFrom(Type.class))
+			if(index == 4 && operand instanceof Type)
 				return Type.isValidType((Type) operand);
 		}
 			return false;
 	}
 
 	@Override
-	public void execute() {
+	public boolean execute() {
 		for(Entity entity: ((EntitySequence) getEntities()).getAllEntities()){
-			((Variable) getLocalVar()).setValue(entity); 
-			getBody().execute();
+			new Assignement(getVariableName(), entity);
+				getBody().execute();
 		}
+		return false;
 	}
 	public void setShip(Entity ship) throws IllegalOperandException{
 		setOperandAt(1, EntitySequence.makeEntitySequence( ship.getRealValue().getWorld(), getType()));
@@ -96,13 +91,13 @@ public class Foreach extends StructuralStatement {
 	}
 	@Override
 	public String toString(){
-		return "For each " + getOperandAt(4) + "\nof  " + getOperandAt(1) + "\ndo " + getOperandAt(3);
+		return "For each " + getVariableName() + "\nof  " + getOperandAt(1) + "\ndo " + getOperandAt(3);
 	}
 	@Override
-	public boolean isTypeChecked() {
-		return canHaveAsOperandAt(2,getLocalVar()) 
-				&& canHaveAsOperandAt(3, getBody());
-				
+	public boolean isTypeChecked(Map<String, Type> globals) {
+		return globals.get(getVariableName()) == getType() 
+				&& !(getBody() instanceof ActionStatement)
+				&& !((StructuralStatement) getBody()).containsAnActionStatement();
 	}
 	
 		

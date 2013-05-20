@@ -1,5 +1,7 @@
 package asteroids.model.programs.statements;
 
+import java.util.Map;
+
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.expressions.Entity;
@@ -55,11 +57,11 @@ public class IfThenElse extends StructuralStatement {
 	}
 
 	@Override
-	public void execute() {
+	public boolean execute() {
 		if((boolean) getCondition().getRealValue()){
-			getIfBody().execute();
+			return getIfBody().execute();
 		}else{
-			getElseBody().execute();
+			return getElseBody().execute();
 		}
 
 	}
@@ -67,11 +69,11 @@ public class IfThenElse extends StructuralStatement {
 	@Override
 	public boolean canHaveAsOperandAt(int index, IEntry operand){
 		if(super.canHaveAsOperandAt(index, operand)){
-			if(index == 1 && operand.getClass().isAssignableFrom(Expression.class))
-				return ((Expression) operand).getRealValue().getClass().isAssignableFrom(Type.BOOLEAN.getClassReference());
+			if(index == 1 && operand instanceof Expression)
+				return ((Expression) operand).getType() == Type.BOOLEAN;
 			
-			if((index == 2 || index == 3) && operand.getClass().isAssignableFrom(Statement.class))
-				return ((Statement) operand).isTypeChecked();
+			if((index == 2 || index == 3) && operand instanceof Statement)
+				return true;
 		}
 			return false;
 	}
@@ -87,9 +89,11 @@ public class IfThenElse extends StructuralStatement {
 		
 	}
 	@Override
-	public boolean isTypeChecked() {
+	public boolean isTypeChecked(Map<String,Type> globals) {
 		return canHaveAsOperandAt(1, getCondition())
 				&& canHaveAsOperandAt(2, getIfBody())
-				&& canHaveAsOperandAt(3, getElseBody());
+				&& canHaveAsOperandAt(3, getElseBody())
+				&& getIfBody().isTypeChecked(globals)
+				&& getElseBody().isTypeChecked(globals);
 	}
 }

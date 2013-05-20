@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import asteroids.Error.IllegalOperandException;
-import asteroids.model.Bullet;
 import asteroids.model.Ship;
 import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.statements.Statement;
@@ -88,6 +87,6 @@ public class Program {
 	}
 	public boolean typeCheck(){
 		
-		return statement.isTypeChecked();
+		return statement.isTypeChecked(getGlobals());
 	}
 }

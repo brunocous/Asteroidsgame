@@ -1,5 +1,7 @@
 package asteroids.model.programs.statements;
 
+import java.util.Map;
+
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.expressions.Expression;
@@ -49,19 +51,20 @@ public class While extends StructuralStatement {
 	@Override
 	public boolean canHaveAsOperandAt(int index, IEntry operand){
 		if(super.canHaveAsOperandAt(index, operand)){
-			if(index == 1 && operand.getClass().isAssignableFrom(Expression.class))
-				return ((Expression) operand).getRealValue().getClass().isAssignableFrom(Type.BOOLEAN.getClassReference());
-			if(index == 2 && operand.getClass().isAssignableFrom(Statement.class))
+			if(index == 1 && operand instanceof Expression)
+				return ((Expression) operand).getType() == Type.BOOLEAN;
+			if(index == 2 && operand instanceof Statement)
 				return true;
 		}
 		return false;
 	}
 
 	@Override
-	public void execute() {
+	public boolean execute() {
 		while((boolean) getCondition().getRealValue()){
-			getBody().execute();
+			return getBody().execute();
 		}
+		return false;
 	}
 	@Override 
 	public String toString(){
@@ -73,9 +76,9 @@ public class While extends StructuralStatement {
 		getBody().setShip(ship);
 	}
 	@Override
-	public boolean isTypeChecked() {
+	public boolean isTypeChecked(Map<String, Type> globals) {
 		return canHaveAsOperandAt(1, getCondition())
-				&& getBody().isTypeChecked();
+				&& getBody().isTypeChecked(globals);
 	}
 
 }

@@ -82,10 +82,6 @@ public enum Type implements IGeneralType,IEntry {
 	public abstract GeneralType getGeneralType();
 		
 	@Override
-	public boolean isTypeChecked(){
-		return true;
-	}
-	@Override
 	public boolean hasAsSubEntry(IEntry entry){
 		return false;
 	}
