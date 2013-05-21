@@ -86,6 +86,7 @@ public class Program {
 	public Map<String,Variable> convertToVariables(Map<String,Type> globals){
 		HashMap<String,Variable> result = new HashMap<String,Variable>();
 		for(String name: globals.keySet()){
+			System.out.println("naam van variabele: " + name + " en zijn type: " + globals.get(name));
 			result.put(name, new Variable(name,globals.get(name)));
 		}
 		return result;
