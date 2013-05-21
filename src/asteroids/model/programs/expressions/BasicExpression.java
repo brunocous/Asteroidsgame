@@ -17,9 +17,4 @@ public abstract class BasicExpression extends Expression{
 	public boolean isTypeChecked(){
 		return true;
 	}
-
-	@Override
-	public void setShip(Entity ship){
-		assert true;
-	}
 }

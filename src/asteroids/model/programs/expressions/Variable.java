@@ -81,10 +81,6 @@ public boolean hasAsSubEntry(IEntry subEntry) {
 public boolean isTypeChecked(){
 	return getVariableValue().isTypeChecked();
 }
-@Override
-public void setShip(Entity ship){
-	assert true;
-}
 public void setType(Type type){
 	if(Type.isValidType(type))
 		this.type = type;

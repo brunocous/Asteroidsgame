@@ -100,10 +100,5 @@ public class EntitySequence extends Expression implements IComposedStructure{
 	public Expression getValue() {
 		return this;
 	}
-	
-	@Override
-	public void setShip(Entity ship){
-		assert true;
-	}
 
 }
