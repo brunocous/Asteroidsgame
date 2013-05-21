@@ -2,7 +2,6 @@ package asteroids.model.programs.statements;
 
 import asteroids.Error.*;
 import asteroids.model.programs.IEntry;
-import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.expressions.Expression;
 
 public class Assignement extends StructuralStatement{
@@ -54,11 +53,6 @@ public class Assignement extends StructuralStatement{
 	@Override
 	public String toString(){
 		return getVariableName() + " is set to " + getOperandAt(1) + ".";
-	}
-
-	@Override
-	public void setShip(Entity ship) throws IllegalOperandException {
-		getNewValue().setShip(ship);
 	}
 
 	@Override

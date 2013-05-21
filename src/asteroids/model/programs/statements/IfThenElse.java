@@ -80,13 +80,6 @@ public class IfThenElse extends StructuralStatement {
 		return "If " + getOperandAt(1) + ", then \n" + getOperandAt(2) + ". \nElse " + getOperandAt(3) + ".";
 	}
 	@Override
-	public void setShip(Entity ship) throws IllegalOperandException {
-		getCondition().setShip(ship);
-		getIfBody().setShip(ship);
-		getElseBody().setShip(ship);
-		
-	}
-	@Override
 	public boolean isTypeChecked() {
 		return canHaveAsOperandAt(1, getCondition())
 				&& canHaveAsOperandAt(2, getIfBody())

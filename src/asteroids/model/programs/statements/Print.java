@@ -54,11 +54,6 @@ public class Print extends StructuralStatement {
 		return "\n Printing the following: \n\t" + getExpression();
 	}
 	@Override
-	public void setShip(Entity ship) throws IllegalOperandException {
-		getExpression().setShip(ship);
-		
-	}
-	@Override
 	public boolean isTypeChecked() {
 		return canHaveAsOperandAt(1, getExpression());
 	}
