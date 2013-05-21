@@ -34,7 +34,9 @@ public abstract class Statement implements IEntry,IComposedStructure {
 	}
 	public void setProgram(Program program){
 		if(canHaveAsProgram( program))
+			System.out.println("ik ga nu program aan statement koppelen");
 			this.program = program;
+			
 	}
 	public boolean canHaveAsProgram(Program program){
 		return (getProgram() == null) ? true:false;

@@ -7,6 +7,7 @@ import be.kuleuven.cs.som.annotate.Raw;
 
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
+import asteroids.model.programs.Program;
 
 public class Sequence extends StructuralStatement {
 
@@ -52,7 +53,9 @@ public class Sequence extends StructuralStatement {
 			getAllStatements().add(statement);
 	}
 	public void addAllStatements(List<Statement> statementsToAdd) {
+		System.out.println(statementsToAdd.size());
 		for(Statement statement: statementsToAdd){
+			
 			addAsStatement(statement);	
 		}
 	}
@@ -76,7 +79,11 @@ public class Sequence extends StructuralStatement {
 			encounteredAction= ((Statement)getOperandAt(i)).execute();
 			i++;
 		}
-		executionPosition = i;
+		int a= i;
+		if((a == getNbOperands()+1))
+			executionPosition = 1;
+		else 
+			executionPosition = a;
 		return !(i == getNbOperands()+1);
 	}
 	
@@ -95,5 +102,12 @@ public class Sequence extends StructuralStatement {
 				return false;
 		}
 		return true;
+	}
+	@Override
+	public void setProgram(Program program){
+		super.setProgram(program);
+		for(Statement st: getAllStatements()){
+			st.setProgram(program);
+		}
 	}
 }

@@ -3,6 +3,7 @@ package asteroids.model.programs.statements;
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.*;
 import asteroids.model.programs.IEntry;
+import asteroids.model.programs.Program;
 import asteroids.model.programs.expressions.Expression;
 import asteroids.model.programs.type.Type;
 
@@ -54,5 +55,11 @@ public class Turn extends ShipActionStatement {
 	}
 	public Expression getAmount(){
 		return amount;
+	}
+	
+	@Override
+	public void setProgram(Program program){
+		super.setProgram(program);
+		getAmount().setProgram(program);
 	}
 }

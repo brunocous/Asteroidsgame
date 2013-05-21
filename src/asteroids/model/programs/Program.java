@@ -6,7 +6,6 @@ import java.util.Map;
 
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.Ship;
-import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.expressions.Variable;
 import asteroids.model.programs.statements.Statement;
 import asteroids.model.programs.type.Type;
@@ -29,6 +28,7 @@ public class Program {
 			throw new IllegalArgumentException();
 		else{
 			this.statement = statement;
+			statement.setProgram(this);
 		}
 		this.errors = errors;
 	}
@@ -44,6 +44,7 @@ public class Program {
 	public void execute(){
 		setIsRunning(true);
 		if(!hasErrors())
+			System.out.println("Nu runnen in program");
 		this.getStatement().execute();
 		setIsRunning(false);
 	}

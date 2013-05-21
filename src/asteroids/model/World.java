@@ -827,7 +827,6 @@ public class World {
 	*/
 	private void runPrograms(){
 	if(canRunAllPrograms()){
-		System.out.println("Hoi, ik ben in runProgram in world");
 		for(SpaceObject sp: getAllSpaceObjects()){
 			if(sp.getClass().isAssignableFrom(Ship.class)){
 				((Ship) sp).runProgram();

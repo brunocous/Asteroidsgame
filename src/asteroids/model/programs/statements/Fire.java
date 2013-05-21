@@ -2,6 +2,7 @@ package asteroids.model.programs.statements;
 
 
 import asteroids.model.*;
+import asteroids.model.programs.Program;
 
 
 public class Fire extends ShipActionStatement {
@@ -21,5 +22,9 @@ public class Fire extends ShipActionStatement {
 	@Override
 	public boolean isTypeChecked() {
 		return true;
+	}
+	@Override
+	public void setProgram(Program program){
+		super.setProgram(program);
 	}
 }

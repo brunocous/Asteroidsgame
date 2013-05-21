@@ -2,6 +2,7 @@ package asteroids.model.programs.statements;
 
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
+import asteroids.model.programs.Program;
 import asteroids.model.programs.expressions.Expression;
 import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.type.Type;
@@ -72,6 +73,12 @@ public class While extends StructuralStatement {
 	public boolean isTypeChecked() {
 		return canHaveAsOperandAt(1, getCondition())
 				&& getBody().isTypeChecked();
+	}
+	@Override
+	public void setProgram(Program program){
+		super.setProgram(program);
+		getBody().setProgram(program);
+		getCondition().setProgram(program);
 	}
 
 }
