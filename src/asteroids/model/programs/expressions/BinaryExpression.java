@@ -20,7 +20,7 @@ public abstract class BinaryExpression extends Expression implements IComposedSt
 	@Override
 	public void setOperandAt(int index, IEntry argument){
 		
-		if(canHaveAsOperandAt(index,argument) && Expression.class.isAssignableFrom(argument.getClass())){
+		if(canHaveAsOperandAt(index,argument) && argument instanceof Expression ){
 			
 			if(index ==1){
 			this.argument1 = (Expression) argument;

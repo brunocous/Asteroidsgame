@@ -18,7 +18,7 @@ public abstract class Expression implements IEntry{
 	
 	public boolean equals(Expression other){
 		
-	if (!this.getValue().getClass().isAssignableFrom(other.getValue().getClass())){
+	if (!(this.getType() == other.getType())){
 		return false;
 	}
 	else{
@@ -35,13 +35,13 @@ public abstract class Expression implements IEntry{
 	
 	public String toString(){
 		
-		if(getValue().getClass().isAssignableFrom(DoubleLiteral.class)){
+		if(getValue().getType() == Type.DOUBLE){
 			return Double.toString((Double) getRealValue());
 		}
-		else if(getValue().getClass().isAssignableFrom(BooleanLiteral.class)){
+		else if(getValue().getType() == Type.BOOLEAN){
 			return String.valueOf((Boolean) getRealValue());
 		}
-		else if(getValue().getClass().isAssignableFrom(Entity.class)){
+		else if(getValue().getType() == Type.ANY){
 			return ((SpaceObject) getRealValue()).toString();
 		}
 		else{

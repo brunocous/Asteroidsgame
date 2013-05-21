@@ -57,13 +57,13 @@ public Expression getVariableValue(){
 
 @Override
 public Object getRealValue() {
-	if(getValue().getClass().isAssignableFrom(DoubleLiteral.class)){
+	if(getValue().getType()== Type.DOUBLE){
 		return new DoubleLiteral(((DoubleLiteral)(value.getValue())).getRealValue());
 	}
-	else if(getValue().getClass().isAssignableFrom(BooleanLiteral.class)){
+	else if(getValue().getType()== Type.BOOLEAN){
 		return new BooleanLiteral(((BooleanLiteral)(value.getValue())).getRealValue());
 	}
-	else if(getValue().getClass().isAssignableFrom(Entity.class)){
+	else if(getValue().getType() == Type.ANY){
 		return new Entity(((Entity)(value.getValue())).getRealValue());
 	}
 	else{
