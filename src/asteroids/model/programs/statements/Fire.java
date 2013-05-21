@@ -23,8 +23,4 @@ public class Fire extends ShipActionStatement {
 	public boolean isTypeChecked() {
 		return true;
 	}
-	@Override
-	public void setProgram(Program program){
-		super.setProgram(program);
-	}
 }

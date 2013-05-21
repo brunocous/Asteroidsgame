@@ -2,6 +2,7 @@ package asteroids.model.programs.statements;
 
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
+import asteroids.model.programs.Program;
 import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.expressions.EntitySequence;
 import asteroids.model.programs.expressions.Expression;
@@ -92,6 +93,11 @@ public class Foreach extends StructuralStatement {
 		return getProgram().getVariable(getVariableName()).getType() == getType()
 				&& !(getBody() instanceof ActionStatement)
 				&& !((StructuralStatement) getBody()).containsAnActionStatement();
+	}
+	@Override
+	public void setProgram(Program program){
+		super.setProgram(program);
+		getBody().setProgram(program);
 	}
 	
 		

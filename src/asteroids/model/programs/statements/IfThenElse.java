@@ -2,6 +2,7 @@ package asteroids.model.programs.statements;
 
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
+import asteroids.model.programs.Program;
 import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.expressions.Expression;
 import asteroids.model.programs.type.Type;
@@ -86,5 +87,12 @@ public class IfThenElse extends StructuralStatement {
 				&& canHaveAsOperandAt(3, getElseBody())
 				&& getIfBody().isTypeChecked()
 				&& getElseBody().isTypeChecked();
+	}
+	@Override
+	public void setProgram(Program program){
+		super.setProgram(program);
+		getCondition().setProgram(program);
+		getIfBody().setProgram(program);
+		getElseBody().setProgram(program);
 	}
 }
