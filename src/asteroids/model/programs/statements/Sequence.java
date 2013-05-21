@@ -53,7 +53,6 @@ public class Sequence extends StructuralStatement {
 			getAllStatements().add(statement);
 	}
 	public void addAllStatements(List<Statement> statementsToAdd) {
-		System.out.println(statementsToAdd.size());
 		for(Statement statement: statementsToAdd){
 			
 			addAsStatement(statement);	

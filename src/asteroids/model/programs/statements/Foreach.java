@@ -5,12 +5,10 @@ import asteroids.model.programs.IEntry;
 import asteroids.model.programs.Program;
 import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.expressions.EntitySequence;
-import asteroids.model.programs.expressions.Expression;
 import asteroids.model.programs.type.Type;
 
 public class Foreach extends StructuralStatement {
 
-	private Expression entities = null;
 	private Statement body;
 	private final Type type;
 	private String variableName;
@@ -18,23 +16,18 @@ public class Foreach extends StructuralStatement {
 	public Foreach(Type type, String variableName, Statement body){
 		this.variableName = variableName;
 		this.body = body;
-		if(canHaveAsOperandAt(3, type))
+		if(canHaveAsOperandAt(1, type))
 			this.type = type;
 		else this.type = null;
 	}
 	@Override
 	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException {
-		if(index == 1)
-			return getEntities();
-		if(index == 2)
+		if(index == 3)
 			return getBody();
-		if(index == 4)
+		if(index == 1)
 			return getType();
 		throw new IndexOutOfBoundsException();
 		
-	}
-	public Expression getEntities(){
-		return entities;
 	}
 	public String getVariableName(){
 		return variableName;
@@ -56,21 +49,17 @@ public class Foreach extends StructuralStatement {
 			throws IllegalOperandException {
 		if(!canHaveAsOperandAt(index,operand))
 			throw new IllegalOperandException();
-		if(index == 1)
-			this.entities = (Expression) operand;
-		if(index == 2)
+		if(index == 3)
 			this.body = (Statement) operand;
 
 	}
 	@Override
 	public boolean canHaveAsOperandAt(int index, IEntry operand){
 		if(super.canHaveAsOperandAt(index, operand)){
-			if(index == 1 && operand instanceof EntitySequence)
-				return true;
-			if(index == 2 && operand instanceof StructuralStatement){
+			if(index == 3 && operand instanceof StructuralStatement){
 				return true;
 			}
-			if(index == 4 && operand instanceof Type)
+			if(index == 1 && operand instanceof Type)
 				return Type.isValidType((Type) operand);
 		}
 			return false;
@@ -78,7 +67,7 @@ public class Foreach extends StructuralStatement {
 
 	@Override
 	public boolean execute() {
-		for(Entity entity: ((EntitySequence) getEntities()).getAllEntities()){
+		for(Entity entity: EntitySequence.generateEntitySequence(getProgram().getShip().getWorld(), getType()).getAllEntities()){
 			getProgram().getVariable(getVariableName()).setValue(entity);
 				getBody().execute();
 		}
@@ -90,7 +79,8 @@ public class Foreach extends StructuralStatement {
 	}
 	@Override
 	public boolean isTypeChecked() {
-		return getProgram().getVariable(getVariableName()).getType() == getType()
+		return Type.isValidEntityType(getType())
+				&& getProgram().getVariable(getVariableName()).getType() == Type.ANY
 				&& !(getBody() instanceof ActionStatement)
 				&& !((StructuralStatement) getBody()).containsAnActionStatement();
 	}

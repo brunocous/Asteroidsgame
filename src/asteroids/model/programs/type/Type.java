@@ -1,6 +1,8 @@
 package asteroids.model.programs.type;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import asteroids.model.Asteroid;
 import asteroids.model.Bullet;
@@ -87,6 +89,14 @@ public enum Type implements IGeneralType,IEntry {
 	}
 	public static boolean isValidType(Type type){
 		return Arrays.asList(Type.values()).contains(type);
+	}
+	public static boolean isValidEntityType(Type type){
+		List<Type> validTypes = new ArrayList<Type>();
+		for(Type t: Type.values()){
+			if(t.getGeneralType() == GeneralType.ENTITY)
+				validTypes.add(t);
+		}
+		return validTypes.contains(type);
 	}
 
 	

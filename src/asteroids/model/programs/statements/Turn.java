@@ -5,6 +5,7 @@ import asteroids.model.*;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.Program;
 import asteroids.model.programs.expressions.Expression;
+import asteroids.model.programs.expressions.Variable;
 import asteroids.model.programs.type.Type;
 
 public class Turn extends ShipActionStatement {
@@ -31,7 +32,7 @@ public class Turn extends ShipActionStatement {
 	@Override
 	public boolean execute() {
 		Ship ship = (Ship) getShip().getRealValue();
-			ship.turn((double) getAmount().getRealValue());
+			ship.turn((Double) getAmount().getRealValue());
 			return true;
 	}
 
@@ -61,5 +62,13 @@ public class Turn extends ShipActionStatement {
 	public void setProgram(Program program){
 		super.setProgram(program);
 		getAmount().setProgram(program);
+		
+		if(getOperandAt(2) instanceof Variable){
+			try{setOperandAt(2, program.getVariable(((Variable)getOperandAt(2)).getName()));
+			
+			} catch(IllegalOperandException e){
+				assert !canHaveAsOperandAt(2, program.getVariable(((Variable)getOperandAt(1)).getName()));
+			}
+		}
 	}
 }

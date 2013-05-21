@@ -4,13 +4,13 @@ import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.Program;
 import asteroids.model.programs.expressions.Expression;
-import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.type.Type;
 
 public class While extends StructuralStatement {
 
 	private Expression condition;
 	private Statement body;
+	private int executionPosition = 1;
 	
 	public While(Expression condition, Statement body){
 		this.condition = condition;
@@ -60,8 +60,8 @@ public class While extends StructuralStatement {
 
 	@Override
 	public boolean execute() {
-		while((boolean) getCondition().getRealValue()){
-			return getBody().execute();
+		while( !getBody().execute() && (boolean) getCondition().getRealValue()){
+			
 		}
 		return false;
 	}
@@ -79,6 +79,18 @@ public class While extends StructuralStatement {
 		super.setProgram(program);
 		getBody().setProgram(program);
 		getCondition().setProgram(program);
+	}
+	/**
+	 * @return the executionPosition
+	 */
+	public int getExecutionPosition() {
+		return executionPosition;
+	}
+	/**
+	 * @param executionPosition the executionPosition to set
+	 */
+	public void setExecutionPosition(int executionPosition) {
+		this.executionPosition = executionPosition;
 	}
 
 }

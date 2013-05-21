@@ -1,6 +1,5 @@
 package asteroids.model.programs.expressions;
 
-import asteroids.Util;
 import asteroids.model.programs.IEntry;
 
 public class Division extends BinaryMath{
@@ -26,19 +25,15 @@ public class Division extends BinaryMath{
 	@Override
 	public boolean canHaveAsOperandAt(int index, IEntry expression){
 		
-		if(index > getNbOperands()){
+		if(index > getNbOperands())
 			return false;
-		}
-		else if(index==2 && Util.fuzzyEquals(((DoubleLiteral)(((Expression)expression).getValue())).getRealValue(),0)){
-			return false;
-		}
-		else{
-			return true;
-		}
+		else return true;
 		
 		
-		}
+	}
+	
 }
+	
 	
 
 

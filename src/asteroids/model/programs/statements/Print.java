@@ -3,8 +3,8 @@ package asteroids.model.programs.statements;
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.Program;
-import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.expressions.Expression;
+import asteroids.model.programs.expressions.Variable;
 
 public class Print extends StructuralStatement {
 
@@ -46,7 +46,7 @@ public class Print extends StructuralStatement {
 
 	@Override
 	public boolean execute() {
-		System.out.println(getExpression());
+		System.out.println(getExpression().getRealValue());
 		return false;
 	}
 	
@@ -62,6 +62,17 @@ public class Print extends StructuralStatement {
 	@Override
 	public void setProgram(Program program){
 		super.setProgram(program);
-		getExpression().setProgram(program);
+		
+		if (getExpression() != null) {
+			getExpression().setProgram(program);
+
+			if (getExpression() instanceof Variable) {
+				try{setOperandAt(1,program.getVariable(((Variable) getExpression()).getName()));
+				
+				}catch(IllegalOperandException e){
+					assert!(canHaveAsOperandAt(1, program.getVariable(((Variable) getExpression()).getName())));
+				}
+			}
+		}
 	}
 }

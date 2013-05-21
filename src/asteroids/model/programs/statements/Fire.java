@@ -2,13 +2,13 @@ package asteroids.model.programs.statements;
 
 
 import asteroids.model.*;
-import asteroids.model.programs.Program;
 
 
 public class Fire extends ShipActionStatement {
 	
 	@Override
 	public boolean execute() {
+		System.out.println("Schiet!");
 		try{ getProgram().getShip().fireObject(new Bullet(getProgram().getShip()));
 		}catch (Exception e){
 			assert true;

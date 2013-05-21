@@ -1,6 +1,7 @@
 package asteroids.model.programs.expressions;
 
 import asteroids.model.programs.type.*;
+import asteroids.model.programs.type.IGeneralType.GeneralType;
 
 import asteroids.model.programs.IEntry;
 
@@ -43,7 +44,7 @@ public Expression getValue() {
 @Override
 public boolean isTypeChecked(){
 	
-	return getOperandAt(1).getType() == Type.ANY;
+	return getOperandAt(1).getType().getGeneralType() == GeneralType.ENTITY;
 }
 
 }

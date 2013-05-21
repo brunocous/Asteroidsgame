@@ -1,5 +1,6 @@
 package asteroids.model.programs.expressions;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,12 +15,13 @@ import asteroids.model.programs.type.Type;
 public class EntitySequence extends Expression implements IComposedStructure{
 
 	private List<Entity> entities;
-	private static final Type TYPE = Type.ANY;
+	private static final Type type = Type.ANY;
 	
 	public EntitySequence(){
-		entities = null;
+		this.entities = new ArrayList<Entity>();
 	}
 	public EntitySequence(List<Entity> entities)throws IllegalOperandException{
+		this();
 		addAllEntities(entities);
 	}
 	public void addAllEntities(List<Entity> entities) throws IllegalOperandException{
@@ -28,9 +30,10 @@ public class EntitySequence extends Expression implements IComposedStructure{
 		}
 		
 	}
+
 	
 	public Type getType(){
-		return TYPE;
+		return type;
 	}
 	public void addAsEntity(@Raw Entity ent) throws IllegalOperandException{
 		setOperandAt(getNbOperands()+1, ent);
@@ -60,7 +63,9 @@ public class EntitySequence extends Expression implements IComposedStructure{
 	}
 	@Override
 	public int getNbOperands() {
-		return this.entities.size();
+		if(this.entities == null)
+			return 0;
+		else return this.entities.size();
 	}
 	@Override
 	public void setOperandAt(int index, IEntry operand)
@@ -80,7 +85,7 @@ public class EntitySequence extends Expression implements IComposedStructure{
 				&& operand != null
 				&& operand.getClass().isAssignableFrom(Entity.class));
 	}
-	public static EntitySequence makeEntitySequence(World world, Type type){
+	public static EntitySequence generateEntitySequence(World world, Type type){
 		     EntitySequence result = new EntitySequence();
 	        for(SpaceObject obj: world.getAllSpaceObjects()){
 	        	if(obj.getClass().isAssignableFrom(type.getClassReference()))
@@ -93,12 +98,12 @@ public class EntitySequence extends Expression implements IComposedStructure{
 		      return result;
 		    }
 	@Override
-	public boolean isTypeChecked() {
-		return true;
-	}
-	@Override
 	public Expression getValue() {
 		return this;
+	}
+	@Override
+	public boolean isTypeChecked() {
+		return true;
 	}
 
 }

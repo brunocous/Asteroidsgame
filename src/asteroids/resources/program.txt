@@ -1,7 +1,7 @@
-double a;
+entity a;
 
-a:= 0.2;
-
-while(0.2 == a){
-fire;
+foreach(asteroid ,a) do{
+print a;
+print getx a;
+print gety a;
 }
