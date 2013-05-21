@@ -83,10 +83,6 @@ public class Foreach extends StructuralStatement {
 		}
 		return false;
 	}
-	public void setShip(Entity ship) throws IllegalOperandException{
-		setOperandAt(1, EntitySequence.makeEntitySequence( ship.getRealValue().getWorld(), getType()));
-		getBody().setShip( ship );
-	}
 	@Override
 	public String toString(){
 		return "For each " + getVariableName() + "\nof  " + getOperandAt(1) + "\ndo " + getOperandAt(3);

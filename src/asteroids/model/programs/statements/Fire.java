@@ -8,8 +8,7 @@ public class Fire extends ShipActionStatement {
 	
 	@Override
 	public boolean execute() {
-		Ship ship = (Ship) getShip().getRealValue();
-		try{ ship.fireObject(new Bullet(ship));
+		try{ getProgram().getShip().fireObject(new Bullet(getProgram().getShip()));
 		}catch (Exception e){
 			assert true;
 		}

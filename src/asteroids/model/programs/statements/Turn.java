@@ -3,7 +3,6 @@ package asteroids.model.programs.statements;
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.*;
 import asteroids.model.programs.IEntry;
-import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.expressions.Expression;
 import asteroids.model.programs.type.Type;
 
@@ -12,7 +11,6 @@ public class Turn extends ShipActionStatement {
 	private Expression amount;
 	
 	public Turn( Expression amount){
-		super();
 		this.amount = amount;
 	}
 	
@@ -38,7 +36,7 @@ public class Turn extends ShipActionStatement {
 
 	@Override
 	public boolean canHaveAsOperandAt( int index, IEntry operand){
-		if(super.canHaveAsOperandAt(index, operand) && index == 2 
+		if(super.canHaveAsOperandAt(index, operand) && index == 2
 				&& operand instanceof Expression)
 				return ((Expression) operand).getType() == Type.DOUBLE;
 		return false;
@@ -46,7 +44,6 @@ public class Turn extends ShipActionStatement {
 	@Override
 	public void setOperandAt(int index, IEntry operand)
 			throws IllegalOperandException {
-		super.setOperandAt(index, operand);
 		if(index == 2 && canHaveAsOperandAt(index, operand))
 			this.amount = (Expression) operand;
 	}
@@ -57,10 +54,5 @@ public class Turn extends ShipActionStatement {
 	}
 	public Expression getAmount(){
 		return amount;
-	}
-	@Override
-	public void setShip(Entity ship)throws IllegalOperandException{
-		super.setShip(ship);
-		getAmount().setShip(ship);
 	}
 }

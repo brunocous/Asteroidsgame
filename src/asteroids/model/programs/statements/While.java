@@ -69,11 +69,6 @@ public class While extends StructuralStatement {
 		return "While " + getOperandAt(1) + " do " + getOperandAt(2);
 	}
 	@Override
-	public void setShip(Entity ship) throws IllegalOperandException {
-		getCondition().setShip(ship);
-		getBody().setShip(ship);
-	}
-	@Override
 	public boolean isTypeChecked() {
 		return canHaveAsOperandAt(1, getCondition())
 				&& getBody().isTypeChecked();

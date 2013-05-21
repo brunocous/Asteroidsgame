@@ -6,19 +6,14 @@ import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.expressions.Expression;
 
 public abstract class ShipActionStatement extends ActionStatement {
-
-	private Expression ship;
 	
-	public ShipActionStatement(){
-		this.ship = null;
-	}
 	@Override
 	public boolean isTypeChecked() {
 		return (getNbOperands() ==1) ? true: this.isTypeChecked();
 	}
 
 	public Expression getShip(){
-		return ship;
+		return new Entity(getProgram().getShip());
 	}
 	@Override
 	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException {
@@ -31,29 +26,10 @@ public abstract class ShipActionStatement extends ActionStatement {
 	public int getNbOperands() {
 		return 1;
 	}
-
 	@Override
-	public void setOperandAt(int index, IEntry operand)
-			throws IllegalOperandException {
-		if(!canHaveAsOperandAt(index,operand))
+	public void setOperandAt(int index, IEntry entry)throws IllegalOperandException{
+		if(index <0)
 			throw new IllegalOperandException();
-		if(index == 1)
-			this.ship = (Expression) operand;
-	}
-
-	@Override
-	public boolean canHaveAsOperandAt(int index, IEntry entry){
-		if(super.canHaveAsOperandAt(index, entry)){
-			if(index == 1)
-				return entry instanceof Entity;
-			else return index>1;
-		}
-		return false;
-	}
-
-	@Override
-	public void setShip(Entity ship) throws IllegalOperandException {
-		setOperandAt(1,ship);
 	}
 
 }
