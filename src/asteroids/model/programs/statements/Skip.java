@@ -2,6 +2,7 @@ package asteroids.model.programs.statements;
 
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
+import asteroids.model.programs.Program;
 
 public class Skip extends ActionStatement {
 
@@ -42,6 +43,10 @@ public class Skip extends ActionStatement {
 	@Override
 	public boolean execute() {
 		return true;
+	}
+	@Override
+	public void setProgram(Program program){
+		super.setProgram(program);
 	}
 
 }

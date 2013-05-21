@@ -2,6 +2,7 @@ package asteroids.model.programs.statements;
 
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
+import asteroids.model.programs.Program;
 import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.expressions.Expression;
 
@@ -58,4 +59,9 @@ public class Print extends StructuralStatement {
 		return canHaveAsOperandAt(1, getExpression());
 	}
 
+	@Override
+	public void setProgram(Program program){
+		super.setProgram(program);
+		getExpression().setProgram(program);
+	}
 }

@@ -2,6 +2,7 @@ package asteroids.model.programs.statements;
 
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
+import asteroids.model.programs.Program;
 import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.expressions.Expression;
 
@@ -30,6 +31,10 @@ public abstract class ShipActionStatement extends ActionStatement {
 	public void setOperandAt(int index, IEntry entry)throws IllegalOperandException{
 		if(index <0)
 			throw new IllegalOperandException();
+	}
+	@Override
+	public void setProgram(Program program){
+		super.setProgram(program);
 	}
 
 }
