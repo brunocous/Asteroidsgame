@@ -586,6 +586,7 @@ public class Ship extends SpaceObject{
 	 */
 	@Override
 	public void fireObject(SpaceObject projectile){
+		System.out.println("fire in the hole!! "+projectile);
 			if(Bullet.class.isAssignableFrom(projectile.getClass())){
 				this.fireBullet((Bullet) projectile);
 			}

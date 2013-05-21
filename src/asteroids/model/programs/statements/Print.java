@@ -62,7 +62,7 @@ public class Print extends StructuralStatement {
 		
 	}
 	@Override
-	public boolean isTypeChecked(Map<String,Type> globals) {
+	public boolean isTypeChecked() {
 		return canHaveAsOperandAt(1, getExpression());
 	}
 

@@ -1,12 +1,9 @@
 package asteroids.model.programs.statements;
 
-import java.util.Map;
-
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.expressions.Expression;
-import asteroids.model.programs.type.Type;
 
 public abstract class ShipActionStatement extends ActionStatement {
 
@@ -16,10 +13,8 @@ public abstract class ShipActionStatement extends ActionStatement {
 		this.ship = null;
 	}
 	@Override
-	public boolean isTypeChecked(Map<String, Type> globals) {
-		if(getShip() == null)
-			return true;
-		else return canHaveAsOperandAt(1,getShip());
+	public boolean isTypeChecked() {
+		return (getNbOperands() ==1) ? true: this.isTypeChecked();
 	}
 
 	public Expression getShip(){

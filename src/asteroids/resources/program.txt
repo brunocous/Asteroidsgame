@@ -1,4 +1,3 @@
+while(true){
 fire;
-fire;
-fire;
-fire;
+}

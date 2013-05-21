@@ -89,11 +89,11 @@ public class IfThenElse extends StructuralStatement {
 		
 	}
 	@Override
-	public boolean isTypeChecked(Map<String,Type> globals) {
+	public boolean isTypeChecked() {
 		return canHaveAsOperandAt(1, getCondition())
 				&& canHaveAsOperandAt(2, getIfBody())
 				&& canHaveAsOperandAt(3, getElseBody())
-				&& getIfBody().isTypeChecked(globals)
-				&& getElseBody().isTypeChecked(globals);
+				&& getIfBody().isTypeChecked()
+				&& getElseBody().isTypeChecked();
 	}
 }

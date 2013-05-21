@@ -2,6 +2,7 @@ package asteroids.model.programs.expressions;
 
 import asteroids.model.SpaceObject;
 import asteroids.model.programs.IEntry;
+import asteroids.model.programs.Program;
 import asteroids.model.programs.type.Type;
 
 
@@ -9,7 +10,7 @@ import asteroids.model.programs.type.Type;
 
 public abstract class Expression implements IEntry{
 
-
+	private Program program = null;
 	 
 	public abstract Object getRealValue();
 
@@ -50,4 +51,17 @@ public abstract class Expression implements IEntry{
 	public abstract void setShip(Entity ship);
 	public abstract boolean isTypeChecked();
 	
+	@Override
+	public Program getProgram(){
+		return new Program(program.getGlobals(),program.getStatement(),program.getErrors());
+	}
+	@Override
+	public void setProgram(Program program){
+		if(canHaveAsProgram( program))
+			this.program = program;
+	}
+	@Override
+	public boolean canHaveAsProgram(Program program){
+		return (getProgram() == null) ? true:false;
+	}
 }

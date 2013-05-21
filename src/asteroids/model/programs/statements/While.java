@@ -1,7 +1,5 @@
 package asteroids.model.programs.statements;
 
-import java.util.Map;
-
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.expressions.Expression;
@@ -76,9 +74,9 @@ public class While extends StructuralStatement {
 		getBody().setShip(ship);
 	}
 	@Override
-	public boolean isTypeChecked(Map<String, Type> globals) {
+	public boolean isTypeChecked() {
 		return canHaveAsOperandAt(1, getCondition())
-				&& getBody().isTypeChecked(globals);
+				&& getBody().isTypeChecked();
 	}
 
 }

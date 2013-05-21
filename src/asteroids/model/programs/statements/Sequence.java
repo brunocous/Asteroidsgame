@@ -75,8 +75,6 @@ public class Sequence extends StructuralStatement {
 		int i = executionPosition;
 		boolean encounteredAction = false;
 		while(i<= getNbOperands() && encounteredAction == false){
-			//executes statement
-			System.out.println("ik ga em nu executen in sequence");
 			
 			encounteredAction= ((Statement)getOperandAt(i)).execute();
 			
@@ -101,9 +99,9 @@ public class Sequence extends StructuralStatement {
 		}
 	}
 	@Override
-	public boolean isTypeChecked(Map<String, Type> globals) {
+	public boolean isTypeChecked() {
 		for(Statement st: getAllStatements()){
-			if(!st.isTypeChecked(globals))
+			if(!st.isTypeChecked())
 				return false;
 		}
 		return true;

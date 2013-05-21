@@ -1,7 +1,5 @@
 package asteroids.model.programs.statements;
 
-import java.util.Map;
-
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.expressions.Entity;
@@ -80,7 +78,7 @@ public class Foreach extends StructuralStatement {
 	@Override
 	public boolean execute() {
 		for(Entity entity: ((EntitySequence) getEntities()).getAllEntities()){
-			new Assignement(getVariableName(), entity);
+			getProgram().getVariable(getVariableName()).setValue(entity);
 				getBody().execute();
 		}
 		return false;
@@ -94,8 +92,8 @@ public class Foreach extends StructuralStatement {
 		return "For each " + getVariableName() + "\nof  " + getOperandAt(1) + "\ndo " + getOperandAt(3);
 	}
 	@Override
-	public boolean isTypeChecked(Map<String, Type> globals) {
-		return globals.get(getVariableName()) == getType() 
+	public boolean isTypeChecked() {
+		return getProgram().getVariable(getVariableName()).getType() == getType()
 				&& !(getBody() instanceof ActionStatement)
 				&& !((StructuralStatement) getBody()).containsAnActionStatement();
 	}

@@ -29,6 +29,7 @@ public class Assignement extends StructuralStatement{
 
 	@Override
 	public boolean execute() {
+		getProgram().getVariable(getVariableName()).setValue(getNewValue());
 		return false;
 	}
 
@@ -63,9 +64,8 @@ public class Assignement extends StructuralStatement{
 	}
 
 	@Override
-	public boolean isTypeChecked(Map<String, Type> globals) {
-		return (globals.get(getVariableName()) == newValue.getType()) ? true:false;
-			
+	public boolean isTypeChecked() {
+		return (getProgram().getVariable(getVariableName()).getType() == newValue.getType()) ? true:false;
 	}
 
 	public Expression getNewValue(){

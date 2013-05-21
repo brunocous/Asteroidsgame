@@ -1,15 +1,15 @@
 package asteroids.model.programs.statements;
 
-import java.util.Map;
 
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IComposedStructure;
 import asteroids.model.programs.IEntry;
+import asteroids.model.programs.Program;
 import asteroids.model.programs.expressions.Entity;
-import asteroids.model.programs.type.Type;
 
 public abstract class Statement implements IEntry,IComposedStructure {
 
+	private Program program = null;
 	public abstract boolean execute();
 	
 	@Override
@@ -30,5 +30,19 @@ public abstract class Statement implements IEntry,IComposedStructure {
 		return false;
 	}
 	
-	public abstract boolean isTypeChecked(Map<String,Type> globals);
+	public abstract boolean isTypeChecked();
+	
+	@Override
+	public Program getProgram(){
+		return program;
+	}
+	@Override
+	public void setProgram(Program program){
+		if(canHaveAsProgram( program))
+			this.program = program;
+	}
+	@Override
+	public boolean canHaveAsProgram(Program program){
+		return (getProgram() == null) ? true:false;
+	}
 }

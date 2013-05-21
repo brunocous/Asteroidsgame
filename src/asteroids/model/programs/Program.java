@@ -1,17 +1,19 @@
 package asteroids.model.programs;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.Ship;
 import asteroids.model.programs.expressions.Entity;
+import asteroids.model.programs.expressions.Variable;
 import asteroids.model.programs.statements.Statement;
 import asteroids.model.programs.type.Type;
 
 public class Program {
 
-	private final Map<String,Type> globals;
+	private final Map<String, Variable> variables;
 	private final Statement statement;
 	private Ship ship = null;
 	private final List<String> errors;
@@ -19,35 +21,30 @@ public class Program {
 	
 
 	public Program(Map<String,Type> globals, Statement statement, List<String> errors){
-		if(!canHaveAsGlobals(globals))
+		if(!canHaveAsVariables(globals))
 			throw new IllegalArgumentException();
 		else
-			this.globals = globals;
+			this.variables = convertToVariables(globals);
 		if(!canHaveAsStatement(statement))
 			throw new IllegalArgumentException();
-		else
-			System.out.println("Ik zet deze statement: " + statement.toString());
+		else{
 			this.statement = statement;
+			statement.setProgram(this);
+		}
 		this.errors = errors;
 	}
-
-	public Map<String,Type> getGlobals() {
-		return globals;
-	}
-
-	public Statement getStatement() {
-		return statement;
-	}
-	public boolean canHaveAsGlobals(Map<String,Type> globals){
+	public boolean canHaveAsVariables(Map<String,Type> globals){
 		return globals != null;
 	}
 	public boolean canHaveAsStatement(Statement statement){
-		return statement != null;
+		return statement != null && statement.canHaveAsProgram(this);
+	}
+	public Statement getStatement(){
+		return statement;
 	}
 	public void execute(){
 		setIsRunning(true);
-		if(!hasTypeCheckingErrors())
-			System.out.println("ik ga hem nu runnen in program");
+		if(!hasErrors())
 		this.getStatement().execute();
 		setIsRunning(false);
 	}
@@ -61,7 +58,7 @@ public class Program {
 		return ship!= null 
 				&& !ship.hasAProgram() 
 				&& !hasShip() 
-				&& !hasTypeCheckingErrors();
+				&& !hasErrors();
 	}
 	public void setShip(Ship ship) throws IllegalOperandException{
 		assert canHaveAsShip(ship);
@@ -74,7 +71,7 @@ public class Program {
 	public List<String> getErrors() {
 		return errors;
 	}
-	public boolean hasTypeCheckingErrors(){
+	public boolean hasErrors(){
 		return !getErrors().isEmpty();
 	}
 
@@ -87,6 +84,22 @@ public class Program {
 	}
 	public boolean typeCheck(){
 		
-		return statement.isTypeChecked(getGlobals());
+		return statement.isTypeChecked();
+	}
+	public Map<String,Variable> convertToVariables(Map<String,Type> globals){
+		HashMap<String,Variable> result = new HashMap<String,Variable>();
+		for(String name: globals.keySet()){
+			result.put(name, new Variable(name,globals.get(name)));
+		}
+		return result;
+	}
+	public Map<String,Variable> getVariables(){
+		return variables;
+	}
+	public Variable getVariable(String variable){
+		return getVariables().get(variable);
+	}
+	public boolean hasVariable(String variable){
+		return getVariables().containsKey(variable);
 	}
 }

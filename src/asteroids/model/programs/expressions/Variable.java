@@ -23,6 +23,10 @@ public Variable(String name){
 	this.value= null;
 	this.type = null;
 }
+public Variable(String name, Type type){
+	this(name);
+	this.type = type;
+}
 	
 public void setValue(Expression value) {
 	if(canHaveAsValue(value)){

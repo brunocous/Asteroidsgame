@@ -1,11 +1,8 @@
 package asteroids.model.programs.statements;
 
-import java.util.Map;
-
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.expressions.Entity;
-import asteroids.model.programs.type.*;
 
 public class Skip extends ActionStatement {
 
@@ -45,7 +42,7 @@ public class Skip extends ActionStatement {
 		
 	}
 	@Override
-	public boolean isTypeChecked(Map<String, Type> globals) {
+	public boolean isTypeChecked() {
 		return true;
 	}
 	@Override

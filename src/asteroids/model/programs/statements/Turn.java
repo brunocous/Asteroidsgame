@@ -1,10 +1,9 @@
 package asteroids.model.programs.statements;
 
-import java.util.Map;
-
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.*;
 import asteroids.model.programs.IEntry;
+import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.expressions.Expression;
 import asteroids.model.programs.type.Type;
 
@@ -18,9 +17,8 @@ public class Turn extends ShipActionStatement {
 	}
 	
 	@Override 
-	public boolean isTypeChecked(Map<String,Type> globals){
-		return super.isTypeChecked(globals) 
-				&& getAmount().getType() == Type.DOUBLE;
+	public boolean isTypeChecked(){
+		return getAmount().getType() == Type.DOUBLE;
 	}
 	@Override
 	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException {
@@ -59,5 +57,10 @@ public class Turn extends ShipActionStatement {
 	}
 	public Expression getAmount(){
 		return amount;
+	}
+	@Override
+	public void setShip(Entity ship)throws IllegalOperandException{
+		super.setShip(ship);
+		getAmount().setShip(ship);
 	}
 }

@@ -32,5 +32,9 @@ public class Thrust extends ShipActionStatement {
 	public String toString(){
 		return getOperandAt(1) + " sets enable thrusters to " + isEnabled();
 	}
+	@Override 
+	public boolean equals(Object other){
+		return super.equals(other) && ((Thrust) other).isEnabled() == this.isEnabled();
+	}
 
 }

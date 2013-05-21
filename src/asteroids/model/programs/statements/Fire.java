@@ -1,9 +1,8 @@
 package asteroids.model.programs.statements;
 
-import java.util.Map;
 
 import asteroids.model.*;
-import asteroids.model.programs.type.Type;
+
 
 public class Fire extends ShipActionStatement {
 	
@@ -21,7 +20,7 @@ public class Fire extends ShipActionStatement {
 		return getOperandAt(1) + " fires a bullet!!";
 	}
 	@Override
-	public boolean isTypeChecked(Map<String, Type> globals) {
+	public boolean isTypeChecked() {
 		return true;
 	}
 }

@@ -749,11 +749,10 @@ public class World {
 	 * 			
 	 */
 	public void evolve(double deltaT, CollisionListener coll) throws UnhandledCombinationException, NegativeTimeException, IllegalStateException{
-		
-		runPrograms();
+		System.out.println("world gaan nu beginnen met evolven met zoveel seconden: "+deltaT);
 		double elapsedTime = 0;
 		while (Util.fuzzyLessThanOrEqualTo(elapsedTime, 0.2)){
-			
+			System.out.println("tijd voorbij gegaan: "+elapsedTime);
 		if(isTerminated())
 			throw new IllegalStateException();
 		double tC=getTimeToFirstCollision();
@@ -801,7 +800,6 @@ public class World {
 				for(SpaceObject object2 : this.getAllSpaceObjects()){
 					if(Util.fuzzyLessThanOrEqualTo(SpaceObject.getDistanceBetween(this.getSpaceObjectAt(i),object2),0.0) 
 							&& this.getSpaceObjectAt(i)!=object2){
-						System.out.println(SpaceObject.getDistanceBetween(this.getSpaceObjectAt(i),object2));
 						if(coll != null)
 							coll.objectCollision(this.getSpaceObjectAt(i), object2, SpaceObject.getCollisionPosition(object2, this.getSpaceObjectAt(i)).getX(), SpaceObject.getCollisionPosition(this.getSpaceObjectAt(i), object2).getY());
 						try {							
@@ -820,7 +818,7 @@ public class World {
 			elapsedTime = elapsedTime +tC;
 	}
 	}
-		
+		runPrograms();	
 	}
 	public void runPrograms(){
 		
