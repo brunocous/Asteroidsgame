@@ -89,12 +89,6 @@ public class Sequence extends StructuralStatement {
 		}
 		return result;
 	}
-
-	public void setShip(Entity ship) throws IllegalOperandException{
-		for(Statement st: getAllStatements()){
-			st.setShip(ship);
-		}
-	}
 	@Override
 	public boolean isTypeChecked() {
 		for(Statement st: getAllStatements()){
