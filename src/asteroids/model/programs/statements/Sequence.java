@@ -2,14 +2,12 @@ package asteroids.model.programs.statements;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import be.kuleuven.cs.som.annotate.Raw;
 
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.expressions.Entity;
-import asteroids.model.programs.type.Type;
 
 public class Sequence extends StructuralStatement {
 
@@ -77,7 +75,6 @@ public class Sequence extends StructuralStatement {
 		while(i<= getNbOperands() && encounteredAction == false){
 			
 			encounteredAction= ((Statement)getOperandAt(i)).execute();
-			
 			i++;
 		}
 		executionPosition = i;

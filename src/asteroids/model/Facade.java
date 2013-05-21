@@ -347,7 +347,7 @@ public class Facade implements IFacade<World, Ship, Asteroid,Bullet,Program>{
 
 	@Override
 	public asteroids.IFacade.TypeCheckOutcome typeCheckProgram(Program program) {
-		if(program.typeCheck()) 
+		if(!program.typeCheck()) 
 				return asteroids.IFacade.TypeCheckOutcome.failure("Program contains type errors.");
 		else return TypeCheckOutcome.success();
 				

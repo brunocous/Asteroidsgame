@@ -29,7 +29,6 @@ public class Program {
 			throw new IllegalArgumentException();
 		else{
 			this.statement = statement;
-			statement.setProgram(this);
 		}
 		this.errors = errors;
 	}
@@ -83,7 +82,6 @@ public class Program {
 		this.isRunning = isRunning;
 	}
 	public boolean typeCheck(){
-		
 		return statement.isTypeChecked();
 	}
 	public Map<String,Variable> convertToVariables(Map<String,Type> globals){

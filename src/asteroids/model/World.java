@@ -65,7 +65,12 @@ public class World {
 	 * Variable reflecting whether or not this world is terminated.
 	 */
 	private boolean isTerminated;
+	/**
+	* Variable reflecting a time stamp.
+	*/
+	private long then = System.currentTimeMillis();
 	
+	private static final long ACTION_EXECUTION_TIME_INTERVAL = 200;
 	/**
 	 * Initializes this new world with a given width and height.
 	 * @param width
@@ -749,19 +754,16 @@ public class World {
 	 * 			
 	 */
 	public void evolve(double deltaT, CollisionListener coll) throws UnhandledCombinationException, NegativeTimeException, IllegalStateException{
-		System.out.println("world gaan nu beginnen met evolven met zoveel seconden: "+deltaT);
-		double elapsedTime = 0;
-		while (Util.fuzzyLessThanOrEqualTo(elapsedTime, 0.2)){
-			System.out.println("tijd voorbij gegaan: "+elapsedTime);
+		
 		if(isTerminated())
 			throw new IllegalStateException();
+		runPrograms();
 		double tC=getTimeToFirstCollision();
 		
 		if(!Util.fuzzyLessThanOrEqualTo(tC, deltaT)){
 			
 			updatePositions(deltaT);
 			updateVelocities(deltaT);
-			elapsedTime = elapsedTime +deltaT;
 		}
 		
 		else{
@@ -815,20 +817,43 @@ public class World {
 			}
 		i++;
 		}
-			elapsedTime = elapsedTime +tC;
+			
 	}
+	
 	}
-		runPrograms();	
-	}
-	public void runPrograms(){
-		
+	/**
+	* Runs the program of each Ship.
+	* TODO documentatie
+	*/
+	private void runPrograms(){
+	if(canRunAllPrograms()){
+		System.out.println("Hoi, ik ben in runProgram in world");
 		for(SpaceObject sp: getAllSpaceObjects()){
 			if(sp.getClass().isAssignableFrom(Ship.class)){
 				((Ship) sp).runProgram();
 			}
 				
 		}
+		}
 	}
+	/**
+	* Checks if this world can order his ship to run their program.
+	*
+	* return True if and only if the elapsed time since the last run of the
+	* ships program is greater than the time interval between each run of the
+	* ships program.
+	*	| TODO documentatie
+	*/
+	private boolean canRunAllPrograms(){
+		long now = System.currentTimeMillis();
+		long elapsedTime = now - getThen();
+		if(elapsedTime > getActionExecutionTimeInterval()){
+			setThen(System.currentTimeMillis());
+			return true;
+			}
+		else return false;
+	}	
+	
 	/**
 	 * Makes a given Space Object bounce off a boundary.
 	 * 
@@ -1170,6 +1195,24 @@ public class World {
 							throw new UnhandledCombinationException();
 						
 						}
+	}
+	/**
+	 * @return the then
+	 */
+	public long getThen() {
+		return then;
+	}
+	/**
+	 * @param then the then to set
+	 */
+	public void setThen(long then) {
+		this.then = then;
+	}
+	/**
+	 * @return the actionExecutionTimeInterval
+	 */
+	public static long getActionExecutionTimeInterval() {
+		return ACTION_EXECUTION_TIME_INTERVAL;
 	}
 }
 
