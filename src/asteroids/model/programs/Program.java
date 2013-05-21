@@ -62,8 +62,6 @@ public class Program {
 	public void setShip(Ship ship) throws IllegalOperandException{
 		assert canHaveAsShip(ship);
 		this.ship = ship;
-		Entity shipEntity = new Entity(getShip());
-		getStatement().setShip(shipEntity);
 		
 	}
 

@@ -7,7 +7,6 @@ import be.kuleuven.cs.som.annotate.Raw;
 
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
-import asteroids.model.programs.expressions.Entity;
 
 public class Sequence extends StructuralStatement {
 
