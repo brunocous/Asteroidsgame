@@ -2,6 +2,6 @@ double a;
 
 a:= 0.2;
 
-while(a == 0.2){
+while(0.2 == a){
 fire;
 }
