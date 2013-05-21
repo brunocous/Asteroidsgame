@@ -32,16 +32,13 @@ public abstract class Statement implements IEntry,IComposedStructure {
 	
 	public abstract boolean isTypeChecked();
 	
-	@Override
 	public Program getProgram(){
 		return program;
 	}
-	@Override
 	public void setProgram(Program program){
 		if(canHaveAsProgram( program))
 			this.program = program;
 	}
-	@Override
 	public boolean canHaveAsProgram(Program program){
 		return (getProgram() == null) ? true:false;
 	}

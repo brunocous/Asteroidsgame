@@ -4,8 +4,6 @@ import asteroids.Error.*;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.expressions.Expression;
-import asteroids.model.programs.type.*;
-import java.util.*;
 
 public class Assignement extends StructuralStatement{
 
