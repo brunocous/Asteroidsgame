@@ -3,6 +3,7 @@ package asteroids.model.programs.expressions;
 
 import asteroids.model.programs.IComposedStructure;
 import asteroids.model.programs.IEntry;
+import asteroids.model.programs.Program;
 
 public abstract class UnaryExpression extends Expression implements IComposedStructure {
 
@@ -50,6 +51,16 @@ public abstract class UnaryExpression extends Expression implements IComposedStr
 	public int getNbOperands() {
 		
 		return 1;
+	}
+	
+	@Override
+	public void setProgram(Program program){
+		super.setProgram(program);
+		getOperandAt(1).setProgram(program);
+		
+		if(getOperandAt(1) instanceof Variable){
+			setOperandAt(1, program.getVariable(((Variable)getOperandAt(1)).getName()));
+		}
 	}
 
 }

@@ -1,6 +1,7 @@
 package asteroids.model.programs.expressions;
 
 import asteroids.model.programs.IEntry;
+import asteroids.model.programs.Program;
 import asteroids.model.programs.type.Type;
 
 
@@ -88,6 +89,17 @@ public void setType(Type type){
 public Type getType(){
 	return type;
 }
+
+@Override
+public void setProgram(Program program){
+	super.setProgram(program);
+	getValue().setProgram(program);
+	
+	if(getVariableValue() instanceof Variable){
+		setValue(program.getVariable(((Variable)getVariableValue()).getName()));
+	}
+}
+
 
 }
 

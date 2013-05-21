@@ -57,6 +57,7 @@ public abstract class Expression implements IEntry{
 		if(canHaveAsProgram( program))
 			this.program = program;
 	}
+	
 	public boolean canHaveAsProgram(Program program){
 		return (getProgram() == null) ? true:false;
 	}

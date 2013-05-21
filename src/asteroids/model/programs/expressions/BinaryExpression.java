@@ -3,6 +3,7 @@ package asteroids.model.programs.expressions;
 
 import asteroids.model.programs.IComposedStructure;
 import asteroids.model.programs.IEntry;
+import asteroids.model.programs.Program;
 
 public abstract class BinaryExpression extends Expression implements IComposedStructure{
 	
@@ -11,6 +12,7 @@ public abstract class BinaryExpression extends Expression implements IComposedSt
 	
 	public BinaryExpression(Expression argument1, Expression argument2) {
 		
+
 		setOperandAt(1, argument1);
 		setOperandAt(2, argument2);
 		
@@ -66,6 +68,19 @@ public abstract class BinaryExpression extends Expression implements IComposedSt
 	}
 
 
-	
+	@Override
+	public void setProgram(Program program){
+		super.setProgram(program);
+		getOperandAt(1).setProgram(program);
+		getOperandAt(2).setProgram(program);
+		
+		if(getOperandAt(1) instanceof Variable){
+			setOperandAt(1, program.getVariable(((Variable)getOperandAt(1)).getName()));
+		}
+		if(getOperandAt(2) instanceof Variable){
+			setOperandAt(2, program.getVariable(((Variable)getOperandAt(2)).getName()));
+		}
+	}
+
 
 }
