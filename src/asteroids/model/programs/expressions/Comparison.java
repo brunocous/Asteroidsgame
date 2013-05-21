@@ -39,12 +39,12 @@ public abstract class Comparison extends BinaryExpression {
 
 	@Override
 	public boolean isTypeChecked(){
-		return (( getOperandAt(1).getValue() instanceof DoubleLiteral
-				&& getOperandAt(2).getValue() instanceof DoubleLiteral)
-				|| ( getOperandAt(1).getValue() instanceof BooleanLiteral
-						&& getOperandAt(2).getValue() instanceof BooleanLiteral)
-				|| ( getOperandAt(1).getValue() instanceof Entity
-						&& getOperandAt(2).getValue() instanceof Entity));
+		return (( getOperandAt(1).getType() == Type.DOUBLE
+				&& getOperandAt(2).getType() == Type.DOUBLE)
+				|| ( getOperandAt(1).getType() == Type.BOOLEAN
+						&& getOperandAt(2).getType() == Type.BOOLEAN)
+				|| ( getOperandAt(1).getType() == Type.ANY
+						&& getOperandAt(2).getType()== Type.ANY));
 	}
 
 

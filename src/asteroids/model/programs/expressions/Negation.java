@@ -54,7 +54,7 @@ public class Negation extends UnaryExpression{
 	
 		@Override
 		public boolean isTypeChecked(){
-			return getOperandAt(1) instanceof BooleanLiteral;
+			return getOperandAt(1).getType() == Type.BOOLEAN;
 		}
 	
 		}

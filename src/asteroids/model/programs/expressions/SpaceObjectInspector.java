@@ -43,7 +43,7 @@ public Expression getValue() {
 @Override
 public boolean isTypeChecked(){
 	
-	return getOperandAt(1).getValue() instanceof Entity;
+	return getOperandAt(1).getType() == Type.ANY;
 }
 
 }

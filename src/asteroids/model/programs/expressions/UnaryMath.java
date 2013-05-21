@@ -41,7 +41,7 @@ public Expression getValue() {
 
 @Override
 public boolean isTypeChecked(){
-	return getOperandAt(1).getValue() instanceof DoubleLiteral;
+	return getOperandAt(1).getType() == Type.DOUBLE;
 }
 
 }

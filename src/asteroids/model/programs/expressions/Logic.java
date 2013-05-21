@@ -35,8 +35,8 @@ public abstract class Logic extends BinaryExpression {
 
 	@Override
 	public boolean isTypeChecked(){
-		return ( getOperandAt(1).getValue() instanceof BooleanLiteral
-				&& getOperandAt(2).getValue() instanceof BooleanLiteral);
+		return ( getOperandAt(1).getType() == Type.BOOLEAN
+				&& getOperandAt(2).getType()== Type.BOOLEAN);
 	}
 	
 	@Override
