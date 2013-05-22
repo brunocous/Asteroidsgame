@@ -4,6 +4,7 @@ import asteroids.Error.*;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.Program;
 import asteroids.model.programs.expressions.Expression;
+import asteroids.model.programs.expressions.Null;
 import asteroids.model.programs.expressions.Variable;
 
 public class Assignement extends StructuralStatement {
@@ -62,6 +63,8 @@ public class Assignement extends StructuralStatement {
 
 	@Override
 	public boolean isTypeChecked() {
+		if(getNewValue() instanceof Null)
+			return true;
 		return (getProgram().getVariable(getVariableName()).getType().getGeneralType() == newValue
 				.getType().getGeneralType()) ? true : false;
 	}
@@ -78,6 +81,8 @@ public class Assignement extends StructuralStatement {
 	public void setProgram(Program program) {
 		super.setProgram(program);
 		
+		if(!program.hasVariable(getVariableName()))
+			program.addAsVariable(new Variable(getVariableName(), getNewValue().getType()));
 		if (getNewValue() != null) {
 			getNewValue().setProgram(program);
 

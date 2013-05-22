@@ -3,6 +3,7 @@ package asteroids.model.programs.expressions;
 import asteroids.model.SpaceObject;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.Program;
+import asteroids.model.programs.type.IGeneralType.GeneralType;
 import asteroids.model.programs.type.Type;
 
 public class Variable extends Expression {
@@ -61,7 +62,7 @@ public class Variable extends Expression {
 			return (double) getValue().getRealValue();
 		} else if (getValue().getType() == Type.BOOLEAN) {
 			return (boolean) getValue().getRealValue();
-		} else if (getValue().getType() == Type.ANY) {
+		} else if (getValue().getType().getGeneralType() == GeneralType.ENTITY) {
 			return (SpaceObject) getValue().getRealValue();
 		} else {
 			return null;

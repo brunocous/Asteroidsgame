@@ -1,7 +1,26 @@
-entity a;
+double a;
+double b;
+double c;
+double d;
+bool e;
 
-foreach(asteroid ,a) do{
+a:= 1;
+b:= 2;
+c:= 3;
+d:= 4;
+
+while(true){
+e := true;
+fire;
 print a;
-print getx a;
-print gety a;
+while(e){
+fire;
+print b;
+fire;
+print c;
+e:= false;
+}
+fire;
+print d;
+
 }

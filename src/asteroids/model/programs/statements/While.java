@@ -4,13 +4,13 @@ import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.Program;
 import asteroids.model.programs.expressions.Expression;
+import asteroids.model.programs.expressions.Variable;
 import asteroids.model.programs.type.Type;
 
 public class While extends StructuralStatement {
 
 	private Expression condition;
 	private Statement body;
-	private int executionPosition = 1;
 	
 	public While(Expression condition, Statement body){
 		this.condition = condition;
@@ -60,10 +60,11 @@ public class While extends StructuralStatement {
 
 	@Override
 	public boolean execute() {
-		while( !getBody().execute() && (boolean) getCondition().getRealValue()){
-			
+		boolean encounterdActionStatement = false;
+		while( !encounterdActionStatement && (boolean) getCondition().getRealValue()){
+			encounterdActionStatement = getBody().execute();
 		}
-		return false;
+		return encounterdActionStatement;
 	}
 	@Override 
 	public String toString(){
@@ -79,18 +80,12 @@ public class While extends StructuralStatement {
 		super.setProgram(program);
 		getBody().setProgram(program);
 		getCondition().setProgram(program);
+		if (getCondition() instanceof Variable) {
+			try {
+				setOperandAt(1,program.getVariable(((Variable) getCondition()).getName()));
+			} catch (IllegalOperandException e) {
+				assert !canHaveAsOperandAt(1,program.getVariable(((Variable) getCondition()).getName()));
+			}
+		}
 	}
-	/**
-	 * @return the executionPosition
-	 */
-	public int getExecutionPosition() {
-		return executionPosition;
-	}
-	/**
-	 * @param executionPosition the executionPosition to set
-	 */
-	public void setExecutionPosition(int executionPosition) {
-		this.executionPosition = executionPosition;
-	}
-
 }

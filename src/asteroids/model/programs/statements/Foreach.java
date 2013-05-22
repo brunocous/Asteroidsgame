@@ -82,7 +82,8 @@ public class Foreach extends StructuralStatement {
 		return Type.isValidEntityType(getType())
 				&& getProgram().getVariable(getVariableName()).getType() == Type.ANY
 				&& !(getBody() instanceof ActionStatement)
-				&& !((StructuralStatement) getBody()).containsAnActionStatement();
+				&& !((StructuralStatement) getBody()).containsAnActionStatement()
+				&& getBody().isTypeChecked();
 	}
 	@Override
 	public void setProgram(Program program){

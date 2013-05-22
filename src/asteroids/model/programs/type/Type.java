@@ -63,12 +63,12 @@ public enum Type implements IGeneralType,IEntry {
 	},
 	NULL{
 		public Class<?> getClassReference(){
-			return null;
+			return getGeneralType().getClassReference();
 		}
 		
 		@Override
 		public GeneralType getGeneralType(){
-			return GeneralType.ENTITY;
+			return GeneralType.NULL;
 		}
 	},
 	ANY{

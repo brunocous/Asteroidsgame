@@ -78,12 +78,11 @@ public class Sequence extends StructuralStatement {
 			encounteredAction= ((Statement)getOperandAt(i)).execute();
 			i++;
 		}
-		int a= i;
-		if((a == getNbOperands()+1))
+		if((i == getNbOperands()+1))
 			executionPosition = 1;
 		else 
-			executionPosition = a;
-		return !(i == getNbOperands()+1);
+			executionPosition = i;
+		return encounteredAction;
 	}
 	
 	@Override

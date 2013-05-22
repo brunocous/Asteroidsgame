@@ -6,7 +6,7 @@ public interface IGeneralType {
 	Class<?> getClassReference();
 	
 	public enum GeneralType implements IGeneralType{
-		DOUBLE(double.class),BOOLEAN(boolean.class),ENTITY(Entity.class);
+		DOUBLE(double.class),BOOLEAN(boolean.class),ENTITY(Entity.class), NULL(null);
 		
 		private final Class<?> refClass;
 		

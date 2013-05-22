@@ -8,7 +8,7 @@ import asteroids.model.programs.type.Type;
 public class Null extends  BasicExpression {
 
 	private SpaceObject value;
-	private static final Type TYPE = null;
+	private static final Type TYPE = Type.NULL;
 	
 public Null(){
 	this.value = (null);

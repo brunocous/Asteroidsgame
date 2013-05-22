@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import be.kuleuven.cs.som.annotate.Raw;
+
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.Ship;
 import asteroids.model.programs.expressions.Variable;
@@ -38,6 +40,7 @@ public class Program {
 	public boolean canHaveAsStatement(Statement statement){
 		return statement != null && statement.canHaveAsProgram(this);
 	}
+	
 	public Statement getStatement(){
 		return statement;
 	}
@@ -97,5 +100,15 @@ public class Program {
 	}
 	public boolean hasVariable(String variable){
 		return getVariables().containsKey(variable);
+	}
+	public void addAsVariable(@Raw Variable newVar){
+		assert canHaveAsVariable(newVar);
+			getVariables().put(newVar.getName(), newVar);
+	}
+	public boolean canHaveAsVariable(Variable variable){
+		return variable != null && !variable.getName().isEmpty()
+				&& !hasVariable(variable.getName())
+				&& variable.getType() != null 
+				&& variable.canHaveAsProgram(this);
 	}
 }
