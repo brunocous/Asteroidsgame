@@ -11,8 +11,8 @@ import asteroids.model.Util.Velocity;
 import be.kuleuven.cs.som.annotate.*;
 
 /** 
- * An abstract class of space objects involving a position, a velocity, a direction
- * ,a maximum speed, a mass and a radius with moving facilities.
+ * An abstract class of space objects involving a position, a velocity, a direction,
+ * a maximum speed, a mass and a radius with moving, firing and turning facilities.
  * 
  * @Invar The position that applies to all space objects must be a valid position.
  *        | isValidPosition(getPos())
@@ -25,7 +25,7 @@ import be.kuleuven.cs.som.annotate.*;
  * @Invar Each space object must have a valid maxSpeed.
  * 		  | isValidMaxSpeed(getVel())
  * 
- * @version 1.0
+ * @version 2.0
  * @author Bruno Coussement and Simon Telen
  *
  */
@@ -177,6 +177,7 @@ public abstract class SpaceObject {
 	
 	/**
 	 * Initialize this new space object as a default space object 
+	 * 
 	 * @effect This new space object is initialized with the default position as its position, 
 	 * 			the default velocity as its velocity, a radius of 15 km as its radius and 
 	 * 			does not belong to any world.
@@ -188,7 +189,7 @@ public abstract class SpaceObject {
 	}
 	
 	/**
-	 * @return the pos
+	 * @return the pos of this space object.
 	 */
 	@Basic
 	public Position getPos() {
@@ -218,7 +219,7 @@ public abstract class SpaceObject {
 		}
 	}
 	/**
-	 * @return the velocity
+	 * @return the velocity of this space object.
 	 */
 	@Basic
 	public Velocity getVel() {
@@ -253,7 +254,7 @@ public abstract class SpaceObject {
 		}
 	}
 	/**
-	 * @return the radius
+	 * @return the radius of this space object.
 	 */
 	@Basic
 	@Immutable
@@ -262,7 +263,7 @@ public abstract class SpaceObject {
 	}
 
 	/**
-	 * @return the maxSpeed
+	 * @return the maxSpeed of this space object.
 	 */
 	@Basic 
 	@Immutable
@@ -286,7 +287,7 @@ public abstract class SpaceObject {
 		return MIN_MASS;
 	}
 	/**
-	 * Returns the mass of a space object.
+	 * Returns the mass of this space object.
 	 */
 	@Basic
 	@Immutable
@@ -301,6 +302,7 @@ public abstract class SpaceObject {
 	}
 	/**
 	 * Sets the world of this space object to the given world.
+	 * 
 	 * @param   world
 	 *          The new world for this space object.
 	 * @pre     This space object can have the given world as its world.
@@ -316,6 +318,7 @@ public abstract class SpaceObject {
 	}
 	/**
 	 * Checks whether this space object has a world.
+	 * 
 	 * @return True if and only if this space object has an effective world.
 	 * 			| result == (this.getWorld() != null)
 	 */
@@ -325,6 +328,7 @@ public abstract class SpaceObject {
 	}
 	/**
 	 * Check whether this space object can have the given world as its world.
+	 * 
 	 * @param  world
 	 *         The world to check.
 	 * @return  If this space object is not yet terminated, true if and
@@ -345,6 +349,7 @@ public abstract class SpaceObject {
 	}
 	/**
 	 * Check whether this space object has a proper world.
+	 * 
 	 * @return  True if and only if this space object can have its world as its
 	 *          world, and if this space object is terminated or the world of
 	 *          this space object has this space object as one of its space objects.
@@ -617,7 +622,7 @@ public static double getTimeToCollision(SpaceObject obj1, SpaceObject obj2) thro
  *         | double radius2 = obj2.getRadius();
  *		   | double fraction =(radius2/(radius1 + radius2));
  *		   | double xPosObj1 = obj2.getPos().getX()+deltaT*obj2.getVel().getX();
-	 *         | double yPosObj1 = obj1.getPos().getY()+deltaT*obj1.getVel().getY();
+ *         | double yPosObj1 = obj1.getPos().getY()+deltaT*obj1.getVel().getY();
  *  	   | double xPosObj2 = obj2.getPos().getX()+deltaT*obj2.getVel().getX();
  *		   | double yPosObj2 = obj2.getPos().getY()+deltaT*obj2.getVel().getY();
  *		   | double xCoordCollision = fraction*xPosObj1 + (1-fraction)*xPosObj2;

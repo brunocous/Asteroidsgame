@@ -1,12 +1,13 @@
 
 	package asteroids.model.programs.expressions;
 
+import be.kuleuven.cs.som.annotate.Value;
 import asteroids.model.programs.type.*;
 
 
 
-
-	public class BooleanLiteral extends BasicExpression{
+@Value
+public class BooleanLiteral extends BasicExpression{
 
 		private boolean value;
 		private static final Type TYPE = Type.BOOLEAN;

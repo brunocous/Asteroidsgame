@@ -1,7 +1,9 @@
 package asteroids.model.programs.expressions;
 
+import be.kuleuven.cs.som.annotate.Value;
 import asteroids.model.programs.type.*;
 
+@Value
 public class DoubleLiteral extends BasicExpression{
 
 private double value;

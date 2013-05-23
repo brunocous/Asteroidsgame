@@ -27,7 +27,7 @@ import be.kuleuven.cs.som.annotate.*;
  * 			| if(hasProgram)
  * 			| then hasProperProgram()
  * 
- * @version 2.0
+ * @version 3.0
  * @author Bruno Coussement and Simon Telen
  *
  */

@@ -1,11 +1,10 @@
 package asteroids.model.programs.expressions;
 
+import be.kuleuven.cs.som.annotate.Value;
 import asteroids.model.SpaceObject;
 import asteroids.model.programs.type.Type;
 
-
-
-
+@Value
 public class Entity extends BasicExpression{
 
 private SpaceObject value;
