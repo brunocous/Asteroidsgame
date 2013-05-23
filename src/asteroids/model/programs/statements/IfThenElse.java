@@ -4,6 +4,7 @@ import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.Program;
 import asteroids.model.programs.expressions.Expression;
+import asteroids.model.programs.expressions.Variable;
 import asteroids.model.programs.type.Type;
 
 public class IfThenElse extends StructuralStatement {
@@ -93,5 +94,12 @@ public class IfThenElse extends StructuralStatement {
 		getCondition().setProgram(program);
 		getIfBody().setProgram(program);
 		getElseBody().setProgram(program);
+		if (getCondition() instanceof Variable) {
+			try {
+				setOperandAt(1,program.getVariable(((Variable) getCondition()).getName()));
+			} catch (IllegalOperandException e) {
+				assert !canHaveAsOperandAt(1,program.getVariable(((Variable) getCondition()).getName()));
+			}
+		}
 	}
 }

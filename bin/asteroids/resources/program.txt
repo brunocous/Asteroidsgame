@@ -1,26 +1,30 @@
-double a;
-double b;
-double c;
-double d;
-bool e;
-
-a:= 1;
-b:= 2;
-c:= 3;
-d:= 4;
-
-while(true){
-e := true;
-fire;
-print a;
-while(e){
-fire;
-print b;
-fire;
-print c;
-e:= false;
+double x;
+double y;
+double r;
+entity nearestAsteroid;
+entity a;
+double distance;
+double distanceToNearestAsteroid;
+x := getx self;
+y := gety self;
+r := getradius self;
+nearestAsteroid := null;
+foreach(asteroid, a) do {
+ax := getx a;
+ay := gety a;
+ar := getradius a;
+distance := sqrt((((x - ax) * (x - ax)) + ((y - ay) * (y - ay))));
+if(nearestAsteroid == null) then {
+nearestAsteroid := a;
+		distanceToNearestAsteroid := distance;
+	} else {
+		if(distance < distanceToNearestAsteroid) then {
+			nearestAsteroid := a;
+			distanceToNearestAsteroid := distance;
+			}
+		}
 }
-fire;
-print d;
-
+if(nearestAsteroid != null) then {
+print nearestAsteroid;
+print distanceToNearestAsteroid;
 }

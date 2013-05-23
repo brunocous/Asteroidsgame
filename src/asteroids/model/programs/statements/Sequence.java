@@ -76,7 +76,11 @@ public class Sequence extends StructuralStatement {
 		while(i<= getNbOperands() && encounteredAction == false){
 			
 			encounteredAction= ((Statement)getOperandAt(i)).execute();
-			i++;
+			if(encounteredAction && ((Statement)getOperandAt(i)) instanceof ActionStatement)
+						i++;
+			if(!encounteredAction)
+				i++;
+				
 		}
 		if((i == getNbOperands()+1))
 			executionPosition = 1;
