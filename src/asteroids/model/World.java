@@ -1081,29 +1081,7 @@ public class World {
 				}
 	}
 	
-	/**
-	 * Check whether the combination of the types of the given object1 and object2 is handled in resolve(...)
-	 * @param object1 the first Space Object to be resolved.
-	 * @param object2 the second Space Object to be resolved.
-	 * @return ((Ship.class.isAssignableFrom(object1.getClass()) && Ship.class.isAssignableFrom(object2.getClass()))
-	 *			  			 || Asteroid.class.isAssignableFrom(object1.getClass()) && Asteroid.class.isAssignableFrom(object2.getClass())
-	 *			  			 || Bullet.class.isAssignableFrom(object1.getClass())
-	 *			  			 || Bullet.class.isAssignableFrom(object2.getClass())
-	 *			  			 || Asteroid.class.isAssignableFrom(object1.getClass()) && Ship.class.isAssignableFrom(object2.getClass())
-	 *			  			 || Ship.class.isAssignableFrom(object1.getClass()) && Asteroid.class.isAssignableFrom(object2.getClass()));
-	 *
-	 * @throws IllegalStateException, NotOfThisWorldException, NullPointerException using the method checkResolvingConditions(object1,object2)
-	 */
-	public boolean isHandledCombination(SpaceObject object1, SpaceObject object2) throws IllegalStateException,  NotOfThisWorldException, NullPointerException{
-		checkResolvingConditions(object1,object2);
-		boolean result =((Ship.class.isAssignableFrom(object1.getClass()) && Ship.class.isAssignableFrom(object2.getClass()))
-				  			 || Asteroid.class.isAssignableFrom(object1.getClass()) && Asteroid.class.isAssignableFrom(object2.getClass())
-				  			 || Bullet.class.isAssignableFrom(object1.getClass())
-				  			 || Bullet.class.isAssignableFrom(object2.getClass())
-				  			 || Asteroid.class.isAssignableFrom(object1.getClass()) && Ship.class.isAssignableFrom(object2.getClass())
-				  			 || Ship.class.isAssignableFrom(object1.getClass()) && Asteroid.class.isAssignableFrom(object2.getClass()));
-		return result;
-	}
+
 	/**
 	 * checks whether the given Space Objects object1 and object2 can be resolved.
 	 * 
