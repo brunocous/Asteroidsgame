@@ -10,7 +10,7 @@ import asteroids.model.Ship;
 import asteroids.model.SpaceObject;
 import asteroids.model.programs.IEntry;
 
-public enum Type implements IGeneralType,IEntry {
+public enum Type implements IGeneralType {
 	DOUBLE{
 		public Class<?> getClassReference(){
 			return GeneralType.DOUBLE.getClassReference();
@@ -83,10 +83,6 @@ public enum Type implements IGeneralType,IEntry {
 	};
 	public abstract GeneralType getGeneralType();
 		
-	@Override
-	public boolean hasAsSubEntry(IEntry entry){
-		return false;
-	}
 	public static boolean isValidType(Type type){
 		return Arrays.asList(Type.values()).contains(type);
 	}

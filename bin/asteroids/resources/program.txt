@@ -9,7 +9,7 @@ double xpos;
 double ypox;
 double angle;
 double tangent;
-x := getx self;
+x := getx 0.2;
 y := gety self;
 r := getradius self;
 nearestAsteroid := null;

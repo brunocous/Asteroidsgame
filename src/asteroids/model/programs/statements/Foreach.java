@@ -16,7 +16,7 @@ public class Foreach extends StructuralStatement {
 	public Foreach(Type type, String variableName, Statement body){
 		this.variableName = variableName;
 		this.body = body;
-		if(canHaveAsOperandAt(1, type))
+		if(Type.isValidEntityType(type))
 			this.type = type;
 		else this.type = null;
 	}
@@ -24,8 +24,6 @@ public class Foreach extends StructuralStatement {
 	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException {
 		if(index == 3)
 			return getBody();
-		if(index == 1)
-			return getType();
 		throw new IndexOutOfBoundsException();
 		
 	}
@@ -59,8 +57,6 @@ public class Foreach extends StructuralStatement {
 			if(index == 3 && operand instanceof StructuralStatement){
 				return true;
 			}
-			if(index == 1 && operand instanceof Type)
-				return Type.isValidType((Type) operand);
 		}
 			return false;
 	}

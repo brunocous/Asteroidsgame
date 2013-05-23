@@ -609,7 +609,7 @@ public class Ship extends SpaceObject{
 	 */
 	@Basic
 	public Program getProgram() {
-		return new Program(program);
+		return (program == null) ? null: new Program(program);
 	}
 	
 	/**

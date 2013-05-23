@@ -42,7 +42,6 @@ public class Program {
 		} catch (IllegalOperandException e) {
 			assert(!canHaveAsShip(program.getShip()));
 		}
-		this.addAllVariables(program.getVariables());
 		this.statement = program.getStatement();
 		this.errors = program.getErrors();
 		this.variables = program.getVariables();
