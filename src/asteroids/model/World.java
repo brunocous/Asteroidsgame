@@ -120,7 +120,6 @@ public class World {
 		this(MAX_WIDTH, MAX_HEIGHT);
 	}
 	/**
-	 * 
 	 * @return The width of this world.
 	 */
 	@Basic
@@ -140,7 +139,9 @@ public class World {
 		
 		return (!Util.fuzzyLessThanOrEqualTo(width,0 )&& Util.fuzzyLessThanOrEqualTo(width, getMaxWidth()));
 	}
-
+/**
+ * @return The height of this world.
+ */
 	@Basic
 	public double getHeight() {
 		return height;
@@ -187,6 +188,7 @@ public class World {
 
 	/**
 	 * Terminates a world.
+	 * 
 	 * @post    This world is terminated.
 	 *        | new.isTerminated()
 	 * @post    Each of the space objects of this world no longer has
@@ -1221,7 +1223,7 @@ public class World {
 		this.then = then;
 	}
 	/**
-	 * @return the actionExecutionTimeInterval.
+	 * @return the action execution time interval.
 	 */
 	public static long getActionExecutionTimeInterval() {
 		return ACTION_EXECUTION_TIME_INTERVAL;
