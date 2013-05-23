@@ -516,10 +516,11 @@ public class Ship extends SpaceObject{
 	 * 
 	 * @param bulletsToAdd
 	 * 		  	The bullets to be added.
-	 * TODO hier documentatie afmaken
-	 * @effect ...
-	 * 			| for each index in 0..bulletsToAdd.size()-1
-	 * 			| addAsBullet(bulletsToAdd.get(index))
+	 * @effect adds the given list of bullets to the bullets of this ship.
+	 * 			| for(Bullet objectToAdd: bulletsToAdd){
+	 *          | this.addAsBullet(objectToAdd)
+	 * @note if an exception is thrown using the method assAsBullet(...), this 
+	 * 		 method does nothing.
 	 */
 	@Raw 
 	public void addAsBullets(@Raw List<Bullet> bulletsToAdd){
