@@ -37,26 +37,17 @@ public class Program {
 	
 	public Program(Program program) {
 		
-		Program result= new Program(program.getStatement(), program.getErrors());
 		try {
-			result.setShip(program.getShip());
+			this.setShip(program.getShip());
 		} catch (IllegalOperandException e) {
 			assert(!canHaveAsShip(program.getShip()));
 		}
-		result.addAllVariables(program.getVariables());
+		this.addAllVariables(program.getVariables());
+		this.statement = program.getStatement();
+		this.errors = program.getErrors();
+		this.variables = program.getVariables();
 	}
 	
-	public Program(Statement statement, List<String> errors){
-		if(!canHaveAsStatement(statement)){
-			throw new IllegalArgumentException();
-		}
-		else{
-			this.statement = statement;
-			statement.setProgram(this);
-		}
-		this.errors = errors;
-		this.variables = new HashMap<String,Variable>();
-	}
 	public boolean canHaveAsVariables(Map<String,Type> globals){
 		return globals != null;
 	}
