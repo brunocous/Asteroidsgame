@@ -318,24 +318,6 @@ public class World {
 	}
 
 	/**
-	 * Return the index at which the given space object is registered
-	 * in the list of space objects for this world.
-	 *  
-	 * @param  spaceObject
-	 *         The space object to search for.
-	 * @return If this world has the given space object as one of its
-	 *         space objects, that space object is registered at the resulting
-	 *         index. Otherwise, the resulting value is -1.
-	 *       | if (this.hasAsSpaceObject(spaceObject))
-	 *       |    then this.getSpaceObjectAt(result) == spaceObject
-	 *       |    else result == -1
-	 */
-	@Raw
-	public int getIndexOfSpaceObject(SpaceObject spaceObject) {
-		return this.getAllSpaceObjects().indexOf(spaceObject);
-	}
-
-	/**
 	 * Return a list of all the space objects of this world.
 	 * 
 	 * @return  The size of the resulting list is equal to the number of
@@ -438,14 +420,7 @@ public class World {
 	 * 			| else result == -1
 	 * 			
 	 */
-	public SpaceObject getIndexOfOtherOverlappingSpaceObject(SpaceObject object){
-		SpaceObject oth = null;
-		for(SpaceObject other: this.getAllSpaceObjects()){
-			if(SpaceObject.overlap(other, object) && other != object)
-				oth = other;
-		}
-		return oth;
-	}
+	
 
 	/**
 	 * Checks if all the points within the given radius from the given position  

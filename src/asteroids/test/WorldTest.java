@@ -173,9 +173,6 @@ public class WorldTest {
         for (int index=0; index<result.size(); index++)
             assertSame(worldWithSomeSpaceObjects.getSpaceObjectAt(index+1),result.get(index));
     }
-    @Test public void getIndexOfSpaceObject_singleCase(){
-    	assertTrue(worldWithSomeSpaceObjects.getIndexOfSpaceObject(defaultPosAsteroid) == 0);
-    }
     @Test public void addAsSpaceObject_legalCase() throws Exception{
     	SpaceObject obj = new Asteroid(new Position(200,200), new Velocity(), radius15);
     	obj.setWorld(worldWithSomeSpaceObjects);
@@ -284,7 +281,7 @@ public class WorldTest {
     	pos100xAsteroid.setWorld(emptyWorld);
     	emptyWorld.addAsSpaceObject(pos100xAsteroid);
     	emptyWorld.evolve(5,null);
-    	assertTrue(emptyWorld.getSpaceObjectAt(1).getVel().getX() == velNeg20x.getX());
+    	assertTrue(emptyWorld.getSpaceObjectAt(1).getVel().getX() == - velNeg20x.getX());
     	assertTrue(emptyWorld.getSpaceObjectAt(1).getVel().getY() == velNeg20x.getY());
 
     }
@@ -403,14 +400,14 @@ public class WorldTest {
 	}
 	@Test
 	public void resolveBullet_2bulletsSameSource()throws Exception{
-		SpaceObject bul = new Bullet((Ship) defaultPosShip);
+		Bullet bul = new Bullet((Ship) defaultPosShip);
 		defaultPosBullet.setWorld(emptyWorld);
 		bul.setWorld(emptyWorld);
 		bul.setPos(pos100x50y);
 		bul.setVel(velNeg20x);
 		emptyWorld.addAsSpaceObject(bul);
 		emptyWorld.addAsSpaceObject(defaultPosBullet);
-		emptyWorld.resolveBullet(defaultPosBullet, bul);
+		emptyWorld.resolveBullet(bul,defaultPosBullet );
 		assertTrue(Util.fuzzyEquals(bul.getVel().getX(), -20));
     	assertTrue(Util.fuzzyEquals(bul.getVel().getY(), 0));
     	assertTrue(Util.fuzzyEquals(defaultPosBullet.getVel().getX(), 250));
@@ -422,7 +419,7 @@ public class WorldTest {
 		pos100xBullet.setWorld(emptyWorld);
 		emptyWorld.addAsSpaceObject(defaultPosBullet);
 		emptyWorld.addAsSpaceObject(pos100xBullet);
-		emptyWorld.resolveBullet(defaultPosBullet,pos100xBullet);
+		emptyWorld.resolveBullet((Bullet) defaultPosBullet,pos100xBullet);
 		assertTrue(defaultPosBullet.isTerminated());
 		assertTrue(pos100xBullet.isTerminated());
 	}
@@ -434,7 +431,7 @@ public class WorldTest {
 		defaultPosBullet.setVel(velNeg20x);
 		emptyWorld.addAsSpaceObject(defaultPosBullet);
 		emptyWorld.addAsSpaceObject(defaultBulletSource);
-		emptyWorld.resolveBullet(defaultPosBullet, defaultBulletSource);
+		emptyWorld.resolveBullet((Bullet) defaultPosBullet, defaultBulletSource);
 		assertFalse(defaultBulletSource.isTerminated());
 	}
 	@Test
@@ -443,7 +440,7 @@ public class WorldTest {
 		pos100xShip.setWorld(emptyWorld);
 		emptyWorld.addAsSpaceObject(defaultPosBullet);
 		emptyWorld.addAsSpaceObject(pos100xShip);
-		emptyWorld.resolveBullet(defaultPosBullet, pos100xShip);
+		emptyWorld.resolveBullet((Bullet) defaultPosBullet, pos100xShip);
 		assertTrue(pos100xShip.isTerminated());
 	}
 	@Test
@@ -452,7 +449,7 @@ public class WorldTest {
 		pos100xAsteroid.setWorld(emptyWorld);
 		emptyWorld.addAsSpaceObject(defaultPosBullet);
 		emptyWorld.addAsSpaceObject(pos100xAsteroid);
-		emptyWorld.resolveBullet(defaultPosBullet, pos100xAsteroid);
+		emptyWorld.resolveBullet((Bullet) defaultPosBullet, pos100xAsteroid);
 		assertTrue(pos100xAsteroid.isTerminated());
 	}
 	@Test (expected = NullPointerException.class)
@@ -461,11 +458,11 @@ public class WorldTest {
 	}
 	@Test (expected = IllegalStateException.class)
 	public void resolveBullet_TerminatedWorld()throws Exception{
-		terminatedWorld.resolveBullet(defaultPosAsteroid, defaultPosShip);
+		terminatedWorld.resolveBullet((Bullet) defaultPosBullet, defaultPosShip);
 	}
 	@Test (expected = NotOfThisWorldException.class)
 	public void resolveBullet_spaceObjectFromOtherWorld()throws Exception{
-		emptyWorld.resolveBullet(defaultPosAsteroid, pos100xAsteroid);
+		emptyWorld.resolveBullet((Bullet) defaultPosBullet, pos100xAsteroid);
 	}
 	
 	
