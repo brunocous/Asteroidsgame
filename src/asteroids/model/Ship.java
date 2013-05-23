@@ -519,18 +519,12 @@ public class Ship extends SpaceObject{
 	 * @effect adds the given list of bullets to the bullets of this ship.
 	 * 			| for(Bullet objectToAdd: bulletsToAdd){
 	 *          | this.addAsBullet(objectToAdd)
-	 * @note if an exception is thrown using the method assAsBullet(...), this 
-	 * 		 method does nothing.
 	 */
 	@Raw 
 	public void addAsBullets(@Raw List<Bullet> bulletsToAdd){
 		for(Bullet objectToAdd: bulletsToAdd){
-			try{ this.addAsBullet(objectToAdd);
-			}catch (Exception ex){
-				assert ((objectToAdd == null) || (objectToAdd.getSource() != this));
-				assert this.hasAsBullet(objectToAdd);
+			this.addAsBullet(objectToAdd);
 			}
-		}
 	}
 
 	/**
