@@ -77,6 +77,8 @@ public class Variable extends Expression {
 
 	@Override
 	public boolean isTypeChecked() {
+		if(getValue() == null)
+			return true;
 		return getValue().isTypeChecked();
 	}
 

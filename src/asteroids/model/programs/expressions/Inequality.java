@@ -41,7 +41,9 @@ public abstract class Inequality extends BinaryExpression{
 	@Override
 	public boolean isTypeChecked(){
 		return ( getOperandAt(1).getType() == Type.DOUBLE
-				&& getOperandAt(2).getType() == Type.DOUBLE);
+				&& getOperandAt(2).getType() == Type.DOUBLE)
+				&& getOperandAt(1).isTypeChecked()
+				&& getOperandAt(2).isTypeChecked();
 	}
 
 }

@@ -65,8 +65,9 @@ public class Assignement extends StructuralStatement {
 	public boolean isTypeChecked() {
 		if(getNewValue() instanceof Null)
 			return true;
-		return (getProgram().getVariable(getVariableName()).getType().getGeneralType() == newValue
-				.getType().getGeneralType()) ? true : false;
+		return (getProgram().getVariable(getVariableName()).getType().getGeneralType() 
+				== getNewValue().getType().getGeneralType() 
+				&& getNewValue().isTypeChecked()) ? true : false;
 	}
 
 	public Expression getNewValue() {

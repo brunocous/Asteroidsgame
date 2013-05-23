@@ -53,7 +53,7 @@ public class Ship extends SpaceObject{
 	/**
 	 * The maximum number of bullets a ship can be associated with in a world.
 	 */
-	private static final double MAX_NB_OF_BULLETS = 3;
+	private static final double MAX_NB_OF_BULLETS = 10;
 	/**
 	 * Variable referencing a list collecting all the bullets of
 	 * this ship.

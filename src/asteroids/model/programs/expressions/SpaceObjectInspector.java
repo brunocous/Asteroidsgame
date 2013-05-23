@@ -1,9 +1,8 @@
 package asteroids.model.programs.expressions;
 
-import asteroids.model.programs.type.*;
-import asteroids.model.programs.type.IGeneralType.GeneralType;
-
 import asteroids.model.programs.IEntry;
+import asteroids.model.programs.type.IGeneralType.GeneralType;
+import asteroids.model.programs.type.Type;
 
 public abstract class SpaceObjectInspector extends UnaryExpression{
 
@@ -44,7 +43,8 @@ public Expression getValue() {
 @Override
 public boolean isTypeChecked(){
 	
-	return getOperandAt(1).getType().getGeneralType() == GeneralType.ENTITY;
+	return (getOperandAt(1).getType().getGeneralType() == GeneralType.ENTITY)
+			&& getOperandAt(1).isTypeChecked();
 }
 
 }
