@@ -53,7 +53,7 @@ public class Ship extends SpaceObject{
 	/**
 	 * The maximum number of bullets a ship can be associated with in a world.
 	 */
-	private static final double MAX_NB_OF_BULLETS = 10;
+	private static final double MAX_NB_OF_BULLETS = 3;
 	/**
 	 * Variable referencing a list collecting all the bullets of
 	 * this ship.
@@ -279,9 +279,8 @@ public class Ship extends SpaceObject{
 	 * 
 	 * @param direction
 	 *        The direction to be checked in radians.
-	 * @return true if and only if the given direction is greater than -Pi and less than or equal to
-	 * 		   Pi.
-	 *         | result == (direction > -Math.PI) && (direction <= Math.PI)
+	 * @return true if and only if the given direction finite.
+	 *         | result == !Double.isInfinite(direction)
 	 *        
 	 */
 	public static boolean isValidDirection(double direction){
@@ -291,7 +290,7 @@ public class Ship extends SpaceObject{
 	}
 
 /**
- * @return True is and only if the thruster is enabled.
+ * @return True if and only if the thruster is enabled.
  * 			| result == (enalbeThruster == true)
  */
 	public boolean isEnableThruster() {
@@ -328,7 +327,7 @@ public class Ship extends SpaceObject{
 	}
 
 	/**
-	 * @return the maxNbOfBullets
+	 * @return the maxNbOfBullets of a ship. 
 	 */
 	@Basic
 	@Immutable
@@ -563,6 +562,7 @@ public class Ship extends SpaceObject{
 	}	
 	/**
 	 * Terminates a Ship.
+	 * 
 	 * @post    Each of the bullets of this ship no longer has
 	 *          a source.
 	 *        | for each space object in getAllSpaceObjects():

@@ -12,7 +12,7 @@ import be.kuleuven.cs.som.annotate.*;
 
 /** 
  * An abstract class of space objects involving a position, a velocity, a direction,
- * a maximum speed, a mass and a radius with moving, firing and turning facilities.
+ * a maximum speed, a mass and a radius with moving facilities.
  * 
  * @Invar The position that applies to all space objects must be a valid position.
  *        | isValidPosition(getPos())
