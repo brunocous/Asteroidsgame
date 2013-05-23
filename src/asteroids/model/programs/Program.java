@@ -34,6 +34,29 @@ public class Program {
 		}
 		this.errors = errors;
 	}
+	
+	public Program(Program program) {
+		
+		Program result= new Program(program.getStatement(), program.getErrors());
+		try {
+			result.setShip(program.getShip());
+		} catch (IllegalOperandException e) {
+			assert(!canHaveAsShip(program.getShip()));
+		}
+		result.addAllVariables(program.getVariables());
+	}
+	
+	public Program(Statement statement, List<String> errors){
+		if(!canHaveAsStatement(statement)){
+			throw new IllegalArgumentException();
+		}
+		else{
+			this.statement = statement;
+			statement.setProgram(this);
+		}
+		this.errors = errors;
+		this.variables = new HashMap<String,Variable>();
+	}
 	public boolean canHaveAsVariables(Map<String,Type> globals){
 		return globals != null;
 	}
@@ -111,4 +134,11 @@ public class Program {
 				&& variable.getType() != null 
 				&& variable.canHaveAsProgram(this);
 	}
+	public void addAllVariables(Map<String,Variable> variables){
+		
+		for(Variable var: variables.values()){
+			addAsVariable(var);
+		}
+	}
+	
 }

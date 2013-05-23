@@ -608,7 +608,11 @@ public class Ship extends SpaceObject{
 		}
 		
 	}
-
+	
+	/**
+	 * Return the program of this ship. 
+	 */
+	@Basic
 	public Program getProgram() {
 		return program;
 	}
