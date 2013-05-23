@@ -73,7 +73,7 @@ public class World {
 	 * The time interval during which the programs of all ships in this world can execute one
 	 * action.
 	 */
-	private static final long ACTION_EXECUTION_TIME_INTERVAL = 200;
+	private static final long ACTION_EXECUTION_TIME_INTERVAL = 100;
 	/**
 	 * Initializes this new world with a given width and height.
 	 * @param width
@@ -782,7 +782,8 @@ public class World {
 				else{
 				for(SpaceObject object2 : this.getAllSpaceObjects()){
 					if(Util.fuzzyLessThanOrEqualTo(SpaceObject.getDistanceBetween(this.getSpaceObjectAt(i),object2),0.0) 
-							&& this.getSpaceObjectAt(i)!=object2){
+							&& this.getSpaceObjectAt(i)!=object2
+							&& !areAssociatedWithEachOther(this.getSpaceObjectAt(i), object2)){
 						if(coll != null)
 							coll.objectCollision(this.getSpaceObjectAt(i), object2, SpaceObject.getCollisionPosition(object2, this.getSpaceObjectAt(i)).getX(), SpaceObject.getCollisionPosition(this.getSpaceObjectAt(i), object2).getY());
 						try {							

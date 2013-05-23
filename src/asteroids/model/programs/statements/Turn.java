@@ -32,7 +32,6 @@ public class Turn extends ShipActionStatement {
 	@Override
 	public boolean execute() {
 		Ship ship = (Ship) getShip().getRealValue();
-		System.out.println("draai.");
 			ship.turn((Double) getAmount().getRealValue());
 			return true;
 	}

@@ -19,7 +19,6 @@ public class Division extends BinaryMath{
 		DoubleLiteral constant1 = (DoubleLiteral) (getOperandAt(1).getValue());
 		DoubleLiteral constant2 = (DoubleLiteral) (getOperandAt(2).getValue());
 		return (constant1).getRealValue()/(constant2).getRealValue();
-			
 	}
 
 	@Override

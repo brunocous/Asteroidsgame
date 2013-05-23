@@ -42,7 +42,6 @@ public class Skip extends ActionStatement {
 	}
 	@Override
 	public boolean execute() {
-		System.out.println("swag wacht");
 		return true;
 	}
 	@Override
