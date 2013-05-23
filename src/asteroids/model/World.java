@@ -69,7 +69,10 @@ public class World {
 	* Variable reflecting a time stamp.
 	*/
 	private long then = System.currentTimeMillis();
-	
+	/**
+	 * The time interval during which the programs of all ships in this world can execute one
+	 * action.
+	 */
 	private static final long ACTION_EXECUTION_TIME_INTERVAL = 200;
 	/**
 	 * Initializes this new world with a given width and height.
@@ -555,7 +558,8 @@ public class World {
 	 * 			|					getSpaceObjectAt(index2))
 	 * 			| if ( !Double.isInfinite(timeToCollision) 
 	 * 			| 			&& Util.fuzzyLessThanOrEqualTo(timeToCollision, result) 
-	 * 			|			&& !Util.fuzzyEquals(timeToCollision,0))
+	 * 			|			&& !Util.fuzzyEquals(timeToCollision,0)
+	 * 			|			&& && !areAssociatedWithEachOther(this.getSpaceObjectAt(i),this.getSpaceObjectAt(j)))
 	 * 			| then tempResult = timeToCollision;
 	 * 			| for each index in 1..getNbSpaceObjects():
 	 * 			| double timeToBoundaryCollision = 
@@ -586,9 +590,7 @@ public class World {
 				
 				if ( !Double.isInfinite(timeToCollision) && Util.fuzzyLessThanOrEqualTo(timeToCollision, result) && !Util.fuzzyEquals(timeToCollision,0)
 							&& !areAssociatedWithEachOther(this.getSpaceObjectAt(i),this.getSpaceObjectAt(j))){
-					/**
-					 * TODO doc. voor aanpassingen van gelijkheid hierboven
-					 */
+					
 					result = timeToCollision;
 				
 				}
@@ -719,8 +721,10 @@ public class World {
 	 * 			for a given amount of time deltaT of all the space objects of
 	 * 			this world. Else update the positions and velocities of all 
 	 * 			space objects of this world for an amount of time until the 
-	 * 			first collision has occurred and resolve that collision.
-	 * TODO aanpassen aan laatste aanpassingen
+	 * 			first collision has occurred and resolve that collision. This 
+	 * 			method also makes sure that the programs of the ships in this world,
+	 * 			if any, are runned as the game continues. 
+	 * 			| runPrograms()
 	 * 			| double tC = getTimeToFirstCollision()
 	 * 			| if(!tC > deltaT)
 	 * 			| then updatePositions(deltaT)
@@ -823,7 +827,13 @@ public class World {
 	}
 	/**
 	* Runs the program of each Ship.
-	* TODO documentatie
+	*
+	* @effect If all programs that belong to the ships in this world can be executed,
+	* 		  this method will make sure they are executed. 
+	* 		  |if(canRunAllPrograms())
+	*         |   for(SpaceObject sp: getAllSpaceObjects()){
+	*		  |         if(sp.getClass().isAssignableFrom(Ship.class))
+	*         |			      ((Ship) sp).runProgram();
 	*/
 	private void runPrograms(){
 	if(canRunAllPrograms()){
@@ -838,10 +848,16 @@ public class World {
 	/**
 	* Checks if this world can order his ship to run their program.
 	*
-	* return True if and only if the elapsed time since the last run of the
-	* ships program is greater than the time interval between each run of the
-	* ships program.
-	*	| TODO documentatie
+	* @return True if and only if the elapsed time since the last run of the
+	* ships program is greater than the fixed time interval there has to be
+	* between each run of the ships program.
+	*	|long now = System.currentTimeMillis();
+	*	|long elapsedTime = now - getThen();
+	*   |if(elapsedTime > getActionExecutionTimeInterval()){
+	*	|setThen(System.currentTimeMillis());
+	*	|return true;
+	*	|else return false;
+	*	
 	*/
 	private boolean canRunAllPrograms(){
 		long now = System.currentTimeMillis();
@@ -1119,27 +1135,24 @@ public class World {
 	 * 			The first object to be resolved, which is a bullet.
 	 * @param object2
 	 * 			The second object to be resolved.
-	 * @effect If the given object2 is an asteroid, then terminate object1 and terminate object2.
-	 * 		   If the given object 2 is a ship, then if the given object1 has not got object2 as 
-	 *         its source then terminate object1 and terminate object2. Else 
-	 * 			if both given objects are bullets, then if they have both a different
-	 * 			source then terminate both objects. Else do nothing. Else terminate object1 and terminate object2.
+	 * @effect If the given object2 is an asteroid, terminate both the given object2 and object1
+	 * 			and create two daughter asteroids if the given object2 has a large enough radius.
+	 * 			If the given object2 is a ship, terminate both the given object1 and object2 un-
+	 * 			less object1 is a bullet fired by that ship, in that case do nothing.
+	 * 			If the given object2 is a bullet, terminate both the givne object2 and object1.
 	 * 			| if(Asteroid.class.isAssignableFrom(object2.getClass()) 
 	 * 			| then
 	 * 			| object1.terminate()
 	 * 			| object2.terminate()
+	 * 			| this.addAsSpaceObjects( asteroidCopy.split())
 	 * 			|		else if( Ship.class.isAssignableFrom(object2.getClass()))
 	 * 			| 			 then if(object1.getSource() != object2) 
 	 * 			| 				  then 
 	 * 			| 				  object1.terminate()
 	 * 			| 				  object2.terminate()
 	 * 			| 			 else if( Bullet.class.isAssignableFrom(object2.getClass()))
-	 * TODO documenatie de tekst aanpassen dat de bullets bla bla
 	 * 			|				  then object1.terminate()
 	 * 			|					   object2.terminate()					
-	 * 			| 				  else 
-	 * 			|			 	  object1.terminate()
-	 * 			| 			      object2.terminate()
 	 * 
 	 * @post If the given object2 is an asteroid, then add the 2 child asteroids of object2 to this world.
 	 * 			| if(( Asteroid.class.isAssignableFrom(object2.getClass())))
@@ -1196,23 +1209,22 @@ public class World {
 						}
 	}
 	/**
-	 * @return the then
+	 * @return The 'then' of this world.
 	 */
 	public long getThen() {
 		return then;
 	}
 	/**
-	 * @param then the then to set
+	 * @param then 	The new value for the then of this world.
 	 */
 	public void setThen(long then) {
 		this.then = then;
 	}
 	/**
-	 * @return the actionExecutionTimeInterval
+	 * @return the actionExecutionTimeInterval.
 	 */
 	public static long getActionExecutionTimeInterval() {
 		return ACTION_EXECUTION_TIME_INTERVAL;
 	}
 }
-
 
