@@ -516,20 +516,15 @@ public class Ship extends SpaceObject{
 	 * 
 	 * @param bulletsToAdd
 	 * 		  	The bullets to be added.
-	 * TODO hier documentatie afmaken
-	 * @effect ...
-	 * 			| for each index in 0..bulletsToAdd.size()-1
-	 * 			| addAsBullet(bulletsToAdd.get(index))
+	 * @effect adds the given list of bullets to the bullets of this ship.
+	 * 			| for(Bullet objectToAdd: bulletsToAdd){
+	 *          | this.addAsBullet(objectToAdd)
 	 */
 	@Raw 
 	public void addAsBullets(@Raw List<Bullet> bulletsToAdd){
 		for(Bullet objectToAdd: bulletsToAdd){
-			try{ this.addAsBullet(objectToAdd);
-			}catch (Exception ex){
-				assert ((objectToAdd == null) || (objectToAdd.getSource() != this));
-				assert this.hasAsBullet(objectToAdd);
+			this.addAsBullet(objectToAdd);
 			}
-		}
 	}
 
 	/**
@@ -608,26 +603,79 @@ public class Ship extends SpaceObject{
 		}
 		
 	}
-
+	
+	/**
+	 * Return the program of this ship. 
+	 */
+	@Basic
 	public Program getProgram() {
-		return program;
+		return new Program(program);
 	}
-
+	
+	/**
+	 * Set the program of this ship to the given program.
+	 * 
+	 * @param program
+	 * 		  The new program for this ship.
+	 * @throws IllegalOperandException using the method setShip(...) of Program.
+	 * @throws IllegalOperandException 
+	 * 		   The given program is not a valid program for this ship.
+	 * 		   | !canHaveAsProgram(program)
+	 * @post the new program of this ship is the given program.
+	 * 		   |(new this).getProgram() == program
+	 * @effect the new ship of the given program is this ship.
+	 * 		   |program.setShip(this)
+	 * 		   
+	 */
 	public void setProgram(@Raw Program program) throws IllegalOperandException{
 		assert canHaveAsProgram(program);
 		this.program = program;
 		
 		program.setShip(this);
 	}
+	
+	/**
+	 * Check whether the given program is a valid program for this ship.
+	 * 
+	 * @param program
+	 * 		  the program to be checked.
+	 * @return true if and only if this ship is a valid ship for the given program.
+	 * 		   |result == program.canHaveAsShip(this)
+	 */
 	public boolean canHaveAsProgram(Program program){
 		return (program.canHaveAsShip(this));
 	}
+	
+	/**
+	 * Check whether this ship has a program.
+	 * 
+	 * @return true if and only if this program has a program.
+	 * 		   |result == this.getProgram!=null
+	 */
 	public boolean hasAProgram(){
 		return this.getProgram() != null;
 	}
+	
+	/**
+	 * Check whether the program that belongs to this ship, if any, is a proper 
+	 * program for this ship.
+	 * 
+	 * @return true if and only if the current program for this ship is a proper 
+	 *			program.
+	 *			|result == canHaveAsProgram(getProgram())
+	 */
 	public boolean hasProperProgram(){
 		return canHaveAsProgram(getProgram());
 	}
+	
+	/**
+	 * Runs the program of this ship.
+	 * 
+	 * @effect executes the program of this ship if this ship has a program and it
+	 * 		   is not already running.
+	 *         | if(hasAProgram() && !getProgram().isRunning())
+	 *         | getProgram().execute()
+	 */
 	public void runProgram(){
 		if(hasAProgram() && !getProgram().isRunning()){
 			getProgram().execute();

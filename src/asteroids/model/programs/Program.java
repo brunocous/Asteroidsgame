@@ -34,6 +34,20 @@ public class Program {
 		}
 		this.errors = errors;
 	}
+	
+	public Program(Program program) {
+		
+		try {
+			this.setShip(program.getShip());
+		} catch (IllegalOperandException e) {
+			assert(!canHaveAsShip(program.getShip()));
+		}
+		this.addAllVariables(program.getVariables());
+		this.statement = program.getStatement();
+		this.errors = program.getErrors();
+		this.variables = program.getVariables();
+	}
+	
 	public boolean canHaveAsVariables(Map<String,Type> globals){
 		return globals != null;
 	}
@@ -111,4 +125,11 @@ public class Program {
 				&& variable.getType() != null 
 				&& variable.canHaveAsProgram(this);
 	}
+	public void addAllVariables(Map<String,Variable> variables){
+		
+		for(Variable var: variables.values()){
+			addAsVariable(var);
+		}
+	}
+	
 }
