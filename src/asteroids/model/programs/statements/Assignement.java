@@ -41,7 +41,7 @@ public class Assignement extends StructuralStatement {
 	public boolean canHaveAsOperandAt(int index, IEntry operand) {
 		if (super.canHaveAsOperandAt(index, operand) && operand != null)
 			if (index == 1
-					&& operand.getClass().isAssignableFrom(Expression.class))
+					&& operand instanceof Expression)
 				return true;
 		return false;
 
