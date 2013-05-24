@@ -6,65 +6,68 @@ import asteroids.model.programs.IEntry;
 import asteroids.model.programs.Program;
 import asteroids.model.programs.type.Type;
 
+public abstract class Expression implements IEntry {
 
+	private Program program = null;
 
+	public abstract Object getRealValue();
 
-public abstract class Expression implements IEntry{
+	public abstract Expression getValue();
 
-private Program program = null;
+	@Override
+	public boolean equals(Object other) {
 
-public abstract Object getRealValue();
+		if (!(other instanceof Expression)) {
+			return false;
+		} else {
 
-public abstract Expression getValue();
+			if (!(this.getType() == ((Expression) other).getType())) {
+				return false;
+			} else {
+				if (this.getType() == Type.BOOLEAN) {
+					return this.getValue().getRealValue() == ((Expression) other)
+							.getValue().getRealValue();
+				} else if (this.getType() == Type.DOUBLE) {
+					return Util.fuzzyEquals((Double) (this.getValue()
+							.getRealValue()), (Double) (((Expression) other)
+							.getValue().getRealValue()));
+				} else if (this.getType() == Type.ANY) {
+					return this.getValue().getRealValue() == ((Expression) other)
+							.getValue().getRealValue();
+				} else
+					return false;
+			}
+		}
+	}
 
-public boolean equals(Expression other){
+	public abstract Type getType();
 
-if (!(this.getType() == other.getType())){
-return false;
-}
-else{
-if(this.getType() == Type.BOOLEAN){
-return this.getValue().getRealValue()==other.getValue().getRealValue();
-}
-else if(this.getType() == Type.DOUBLE){
-return Util.fuzzyEquals((Double)(this.getValue().getRealValue()),(Double)(other.getValue().getRealValue()));
-}
-else if(this.getType() == Type.ANY){
-return this.getValue().getRealValue()==other.getValue().getRealValue();
-}
-else return false;
-}
-}
+	public String toString() {
 
-public abstract Type getType();
+		if (getValue().getType() == Type.DOUBLE) {
+			return Double.toString((Double) getRealValue());
+		} else if (getValue().getType() == Type.BOOLEAN) {
+			return String.valueOf((Boolean) getRealValue());
+		} else if (getValue().getType() == Type.ANY) {
+			return ((SpaceObject) getRealValue()).toString();
+		} else {
+			return null;
+		}
+	}
 
-public String toString(){
+	public abstract boolean isTypeChecked();
 
-if(getValue().getType() == Type.DOUBLE){
-return Double.toString((Double) getRealValue());
-}
-else if(getValue().getType() == Type.BOOLEAN){
-return String.valueOf((Boolean) getRealValue());
-}
-else if(getValue().getType() == Type.ANY){
-return ((SpaceObject) getRealValue()).toString();
-}
-else{
-return null;
-}
-}
-public abstract boolean isTypeChecked();
+	public Program getProgram() {
+		return program;
+	}
 
-public Program getProgram(){
-return program;
-}
-public void setProgram(Program program){
-if(canHaveAsProgram( program))
-this.program = program;
-}
+	public void setProgram(Program program) {
+		if (canHaveAsProgram(program))
+			this.program = program;
+	}
 
-public boolean canHaveAsProgram(Program program){
-return (getProgram() == null) ? true:false;
-}
+	public boolean canHaveAsProgram(Program program) {
+		return (getProgram() == null) ? true : false;
+	}
 
 }
