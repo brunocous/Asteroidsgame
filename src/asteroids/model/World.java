@@ -73,7 +73,7 @@ public class World {
 	 * The time interval during which the programs of all ships in this world can execute one
 	 * action.
 	 */
-	private static final long ACTION_EXECUTION_TIME_INTERVAL = 100;
+	private static final long ACTION_EXECUTION_TIME_INTERVAL = 200;
 	/**
 	 * Initializes this new world with a given width and height.
 	 * @param width
