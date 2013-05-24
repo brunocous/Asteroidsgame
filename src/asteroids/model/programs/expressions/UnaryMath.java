@@ -1,5 +1,6 @@
 package asteroids.model.programs.expressions;
 
+import be.kuleuven.cs.som.annotate.Raw;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.type.Type;
 
@@ -13,6 +14,7 @@ public UnaryMath(Expression argument) {
 }
 
 @Override
+@Raw
 public boolean canHaveAsOperandAt(int index, IEntry argument){
 		
 		if(index ==1){
@@ -20,7 +22,6 @@ public boolean canHaveAsOperandAt(int index, IEntry argument){
 		}
 		else{
 			return false;
-			//TODO implementeren
 		}
 		
 

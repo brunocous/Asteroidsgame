@@ -1,6 +1,8 @@
 package asteroids.model.programs.expressions;
 
 
+import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Raw;
 import asteroids.model.programs.type.*;
 
 import asteroids.model.programs.IEntry;
@@ -18,10 +20,12 @@ public class Negation extends UnaryExpression{
 	}
 	
 	@Override
+	@Basic
 	public Type getType(){
 		return TYPE;
 	}
 	@Override
+	@Raw
 	public boolean canHaveAsOperandAt(int index, IEntry argument){
 			
 			if(index ==1){

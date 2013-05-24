@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 
 import asteroids.Error.IllegalOperandException;
@@ -31,13 +32,15 @@ public class EntitySequence extends Expression implements IComposedStructure{
 		
 	}
 
-	
+	@Basic
 	public Type getType(){
 		return type;
 	}
+	
 	public void addAsEntity(@Raw Entity ent) throws IllegalOperandException{
 		setOperandAt(getNbOperands()+1, ent);
 	}
+	
 	@Override
 	public boolean hasAsSubEntry(IEntry subEntry) {
 		if(subEntry.getClass().isAssignableFrom(Entity.class))
@@ -45,6 +48,7 @@ public class EntitySequence extends Expression implements IComposedStructure{
 		return false;
 	}
 
+	@Override
 	public List<SpaceObject> getRealValue(){
 		List<SpaceObject> result = new LinkedList<SpaceObject>();
 		for(Entity ent: getAllEntities()){
@@ -53,11 +57,13 @@ public class EntitySequence extends Expression implements IComposedStructure{
 		return result;
 	}
 	@Override
+	@Basic
 	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException {
 		if(index >0 && index <= getNbOperands())
 		return getAllEntities().get(index - 1);
 		else throw new IndexOutOfBoundsException();
 	}
+	@Basic
 	public List<Entity> getAllEntities(){
 		return entities;
 	}
@@ -79,12 +85,14 @@ public class EntitySequence extends Expression implements IComposedStructure{
 		return getAllEntities().contains(entity);
 	}
 	@Override
+	@Raw
 	public boolean canHaveAsOperandAt(int index, IEntry operand) {
 		return (!operand.hasAsSubEntry(this) && (index > 0) 
 				&& (index <= getNbOperands() +1) 
 				&& operand != null
 				&& operand.getClass().isAssignableFrom(Entity.class));
 	}
+	
 	public static EntitySequence generateEntitySequence(World world, Type type){
 		     EntitySequence result = new EntitySequence();
 	        for(SpaceObject obj: world.getAllSpaceObjects()){

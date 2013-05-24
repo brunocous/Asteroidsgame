@@ -1,5 +1,7 @@
 package asteroids.model.programs.expressions;
 
+import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Raw;
 import asteroids.model.programs.type.*;
 
 import asteroids.model.programs.IEntry;
@@ -15,6 +17,7 @@ public abstract class Logic extends BinaryExpression {
 	}
 	
 	@Override
+	@Raw
 	public boolean canHaveAsOperandAt(int index, IEntry expression){
 		
 		if(index > getNbOperands()){
@@ -26,8 +29,9 @@ public abstract class Logic extends BinaryExpression {
 		}
 		}
 	
+	@Override
 	public abstract Boolean getRealValue();
-
+	@Override
 	public Expression getValue(){
 		
 		return new BooleanLiteral(getRealValue());
@@ -42,6 +46,7 @@ public abstract class Logic extends BinaryExpression {
 	}
 	
 	@Override
+	@Basic
 	public Type getType(){
 		return TYPE;
 	}

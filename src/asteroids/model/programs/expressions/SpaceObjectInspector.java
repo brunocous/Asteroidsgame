@@ -1,5 +1,7 @@
 package asteroids.model.programs.expressions;
 
+import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Raw;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.type.IGeneralType.GeneralType;
 import asteroids.model.programs.type.Type;
@@ -15,6 +17,7 @@ public SpaceObjectInspector(Expression argument) {
 	}
 	
 	@Override
+	@Raw
 	public boolean canHaveAsOperandAt(int index, IEntry argument){
 			
 			if(index ==1){
@@ -29,10 +32,12 @@ public SpaceObjectInspector(Expression argument) {
 			
 
 @Override
+@Basic
 public Type getType(){
 	return TYPE;
 }
 
+@Override
 public abstract Double getRealValue();
 @Override
 public Expression getValue() {

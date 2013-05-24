@@ -1,6 +1,8 @@
 package asteroids.model.programs.expressions;
 
 
+import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Raw;
 import asteroids.model.programs.IComposedStructure;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.Program;
@@ -16,7 +18,8 @@ public abstract class UnaryExpression extends Expression implements IComposedStr
 	}
 	
 	@Override
-	public void setOperandAt(int index, IEntry argument){
+	@Basic
+	public void setOperandAt(int index, @Raw IEntry argument){
 		
 		if(canHaveAsOperandAt(index,argument) && argument instanceof Expression){
 			
@@ -37,6 +40,7 @@ public abstract class UnaryExpression extends Expression implements IComposedStr
 
 	
 	@Override
+	@Basic
 	public Expression getOperandAt(int index) throws IndexOutOfBoundsException {
 
 		if(index ==1){
@@ -54,7 +58,8 @@ public abstract class UnaryExpression extends Expression implements IComposedStr
 	}
 	
 	@Override
-	public void setProgram(Program program){
+	@Basic
+	public void setProgram(@Raw Program program){
 		super.setProgram(program);
 		getOperandAt(1).setProgram(program);
 		

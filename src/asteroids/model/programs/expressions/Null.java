@@ -1,5 +1,6 @@
 package asteroids.model.programs.expressions;
 
+import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Value;
 import asteroids.model.SpaceObject;
 import asteroids.model.programs.type.Type;
@@ -32,6 +33,7 @@ public Expression getValue() {
 
 
 @Override
+@Basic
 public Type getType() {
 	return TYPE;
 }

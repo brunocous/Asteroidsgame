@@ -26,7 +26,7 @@ import be.kuleuven.cs.som.annotate.Raw;
  * @Invar Each world must have proper space objects.
  * 			| hasProperSpaceObjects()
  * 
- * @version 1.0
+ * @version 2.0
  * @author Bruno Coussement and Simon Telen
  * 
  *

@@ -12,7 +12,7 @@ public class LogicAnd extends Logic {
 	}
 
 	
-
+	@Override
 	public Boolean getRealValue(){
 		
 		BooleanLiteral constant1 = (BooleanLiteral) (getOperandAt(1).getValue());

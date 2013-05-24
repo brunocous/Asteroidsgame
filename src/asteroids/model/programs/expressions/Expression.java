@@ -1,5 +1,8 @@
 package asteroids.model.programs.expressions;
 
+import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Immutable;
+import be.kuleuven.cs.som.annotate.Raw;
 import asteroids.Util;
 import asteroids.model.SpaceObject;
 import asteroids.model.programs.IEntry;
@@ -40,6 +43,8 @@ public abstract class Expression implements IEntry {
 		}
 	}
 
+	@Immutable
+	@Basic
 	public abstract Type getType();
 
 	public String toString() {
@@ -57,15 +62,18 @@ public abstract class Expression implements IEntry {
 
 	public abstract boolean isTypeChecked();
 
+	@Basic
 	public Program getProgram() {
 		return program;
 	}
 
-	public void setProgram(Program program) {
+	@Basic
+	public void setProgram(@Raw Program program) {
 		if (canHaveAsProgram(program))
 			this.program = program;
 	}
 
+	@Raw
 	public boolean canHaveAsProgram(Program program) {
 		return (getProgram() == null) ? true : false;
 	}

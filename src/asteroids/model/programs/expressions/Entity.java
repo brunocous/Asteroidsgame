@@ -24,6 +24,7 @@ public Expression getValue() {
 	return new Entity(getRealValue());
 }
 
+@Override
 public SpaceObject getRealValue(){
 	return value;
 }

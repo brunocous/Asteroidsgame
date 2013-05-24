@@ -25,8 +25,9 @@ public abstract class Comparison extends BinaryExpression {
 	}
 	
 
-	
+	@Override
 	public abstract Boolean getRealValue();
+	@Override
 	public Expression getValue(){
 		
 		return new BooleanLiteral(getRealValue());

@@ -18,11 +18,13 @@ public DoubleLiteral(double value){
 public Type getType(){
 	return TYPE;
 }
+
+@Override
 public Expression getValue(){
 	return new DoubleLiteral(getRealValue());
 }
 
-
+@Override
 public Double getRealValue(){
 	
 	return value;
