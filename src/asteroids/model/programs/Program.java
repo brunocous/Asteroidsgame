@@ -126,9 +126,16 @@ public class Program {
 	}
 	public void addAllVariables(Map<String,Variable> variables){
 		
-		for(Variable var: variables.values()){
+		for(Variable var: getVariables().values()){
 			addAsVariable(var);
 		}
+	}
+	public boolean hasProperVariables(){
+		for(Variable var: getVariables().values()){
+			if(!canHaveAsVariable(var))
+				return false;
+		}
+		return true;
 	}
 	
 }
