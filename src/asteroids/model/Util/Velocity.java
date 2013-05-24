@@ -6,7 +6,7 @@ import be.kuleuven.cs.som.annotate.*;
 /**
  * A class of two dimensional velocity vectors involving an x- and a y-component.
  * 
- * @version 1.0
+ * @version 3.0
  * @author Bruno Coussement and Simon Telen
  *
  */

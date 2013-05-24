@@ -2,7 +2,13 @@ package asteroids.model.Util;
 
 import asteroids.Util;
 import be.kuleuven.cs.som.annotate.*;
-
+/**
+ * An Abstract Class of vectors.
+ * 
+ * @author	Bruno Coussement and Simon Telen
+ * @version 3.0
+ *
+ */
 @Value
 public abstract class Vector {
 

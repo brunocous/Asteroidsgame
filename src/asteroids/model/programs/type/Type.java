@@ -8,7 +8,8 @@ import asteroids.model.Asteroid;
 import asteroids.model.Bullet;
 import asteroids.model.Ship;
 import asteroids.model.SpaceObject;
-import asteroids.model.programs.IEntry;
+
+
 
 public enum Type implements IGeneralType {
 	DOUBLE{
@@ -82,10 +83,13 @@ public enum Type implements IGeneralType {
 		}
 	};
 	public abstract GeneralType getGeneralType();
-		
+	
+	
 	public static boolean isValidType(Type type){
 		return Arrays.asList(Type.values()).contains(type);
 	}
+	
+
 	public static boolean isValidEntityType(Type type){
 		List<Type> validTypes = new ArrayList<Type>();
 		for(Type t: Type.values()){
