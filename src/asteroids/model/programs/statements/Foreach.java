@@ -1,5 +1,7 @@
 package asteroids.model.programs.statements;
 
+import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Raw;
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.Program;
@@ -21,18 +23,22 @@ public class Foreach extends StructuralStatement {
 		else this.type = null;
 	}
 	@Override
+	@Basic
 	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException {
 		if(index == 3)
 			return getBody();
 		throw new IndexOutOfBoundsException();
 		
 	}
+	@Basic
 	public String getVariableName(){
 		return variableName;
 	}
+	@Basic
 	public Statement getBody(){
 		return body;
 	}
+	@Basic
 	public Type getType(){
 		return type;
 	}
@@ -43,6 +49,7 @@ public class Foreach extends StructuralStatement {
 	}
 
 	@Override
+	@Basic
 	public void setOperandAt(int index, IEntry operand)
 			throws IllegalOperandException {
 		if(!canHaveAsOperandAt(index,operand))
@@ -52,6 +59,7 @@ public class Foreach extends StructuralStatement {
 
 	}
 	@Override
+	@Raw
 	public boolean canHaveAsOperandAt(int index, IEntry operand){
 		if(super.canHaveAsOperandAt(index, operand)){
 			if(index == 3 && operand instanceof StructuralStatement){
@@ -82,6 +90,7 @@ public class Foreach extends StructuralStatement {
 				&& getBody().isTypeChecked();
 	}
 	@Override
+	@Basic
 	public void setProgram(Program program){
 		super.setProgram(program);
 		getBody().setProgram(program);

@@ -1,5 +1,7 @@
 package asteroids.model.programs.statements;
 
+import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Raw;
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.*;
 import asteroids.model.programs.IEntry;
@@ -21,6 +23,7 @@ public class Turn extends ShipActionStatement {
 		return getAmount().getType() == Type.DOUBLE;
 	}
 	@Override
+	@Basic
 	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException {
 		if(index == 1)
 			return getShip();
@@ -37,6 +40,7 @@ public class Turn extends ShipActionStatement {
 	}
 
 	@Override
+	@Raw
 	public boolean canHaveAsOperandAt( int index, IEntry operand){
 		if(super.canHaveAsOperandAt(index, operand) && index == 2
 				&& operand instanceof Expression)
@@ -44,6 +48,7 @@ public class Turn extends ShipActionStatement {
 		return false;
 	}
 	@Override
+	@Basic
 	public void setOperandAt(int index, IEntry operand)
 			throws IllegalOperandException {
 		if(index == 2 && canHaveAsOperandAt(index, operand))
@@ -59,6 +64,7 @@ public class Turn extends ShipActionStatement {
 	}
 	
 	@Override
+	@Basic
 	public void setProgram(Program program){
 		super.setProgram(program);
 		getAmount().setProgram(program);

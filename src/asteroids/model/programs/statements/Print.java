@@ -1,5 +1,7 @@
 package asteroids.model.programs.statements;
 
+import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Raw;
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.Program;
@@ -14,11 +16,13 @@ public class Print extends StructuralStatement {
 		this.expression = expression;
 	}
 	@Override
+	@Basic
 	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException {
 		if(index == 1) 
 			return getExpression();
 		throw new IndexOutOfBoundsException();
 	}
+	@Basic
 	public Expression getExpression(){
 		return expression;
 	}
@@ -29,6 +33,7 @@ public class Print extends StructuralStatement {
 	}
 
 	@Override
+	@Basic
 	public void setOperandAt(int index, IEntry operand)
 			throws IllegalOperandException {
 		if(!canHaveAsOperandAt(index, operand))
@@ -38,6 +43,7 @@ public class Print extends StructuralStatement {
 
 	}
 	@Override
+	@Raw
 	public boolean canHaveAsOperandAt(int index, IEntry operand){
 		return (super.canHaveAsOperandAt(index, operand)
 				&& operand instanceof Expression)
@@ -60,6 +66,7 @@ public class Print extends StructuralStatement {
 	}
 
 	@Override
+	@Basic
 	public void setProgram(Program program){
 		super.setProgram(program);
 		

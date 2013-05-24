@@ -1,5 +1,7 @@
 package asteroids.model.programs.statements;
 
+import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Raw;
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.Program;
@@ -19,6 +21,7 @@ public class IfThenElse extends StructuralStatement {
 		this.elseBody = elseBody;
 	}
 	@Override
+	@Basic
 	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException {
 		if(index == 1)
 			return getCondition();
@@ -28,12 +31,15 @@ public class IfThenElse extends StructuralStatement {
 			return getElseBody();
 		throw new IndexOutOfBoundsException();
 	}
+	@Basic
 	public Expression getCondition(){
 		return condition;
 	}
+	@Basic
 	public Statement getIfBody(){
 		return ifBody;
 	}
+	@Basic
 	public Statement getElseBody(){
 		return elseBody;
 	}
@@ -44,6 +50,7 @@ public class IfThenElse extends StructuralStatement {
 	}
 
 	@Override
+	@Basic
 	public void setOperandAt(int index, IEntry operand)throws IllegalOperandException{
 			if(!canHaveAsOperandAt(index,operand))
 				throw new IllegalOperandException();
@@ -66,6 +73,7 @@ public class IfThenElse extends StructuralStatement {
 	}
 
 	@Override
+	@Raw
 	public boolean canHaveAsOperandAt(int index, IEntry operand){
 		if(super.canHaveAsOperandAt(index, operand)){
 			if(index == 1 && operand instanceof Expression)
@@ -89,6 +97,7 @@ public class IfThenElse extends StructuralStatement {
 				&& getElseBody().isTypeChecked();
 	}
 	@Override
+	@Basic
 	public void setProgram(Program program){
 		super.setProgram(program);
 		getCondition().setProgram(program);

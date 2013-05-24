@@ -1,5 +1,6 @@
 package asteroids.model.programs.statements;
 
+import be.kuleuven.cs.som.annotate.Basic;
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.Program;
@@ -12,11 +13,12 @@ public abstract class ShipActionStatement extends ActionStatement {
 	public boolean isTypeChecked() {
 		return (getNbOperands() ==1) ? true: this.isTypeChecked();
 	}
-
+	@Basic
 	public Expression getShip(){
 		return new Entity(getProgram().getShip());
 	}
 	@Override
+	@Basic
 	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException {
 		if(index == 1)
 			return getShip();
@@ -28,11 +30,13 @@ public abstract class ShipActionStatement extends ActionStatement {
 		return 1;
 	}
 	@Override
+	@Basic
 	public void setOperandAt(int index, IEntry entry)throws IllegalOperandException{
 		if(index <0)
 			throw new IllegalOperandException();
 	}
 	@Override
+	@Basic
 	public void setProgram(Program program){
 		super.setProgram(program);
 	}
