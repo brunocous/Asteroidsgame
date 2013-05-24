@@ -1,5 +1,6 @@
 package asteroids.model.programs.statements;
 
+import be.kuleuven.cs.som.annotate.Basic;
 import asteroids.model.Ship;
 import asteroids.model.programs.IEntry;
 
@@ -18,6 +19,7 @@ public class Thrust extends ShipActionStatement {
 			 return getShip();
 		else throw new IndexOutOfBoundsException();
 	}
+	@Basic
 	public boolean isEnabled(){
 		return enable;
 	}

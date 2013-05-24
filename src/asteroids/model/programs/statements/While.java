@@ -1,5 +1,7 @@
 package asteroids.model.programs.statements;
 
+import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Raw;
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.Program;
@@ -17,6 +19,7 @@ public class While extends StructuralStatement {
 		this.body = body;
 	}
 	@Override
+	@Basic
 	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException {
 		if(index ==1)
 			return getCondition();
@@ -24,9 +27,11 @@ public class While extends StructuralStatement {
 			return getBody();
 		throw new IndexOutOfBoundsException();
 	}
+	@Basic
 	public Expression getCondition(){
 		return condition;
 	}
+	@Basic
 	public Statement getBody(){
 		return body;
 	}
@@ -37,6 +42,7 @@ public class While extends StructuralStatement {
 	}
 
 	@Override
+	@Basic
 	public void setOperandAt(int index, IEntry operand)
 			throws IllegalOperandException {
 		if(!canHaveAsOperandAt(index, operand))
@@ -48,6 +54,7 @@ public class While extends StructuralStatement {
 
 	}
 	@Override
+	@Raw
 	public boolean canHaveAsOperandAt(int index, IEntry operand){
 		if(super.canHaveAsOperandAt(index, operand)){
 			if(index == 1 && operand instanceof Expression)
@@ -76,6 +83,7 @@ public class While extends StructuralStatement {
 				&& getBody().isTypeChecked();
 	}
 	@Override
+	@Basic
 	public void setProgram(Program program){
 		super.setProgram(program);
 		getBody().setProgram(program);

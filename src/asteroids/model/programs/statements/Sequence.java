@@ -3,6 +3,7 @@ package asteroids.model.programs.statements;
 import java.util.ArrayList;
 import java.util.List;
 
+import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 
 import asteroids.Error.IllegalOperandException;
@@ -22,6 +23,7 @@ public class Sequence extends StructuralStatement {
 		addAllStatements(statementsToAdd);
 	}
 	@Override
+	@Basic
 	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException {
 		if(index >0 && index <= getNbOperands())
 		return this.getAllStatements().get(index - 1);
@@ -36,12 +38,14 @@ public class Sequence extends StructuralStatement {
 	}
 
 	@Override
+	@Raw
 	public boolean canHaveAsOperandAt(int index, IEntry operand){
 		return (super.canHaveAsOperandAt(index, operand) 
 				&& (index <= getNbOperands() +1) 
 				&& operand instanceof Statement);
 	}
 	@Override
+	@Basic
 	public void setOperandAt(int index, IEntry operand)
 			throws IllegalOperandException {
 		if(!canHaveAsOperandAt(index, operand))
@@ -49,6 +53,7 @@ public class Sequence extends StructuralStatement {
 		getAllStatements().add(index-1, (Statement) operand);
 
 	}
+	@Basic
 	public void addAsStatement(Statement statement) {
 			getAllStatements().add(statement);
 	}
@@ -64,7 +69,7 @@ public class Sequence extends StructuralStatement {
 		assert hasAsStatement(statement);
 		getAllStatements().remove(statement);
 	}
-
+	@Raw
 	public boolean hasAsStatement(Statement statement){
 		return getAllStatements().contains(statement);
 	}
@@ -106,6 +111,7 @@ public class Sequence extends StructuralStatement {
 		return true;
 	}
 	@Override
+	@Basic
 	public void setProgram(Program program){
 		super.setProgram(program);
 		for(Statement st: getAllStatements()){

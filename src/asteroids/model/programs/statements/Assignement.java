@@ -1,5 +1,7 @@
 package asteroids.model.programs.statements;
 
+import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Raw;
 import asteroids.Error.*;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.Program;
@@ -20,6 +22,7 @@ public class Assignement extends StructuralStatement {
 	}
 
 	@Override
+	@Basic
 	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException {
 		if ((index == 1))
 			return getNewValue();
@@ -38,7 +41,8 @@ public class Assignement extends StructuralStatement {
 	}
 
 	@Override
-	public boolean canHaveAsOperandAt(int index, IEntry operand) {
+	@Raw
+	public boolean canHaveAsOperandAt(int index,@Raw IEntry operand) {
 		if (super.canHaveAsOperandAt(index, operand) && operand != null)
 			if (index == 1
 					&& operand instanceof Expression)
@@ -48,7 +52,7 @@ public class Assignement extends StructuralStatement {
 	}
 
 	@Override
-	public void setOperandAt(int index, IEntry operand)
+	public void setOperandAt(int index,@Raw IEntry operand)
 			throws IllegalOperandException {
 		if (!canHaveAsOperandAt(index, operand))
 			throw new IllegalOperandException();
@@ -69,17 +73,18 @@ public class Assignement extends StructuralStatement {
 				== getNewValue().getType().getGeneralType() 
 				&& getNewValue().isTypeChecked()) ? true : false;
 	}
-
+@Basic
 	public Expression getNewValue() {
 		return newValue;
 	}
-
+@Basic
 	public String getVariableName() {
 		return variableName;
 	}
 
 	@Override
-	public void setProgram(Program program) {
+	@Basic
+	public void setProgram(@Raw Program program) {
 		super.setProgram(program);
 		
 		if(!program.hasVariable(getVariableName()))

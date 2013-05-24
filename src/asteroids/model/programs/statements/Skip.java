@@ -1,5 +1,7 @@
 package asteroids.model.programs.statements;
 
+import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Raw;
 import asteroids.Error.IllegalOperandException;
 import asteroids.model.programs.IEntry;
 import asteroids.model.programs.Program;
@@ -10,6 +12,7 @@ public class Skip extends ActionStatement {
 	public Skip(){
 	}
 	@Override
+	@Basic
 	public IEntry getOperandAt(int index) throws IndexOutOfBoundsException {
 		return null;
 	}
@@ -23,12 +26,14 @@ public class Skip extends ActionStatement {
 	}
 
 	@Override
+	@Basic
 	public void setOperandAt(int index, IEntry operand)
 			throws IllegalOperandException {
 		assert getNbOperands() == 0;
 	}
 
 	@Override 
+	@Raw
 	public boolean canHaveAsOperandAt(int indes,IEntry operand){
 		return false;
 	}
@@ -45,6 +50,7 @@ public class Skip extends ActionStatement {
 		return true;
 	}
 	@Override
+	@Basic
 	public void setProgram(Program program){
 		super.setProgram(program);
 	}
