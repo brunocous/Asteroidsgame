@@ -552,6 +552,10 @@ public static boolean overlap(SpaceObject obj1, SpaceObject obj2) {
  * 		  The first space object that will or will not collide with obj2 after an amount of time.
  * @param obj2
  * 		  The second space object that will or will not collide with obj1 after an amount of time.
+ * @return If the two given space objects overlap, then the time to the collision of those two 
+ * 			space objects is -1.
+ * 		   | if(overlap(obj1,obj2)
+ * 		   | then result == -1
  * @return The amount of time (in seconds) it will take for obj1 and obj2 to collide or 
  * 	       POSITIVE_INFINITY if they will never collide (given their current position and 
  *         velocity). If obj1 and obj2 are the same space object, they will never collide.
@@ -573,7 +577,6 @@ public static boolean overlap(SpaceObject obj1, SpaceObject obj2) {
 public static double getTimeToCollision(SpaceObject obj1, SpaceObject obj2) throws NullPointerException{
 	
 	double result;
-	// TODO doc
 	if (overlap(obj1,obj2)){
 		result = -1;
 		
