@@ -13,10 +13,10 @@ import be.kuleuven.cs.som.annotate.*;
  * @Invar Each bullet must have a valid number of boundary collisions.
  * 			| isValidNbBoundaryCollisions(getNbBoundaryCollisions())
  * @Invar Each bullet must have a valid source.
- * 			| hasProperSource(getSource())
+ * 			| hasProperSource()
  * 
  * @author Bruno Cousement and Simon Telen
- * @version 1.0
+ * @version 2.0
  */
 public class Bullet extends SpaceObject {
 	
@@ -61,8 +61,7 @@ public class Bullet extends SpaceObject {
 	public Bullet(Ship source)
 			throws IllegalRadiusException, IllegalPositionException,IllegalMaxSpeedException{
 		super( 
-				// TODO doc voor 0.1
-				new Position(source.getPos().getX() + Math.cos(source.getDirection())*(getInitialRadius()+source.getRadius()+0.1),source.getPos().getY() + Math.sin(source.getDirection())*(getInitialRadius()+source.getRadius()+0.1))
+				new Position(source.getPos().getX() + Math.cos(source.getDirection())*(getInitialRadius()+source.getRadius()),source.getPos().getY() + Math.sin(source.getDirection())*(getInitialRadius()+source.getRadius()))
 				, new Velocity(Math.cos(source.getDirection())*getInitialSpeed(),Math.sin(source.getDirection())*getInitialSpeed())
 				, getInitialRadius(), source.getWorld());
 		
@@ -113,11 +112,9 @@ public class Bullet extends SpaceObject {
 	 * Check whether this bullet has a valid source.
 	 * 
 	 * @return  True if and only if this bullet can have its source as its
-	 *          source, and if this source is terminated. 
-	 *          TODO VRAAG: wa moet het hier zijn?
+	 *          source.
 	 *        | result ==
 	 *        |  canHaveAsSource(getSource())
-	 *        | 	&& getWorld() == null
 	 */
 	public boolean hasProperSource(){
 		return this.canHaveAsSource(getSource());

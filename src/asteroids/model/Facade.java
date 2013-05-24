@@ -24,6 +24,12 @@ import asteroids.model.programs.parsing.ProgramParser;
 import asteroids.model.programs.statements.Statement;
 import asteroids.model.programs.type.*;
 
+/**
+ * 
+ * @author Bruno Coussement
+ * @version 2.0
+ *
+ */
 public class Facade implements IFacade<World, Ship, Asteroid,Bullet,Program>{
 
 	@Override

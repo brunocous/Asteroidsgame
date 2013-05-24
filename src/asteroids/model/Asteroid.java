@@ -15,6 +15,9 @@ import be.kuleuven.cs.som.annotate.Immutable;
 
 /**
  * A class of asteroids involving a position, a velocity and a radius.
+ * 
+ * @author Bruno Cousement and Simon Telen
+ * @version 2.0
  */
 public class Asteroid extends SpaceObject {
 
